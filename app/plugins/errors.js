@@ -1,3 +1,5 @@
+const config = require('../config')
+
 module.exports = {
   plugin: {
     name: 'error-pages',
@@ -9,6 +11,11 @@ module.exports = {
           // An error was raised during
           // processing the request
           const statusCode = response.output.statusCode
+
+          // if not authorised then request login
+          if (statusCode === 401 || statusCode === 403) {
+            return h.redirect(`${config.loginHost}/login`)
+          }
 
           // In the event of 404
           // return the `404` view
