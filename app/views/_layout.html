@@ -1,20 +1,42 @@
 <!DOCTYPE html>
 <html>
 
-  <head>
-    <meta charset="UTF-8">
-    <title>{{ appName }}</title>
-    <link href="{{ assetPath }}/site.css" rel="stylesheet" />
-  </head>
+<head>
+  <meta charset="UTF-8">
+  <title>{{ appName }}</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+    integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+  <link href="{{ assetPath }}/site.css" rel="stylesheet" />
+</head>
 
-  <body>
+<body>
+  <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark bg-dark box-shadow mb-3">
+    <a class="navbar-brand" href="/">{{ appName }}</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse"
+      aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
+      <ul class="navbar-nav flex-grow-1">
+        <li class="nav-item">
+          <a class="nav-link text-light" href="{{ loginHost }}/register">Register</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link text-light" href="{{ loginHost }}">Login</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link text-light" href="/data">Data</a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+  <div class="cover-container d-flex h-100 p-3 mx-auto flex-column">
     {% block content %}
     {% endblock %}
-    {% block bodyEnd %}
-      <script src="{{ assetPath }}/application.js"></script>
-    {% endblock %}
-  </body>
+  </div>
+  {% block bodyEnd %}
+  <script src="{{ assetPath }}/application.js"></script>
+  {% endblock %}
+</body>
 
 </html>
-
-

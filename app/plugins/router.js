@@ -1,5 +1,6 @@
 const routes = [].concat(
   require('../routes/home'),
+  require('../routes/data'),
   require('../routes/public')
 )
 
