@@ -25,6 +25,11 @@
           <a class="nav-link text-light" href="{{ loginHost }}/login">Login</a>
         </li>
         <li class="nav-item">
+          <form action="{{ loginHost }}/logout" method="POST">
+            <button type="submit" class="btn btn-link nav-link text-light">Logout</button>
+          </form>
+        </li>
+        <li class="nav-item">
           <a class="nav-link text-light" href="/data">Data</a>
         </li>
       </ul>
