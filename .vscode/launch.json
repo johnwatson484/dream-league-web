@@ -11,8 +11,7 @@
       "remoteRoot": "/home/node",
       "port": 9232,
       "skipFiles": [
-        "<node_internals>/**",
-        "${workspaceFolder}/node_modules/**"
+        "<node_internals>/**"
       ]
     }
 

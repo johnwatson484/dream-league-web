@@ -7,7 +7,8 @@ module.exports = {
     register: (server, options) => {
       server.auth.strategy('jwt', 'jwt', {
         key: jwtConfig.secret,
-        validate
+        validate,
+        cookieKey: 'dl_token'
       })
     }
   }
