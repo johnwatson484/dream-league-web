@@ -8,6 +8,7 @@ services:
       - "3003:3003"
       - "9232:9229"
     environment:
+      JWT_SECRET: secret
       API_GATEWAY_HOST: http://dream-league-api-gateway:3001
     volumes:
       - ./app/:/home/node/app/
