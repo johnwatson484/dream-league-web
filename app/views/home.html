@@ -2,4 +2,16 @@
 
 {% block content %}
   <h1>Hello world</h1>
+
+  {% if auth.isAuthenticated %}
+    <h2>Authenticated</h2>
+  {% endif %}
+
+  {% if auth.isAdmin %}
+    <h2>Admin role</h2>
+  {% endif %}
+
+  {% if auth.isUser %}
+    <h2>User role</h2>
+  {% endif %}
 {% endblock %}

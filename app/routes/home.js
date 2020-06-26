@@ -1,9 +1,13 @@
+const mapAuth = require('../handlers/map-auth')
+
 module.exports = [{
   method: 'GET',
   path: '/',
-  config: { auth: { strategy: 'jwt', scope: ['admin'] } },
+  config: {
+    auth: { strategy: 'jwt', mode: 'optional' },
+    pre: [{ method: mapAuth, assign: 'auth' }]
+  },
   handler: (request, h) => {
-    console.log(request.auth)
-    return h.view('home')
+    return h.view('home', { auth: request.pre.auth })
   }
 }]
