@@ -4,7 +4,6 @@ module.exports = [{
   method: 'GET',
   path: '/',
   config: {
-    auth: { strategy: 'jwt', mode: 'optional' },
     pre: [{ method: mapAuth, assign: 'auth' }]
   },
   handler: (request, h) => {

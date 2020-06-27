@@ -10,6 +10,7 @@ module.exports = {
         validate,
         cookieKey: 'dl_token'
       })
+      server.auth.default({ strategy: 'jwt', mode: 'optional' })
     }
   }
 }
