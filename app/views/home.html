@@ -4,14 +4,14 @@
   <h1>Hello world</h1>
 
   {% if auth.isAuthenticated %}
-    <h2>Authenticated</h2>
+    <p>Authenticated</p>
   {% endif %}
 
   {% if auth.isAdmin %}
-    <h2>Admin role</h2>
+    <p>Admin role</p>
   {% endif %}
 
   {% if auth.isUser %}
-    <h2>User role</h2>
+    <p>User role</p>
   {% endif %}
 {% endblock %}
