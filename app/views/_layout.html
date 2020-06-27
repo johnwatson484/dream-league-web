@@ -18,16 +18,19 @@
     </button>
     <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
       <ul class="navbar-nav flex-grow-1">
-        <li class="nav-item">
-          <a class="nav-link text-light" href="{{ loginHost }}/register">Register</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link text-light" href="{{ loginHost }}/login">Login</a>
-        </li>
-        <li class="nav-item">
-          <form action="{{ loginHost }}/logout" method="POST">
-            <button type="submit" class="btn btn-link nav-link text-light">Logout</button>
-          </form>
+        {% if not auth.isAuthenticated %}
+          <li class="nav-item">
+            <a class="nav-link text-light" href="{{ loginHost }}/register">Register</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link text-light" href="{{ loginHost }}/login">Login</a>
+          </li>
+        {% else %}
+          <li class="nav-item">
+            <form action="{{ loginHost }}/logout" method="POST">
+              <button type="submit" class="btn btn-link nav-link text-light">Logout</button>
+            </form>
+        {% endif %}
         </li>
         <li class="nav-item">
           <a class="nav-link text-light" href="/data">Data</a>
