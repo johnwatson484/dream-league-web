@@ -11,7 +11,15 @@ const schema = joi.object().keys({
     expiryInMinutes: joi.number().default(60)
   }),
   apiGatewayHost: joi.string().default('http://localhost:3001'),
-  loginHost: joi.string().default('http://localhost:3002')
+  loginHost: joi.string().default('http://localhost:3002'),
+  cookieOptions: joi.object({
+    ttl: joi.number().default(60 * 60 * 1000),
+    encoding: joi.string().valid('none').default('none'),
+    isSecure: joi.bool().default(true),
+    isHttpOnly: joi.bool().default(true),
+    clearInvalid: joi.bool().default(false),
+    strictHeader: joi.bool().default(true)
+  })
 })
 
 // Build config
@@ -24,7 +32,15 @@ const config = {
     expiryInMinutes: process.env.JWT_EXPIRY_IN_MINUTES
   },
   apiGatewayHost: process.env.API_GATEWAY_HOST,
-  loginHost: process.env.LOGIN_HOST
+  loginHost: process.env.LOGIN_HOST,
+  cookieOptions: {
+    ttl: 60 * 60 * 1000,
+    encoding: 'none',
+    isSecure: process.env.NODE_ENV === 'production',
+    isHttpOnly: true,
+    clearInvalid: false,
+    strictHeader: true
+  }
 }
 
 // Validate config

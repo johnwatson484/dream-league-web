@@ -28,6 +28,7 @@
         {% else %}
           <li class="nav-item">
             <form action="{{ loginHost }}/logout" method="POST">
+              <input type="hidden" name="crumb" value="{{crumb}}"/>
               <button type="submit" class="btn btn-link nav-link text-light">Logout</button>
             </form>
         {% endif %}
