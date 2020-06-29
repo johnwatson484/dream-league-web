@@ -11,7 +11,7 @@ container:
   port: 3003
   readOnlyRootFilesystem: true
   allowPrivilegeEscalation: false
-  cookieExpiryInMinutes: 60
+  jwtSecret: secret
   apiGatewayHost: http://dream-league-api-gateway
   loginHost: http://dream-league-login
 

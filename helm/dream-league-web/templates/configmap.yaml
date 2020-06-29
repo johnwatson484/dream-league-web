@@ -3,7 +3,7 @@
 data:
   NODE_ENV: {{ quote .Values.environment }}
   PORT: {{ quote .Values.container.port }}
-  COOKIE_EXPIRY_IN_MINUTES: {{ quote .Values.container.cookieExpiryInMinutes }}
+  JWT_SECRET: {{ quote .Values.container.jwtSecret }}
   API_GATEWAY_HOST: {{ quote .Values.container.apiGatewayHost }}
   LOGIN_HOST: {{ quote .Values.container.loginHost }}
 {{- end -}}

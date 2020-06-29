@@ -7,8 +7,7 @@ const schema = joi.object().keys({
   env: joi.string().valid(...envs).default(envs[0]),
   appName: joi.string(),
   jwtConfig: joi.object({
-    secret: joi.string(),
-    expiryInMinutes: joi.number().default(60)
+    secret: joi.string()
   }),
   apiGatewayHost: joi.string().default('http://localhost:3001'),
   loginHost: joi.string().default('http://localhost:3002'),
@@ -28,8 +27,7 @@ const config = {
   env: process.env.NODE_ENV,
   appName: 'Dream League',
   jwtConfig: {
-    secret: process.env.JWT_SECRET,
-    expiryInMinutes: process.env.JWT_EXPIRY_IN_MINUTES
+    secret: process.env.JWT_SECRET
   },
   apiGatewayHost: process.env.API_GATEWAY_HOST,
   loginHost: process.env.LOGIN_HOST,
