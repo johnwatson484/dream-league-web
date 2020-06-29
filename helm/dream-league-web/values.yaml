@@ -1,0 +1,33 @@
+environment: development
+name: dream-league-web
+image: dream-league-web
+
+container:
+  imagePullPolicy: IfNotPresent
+  requestMemory: 60Mi
+  requestCpu: 60m
+  limitMemory: 60Mi
+  limitCpu: 60m
+  port: 3003
+  readOnlyRootFilesystem: true
+  allowPrivilegeEscalation: false
+  cookieExpiryInMinutes: 60
+  apiGatewayHost: http://dream-league-api-gateway
+  loginHost: http://dream-league-login
+
+deployment:
+  restartPolicy: Always
+  replicas: 1
+  minReadySeconds: 5
+  redeployOnChange: update this field to force a change
+  imagePullSecret:
+  runAsNonRoot: true
+  runAsUser: 1000
+
+ingress:
+  class: nginx
+  host:
+  certIssuer: letsencrypt
+
+service:
+  port: 80

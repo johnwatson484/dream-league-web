@@ -1,0 +1,3 @@
+{{- include "helm-library.cluster-ip-service" (list . "dream-league-web.cluster-ip-service") -}}
+{{- define "dream-league-web.cluster-ip-service" -}}
+{{- end -}}

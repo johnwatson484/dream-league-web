@@ -1,0 +1,13 @@
+{{- include "helm-library.ingress" (list . "lynx-magnus-web.ingress") -}}
+{{- define "lynx-magnus-web.ingress" -}}
+metadata:
+  annotations:
+  {{- if .Values.ingress.host }}
+    cert-manager.io/cluster-issuer: {{ .Values.ingress.certIssuer }}
+    nginx.ingress.kubernetes.io/proxy-body-size: "0"
+    nginx.ingress.kubernetes.io/affinity: "cookie"
+    nginx.ingress.kubernetes.io/session-cookie-name: "affinity"
+    nginx.ingress.kubernetes.io/session-cookie-expires: "172800"
+    nginx.ingress.kubernetes.io/session-cookie-max-age: "172800"
+  {{- end }}
+{{- end -}}

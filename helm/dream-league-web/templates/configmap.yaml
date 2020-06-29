@@ -1,0 +1,9 @@
+{{- include "helm-library.configmap" (list . "dream-league-web.configmap") -}}
+{{- define "dream-league-web.configmap" -}}
+data:
+  NODE_ENV: {{ quote .Values.environment }}
+  PORT: {{ quote .Values.container.port }}
+  COOKIE_EXPIRY_IN_MINUTES: {{ quote .Values.container.cookieExpiryInMinutes }}
+  API_GATEWAY_HOST: {{ quote .Values.container.apiGatewayHost }}
+  LOGIN_HOST: {{ quote .Values.container.loginHost }}
+{{- end -}}
