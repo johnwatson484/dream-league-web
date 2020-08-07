@@ -20,14 +20,14 @@
       <ul class="navbar-nav flex-grow-1">
         {% if not auth.isAuthenticated %}
           <li class="nav-item">
-            <a class="nav-link text-light" href="{{ loginHost }}/register">Register</a>
+            <a class="nav-link text-light" href="/register">Register</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link text-light" href="{{ loginHost }}/login">Login</a>
+            <a class="nav-link text-light" href="/login">Login</a>
           </li>
         {% else %}
           <li class="nav-item">
-            <form action="{{ loginHost }}/logout" method="POST">
+            <form action="/logout" method="POST">
               <input type="hidden" name="crumb" value="{{crumb}}"/>
               <button type="submit" class="btn btn-link nav-link text-light">Logout</button>
             </form>

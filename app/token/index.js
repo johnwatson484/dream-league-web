@@ -2,8 +2,7 @@ const wreck = require('wreck')
 const config = require('../config')
 
 async function validate (decoded, request, h) {
-  console.log(decoded)
-  const { payload } = await wreck.post(`${config.apiGatewayHost}/validate`, {
+  const { payload } = await wreck.post(`${config.apiHost}/validate`, {
     payload: {
       token: decoded
     }

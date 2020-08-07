@@ -9,7 +9,7 @@
       "request": "attach",
       "name": "Docker: Attach to Node",
       "remoteRoot": "/home/node",
-      "port": 9232,
+      "port": 9230,
       "skipFiles": [
         "<node_internals>/**",
         "${workspaceFolder}/node_modules/**"

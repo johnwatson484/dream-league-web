@@ -29,8 +29,7 @@ module.exports = {
     isCached: !config.isDev,
     context: {
       assetPath: '/assets',
-      appName: config.appName,
-      loginHost: config.loginHost
+      appName: config.appName
     }
   }
 }

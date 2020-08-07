@@ -8,12 +8,11 @@ container:
   requestCpu: 60m
   limitMemory: 60Mi
   limitCpu: 60m
-  port: 3003
+  port: 3001
   readOnlyRootFilesystem: true
   allowPrivilegeEscalation: false
   jwtSecret: secret
-  apiGatewayHost: http://dream-league-api-gateway
-  loginHost: http://dream-league-login
+  apiHost: http://dream-league-api
 
 deployment:
   restartPolicy: Always

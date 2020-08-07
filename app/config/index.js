@@ -3,7 +3,7 @@ const envs = ['development', 'test', 'production']
 
 // Define config schema
 const schema = joi.object().keys({
-  port: joi.number().default(3003),
+  port: joi.number().default(3001),
   env: joi.string().valid(...envs).default(envs[0]),
   appName: joi.string(),
   jwtConfig: joi.object({
