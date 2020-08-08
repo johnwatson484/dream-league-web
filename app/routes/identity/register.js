@@ -1,6 +1,6 @@
-const wreck = require('wreck')
 const joi = require('@hapi/joi')
 const config = require('../../config')
+const api = require('../../api')
 
 module.exports = [{
   method: 'GET',
@@ -26,14 +26,11 @@ module.exports = [{
     },
     handler: async (request, h) => {
       try {
-        const { payload } = await wreck.post(`${config.apiHost}/register`, {
-          payload: request.payload
-        })
-
-        const payloadRaw = JSON.parse(payload.toString())
+        const response = await api.post('/register', request.payload)
+        const payloadRaw = JSON.parse(response.toString())
         if (!payloadRaw) {
           return h.view('identity/register', {
-            message: 'email already registered'
+            message: 'Email already registered'
           })
         }
         return h.redirect('/')
@@ -41,7 +38,7 @@ module.exports = [{
           .state('dl_token', payloadRaw.token, config.cookieOptions)
       } catch {
         return h.view('identity/register', {
-          message: 'invalid credentials'
+          message: 'Invalid credentials'
         })
       }
     }

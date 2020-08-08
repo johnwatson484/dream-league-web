@@ -1,6 +1,6 @@
-const wreck = require('wreck')
 const joi = require('@hapi/joi')
 const config = require('../../config')
+const api = require('../../api')
 
 module.exports = [{
   method: 'GET',
@@ -20,23 +20,20 @@ module.exports = [{
       }),
       failAction: async (request, h, error) => {
         return h.view('login', {
-          message: 'email format incorrect'
+          message: 'Email format incorrect'
         }).takeover()
       }
     },
     handler: async (request, h) => {
       try {
-        const { payload } = await wreck.post(`${config.apiHost}/login`, {
-          payload: request.payload
-        })
-
-        const payloadRaw = JSON.parse(payload.toString())
+        const response = await api.post('/login', request.payload)
+        const payloadRaw = JSON.parse(response.toString())
         return h.redirect('/')
           .header('Authorization', payloadRaw.token)
           .state('dl_token', payloadRaw.token, config.cookieOptions)
       } catch {
         return h.view('identity/login', {
-          message: 'invalid credentials'
+          message: 'Invalid credentials'
         })
       }
     }
