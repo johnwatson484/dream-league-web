@@ -3,7 +3,7 @@ const { validate } = require('../token')
 
 module.exports = {
   plugin: {
-    name: 'token',
+    name: 'auth',
     register: (server, options) => {
       server.auth.strategy('jwt', 'jwt', {
         key: jwtConfig.secret,
