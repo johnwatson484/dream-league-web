@@ -1,13 +1,10 @@
-const wreck = require('wreck')
-const config = require('../config')
+const api = require('../api')
 
 async function validate (decoded, request, h) {
-  const { payload } = await wreck.post(`${config.apiHost}/validate`, {
-    payload: {
-      token: decoded
-    }
+  const response = await api.post('/validate', {
+    token: decoded
   })
-  return JSON.parse(payload.toString())
+  return JSON.parse(response.toString())
 }
 
 module.exports = {
