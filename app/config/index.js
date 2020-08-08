@@ -9,8 +9,7 @@ const schema = joi.object().keys({
   jwtConfig: joi.object({
     secret: joi.string()
   }),
-  apiGatewayHost: joi.string().default('http://localhost:3001'),
-  loginHost: joi.string().default('http://localhost:3002'),
+  apiHost: joi.string().default('http://localhost:3000'),
   cookieOptions: joi.object({
     ttl: joi.number().default(60 * 60 * 1000),
     encoding: joi.string().valid('none').default('none'),
@@ -29,8 +28,7 @@ const config = {
   jwtConfig: {
     secret: process.env.JWT_SECRET
   },
-  apiGatewayHost: process.env.API_GATEWAY_HOST,
-  loginHost: process.env.LOGIN_HOST,
+  apiHost: process.env.API_HOST,
   cookieOptions: {
     ttl: 60 * 60 * 1000,
     encoding: 'none',

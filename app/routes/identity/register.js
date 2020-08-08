@@ -32,7 +32,7 @@ module.exports = [{
 
         const payloadRaw = JSON.parse(payload.toString())
         if (!payloadRaw) {
-          return h.view('register', {
+          return h.view('identity/register', {
             message: 'email already registered'
           })
         }
