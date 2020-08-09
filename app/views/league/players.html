@@ -1,22 +1,22 @@
 {% extends '_layout.html' %}
 
 {% block content %}
-{%if teams.length %}
+{%if players.length %}
   <table class="table table-hover">
     <tr>
+      <th>Name</th>
       <th>Team</th>
-      <th>Division</th>
     </tr>
-    {% for team in teams %}
+    {% for player in players %}
       <tr>
-        <td>{{ team.name }}</td>
-        <td>{{ team.division.name }}</td>
+        <td>{{ player.lastNameFirstName }}</td>
+        <td>{{ player.team.name }}</td>
       </tr>
     {% endfor %}
   </table>
 {% else %}
   <div class="alert alert-info">
-    No teams available.
+    No players available.
   </div>
 {% endif %}
 {% endblock %}
