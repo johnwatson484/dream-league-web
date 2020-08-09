@@ -27,15 +27,14 @@ module.exports = [{
     handler: async (request, h) => {
       try {
         const response = await api.post('/register', request.payload)
-        const payloadRaw = JSON.parse(response.toString())
-        if (!payloadRaw) {
+        if (!response) {
           return h.view('identity/register', {
             message: 'Email already registered'
           })
         }
         return h.redirect('/')
-          .header('Authorization', payloadRaw.token)
-          .state('dl_token', payloadRaw.token, config.cookieOptions)
+          .header('Authorization', response.token)
+          .state('dl_token', response.token, config.cookieOptions)
       } catch {
         return h.view('identity/register', {
           message: 'Invalid credentials'

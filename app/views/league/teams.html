@@ -1,5 +1,22 @@
 {% extends '_layout.html' %}
 
 {% block content %}
-  
+{%if teams %}
+  <table class="table table-hover">
+    <tr>
+      <th>Team</th>
+      <th>Divison</th>
+    </tr>
+    {% for team in teams %}
+      <tr>
+        <td>{{ team.name }}</td>
+        <td>{{ team.Division.name }}</td>
+      </tr>
+    {% endfor %}
+  </table>
+{% else %}
+  <div class="alert alert-info">
+    No teams available.
+  </div>
+{% endif %}
 {% endblock %}
