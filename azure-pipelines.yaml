@@ -24,6 +24,10 @@ steps:
   - checkout: self
     displayName: Clone repository
 
+  - script: |
+      docker-compose -f $(Agent.BuildDirectory)/s/$(repo)/docker-compose.yaml -f $(Agent.BuildDirectory)/s/$(repo)/docker-compose.test.yaml -p $(repo)-test run $(repo)
+    displayName: Run tests
+
   - task: PowerShell@2
     displayName: Set version
     inputs:

@@ -4,9 +4,9 @@ services:
     build:
       context: .
       target: development
-    ports:
-      - "3001:3001"
-      - "9230:9229"    
+    command: npm run test
     volumes:
       - ./app/:/home/node/app/
       - ./package.json:/home/node/package.json
+      - ./test/:/home/node/test/
+      - ./test-output/:/home/node/test-output/      

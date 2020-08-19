@@ -1,0 +1,27 @@
+#!/usr/bin/env sh
+
+set -e
+projectRoot="$(a="/$0"; a=${a%/*}; a=${a:-.}; a=${a#/}/; cd "$a/.." || return; pwd)"
+
+command="$@"
+service="dream-league-web"
+
+compose() {
+  docker-compose -f docker-compose.yaml -f docker-compose.test.yaml -p "${service}-test" $@
+}
+
+(
+  cd "${projectRoot}"
+
+  # Guarantee clean environment
+  compose down -v
+
+  # Ensure container images are up to date
+  compose build
+
+  # Run tests
+  compose run ${service} ${command}
+
+  # Clean up
+  compose down -v
+)

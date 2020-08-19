@@ -5,7 +5,12 @@
   "main": "app/index.js",
   "scripts": {
     "start": "node app/index.js",
-    "start:watch": "nodemon --inspect=0.0.0.0 --ext css,js,njk --legacy-watch app/index.js"
+    "start:watch": "nodemon --inspect=0.0.0.0 --ext css,js,njk --legacy-watch app/index.js",
+    "test": "jest --runInBand",
+    "test:lint": "standard",
+    "test:integration": "jest --testPathPattern=test/integration --coverage=false",
+    "test:unit": "jest --testPathPattern=test/unit --coverage=false",
+    "test:watch": "jest --coverage=false --onlyChanged --watch --runInBand"
   },
   "author": "John Watson",
   "license": "MIT",
@@ -25,7 +30,20 @@
     "wreck": "^14.2.0"
   },
   "devDependencies": {
+    "jest": "^26.4.0",
     "nodemon": "^2.0.4",
     "standard": "^14.3.4"
+  },
+  "standard": {
+    "globals": [
+      "describe",
+      "beforeEach",
+      "expect",
+      "test",
+      "afterEach",
+      "jest",
+      "beforeAll",
+      "afterAll"
+    ]
   }
 }
