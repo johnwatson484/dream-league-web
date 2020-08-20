@@ -3,11 +3,42 @@
 set -e
 projectRoot="$(a="/$0"; a=${a%/*}; a=${a:-.}; a=${a#/}/; cd "$a/.." || return; pwd)"
 
-command="$@"
 service="dream-league-web"
 
+show_help() {
+  echo "
+    Usage: scripts/test [OPTION...]
+    Run tests.
+
+    Options:
+      -w, --watch   watch tests
+      -h, --help    display this help text
+    "
+}
+
+while :; do
+  case $1 in
+    -w|--watch)
+      watch="true"
+      ;;
+
+    -h|--help)   # Call a "show_help" function to display a synopsis, then exit.
+      show_help
+      exit
+      ;;
+    *)
+      break
+  esac
+
+  shift
+done
+
 compose() {
-  docker-compose -f docker-compose.yaml -f docker-compose.test.yaml -p "${service}-test" $@
+  if [ "${watch}" != "true" ]; then
+    docker-compose -f docker-compose.yaml -f docker-compose.test.yaml -p "${service}-test" $@
+  else
+    docker-compose -f docker-compose.yaml -f docker-compose.test.yaml -f docker-compose.test.watch.yaml -p "${service}-test" $@
+  fi
 }
 
 (
