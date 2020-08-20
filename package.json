@@ -27,7 +27,8 @@
     "blipp": "^4.0.1",
     "hapi-auth-jwt2": "^10.1.0",
     "nunjucks": "^3.2.1",
-    "wreck": "^14.2.0"
+    "wreck": "^14.2.0",
+    "xlsx": "^0.16.6"
   },
   "devDependencies": {
     "jest": "^26.4.0",
