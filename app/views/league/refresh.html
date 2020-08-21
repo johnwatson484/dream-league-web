@@ -1,0 +1,11 @@
+{% extends '_layout.html' %}
+
+{% block content %}
+  <form method="POST" action="/league/refresh">
+    <div class="custom-file">
+      <input type="file" class="custom-file-input" id="playerFile">
+      <label class="custom-file-label" for="playerFile">Choose file</label>
+    </div>
+  </form>
+  <p>{{ message }}</p>
+{% endblock %}
