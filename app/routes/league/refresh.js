@@ -1,3 +1,5 @@
+const refreshPlayers = require('../../league/player-refresh')
+
 module.exports = [{
   method: 'GET',
   path: '/league/refresh',
@@ -16,8 +18,8 @@ module.exports = [{
       multipart: true,
       timeout: false
     },
-    handler: (request, h) => {
-      console.log(request.payload)
+    handler: async (request, h) => {
+      await refreshPlayers(request.payload)
       return h.redirect('/league/players')
     }
   }
