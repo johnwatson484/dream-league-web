@@ -6,7 +6,7 @@ module.exports = [{
   }
 }, {
   method: 'POST',
-  path: '/league/refresh',
+  path: '/league/refresh/players',
   options: {
     payload: {
       maxBytes: 209715200,
@@ -14,6 +14,7 @@ module.exports = [{
       parse: true
     },
     handler: async (request, h) => {
+      console.log(request.payload)
       return h.redirect('/league/players')
     }
   }
