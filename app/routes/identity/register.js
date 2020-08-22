@@ -1,4 +1,4 @@
-const joi = require('@hapi/joi')
+const joi = require('joi')
 const config = require('../../config')
 const api = require('../../api')
 
@@ -19,7 +19,7 @@ module.exports = [{
         password: joi.string().required()
       }),
       failAction: async (request, h, error) => {
-        return h.view('register', {
+        return h.view('identity/register', {
           message: 'email format incorrect'
         }).takeover()
       }

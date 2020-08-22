@@ -1,7 +1,7 @@
 module.exports = [{
   method: 'GET',
   path: '/league/refresh',
-  handler: async (request, h) => {
+  handler: (request, h) => {
     return h.view('league/refresh')
   }
 }, {
@@ -11,9 +11,12 @@ module.exports = [{
     payload: {
       maxBytes: 209715200,
       output: 'file',
-      parse: true
+      parse: true,
+      allow: 'multipart/form-data',
+      multipart: true,
+      timeout: false
     },
-    handler: async (request, h) => {
+    handler: (request, h) => {
       console.log(request.payload)
       return h.redirect('/league/players')
     }
