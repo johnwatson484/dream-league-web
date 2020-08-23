@@ -5,11 +5,13 @@
     <table class="table table-hover">
       <tr>
         <th>Name</th>
+        <th>Position</th>
         <th>Team</th>
       </tr>
       {% for player in players %}
         <tr>
           <td>{{ player.lastNameFirstName }}</td>
+          <td>{{ player.position }}</td>
           <td>{{ player.team.name }}</td>
         </tr>
       {% endfor %}

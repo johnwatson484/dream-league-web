@@ -19,8 +19,14 @@ module.exports = [{
       timeout: false
     },
     handler: async (request, h) => {
-      await refreshPlayers(request.payload.playerFile.path)
-      return h.redirect('/league/players')
+      const response = await refreshPlayers(request.payload.playerFile.path, request.state.dl_token)
+      if (response.success) {
+        return h.redirect('/league/players')
+      }
+      return h.view('league/refresh', {
+        message: 'Some players could not be mapped',
+        unmappedPlayers: response.unmappedPlayers
+      })
     }
   }
 }]

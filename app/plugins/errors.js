@@ -25,6 +25,7 @@ module.exports = {
           request.log('error', {
             statusCode: statusCode,
             message: response.message,
+            payloadMessage: response.data ? response.data.payload.message : '',
             stack: response.data ? response.data.stack : response.stack
           })
 
