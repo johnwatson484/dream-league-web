@@ -19,7 +19,7 @@ module.exports = [{
       timeout: false
     },
     handler: async (request, h) => {
-      await refreshPlayers(request.payload)
+      await refreshPlayers(request.payload.playerFile.path)
       return h.redirect('/league/players')
     }
   }
