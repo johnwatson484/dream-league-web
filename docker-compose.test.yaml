@@ -4,7 +4,10 @@ services:
     build:
       context: .
       target: development
-    command: npm run test
+    command: >
+      sh -c "
+        chmod -R 777 test/files &&
+        npm run test"
     volumes:
       - ./app/:/home/node/app/
       - ./package.json:/home/node/package.json
