@@ -3,7 +3,7 @@
 {% block content %}
   <h2>Refresh League data</h2>
 
-  <p>Upload new season players list to replace current player's list</p>
+  <h3>Upload new season players list to replace current player's list</h3>
 
   <form method="POST" action="/league/refresh/players" enctype="multipart/form-data">
     <input type="hidden" name="crumb" value="{{crumb}}"/>

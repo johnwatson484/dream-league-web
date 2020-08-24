@@ -1,0 +1,25 @@
+{% extends '_layout.html' %}
+
+{% block content %}
+  <h2>Current teams</h2>
+
+  <h3>Upload new teamsheet</h3>
+
+  <form method="POST" action="/dream-league/teamsheet/refresh" enctype="multipart/form-data">
+    <input type="hidden" name="crumb" value="{{crumb}}"/>
+    <div class="form-group">
+      <div class="custom-file">
+        <input type="file" class="custom-file-input" id="teamFile" name="teamFile">
+        <label class="custom-file-label" for="teamFile">Choose file</label>
+      </div>
+    </div>
+    <button type="submit" class="btn btn-primary">Submit</button>
+  </form>
+  <p>{{ message }}</p>
+  
+{% endblock %}
+
+{% block bodyEnd %}
+  <script src="{{ assetPath }}/file-input.js"></script>
+{% endblock %}
+
