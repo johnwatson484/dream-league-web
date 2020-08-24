@@ -6,6 +6,7 @@ const routes = [].concat(
   require('../routes/league/team'),
   require('../routes/league/player'),
   require('../routes/league/refresh'),
+  require('../routes/dream-league/teamsheet'),
   require('../routes/public')
 )
 

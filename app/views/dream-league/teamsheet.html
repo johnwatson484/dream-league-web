@@ -3,13 +3,13 @@
 {% block content %}
   <h2>Current teams</h2>
 
-  <h3>Upload new teamsheet</h3>
+  <p>Upload new teamsheet</p>
 
-  <form method="POST" action="/dream-league/teamsheet/refresh" enctype="multipart/form-data">
+  <form method="POST" action="/teamsheet/refresh" enctype="multipart/form-data">
     <input type="hidden" name="crumb" value="{{crumb}}"/>
     <div class="form-group">
       <div class="custom-file">
-        <input type="file" class="custom-file-input" id="teamFile" name="teamFile">
+        <input type="file" class="custom-file-input" id="file-control" name="teamFile">
         <label class="custom-file-label" for="teamFile">Choose file</label>
       </div>
     </div>

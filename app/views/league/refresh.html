@@ -3,13 +3,13 @@
 {% block content %}
   <h2>Refresh League data</h2>
 
-  <h3>Upload new season players list to replace current player's list</h3>
+  <p>Upload new season players list to replace current player's list</p>
 
   <form method="POST" action="/league/refresh/players" enctype="multipart/form-data">
     <input type="hidden" name="crumb" value="{{crumb}}"/>
     <div class="form-group">
       <div class="custom-file">
-        <input type="file" class="custom-file-input" id="playerFile" name="playerFile">
+        <input type="file" class="custom-file-input" id="file-control" name="playerFile">
         <label class="custom-file-label" for="playerFile">Choose file</label>
       </div>
     </div>
