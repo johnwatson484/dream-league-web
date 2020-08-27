@@ -9,3 +9,5 @@ Dockerfile
 npm-debug.log
 azure-pipelines.yaml
 jsconfig.json
+helm/
+.vscode/
