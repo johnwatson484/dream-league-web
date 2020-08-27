@@ -1,9 +1,11 @@
 node_modules/
 test-output/
 .dockerignore
-test-output
+.gitignore
 docker-compose*
-LICENCE
+LICENSE
 README.md
 Dockerfile
 npm-debug.log
+azure-pipelines.yaml
+jsconfig.json
