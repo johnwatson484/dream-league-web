@@ -1,10 +1,12 @@
 const refreshTeamSheet = require('../../dream-league/teamsheet-refresh')
+const api = require('../../api')
 
 module.exports = [{
   method: 'GET',
   path: '/teamsheet',
-  handler: (request, h) => {
-    return h.view('dream-league/teamsheet')
+  handler: async (request, h) => {
+    const teamsheet = await api.get('/league/players', request.state.dl_token)
+    return h.view('dream-league/teamsheet', { teamsheet })
   }
 }, {
   method: 'POST',
