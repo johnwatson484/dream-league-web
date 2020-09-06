@@ -1,25 +1,49 @@
 {% extends '_layout.html' %}
 
 {% block content %}
-  <h2>Current teams</h2>
+  <h2>Teamsheet</h2>
 
-  <p>Upload new teamsheet</p>
-
-  <form method="POST" action="/teamsheet/refresh" enctype="multipart/form-data">
-    <input type="hidden" name="crumb" value="{{crumb}}"/>
-    <div class="form-group">
-      <div class="custom-file">
-        <input type="file" class="custom-file-input" id="file-control" name="teamFile">
-        <label class="custom-file-label" for="teamFile">Choose file</label>
+  {%if teamsheet.length %}
+    <div class="row">
+      {% for team in teamsheet %}
+        <div class="col-6">
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title">{{team.name}}</h5>
+              <h6 class="card-subtitle mb-2 text-muted">Goalkeepers</h6>
+              <ul class="list-group list-group-flush">
+                {% for player in team.keepers %}
+                  <li class="list-group-item">{{ player.name}}</li>
+                {% endfor %}
+              </ul>
+              <h6 class="card-subtitle mb-2 text-muted">Defenders</h6>
+              <ul class="list-group list-group-flush">
+                {% for player in team.defenders %}
+                  <li class="list-group-item">{{ player.fullName}}</li>
+                {% endfor %}
+              </ul>
+              <h6 class="card-subtitle mb-2 text-muted">Midfielders</h6>
+              <ul class="list-group list-group-flush">
+                {% for player in team.midfielders %}
+                  <li class="list-group-item">{{ player.fullName}}</li>
+                {% endfor %}
+              </ul>
+              <h6 class="card-subtitle mb-2 text-muted">Forwards</h6>
+              <ul class="list-group list-group-flush">
+                {% for player in team.forwards %}
+                  <li class="list-group-item">{{ player.fullName}}</li>
+                {% endfor %}
+              </ul>
+            </div>
+          </div>
+        </div>
+       {% endfor %}
       </div>
+  {% else %}
+    <div class="alert alert-info">
+      No teams available.
     </div>
-    <button type="submit" class="btn btn-primary">Submit</button>
-  </form>
-  <p>{{ message }}</p>
+  {% endif %}
   
-{% endblock %}
-
-{% block bodyEnd %}
-  <script src="{{ assetPath }}/file-input.js"></script>
 {% endblock %}
 
