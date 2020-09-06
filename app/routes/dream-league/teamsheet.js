@@ -9,6 +9,13 @@ module.exports = [{
     return h.view('dream-league/teamsheet', { teamsheet })
   }
 }, {
+  method: 'GET',
+  path: '/teamsheet/edit',
+  handler: async (request, h) => {
+    const teamsheet = await api.get('/league/players', request.state.dl_token)
+    return h.view('dream-league/teamsheet-edit', { teamsheet })
+  }
+}, {
   method: 'POST',
   path: '/teamsheet/refresh',
   options: {
