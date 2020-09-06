@@ -11,6 +11,9 @@ async function createServer () {
           abortEarly: false
         }
       }
+    },
+    router: {
+      stripTrailingSlash: true
     }
   })
 
