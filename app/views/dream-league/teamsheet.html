@@ -13,27 +13,15 @@
               {% for player in team.keepers %}
                 <div class="row">
                   <div class="col-md-2">GK</div>
-                  <div class="col-md-9">{{ player.name}}</div>
+                  <div class="col-md-9">{{ player.name}}{% if player.substitute %} (sub){% endif %}</div>
                 </div>
               {% endfor %}
-              {% for player in team.defenders %}
+              {% for player in team.players %}
                 <div class="row">
-                  <div class="col-md-2">D</div>
-                  <div class="col-md-9">{{ player.fullName}}</div>
+                  <div class="col-md-2">{{ player.position[0] }}</div>
+                  <div class="col-md-9">{{ player.fullName}}{% if player.substitute %} (sub){% endif %}</div>
                 </div>
-              {% endfor %}
-              {% for player in team.midfielders %}
-                <div class="row">
-                  <div class="col-md-2">M</div>
-                  <div class="col-md-9">{{ player.fullName}}</div>
-                </div>
-              {% endfor %}
-              {% for player in team.forwards %}
-                <div class="row">
-                  <div class="col-md-2">F</div>
-                  <div class="col-md-9">{{ player.fullName}}</div>
-                </div>
-              {% endfor %}
+              {% endfor %}              
             </div>
           </div>
         </div>

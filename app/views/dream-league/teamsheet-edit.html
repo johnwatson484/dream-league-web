@@ -18,34 +18,36 @@
   <p>{{ message }}</p>
 
   {% for team in teamsheet %}
-    <div class="col-6">
+    <div class="col-12">
       <div class="card">
         <div class="card-body">
           <h5 class="card-title">{{team.name}}</h5>              
           {% for player in team.keepers %}
             <div class="row">
-              <div class="col-md-2">GK</div>
-              <div class="col-md-9">{{ player.name}}</div>
+              <div class="col-md-1">GK</div>
+              <div class="col-md-4">
+                <input type="text" class="form-control-sm" onClick = "this.select()" value="{{ player.name }}" >
+              </div>
+              <div class="col-md-1">
+                <input type="checkbox" checked="{{ player.substitute }}">
+              </div>
+              <div class="col-md-4">{{ player.sourceName }}</div>
+              <div class="col-md-1">{{ player.matchDistance }}</div>
             </div>
           {% endfor %}
-          {% for player in team.defenders %}
+          {% for player in team.players %}
             <div class="row">
-              <div class="col-md-2">D</div>
-              <div class="col-md-9">{{ player.fullName}}</div>
+              <div class="col-md-1">{{ player.position[0] }}</div>
+              <div class="col-md-4">
+                <input type="text" class="form-control-sm" onClick = "this.select()" value="{{ player.lastNameFirstName }}" >
+              </div>
+              <div class="col-md-1">
+                <input type="checkbox" checked="{{ player.substitute }}">
+              </div>
+              <div class="col-md-4">{{ player.sourceName }}</div>
+              <div class="col-md-1">{{ player.matchDistance }}</div>
             </div>
-          {% endfor %}
-          {% for player in team.midfielders %}
-            <div class="row">
-              <div class="col-md-2">M</div>
-              <div class="col-md-9">{{ player.fullName}}</div>
-            </div>
-          {% endfor %}
-          {% for player in team.forwards %}
-            <div class="row">
-              <div class="col-md-2">F</div>
-              <div class="col-md-9">{{ player.fullName}}</div>
-            </div>
-          {% endfor %}
+          {% endfor %}          
         </div>
       </div>
     </div>
