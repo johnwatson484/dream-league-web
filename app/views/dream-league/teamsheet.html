@@ -9,31 +9,31 @@
         <div class="col-6">
           <div class="card">
             <div class="card-body">
-              <h5 class="card-title">{{team.name}}</h5>
-              <h6 class="card-subtitle mb-2 text-muted">Goalkeepers</h6>
-              <ul class="list-group list-group-flush">
-                {% for player in team.keepers %}
-                  <li class="list-group-item">{{ player.name}}</li>
-                {% endfor %}
-              </ul>
-              <h6 class="card-subtitle mb-2 text-muted">Defenders</h6>
-              <ul class="list-group list-group-flush">
-                {% for player in team.defenders %}
-                  <li class="list-group-item">{{ player.fullName}}</li>
-                {% endfor %}
-              </ul>
-              <h6 class="card-subtitle mb-2 text-muted">Midfielders</h6>
-              <ul class="list-group list-group-flush">
-                {% for player in team.midfielders %}
-                  <li class="list-group-item">{{ player.fullName}}</li>
-                {% endfor %}
-              </ul>
-              <h6 class="card-subtitle mb-2 text-muted">Forwards</h6>
-              <ul class="list-group list-group-flush">
-                {% for player in team.forwards %}
-                  <li class="list-group-item">{{ player.fullName}}</li>
-                {% endfor %}
-              </ul>
+              <h5 class="card-title">{{team.name}}</h5>              
+              {% for player in team.keepers %}
+                <div class="row">
+                  <div class="col-md-2">GK</div>
+                  <div class="col-md-9">{{ player.name}}</div>
+                </div>
+              {% endfor %}
+              {% for player in team.defenders %}
+                <div class="row">
+                  <div class="col-md-2">D</div>
+                  <div class="col-md-9">{{ player.fullName}}</div>
+                </div>
+              {% endfor %}
+              {% for player in team.midfielders %}
+                <div class="row">
+                  <div class="col-md-2">M</div>
+                  <div class="col-md-9">{{ player.fullName}}</div>
+                </div>
+              {% endfor %}
+              {% for player in team.forwards %}
+                <div class="row">
+                  <div class="col-md-2">F</div>
+                  <div class="col-md-9">{{ player.fullName}}</div>
+                </div>
+              {% endfor %}
             </div>
           </div>
         </div>
