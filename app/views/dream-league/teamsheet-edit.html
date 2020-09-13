@@ -33,7 +33,8 @@
             <div class="row">
               <div class="col-md-1">GK</div>
               <div class="col-md-5">
-                <input type="text" class="form-control" onClick = "this.select()" value="{{ player.name }}" >
+                <input type="text" class="form-control keeper-input" onClick = "this.select()" value="{{ player.name }}" >
+                <input type="hidden" class="team-id" data-managerId="{{ player.managerId }}" >
               </div>
               <div class="col-md-1">
                 <input type="checkbox" {% if player.substitute %}checked{% endif %}>
@@ -46,7 +47,8 @@
             <div class="row">
               <div class="col-md-1">{{ player.position[0] }}</div>
               <div class="col-md-5">
-                <input type="text" class="form-control" onClick = "this.select()" value="{{ player.lastNameFirstName }} - {{ player.team }}" >
+                <input type="text" class="form-control player-input" onClick = "this.select()" value="{{ player.lastNameFirstName }} - {{ player.team }}" >
+                <input type="hidden" class="player-id" data-managerId="{{ player.managerId }}" >
               </div>
               <div class="col-md-1">
                 <input type="checkbox" {% if player.substitute %}checked{% endif %}>
@@ -64,5 +66,6 @@
 
 {% block bodyEnd %}
   <script src="{{ assetPath }}/file-input.js"></script>
+  <script src="{{ assetPath }}/teamsheet.js"></script>
 {% endblock %}
 

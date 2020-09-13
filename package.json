@@ -44,7 +44,8 @@
       "afterEach",
       "jest",
       "beforeAll",
-      "afterAll"
+      "afterAll",
+      "$"
     ]
   }
 }
