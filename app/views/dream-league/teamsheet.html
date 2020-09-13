@@ -16,7 +16,7 @@
                   <div class="col-md-9">{{ player.name}}{% if player.substitute %} (sub){% endif %}</div>
                 </div>
               {% endfor %}
-              {% for player in team.players %}
+              {% for player in team.players|sort(attribute='substitute') %}
                 <div class="row">
                   <div class="col-md-2">{{ player.position[0] }}</div>
                   <div class="col-md-9">{{ player.fullName}}{% if player.substitute %} (sub){% endif %}</div>
