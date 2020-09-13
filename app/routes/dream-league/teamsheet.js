@@ -1,5 +1,7 @@
 const refreshTeamSheet = require('../../dream-league/teamsheet-refresh')
 const api = require('../../api')
+const joi = require('joi')
+const boom = require('@hapi/boom')
 
 module.exports = [{
   method: 'GET',
@@ -14,6 +16,48 @@ module.exports = [{
   handler: async (request, h) => {
     const teamsheet = await api.get('/dream-league/teamsheet', request.state.dl_token)
     return h.view('dream-league/teamsheet-edit', { teamsheet })
+  }
+}, {
+  method: 'POST',
+  path: '/teamsheet/edit/player',
+  options: {
+    plugins: {
+      crumb: false
+    },
+    validate: {
+      payload: joi.object({
+        managerId: joi.number(),
+        playerIds: joi.array(),
+        playerSubs: joi.array()
+      }),
+      failAction: async (request, h, error) => {
+        return boom.badRequest(error)
+      }
+    },
+    handler: async (request, h) => {
+      return await api.post('dream-league/teamsheet/edit/player', request.payload, request.state.dl_token)
+    }
+  }
+}, {
+  method: 'POST',
+  path: '/teamsheet/edit/keeper',
+  options: {
+    plugins: {
+      crumb: false
+    },
+    validate: {
+      payload: joi.object({
+        managerId: joi.number(),
+        teamIds: joi.array(),
+        teamSubs: joi.array()
+      }),
+      failAction: async (request, h, error) => {
+        return boom.badRequest(error)
+      }
+    },
+    handler: async (request, h) => {
+      return await api.post('dream-league/teamsheet/edit/keeper', request.payload, request.state.dl_token)
+    }
   }
 }, {
   method: 'POST',
