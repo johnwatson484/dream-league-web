@@ -5,7 +5,8 @@ module.exports = [{
     directory: {
       path: [
         'app/public/css',
-        'app/public/scripts'
+        'app/public/scripts',
+        'app/public/assets'
       ]
     }
   }
