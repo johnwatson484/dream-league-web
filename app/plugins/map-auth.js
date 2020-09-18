@@ -4,7 +4,7 @@ module.exports = {
     register: (server, options) => {
       server.ext('onPreResponse', (request, h) => {
         const statusCode = request.response.statusCode
-        if (request.response.variety === 'view' && statusCode !== 404 && statusCode !== 500) {
+        if (request.response.variety === 'view' && statusCode !== 404 && statusCode !== 500 && request.response.source.context) {
           const auth = mapAuth(request)
           request.response.source.context.auth = auth
         }

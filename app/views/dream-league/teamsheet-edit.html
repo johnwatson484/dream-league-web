@@ -22,7 +22,7 @@
       <div class="card">
         <div class="card-body">
           <h5 class="card-title">{{team.name}}</h5>
-          <input type="hidden" class="manager-id" value="{{ player.managerId }}" >
+          <input type="hidden" class="manager-id" value="{{ team.managerId }}" >
           <div class="row">
             <div class="col-md-1">Pos</div>
             <div class="col-md-5">Player</div>
@@ -49,7 +49,7 @@
               <div class="col-md-1">{{ player.position[0] }}</div>
               <div class="col-md-5">
                 <input type="text" class="form-control player-input" onClick = "this.select()" value="{{ player.lastNameFirstName }} - {{ player.team }}" >
-                <input type="hidden" class="player-id" data-managerId="{{ player.managerId }}" value="player.playerId">
+                <input type="hidden" class="player-id" data-managerId="{{ player.managerId }}" value="{{ player.playerId }}">
               </div>
               <div class="col-md-1">
                 <input type="checkbox" class="player-substitute" {% if player.substitute %}checked{% endif %}>

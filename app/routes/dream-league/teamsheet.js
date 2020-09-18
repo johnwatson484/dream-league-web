@@ -31,11 +31,12 @@ module.exports = [{
         playerSubs: joi.array()
       }),
       failAction: async (request, h, error) => {
+        console.log(request.payload)
         return boom.badRequest(error)
       }
     },
     handler: async (request, h) => {
-      return await api.post('dream-league/teamsheet/edit/player', request.payload, request.state.dl_token)
+      return await api.post('/dream-league/teamsheet/edit/player', request.payload, request.state.dl_token)
     }
   }
 }, {
@@ -56,7 +57,7 @@ module.exports = [{
       }
     },
     handler: async (request, h) => {
-      return await api.post('dream-league/teamsheet/edit/keeper', request.payload, request.state.dl_token)
+      return await api.post('/dream-league/teamsheet/edit/keeper', request.payload, request.state.dl_token)
     }
   }
 }, {
