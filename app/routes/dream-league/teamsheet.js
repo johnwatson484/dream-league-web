@@ -31,7 +31,6 @@ module.exports = [{
         playerSubs: joi.array()
       }),
       failAction: async (request, h, error) => {
-        console.log(request.payload)
         return boom.badRequest(error)
       }
     },
