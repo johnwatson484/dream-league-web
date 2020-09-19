@@ -35,7 +35,7 @@ $('.player-id').change(function () {
   $.ajax({
     type: 'POST',
     url: '/teamsheet/edit/player',
-    data: { managerId: managerId, playerIds: playerIds, playerSubs: playerSubs },
+    data: { managerId, playerIds, playerSubs },
     traditional: true,
     success: function () {
       $('#save-confirmation').fadeIn(2000)
@@ -75,12 +75,12 @@ $(function () {
   })
 })
 
-$('.goalkeeper-id').change(function () {
+$('.team-id').change(function () {
   const managerId = $(this).closest('.card-body').find('.manager-id').val()
   const teamIds = []
   const teamSubs = []
 
-  $(this).closest('.card-body').find('.keeper-id').each(function (i) {
+  $(this).closest('.card-body').find('.team-id').each(function (i) {
     teamIds[i] = $(this).val()
 
     if ($(this).closest('.row').find('.keeper-substitute').is(':checked')) {
@@ -90,8 +90,8 @@ $('.goalkeeper-id').change(function () {
 
   $.ajax({
     type: 'POST',
-    url: '/teamSheet/edit/keeper',
-    data: { managerId: managerId, teamIds: teamIds, teamSubs: teamSubs },
+    url: '/teamsheet/edit/keeper',
+    data: { managerId, teamIds, teamSubs },
     traditional: true,
     success: function () {
       $('#save-confirmation').fadeIn(2000)

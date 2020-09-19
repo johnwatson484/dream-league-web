@@ -27,8 +27,8 @@ module.exports = [{
     validate: {
       payload: joi.object({
         managerId: joi.number(),
-        playerIds: joi.array(),
-        playerSubs: joi.array()
+        playerIds: joi.alternatives().try(joi.array().items(joi.string()), joi.string()),
+        playerSubs: joi.alternatives().try(joi.array().items(joi.string()), joi.string())
       }),
       failAction: async (request, h, error) => {
         return boom.badRequest(error)
@@ -48,8 +48,8 @@ module.exports = [{
     validate: {
       payload: joi.object({
         managerId: joi.number(),
-        teamIds: joi.array(),
-        teamSubs: joi.array()
+        teamIds: joi.alternatives().try(joi.array().items(joi.string()), joi.string()),
+        teamSubs: joi.alternatives().try(joi.array().items(joi.string()), joi.string())
       }),
       failAction: async (request, h, error) => {
         return boom.badRequest(error)
