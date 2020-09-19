@@ -24,7 +24,6 @@
           <h5 class="card-title">{{team.name}}</h5>
           <input type="hidden" class="manager-id" value="{{ team.managerId }}" >
           <div class="row">
-            <div class="col-md-1">Pos</div>
             <div class="col-md-5">Player</div>
             <div class="col-md-1">Sub</div>
             <div class="col-md-4">Source</div>
@@ -32,9 +31,8 @@
           </div>           
           {% for player in team.keepers %}
             <div class="row">
-              <div class="col-md-1">GK</div>
               <div class="col-md-5">
-                <input type="text" class="form-control keeper-input" onClick = "this.select()" value="{{ player.name }}" >
+                <input type="text" class="form-control keeper-input" onClick = "this.select()" value="{{ player.name }} - GK" >
                 <input type="hidden" class="team-id" data-managerId="{{ player.managerId }}" value="{{ player.teamId }}" >
               </div>
               <div class="col-md-1">
@@ -44,11 +42,11 @@
               <div class="col-md-1">{{ player.matchDistance }}</div>
             </div>
           {% endfor %}
+          <hr />
           {% for player in team.players %}
             <div class="row">
-              <div class="col-md-1">{{ player.position[0] }}</div>
               <div class="col-md-5">
-                <input type="text" class="form-control player-input" onClick = "this.select()" value="{{ player.lastNameFirstName }} - {{ player.team }}" >
+                <input type="text" class="form-control player-input" onClick = "this.select()" value="{{ player.lastNameFirstName }} - {{ player.team }} - {{ player.position[0] }}" >
                 <input type="hidden" class="player-id" data-managerId="{{ player.managerId }}" value="{{ player.playerId }}">
               </div>
               <div class="col-md-1">
