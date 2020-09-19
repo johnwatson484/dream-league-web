@@ -2,6 +2,7 @@ const refreshTeamSheet = require('../../dream-league/teamsheet-refresh')
 const api = require('../../api')
 const joi = require('joi')
 const boom = require('@hapi/boom')
+const ViewModel = require('../../view-models/teamsheet')
 
 module.exports = [{
   method: 'GET',
@@ -15,7 +16,8 @@ module.exports = [{
   path: '/teamsheet/edit',
   handler: async (request, h) => {
     const teamsheet = await api.get('/dream-league/teamsheet', request.state.dl_token)
-    return h.view('dream-league/teamsheet-edit', { teamsheet })
+    const teamsheetViewModel = new ViewModel(teamsheet)
+    return h.view('dream-league/teamsheet-edit', { teamsheet: teamsheetViewModel })
   }
 }, {
   method: 'POST',
@@ -27,8 +29,8 @@ module.exports = [{
     validate: {
       payload: joi.object({
         managerId: joi.number(),
-        playerIds: joi.alternatives().try(joi.array().items(joi.string()), joi.string()),
-        playerSubs: joi.alternatives().try(joi.array().items(joi.string()), joi.string())
+        playerIds: joi.alternatives().try(joi.array().items(joi.number()), joi.number()),
+        playerSubs: joi.alternatives().try(joi.array().items(joi.number()), joi.number())
       }),
       failAction: async (request, h, error) => {
         return boom.badRequest(error)
