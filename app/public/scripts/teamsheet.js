@@ -107,5 +107,5 @@ $('.keeper-input').change(function () {
 })
 
 $('.keeper-substitute').change(function () {
-  $(this).closest('.row').find('.keeper-id').trigger('change')
+  $(this).closest('.row').find('.team-id').trigger('change')
 })
