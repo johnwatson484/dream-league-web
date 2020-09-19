@@ -28,7 +28,7 @@ module.exports = [{
       const players = await api.post('/league/players/autocomplete', request.payload, request.state.dl_token)
       return players.map(function (player) {
         return {
-          label: `${player.lastNameFirstName} - ${player.team.name}`,
+          label: `${player.lastNameFirstName} - ${player.team.name} - ${player.position}`,
           val: player.playerId
         }
       })
