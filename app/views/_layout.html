@@ -24,6 +24,26 @@
     </button>
     <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
       <ul class="navbar-nav flex-grow-1">
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Teamsheet
+          </a>
+          <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+            <a class="dropdown-item" href="/teamsheet">View</a>
+            <a class="dropdown-item" href="/teamsheet/edit">Edit</a>
+          </div>
+        </li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Season Data
+          </a>
+          <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+            <a class="dropdown-item" href="/league/players">Players</a>
+            <a class="dropdown-item" href="/league/teams">Teams</a>
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item" href="/league/refresh">Refresh</a>
+          </div>
+        </li>
         {% if not auth.isAuthenticated %}
           <li class="nav-item">
             <a class="nav-link text-light" href="/register">Register</a>
