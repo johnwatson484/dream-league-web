@@ -3,20 +3,20 @@
 {% block content %}
   <h2>Players</h2>
 
-  {%if players.length %}
-    <div class="row">
-      <div class="col-md-6">
-        <form method="GET" action="/league/players">
-          <div class="input-group mb-3">
-            <input type="text" class="form-control" name="search" id="search">
-            <div class="input-group-append">
-              <button class="btn btn-outline-secondary" type="submit" id="button-addon2">Search</button>
-            </div>
+  <div class="row">
+    <div class="col-md-6">
+      <form method="GET" action="/league/players">
+        <div class="input-group mb-3">
+          <input type="text" class="form-control" name="search" id="search">
+          <div class="input-group-append">
+            <button class="btn btn-outline-secondary" type="submit" id="button-addon2">Search</button>
           </div>
-        </form>
-      </div>
+        </div>
+      </form>
     </div>
-
+  </div>
+  
+  {%if players.length %}
     <table class="table table-hover">
       <tr>
         <th>Name</th>
