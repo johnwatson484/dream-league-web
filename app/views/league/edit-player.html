@@ -4,6 +4,7 @@
   <div class="col-md-6">
     <form method="POST" action="/league/player/edit">
       <input type="hidden" name="crumb" value="{{crumb}}"/>
+      <input type="hidden" id="playerId" name="playerId" value="{{ player.playerId }}"> 
       <div class="form-group">
         <label for="firstName">First name</label>
         <input type="text" class="form-control" id="firstName" name="firstName" value="{{ player.firstName }}">    

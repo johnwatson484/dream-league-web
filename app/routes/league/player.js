@@ -57,6 +57,7 @@ module.exports = [{
   options: {
     validate: {
       payload: joi.object({
+        playerId: joi.number(),
         firstName: joi.string().allow(''),
         lastName: joi.string(),
         position: joi.string().valid(...['Defender', 'Midfielder', 'Forward']),
