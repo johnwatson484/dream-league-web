@@ -17,7 +17,7 @@
         <label for="position">Position</label>
         <select class="form-control" id="position" name="position">
         {% for position in positions %}
-          <option value="{{ position }}" {% if position == {{ player.position }} %}selected{% endif %}>{{ position }}</option>
+          <option value="{{ position }}" {% if position == player.position %}selected{% endif %}>{{ position }}</option>
         {% endfor %}
         </select>  
       </div>

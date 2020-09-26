@@ -46,7 +46,7 @@ module.exports = [{
   method: 'GET',
   path: '/league/player/edit',
   handler: async (request, h) => {
-    const player = api.get(`/league/player/?playerId=${request.query.playerId}`, request.state.dl_token)
+    const player = await api.get(`/league/player/?playerId=${request.query.playerId}`, request.state.dl_token)
     const teams = await api.get('/league/teams', request.state.dl_token)
     const positions = ['Defender', 'Midfielder', 'Forward']
     return h.view('league/edit-player', { player, teams, positions })
