@@ -24,12 +24,14 @@
         <th>Name</th>
         <th>Position</th>
         <th>Team</th>
+        <th></th>
       </tr>
       {% for player in players %}
         <tr>
           <td>{{ player.lastNameFirstName }}</td>
           <td>{{ player.position }}</td>
           <td>{{ player.team.name }}</td>
+          <td><a href="/league/player/edit?playerId={{ player.playerId }}">Edit</a></td>
         </tr>
       {% endfor %}
     </table>

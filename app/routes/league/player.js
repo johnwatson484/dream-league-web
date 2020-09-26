@@ -43,6 +43,35 @@ module.exports = [{
     }
   }
 }, {
+  method: 'GET',
+  path: '/league/player/edit',
+  handler: async (request, h) => {
+    const player = api.get(`/league/player/?playerId=${request.query.playerId}`, request.state.dl_token)
+    const teams = await api.get('/league/teams', request.state.dl_token)
+    const positions = ['Defender', 'Midfielder', 'Forward']
+    return h.view('league/edit-player', { player, teams, positions })
+  }
+}, {
+  method: 'POST',
+  path: '/league/player/edit',
+  options: {
+    validate: {
+      payload: joi.object({
+        firstName: joi.string().allow(''),
+        lastName: joi.string(),
+        position: joi.string().valid(...['Defender', 'Midfielder', 'Forward']),
+        teamId: joi.number()
+      }),
+      failAction: async (request, h, error) => {
+        return boom.badRequest(error)
+      }
+    },
+    handler: async (request, h) => {
+      await api.post('/league/player/edit', request.payload, request.state.dl_token)
+      return h.redirect('/league/players')
+    }
+  }
+}, {
   method: 'POST',
   path: '/league/players/autocomplete',
   options: {

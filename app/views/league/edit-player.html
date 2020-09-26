@@ -1,0 +1,34 @@
+{% extends '_layout.html' %}
+
+{% block content %}
+  <div class="col-md-6">
+    <form method="POST" action="/league/player/edit">
+      <input type="hidden" name="crumb" value="{{crumb}}"/>
+      <div class="form-group">
+        <label for="firstName">First name</label>
+        <input type="text" class="form-control" id="firstName" name="firstName" value="{{ player.firstName }}">    
+      </div>
+      <div class="form-group">
+        <label for="lastName">Last name</label>
+        <input type="text" class="form-control" id="lastName" name="lastName" value="{{ player.lastName }}">    
+      </div>
+      <div class="form-group">
+        <label for="position">Position</label>
+        <select class="form-control" id="position" name="position">
+        {% for position in positions %}
+          <option value="{{ position }}" {% if position == {{ player.position }} %}selected{% endif %}>{{ position }}</option>
+        {% endfor %}
+        </select>  
+      </div>
+      <div class="form-group">
+        <label for="teamId">Team</label>
+        <select class="form-control" id="teamId" name="teamId">
+        {% for team in teams %}
+          <option value="{{ team.teamId }}" {% if team.teamId == player.teamId %}selected{% endif %}>{{ team.name }}</option>
+        {% endfor %}
+        </select>      
+      </div>
+      <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+  </div>
+{% endblock %}
