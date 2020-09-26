@@ -5,9 +5,14 @@ const boom = require('@hapi/boom')
 module.exports = [{
   method: 'GET',
   path: '/league/players',
-  handler: async (request, h) => {
-    const players = await api.get('/league/players', request.state.dl_token)
-    return h.view('league/players', { players })
+  options: {
+    plugins: {
+      crumb: false
+    },
+    handler: async (request, h) => {
+      const players = await api.get(`/league/players?search=${request.query.search}`, request.state.dl_token)
+      return h.view('league/players', { players })
+    }
   }
 }, {
   method: 'POST',
