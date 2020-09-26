@@ -15,6 +15,34 @@ module.exports = [{
     }
   }
 }, {
+  method: 'GET',
+  path: '/league/player/create',
+  handler: async (request, h) => {
+    const teams = await api.get('/league/teams', request.state.dl_token)
+    const positions = ['Defender', 'Midfielder', 'Forward']
+    return h.view('league/create-player', { teams, positions })
+  }
+}, {
+  method: 'POST',
+  path: '/league/player/create',
+  options: {
+    validate: {
+      payload: joi.object({
+        firstName: joi.string().allow(''),
+        lastName: joi.string(),
+        position: joi.string().valid(...['Defender', 'Midfielder', 'Forward']),
+        teamId: joi.number()
+      }),
+      failAction: async (request, h, error) => {
+        return boom.badRequest(error)
+      }
+    },
+    handler: async (request, h) => {
+      await api.post('/league/player/create', request.payload, request.state.dl_token)
+      return h.redirect('/league/players')
+    }
+  }
+}, {
   method: 'POST',
   path: '/league/players/autocomplete',
   options: {
