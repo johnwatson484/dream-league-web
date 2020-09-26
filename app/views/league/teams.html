@@ -1,22 +1,26 @@
 {% extends '_layout.html' %}
 
 {% block content %}
-{%if teams.length %}
-  <table class="table table-hover">
-    <tr>
-      <th>Team</th>
-      <th>Division</th>
-    </tr>
-    {% for team in teams %}
+  <a href="/league/team/create">Create team</a>
+
+  {%if teams.length %}
+    <table class="table table-hover">
       <tr>
-        <td>{{ team.name }}</td>
-        <td>{{ team.division.name }}</td>
+        <th>Team</th>
+        <th>Division</th>
+        <th></th>
       </tr>
-    {% endfor %}
-  </table>
-{% else %}
-  <div class="alert alert-info">
-    No teams available.
-  </div>
-{% endif %}
+      {% for team in teams %}
+        <tr>
+          <td>{{ team.name }}</td>
+          <td>{{ team.division.name }}</td>
+          <td><a href="/league/team/edit?teamId={{ team.teamId }}">Edit</a></td>
+        </tr>
+      {% endfor %}
+    </table>
+  {% else %}
+    <div class="alert alert-info">
+      No teams available.
+    </div>
+  {% endif %}
 {% endblock %}

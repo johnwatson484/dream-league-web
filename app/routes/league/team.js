@@ -10,6 +10,60 @@ module.exports = [{
     return h.view('league/teams', { teams })
   }
 }, {
+  method: 'GET',
+  path: '/league/team/create',
+  handler: async (request, h) => {
+    const divisions = await api.get('/league/divisions', request.state.dl_token)
+    return h.view('league/create-team', { divisions })
+  }
+}, {
+  method: 'POST',
+  path: '/league/team/create',
+  options: {
+    validate: {
+      payload: joi.object({
+        name: joi.string(),
+        alias: joi.string(),
+        divisionId: joi.number()
+      }),
+      failAction: async (request, h, error) => {
+        return boom.badRequest(error)
+      }
+    },
+    handler: async (request, h) => {
+      await api.post('/league/team/create', request.payload, request.state.dl_token)
+      return h.redirect('/league/teams')
+    }
+  }
+}, {
+  method: 'GET',
+  path: '/league/team/edit',
+  handler: async (request, h) => {
+    const team = await api.get(`/league/team/?teamId=${request.query.teamId}`, request.state.dl_token)
+    const divisions = await api.get('/league/divisions', request.state.dl_token)
+    return h.view('league/edit-team', { team, divisions })
+  }
+}, {
+  method: 'POST',
+  path: '/league/team/edit',
+  options: {
+    validate: {
+      payload: joi.object({
+        teamId: joi.string(),
+        name: joi.string(),
+        alias: joi.string(),
+        divisionId: joi.number()
+      }),
+      failAction: async (request, h, error) => {
+        return boom.badRequest(error)
+      }
+    },
+    handler: async (request, h) => {
+      await api.post('/league/team/edit', request.payload, request.state.dl_token)
+      return h.redirect('/league/teams')
+    }
+  }
+}, {
   method: 'POST',
   path: '/league/teams/autocomplete',
   options: {

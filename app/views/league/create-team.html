@@ -1,0 +1,26 @@
+{% extends '_layout.html' %}
+
+{% block content %}
+  <div class="col-md-6">
+    <form method="POST" action="/league/team/create">
+      <input type="hidden" name="crumb" value="{{crumb}}"/>
+      <div class="form-group">
+        <label for="name">Name</label>
+        <input type="text" class="form-control" id="name" name="name">    
+      </div>
+      <div class="form-group">
+        <label for="lastName">Alias</label>
+        <input type="text" class="form-control" id="alias" name="alias">    
+      </div>
+      <div class="form-group">
+        <label for="divisionId">Division</label>
+        <select class="form-control" id="divisionId" name="divisionId">
+        {% for division in divisions %}
+          <option value="{{ division.divisionId }}">{{ division.name }}</option>
+        {% endfor %}
+        </select>      
+      </div>
+      <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+  </div>
+{% endblock %}
