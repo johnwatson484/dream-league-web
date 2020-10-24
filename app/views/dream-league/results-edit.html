@@ -1,6 +1,22 @@
 {% extends '_layout.html' %}
 
 {% block content %}
-  <h2>Results</h2>  
+  <h2>Results sheet</h2>
+
+  {% extends '_layout.html' %}
+
+  {%if players.keepers.length %}
+    <div class="row">
+      {% for keeper in players.keepers %}
+        <div class="col-6">
+          
+        </div>
+       {% endfor %}
+      </div>
+  {% else %}
+    <div class="alert alert-info">
+      No teams available.
+    </div>
+  {% endif %}
 {% endblock %}
 
