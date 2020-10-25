@@ -5,7 +5,7 @@ module.exports = [{
   path: '/results/edit',
   handler: async (request, h) => {
     const players = await api.get('/dream-league/resultsheet', request.state.dl_token)
-    console.log(players)
+    console.log(players.keepers)
     return h.view('dream-league/results-edit', { players })
   }
 }]

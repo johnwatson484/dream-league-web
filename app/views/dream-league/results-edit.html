@@ -6,16 +6,43 @@
   {% extends '_layout.html' %}
 
   {%if players.keepers.length %}
-    <div class="row">
+    <table class="table table-condensed table-hover small">
+      <tr>
+        <th>Division</th>
+        <th>Team</th>
+        <th>Substitute</th>
+        <th>Manager</th>
+        <th width="100px;">Conceded</th>
+      </tr>
       {% for keeper in players.keepers %}
-        <div class="col-6">
-          
-        </div>
+        <tr>
+          <td>{{ keeper.division }}</td>
+          <td>{{ keeper.team }}</td>
+          <td>{{ keeper.substitute }}</td>
+          <td>{{ keeper.manager }}</td>
+          <td width="100px;">Conceded</td>
+        </tr>
+       {% endfor %}
+      </table>
+      <table class="table table-condensed table-hover small">
+      <tr>
+        <th>Division</th>
+        <th>Team</th>
+        <th>Manager</th>
+        <th width="100px;">Goals</th>
+      </tr>
+       {% for player in players.players %}
+        <tr>
+          <td>{{ player.division }}</td>
+          <td>{{ player.firstName }} {{ player.lastName }}</td>
+          <td>{{ player.manager }}</td>
+          <td width="100px;">Goals</td>
+        </tr>
        {% endfor %}
       </div>
   {% else %}
     <div class="alert alert-info">
-      No teams available.
+      No players available.
     </div>
   {% endif %}
 {% endblock %}
