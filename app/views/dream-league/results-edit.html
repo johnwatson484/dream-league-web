@@ -20,7 +20,19 @@
           <td>{{ keeper.team }}</td>
           <td>{{ keeper.substitute }}</td>
           <td>{{ keeper.manager }}</td>
-          <td width="100px;">Conceded</td>
+          <td width="100px;">
+            <span class="input-group-btn">
+              <button type="button" class="btn btn-danger btn-number btn-xs minus" data-type="minus" data-field="conceded">
+                <span class="glyphicon glyphicon-minus"></span>
+              </button>
+            </span>
+            <input type="text" onClick="this.select()" class="form-control input-xs" style="text-align:center; min-width:50px;" />
+            <span class="input-group-btn">
+              <button type="button" class="btn btn-danger btn-number btn-xs minus" data-type="minus" data-field="conceded">
+                <span class="glyphicon glyphicon-minus"></span>
+              </button>
+            </span>
+          </td>
         </tr>
        {% endfor %}
       </table>
@@ -36,7 +48,19 @@
           <td>{{ player.division }}</td>
           <td>{{ player.firstName }} {{ player.lastName }}</td>
           <td>{{ player.manager }}</td>
-          <td width="100px;">Goals</td>
+          <td width="100px;">
+            <span class="input-group-btn">
+              <button type="button" class="btn btn-danger btn-number btn-xs minus" data-type="minus" data-field="goals">
+                <span class="glyphicon glyphicon-minus"></span>
+              </button>
+            </span>
+            <input type="text" onClick="this.select()" class="form-control input-xs" style="text-align:center; min-width:50px;" />
+            <span class="input-group-btn">
+              <button type="button" class="btn btn-danger btn-number btn-xs minus" data-type="minus" data-field="goals">
+                <span class="glyphicon glyphicon-minus"></span>
+              </button>
+            </span>
+          </td>
         </tr>
        {% endfor %}
       </div>
