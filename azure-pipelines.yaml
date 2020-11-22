@@ -1,127 +1,16 @@
 trigger:
-- master
+  - master
 
 pr: none
 
 resources:
   repositories:
-  - repository: helmRepo
+  - repository: templates
     type: github
     endpoint: John D Watson
-    name: johnwatson484/helm-charts
+    name: johnwatson484/azure-devops-templates
 
-pool:
-  vmImage: 'ubuntu-latest'
-
-variables:
-  repo: dream-league-web
-  helmRepo: helm-charts
-  helmRepositoryUrl: git@github.com:johnwatson484/helm-charts.git
-  version:
-  containerRepository: johnwatson484/dream-league-web
-  helmChartPath: helm/dream-league-web
-  releaseExists: false
-
-steps: 
-  - checkout: self
-    displayName: Clone repository
-
-  - script: |
-      docker-compose -f $(Agent.BuildDirectory)/s/$(repo)/docker-compose.yaml -f $(Agent.BuildDirectory)/s/$(repo)/docker-compose.test.yaml -p $(repo)-test run $(repo)
-    displayName: Run tests
-
-  - task: PowerShell@2
-    displayName: Set version
-    inputs:
-      targetType: 'inline'
-      script: |
-        $packageVersion = (Get-Content '$(Agent.BuildDirectory)/s/$(repo)/package.json' | ConvertFrom-Json).version
-        Write-Host "##vso[task.setvariable variable=version;]$packageVersion"
-
-  - task: Docker@2
-    displayName: Build image
-    inputs:
-      containerRegistry: 'DockerHub'
-      repository: '$(containerRepository)'
-      command: 'build'
-      Dockerfile: '$(Agent.BuildDirectory)/s/$(repo)/Dockerfile'
-      tags: |
-        $(version)
-        latest
-      arguments: '--target production'
-      addPipelineData: false
-
-  - task: Docker@2
-    displayName: Push image
-    inputs:
-      containerRegistry: 'DockerHub'
-      repository: '$(containerRepository)'
-      command: 'push'
-      tags: |
-        $(version)
-        latest
-      addPipelineData: false
-
-  - script: |
-      sed -i -e 's/image: .*/image: johnwatson484\/$(repo):$(version)/' $(Agent.BuildDirectory)/s/$(repo)/$(helmChartPath)/values.yaml
-    displayName: Update Helm values
-  
-  - task: HelmInstaller@1
-    displayName: Install Helm
-    inputs:
-      helmVersionToInstall: 'latest'
-
-  - checkout: helmRepo
-    displayName: Clone Helm repository
-
-  - script: |
-      helm package $(Agent.BuildDirectory)/s/$(repo)/$(helmChartPath) --version $(version) --destination $(Agent.BuildDirectory)/s/$(helmRepo) --dependency-update
-    displayName: Package Helm
-
-  - task: DownloadSecureFile@1
-    name: sshKey
-    displayName: Download SSH key
-    inputs:
-      secureFile: 'GitHub-Helm-Deploy-Key'
-
-  - script: |
-      mkdir ~/.ssh && mv $(sshKey.secureFilePath) ~/.ssh/id_rsa
-      chmod 700 ~/.ssh && chmod 600 ~/.ssh/id_rsa
-      ssh-keyscan -t rsa github.com >> ~/.ssh/known_hosts
-    displayName: Install SSH key
-  
-  - script: |
-      cd $(Agent.BuildDirectory)/s/$(helmRepo)
-      git config --global user.email "azuredevops@microsoft.com"
-      git config --global user.name "Azure DevOps"
-      git remote set-url --push origin $(helmRepositoryUrl)
-      git pull origin master
-      helm repo index . --merge ./index.yaml
-      git add .
-      git commit -m "$(repo) updated by Azure DevOps"
-      git push origin HEAD:master
-    displayName: Update Helm repo
-
-  - task: PowerShell@2
-    displayName: Check GitHub release
-    inputs:
-      targetType: 'inline'
-      script: |
-        $releaseExists = (Invoke-RestMethod -SkipHttpErrorCheck -Uri 'https://api.github.com/repos/johnwatson484/$(repo)/releases/tags/$(version)').tag_name -eq '$(version)'
-        Write-Host "##vso[task.setvariable variable=releaseExists;]$releaseExists"
-
-  - task: GitHubRelease@1
-    displayName: GitHub release
-    inputs:
-      gitHubConnection: 'John D Watson PAT'
-      repositoryName: '$(Build.Repository.Name)'
-      action: 'create'
-      target: '$(Build.SourceVersion)'
-      tagSource: 'userSpecifiedTag'
-      tag: '$(version)'
-      title: '$(version)'
-      releaseNotesSource: 'inline'
-      changeLogCompareToRelease: 'lastFullRelease'
-      changeLogType: 'commitBased'
-    continueOnError: true
-    condition: and(succeeded(), eq(variables.releaseExists, false))
+extends:
+  template: build.yaml@templates
+  parameters:
+    repo: dream-league-web
