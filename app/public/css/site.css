@@ -1,3 +1,11 @@
 .ui-autocomplete-input {
   z-index: 2000 !important;
 }
+
+.input-xs {
+  height: 25px;
+  padding: 1px 5px;
+  font-size: 13px;
+  line-height: 1.5; /* If Placeholder of the input is moved up, rem/modify this. */
+  border-radius: 3px;
+}

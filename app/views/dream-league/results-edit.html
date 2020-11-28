@@ -12,7 +12,7 @@
         <th>Team</th>
         <th>Substitute</th>
         <th>Manager</th>
-        <th width="100px;">Conceded</th>
+        <th width="110px;">Conceded</th>
       </tr>
       {% for keeper in players.keepers %}
         <tr>
@@ -20,17 +20,19 @@
           <td>{{ keeper.team }}</td>
           <td>{{ keeper.substitute }}</td>
           <td>{{ keeper.manager }}</td>
-          <td width="100px;">
-            <span class="input-group-btn">
-              <button type="button" class="btn btn-danger btn-number btn-xs minus" data-type="minus" data-field="conceded">
-                <span class="glyphicon glyphicon-minus"></span>
-              </button>
-            </span>
-            <input type="text" onClick="this.select()" class="form-control input-xs" style="text-align:center; min-width:50px;" />
-            <span class="input-group-btn">
-              <button type="button" class="btn btn-danger btn-number btn-xs minus" data-type="minus" data-field="conceded">
-                <span class="glyphicon glyphicon-minus"></span>
-              </button>
+          <td width="110px;">
+            <span class="input-group">
+              <span class="input-group-prepend">
+                <button type="button" class="btn btn-danger btn-number btn-sm minus" data-type="minus" data-field="conceded">
+                  <span class="glyphicon glyphicon-minus"></span>
+                </button>
+              </span>
+              <input type="text" onClick="this.select()" class="form-control input-xs" style="text-align:center; min-width:50px;" />
+              <span class="input-group-append">
+                <button type="button" class="btn btn-danger btn-number btn-sm plus" data-type="plus" data-field="conceded">
+                  <span class="glyphicon glyphicon-plus"></span>
+                </button>
+              </span>
             </span>
           </td>
         </tr>
@@ -41,24 +43,26 @@
         <th>Division</th>
         <th>Team</th>
         <th>Manager</th>
-        <th width="100px;">Goals</th>
+        <th width="110px;">Goals</th>
       </tr>
        {% for player in players.players %}
         <tr>
           <td>{{ player.division }}</td>
           <td>{{ player.firstName }} {{ player.lastName }}</td>
           <td>{{ player.manager }}</td>
-          <td width="100px;">
-            <span class="input-group-btn">
-              <button type="button" class="btn btn-danger btn-number btn-xs minus" data-type="minus" data-field="goals">
-                <span class="glyphicon glyphicon-minus"></span>
-              </button>
-            </span>
-            <input type="text" onClick="this.select()" class="form-control input-xs" style="text-align:center; min-width:50px;" />
-            <span class="input-group-btn">
-              <button type="button" class="btn btn-danger btn-number btn-xs minus" data-type="minus" data-field="goals">
-                <span class="glyphicon glyphicon-minus"></span>
-              </button>
+          <td width="110px;">
+            <span class="input-group">
+              <span class="input-group-prepend">
+                <button type="button" class="btn btn-danger btn-number btn-sm minus" data-type="minus" data-field="goals">
+                  <span class="glyphicon glyphicon-minus"></span>
+                </button>
+              </span>
+              <input type="text" onClick="this.select()" class="form-control input-xs" style="text-align:center; min-width:50px;" />
+              <span class="input-group-append">
+                <button type="button" class="btn btn-danger btn-number btn-sm plus" data-type="plus" data-field="goals">
+                  <span class="glyphicon glyphicon-plus"></span>
+                </button>
+              </span>
             </span>
           </td>
         </tr>
