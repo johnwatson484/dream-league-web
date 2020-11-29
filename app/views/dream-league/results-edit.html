@@ -6,68 +6,88 @@
   {% extends '_layout.html' %}
 
   {%if players.keepers.length %}
-    <table class="table table-condensed table-hover small">
-      <tr>
-        <th>Division</th>
-        <th>Team</th>
-        <th>Substitute</th>
-        <th>Manager</th>
-        <th width="110px;">Conceded</th>
-      </tr>
-      {% for keeper in players.keepers %}
-        <tr>
-          <td>{{ keeper.division }}</td>
-          <td>{{ keeper.team }}</td>
-          <td>{{ keeper.substitute }}</td>
-          <td>{{ keeper.manager }}</td>
-          <td width="110px;">
-            <span class="input-group">
-              <span class="input-group-prepend">
-                <button type="button" class="btn btn-danger btn-number btn-sm minus" data-type="minus" data-field="conceded">
-                  <span class="glyphicon glyphicon-minus"></span>
-                </button>
-              </span>
-              <input type="text" onClick="this.select()" class="form-control input-xs" style="text-align:center; min-width:50px;" />
-              <span class="input-group-append">
-                <button type="button" class="btn btn-success btn-number btn-sm plus" data-type="plus" data-field="conceded">
-                  <span class="glyphicon glyphicon-plus"></span>
-                </button>
-              </span>
-            </span>
-          </td>
-        </tr>
-       {% endfor %}
-      </table>
-      <table class="table table-condensed table-hover small">
-      <tr>
-        <th>Division</th>
-        <th>Team</th>
-        <th>Manager</th>
-        <th width="110px;">Goals</th>
-      </tr>
-       {% for player in players.players %}
-        <tr>
-          <td>{{ player.division }}</td>
-          <td>{{ player.firstName }} {{ player.lastName }}</td>
-          <td>{{ player.manager }}</td>
-          <td width="110px;">
-            <span class="input-group">
-              <span class="input-group-prepend">
-                <button type="button" class="btn btn-danger btn-number btn-sm minus" data-type="minus" data-field="goals">
-                  <span class="glyphicon glyphicon-minus"></span>
-                </button>
-              </span>
-              <input type="text" onClick="this.select()" class="form-control input-xs" style="text-align:center; min-width:50px;" />
-              <span class="input-group-append">
-                <button type="button" class="btn btn-success btn-number btn-sm plus" data-type="plus" data-field="goals">
-                  <span class="glyphicon glyphicon-plus"></span>
-                </button>
-              </span>
-            </span>
-          </td>
-        </tr>
-       {% endfor %}
+    <form method="POST" action="/results/edit">
+      <input type="hidden" name="crumb" value="{{crumb}}"/>
+    
+      <div class="form-group">
+        <label for="gameweekId">Game Week</label>
+        <select class="form-control" id="gameweekId" name="gameweekId">
+        {% for gameweek in players.gameweeks %}
+          <option value="{{ gameweek.gameweekId }}" {% if gameweek.current %}selected{% endif %}>Gamweek {{gameweek.gameweekId}} - {{ gameweek.startDate }}</option>
+        {% endfor %}
+        </select> 
       </div>
+
+      <button type="submit" class="btn btn-primary">Submit</button>
+
+      <h4>Goalkeepers</h4>
+
+      <table class="table table-condensed table-hover small">
+        <tr>
+          <th>Division</th>
+          <th>Team</th>
+          <th>Substitute</th>
+          <th>Manager</th>
+          <th width="110px;">Conceded</th>
+        </tr>
+        {% for keeper in players.keepers %}
+          <tr>
+            <td>{{ keeper.division }}</td>
+            <td>{{ keeper.team }}</td>
+            <td>{{ keeper.substitute }}</td>
+            <td>{{ keeper.manager }}</td>
+            <td width="110px;">
+              <span class="input-group">
+                <span class="input-group-prepend">
+                  <button type="button" class="btn btn-danger btn-number btn-sm minus" data-type="minus" data-field="conceded">
+                    <span class="glyphicon glyphicon-minus"></span>
+                  </button>
+                </span>
+                <input type="text" onClick="this.select()" class="form-control input-xs" style="text-align:center; min-width:50px;" />
+                <span class="input-group-append">
+                  <button type="button" class="btn btn-success btn-number btn-sm plus" data-type="plus" data-field="conceded">
+                    <span class="glyphicon glyphicon-plus"></span>
+                  </button>
+                </span>
+              </span>
+            </td>
+          </tr>
+        {% endfor %}
+        </table>
+
+        <h4>Players</h4>
+
+        <table class="table table-condensed table-hover small">
+        <tr>
+          <th>Division</th>
+          <th>Team</th>
+          <th>Manager</th>
+          <th width="110px;">Goals</th>
+        </tr>
+        {% for player in players.players %}
+          <tr>
+            <td>{{ player.division }}</td>
+            <td>{{ player.firstName }} {{ player.lastName }}</td>
+            <td>{{ player.manager }}</td>
+            <td width="110px;">
+              <span class="input-group">
+                <span class="input-group-prepend">
+                  <button type="button" class="btn btn-danger btn-number btn-sm minus" data-type="minus" data-field="goals">
+                    <span class="glyphicon glyphicon-minus"></span>
+                  </button>
+                </span>
+                <input type="text" onClick="this.select()" class="form-control input-xs" style="text-align:center; min-width:50px;" />
+                <span class="input-group-append">
+                  <button type="button" class="btn btn-success btn-number btn-sm plus" data-type="plus" data-field="goals">
+                    <span class="glyphicon glyphicon-plus"></span>
+                  </button>
+                </span>
+              </span>
+            </td>
+          </tr>
+        {% endfor %}
+      </table>      
+    </form>
   {% else %}
     <div class="alert alert-info">
       No players available.
