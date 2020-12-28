@@ -76,7 +76,7 @@ module.exports = [{
     handler: async (request, h) => {
       const response = await refreshTeamSheet(request.payload.teamFile.path, request.state.dl_token)
       if (response.success) {
-        return h.redirect('/teamsheet')
+        return h.redirect('/teamsheet/edit')
       }
       return h.view('teamsheet', {
         message: 'Some players could not be mapped'
