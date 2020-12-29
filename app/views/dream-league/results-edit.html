@@ -61,12 +61,14 @@
         <tr>
           <th>Division</th>
           <th>Team</th>
+          <th>Player</th>
           <th>Manager</th>
           <th width="110px;">Goals</th>
         </tr>
         {% for player in players.players %}
           <tr>
             <td>{{ player.division }}</td>
+            <td>{{ player.team }}</td>
             <td>{{ player.firstName }} {{ player.lastName }}</td>
             <td>{{ player.manager }}</td>
             <td width="110px;">
