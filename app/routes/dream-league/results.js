@@ -5,7 +5,8 @@ module.exports = [{
   path: '/results/edit',
   handler: async (request, h) => {
     const players = await api.get('/dream-league/results-edit', request.state.dl_token)
-    console.log(players)
+    players.keepers = players.keepers.sort((a, b) => { return sortFn(a.division, b.division) || sortFn(a.team, b.team) })
+    players.players = players.players.sort((a, b) => { return sortFn(a.division, b.division) || sortFn(a.team, b.team) || sortFn(a.lastName, b.lastName) || sortFn(a.firstName, b.firstName) })
     return h.view('dream-league/results-edit', { players })
   }
 }, {
@@ -16,3 +17,7 @@ module.exports = [{
     return h.redirect('/')
   }
 }]
+
+function sortFn (a, b) {
+  return a === b ? 0 : a < b ? -1 : 1
+}
