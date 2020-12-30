@@ -13,8 +13,10 @@ module.exports = [{
   method: 'POST',
   path: '/results/edit',
   handler: async (request, h) => {
-    await api.post('/dream-league/results-edit', request.state.dl_token)
-    return h.redirect('/')
+    const x = request.payload
+    console.log(x)
+    // await api.post('/dream-league/results-edit', request.payload, request.state.dl_token)
+    return h.redirect('/results/edit')
   }
 }]
 

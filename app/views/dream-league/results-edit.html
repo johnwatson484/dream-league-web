@@ -6,7 +6,7 @@
   {% extends '_layout.html' %}
 
   {%if players.keepers.length %}
-    <form method="POST" action="/results/edit">
+    <form method="POST" action="/results/edit" >
       <input type="hidden" name="crumb" value="{{crumb}}"/>
     
       <div class="form-group">
@@ -43,7 +43,8 @@
                     <span class="glyphicon glyphicon-minus"></span>
                   </button>
                 </span>
-                <input type="text" onClick="this.select()" class="form-control input-xs" style="text-align:center; min-width:50px;" value="0"/>
+                <input type="hidden" name="conceded[{{ loop.index0 }}][teamId]" value="{{ keeper.teamId }}"/>
+                <input type="text" onClick="this.select()" name="conceded[{{ loop.index0 }}][conceded]" class="form-control input-xs" style="text-align:center; min-width:50px;" value="0"/>
                 <span class="input-group-append">
                   <button type="button" class="btn btn-success btn-number btn-sm plus" data-type="plus" data-field="conceded">
                     <span class="glyphicon glyphicon-plus"></span>
@@ -78,7 +79,8 @@
                     <span class="glyphicon glyphicon-minus"></span>
                   </button>
                 </span>
-                <input type="text" onClick="this.select()" class="form-control input-xs" style="text-align:center; min-width:50px;" value="0" />
+                <input type="hidden" name="goals[{{ loop.index0 }}][playerId]" value="{{ player.playerId }}"/>
+                <input type="text" onClick="this.select()" name="goals[{{ loop.index0 }}][goals]" class="form-control input-xs" style="text-align:center; min-width:50px;" value="0" />
                 <span class="input-group-append">
                   <button type="button" class="btn btn-success btn-number btn-sm plus" data-type="plus" data-field="goals">
                     <span class="glyphicon glyphicon-plus"></span>
