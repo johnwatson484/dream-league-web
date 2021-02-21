@@ -1,0 +1,12 @@
+{% extends '_layout.html' %}
+
+{% block content %}
+  {%if results.gameweekId %}
+    <h2>Week {{ results.gameweekId }} Results</h2>
+     
+  {% else %}
+    <div class="alert alert-info">
+      Results coming soon.
+    </div>
+  {% endif %}
+{% endblock %}

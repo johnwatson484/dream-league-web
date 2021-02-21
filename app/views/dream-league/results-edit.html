@@ -3,8 +3,6 @@
 {% block content %}
   <h2>Results sheet</h2>
 
-  {% extends '_layout.html' %}
-
   {%if players.keepers.length %}
     <form method="POST" action="/results/edit" >
       <input type="hidden" name="crumb" value="{{crumb}}"/>

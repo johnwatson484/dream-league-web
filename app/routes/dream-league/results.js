@@ -4,6 +4,14 @@ const boom = require('@hapi/boom')
 
 module.exports = [{
   method: 'GET',
+  path: '/results',
+  handler: async (request, h) => {
+    const results = await api.get('/dream-league/results', request.state.dl_token)
+    const gameweeks = await api.get('/dream-league/gameweeks', request.state.dl_token)
+    return h.view('dream-league/results', { results, gameweeks })
+  }
+}, {
+  method: 'GET',
   path: '/results/edit',
   handler: async (request, h) => {
     const players = await api.get('/dream-league/results-edit', request.state.dl_token)
@@ -27,7 +35,7 @@ module.exports = [{
     },
     handler: async (request, h) => {
       await api.post('/dream-league/results-edit', request.payload, request.state.dl_token)
-      return h.redirect('/results/edit')
+      return h.redirect('/results')
     }
   }
 }]
