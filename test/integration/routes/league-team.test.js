@@ -1,12 +1,13 @@
-const api = require('../../../app/api')
-jest.mock('../../../app/api')
-jest.mock('../../../app/plugins/auth')
-jest.mock('../../../app/plugins/crumb')
-let createServer
-let server
-const teams = [{ teamId: 1 }, { teamId: 2 }]
 
 describe('team route test', () => {
+  const api = require('../../../app/api')
+  jest.mock('../../../app/api')
+  jest.mock('../../../app/plugins/auth')
+  jest.mock('../../../app/plugins/crumb')
+  let createServer
+  let server
+  const teams = [{ teamId: 1 }, { teamId: 2 }]
+
   beforeAll(async () => {
     createServer = require('../../../app/server')
   })
