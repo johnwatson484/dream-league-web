@@ -2,6 +2,11 @@
 
 {% block content %}
   <div class="col-md-6">
+    {% if error %}
+      <div class="alert alert-danger">
+        {{ error }}
+      </div>
+    {% endif %}
     <form method="POST" action="/league/player/edit">
       <input type="hidden" name="crumb" value="{{crumb}}"/>
       <input type="hidden" id="playerId" name="playerId" value="{{ player.playerId }}"> 

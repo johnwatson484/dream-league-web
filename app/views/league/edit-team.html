@@ -2,6 +2,11 @@
 
 {% block content %}
   <div class="col-md-6">
+    {% if error %}
+      <div class="alert alert-danger">
+        {{ error }}
+      </div>
+    {% endif %}
     <form method="POST" action="/league/team/edit">
       <input type="hidden" name="crumb" value="{{crumb}}"/>
       <input type="hidden" id="teamId" name="teamId" value="{{ team.teamId }}"> 
@@ -17,7 +22,7 @@
         <label for="divisionId">Division</label>
         <select class="form-control" id="divisionId" name="divisionId">
         {% for division in divisions %}
-          <option value="{{ division.divisionId }}" {% if division.divisionId == teamId.divisionId %}selected{% endif %}>{{ division.name }}</option>
+          <option value="{{ division.divisionId }}" {% if division.divisionId == team.divisionId %}selected{% endif %}>{{ division.name }}</option>
         {% endfor %}
         </select>      
       </div>

@@ -29,12 +29,14 @@ module.exports = [{
     validate: {
       payload: joi.object({
         firstName: joi.string().allow(''),
-        lastName: joi.string(),
+        lastName: joi.string().required(),
         position: joi.string().valid(...['Defender', 'Midfielder', 'Forward']),
-        teamId: joi.number()
+        teamId: joi.number().required()
       }),
       failAction: async (request, h, error) => {
-        return boom.badRequest(error)
+        const teams = await api.get('/league/teams', request.state.dl_token)
+        const positions = ['Defender', 'Midfielder', 'Forward']
+        return h.view('league/create-player', { teams, positions, error, player: request.payload }).code(400).takeover()
       }
     },
     handler: async (request, h) => {
@@ -57,14 +59,16 @@ module.exports = [{
   options: {
     validate: {
       payload: joi.object({
-        playerId: joi.number(),
+        playerId: joi.number().required(),
         firstName: joi.string().allow(''),
-        lastName: joi.string(),
+        lastName: joi.string().required(),
         position: joi.string().valid(...['Defender', 'Midfielder', 'Forward']),
-        teamId: joi.number()
+        teamId: joi.number().required()
       }),
       failAction: async (request, h, error) => {
-        return boom.badRequest(error)
+        const teams = await api.get('/league/teams', request.state.dl_token)
+        const positions = ['Defender', 'Midfielder', 'Forward']
+        return h.view('league/edit-player', { player: request.payload, teams, positions }).code(400).takeover()
       }
     },
     handler: async (request, h) => {

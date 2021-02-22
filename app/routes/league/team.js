@@ -22,12 +22,13 @@ module.exports = [{
   options: {
     validate: {
       payload: joi.object({
-        name: joi.string(),
-        alias: joi.string(),
-        divisionId: joi.number()
+        name: joi.string().required(),
+        alias: joi.string().required(),
+        divisionId: joi.number().required()
       }),
       failAction: async (request, h, error) => {
-        return boom.badRequest(error)
+        const divisions = await api.get('/league/divisions', request.state.dl_token)
+        return h.view('league/create-team', { divisions, team: request.payload, error }).code(400).takeover()
       }
     },
     handler: async (request, h) => {
@@ -49,13 +50,14 @@ module.exports = [{
   options: {
     validate: {
       payload: joi.object({
-        teamId: joi.string(),
-        name: joi.string(),
-        alias: joi.string(),
-        divisionId: joi.number()
+        teamId: joi.string().required(),
+        name: joi.string().required(),
+        alias: joi.string().required(),
+        divisionId: joi.number().required()
       }),
       failAction: async (request, h, error) => {
-        return boom.badRequest(error)
+        const divisions = await api.get('/league/divisions', request.state.dl_token)
+        return h.view('league/create-team', { divisions, team: request.payload, error }).code(400).takeover()
       }
     },
     handler: async (request, h) => {
