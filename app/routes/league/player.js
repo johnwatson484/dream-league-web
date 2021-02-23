@@ -1,6 +1,7 @@
 const api = require('../../api')
 const joi = require('joi')
 const boom = require('@hapi/boom')
+const positions = ['Defender', 'Midfielder', 'Forward']
 
 module.exports = [{
   method: 'GET',
@@ -19,7 +20,6 @@ module.exports = [{
   path: '/league/player/create',
   handler: async (request, h) => {
     const teams = await api.get('/league/teams', request.state.dl_token)
-    const positions = ['Defender', 'Midfielder', 'Forward']
     return h.view('league/create-player', { teams, positions })
   }
 }, {
@@ -30,12 +30,11 @@ module.exports = [{
       payload: joi.object({
         firstName: joi.string().allow(''),
         lastName: joi.string().required(),
-        position: joi.string().valid(...['Defender', 'Midfielder', 'Forward']),
+        position: joi.string().valid(...positions),
         teamId: joi.number().required()
       }),
       failAction: async (request, h, error) => {
         const teams = await api.get('/league/teams', request.state.dl_token)
-        const positions = ['Defender', 'Midfielder', 'Forward']
         return h.view('league/create-player', { teams, positions, error, player: request.payload }).code(400).takeover()
       }
     },
@@ -50,7 +49,6 @@ module.exports = [{
   handler: async (request, h) => {
     const player = await api.get(`/league/player/?playerId=${request.query.playerId}`, request.state.dl_token)
     const teams = await api.get('/league/teams', request.state.dl_token)
-    const positions = ['Defender', 'Midfielder', 'Forward']
     return h.view('league/edit-player', { player, teams, positions })
   }
 }, {
@@ -62,12 +60,11 @@ module.exports = [{
         playerId: joi.number().required(),
         firstName: joi.string().allow(''),
         lastName: joi.string().required(),
-        position: joi.string().valid(...['Defender', 'Midfielder', 'Forward']),
+        position: joi.string().valid(...positions),
         teamId: joi.number().required()
       }),
       failAction: async (request, h, error) => {
         const teams = await api.get('/league/teams', request.state.dl_token)
-        const positions = ['Defender', 'Midfielder', 'Forward']
         return h.view('league/edit-player', { player: request.payload, teams, positions }).code(400).takeover()
       }
     },
