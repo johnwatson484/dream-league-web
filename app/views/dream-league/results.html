@@ -1,21 +1,70 @@
 {% extends '_layout.html' %}
 
 {% block content %}
-  {%if results.gameweekId %}
-    <h2>Week {{ results.gameweekId }} Results</h2>
+{%if results.gameweekId %}
+<h2>Week {{ results.gameweekId }} Results</h2>
 
-    <div class="form-group">
-      <label for="gameweekId">Game Week</label>
-      <select class="form-control" id="gameweekId" name="gameweekId">
-      {% for gameweek in gameweeks %}
-        <option value="{{ gameweek.gameweekId }}" {% if loop.last %}selected{% endif %}>Gameweek {{ gameweek.gameweekId }} - {{ gameweek.startDate }} - {{ gameweek.endDate }}</option>
-      {% endfor %}
-      </select> 
+<div class="form-group">
+  <label for="gameweekId">Game Week</label>
+  <select class="form-control" id="gameweekId" name="gameweekId">
+    {% for gameweek in gameweeks %}
+    <option value="{{ gameweek.gameweekId }}" {% if loop.last %}selected{% endif %}>Gameweek {{ gameweek.gameweekId }} -
+      {{ gameweek.startDate }} - {{ gameweek.endDate }}</option>
+    {% endfor %}
+  </select>
+</div>
+
+<div class="row">
+  <div class="col-md-6">
+    <div class="card">
+      <div class="card-header">
+        Scores
+      </div>
+      <div class="card-body">
+        <table>
+          {% for score in results.scores %}
+            <tr>
+              <td>{{ score.manager }}</td>
+              <td>
+                <div class="row">
+                  <div class="col-md-12">
+                    <span class="label @(score.Result == "Won" ? "label-success" : score.Result == "Lost" ? "label-danger" : "label-primary")"><strong>{{ score.goals }} - {{ score.conceded }}</strong></span>
+                  </div>
+                </div>
+                {% for scorer in score.scorers %}
+                    <div class="row">
+                      <div class="col-md-12">
+                        <em>
+                          {{ scorer.name }}
+
+                          {% if scorer.goals > 1 %}
+                            ({{ scorer.goals }})
+                          {% endif %}
+                        </em>
+                      </div>
+                    </div>
+                {% endfor %}
+              </td>
+            </tr>
+          {% endfor %}
+        </table>
+      </div>
     </div>
-     
-  {% else %}
-    <div class="alert alert-info">
-      Results coming soon.
+  </div>
+  <div class="col-md-6">
+    <div class="card">
+      <div class="card-header">
+        Table
+      </div>
+      <div class="card-body">
+      </div>
     </div>
-  {% endif %}
+  </div>
+</div>
+
+{% else %}
+<div class="alert alert-info">
+  Results coming soon.
+</div>
+{% endif %}
 {% endblock %}
