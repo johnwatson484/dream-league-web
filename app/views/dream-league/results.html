@@ -3,6 +3,15 @@
 {% block content %}
   {%if results.gameweekId %}
     <h2>Week {{ results.gameweekId }} Results</h2>
+
+    <div class="form-group">
+      <label for="gameweekId">Game Week</label>
+      <select class="form-control" id="gameweekId" name="gameweekId">
+      {% for gameweek in gameweeks %}
+        <option value="{{ gameweek.gameweekId }}" {% if loop.last %}selected{% endif %}>Gameweek {{ gameweek.gameweekId }} - {{ gameweek.startDate }} - {{ gameweek.endDate }}</option>
+      {% endfor %}
+      </select> 
+    </div>
      
   {% else %}
     <div class="alert alert-info">
