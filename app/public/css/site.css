@@ -2,10 +2,65 @@
   z-index: 2000 !important;
 }
 
+body {
+  padding-top: 50px;
+  padding-bottom: 20px;
+  font-family: 'Play', sans-serif;
+}
+
+/* Set padding to keep content from hitting the edges */
+.body-content {
+  padding-left: 15px;
+  padding-right: 15px;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Play', sans-serif;
+}
+
+/* Override the default bootstrap behavior where horizontal description lists 
+   will truncate terms that are too long to fit in the left column 
+*/
+.dl-horizontal dt {
+  white-space: normal;
+}
+
+/* Set width on the form input elements since they're 100% wide by default */
+input,
+select,
+textarea {
+  max-width: 280px;
+}
+
 .input-xs {
   height: 25px;
   padding: 1px 5px;
   font-size: 13px;
   line-height: 1.5; /* If Placeholder of the input is moved up, rem/modify this. */
   border-radius: 3px;
+}
+
+table a:not(.btn), .table a:not(.btn) {
+  text-decoration: none;
+}
+
+  table a:not(.btn):hover, .table a:not(.btn):hover {
+    text-decoration: underline;
+  }
+
+.jumbotron {
+  background-image: url("../Content/images/FootballPitch.jpg");
+  background-size: cover;
+  color: white;
+  text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
+}
+
+@media(max-width:650px) {
+  .no-mobile {
+    display: none;
+  }
+
+  body {
+    padding-top: 65px;
+  }
 }
