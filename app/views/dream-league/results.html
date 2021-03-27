@@ -1,98 +1,103 @@
 {% extends '_layout.html' %}
 
 {% block content %}
-{%if results.gameweekId %}
-<h2>Week {{ results.gameweekId }} Results</h2>
+  {%if results.gameweekId %}
+  <h2>Week {{ results.gameweekId }} Results</h2>
 
-<div class="form-group">
-  <label for="gameweekId">Game Week</label>
-  <select class="form-control" id="gameweekId" name="gameweekId">
-    {% for gameweek in gameweeks %}
-    <option value="{{ gameweek.gameweekId }}" {% if loop.last %}selected{% endif %}>Gameweek {{ gameweek.gameweekId }} -
-      {{ gameweek.startDate }} - {{ gameweek.endDate }}</option>
-    {% endfor %}
-  </select>
-</div>
+  <form action="/results" method="GET" id="frm-gameweek">
+    <div class="form-group">
+      <label for="gameweekId">Game Week</label>
+      <select class="form-control" id="gameweekId" name="gameweekId">
+        {% for gameweek in gameweeks %}
+          <option value="{{ gameweek.gameweekId }}" {% if results.gameweekId === gameweek.gameweekId %}selected{% endif %}>Gameweek {{ gameweek.gameweekId }} - {{ gameweek.startDate }} - {{ gameweek.endDate }}</option>
+        {% endfor %}
+      </select>
+    </div>
+  </form>
 
-<div class="row">
-  <div class="col-md-6">
-    <div class="card">
-      <div class="card-header">
-        Scores
-      </div>
-      <div class="card-body">
-        <table class="table table-hover">
-          {% for score in results.scores %}
-            <tr>
-              <td>{{ score.manager }}</td>
-              <td>
-                <div class="row">
-                  <div class="col-md-12">
-                    <span class="badge {% if score.result === 'W' %}badge-success{% elif score.result === 'L' %}badge-danger{% else %}badge-primary{% endif %}">{{ score.goals }} - {{ score.conceded }}</span>
-                  </div>
-                </div>
-                {% for scorer in score.scorers %}
-                    <div class="row">
-                      <div class="col-md-12">
-                        <em>
-                          {{ scorer.name }}
-
-                          {% if scorer.goals > 1 %}
-                            ({{ scorer.goals }})
-                          {% endif %}
-                        </em>
-                      </div>
+  <div class="row">
+    <div class="col-md-6">
+      <div class="card">
+        <div class="card-header">
+          Scores
+        </div>
+        <div class="card-body">
+          <table class="table table-hover">
+            {% for score in results.scores %}
+              <tr>
+                <td>{{ score.manager }}</td>
+                <td>
+                  <div class="row">
+                    <div class="col-md-12">
+                      <span class="badge {% if score.result === 'W' %}badge-success{% elif score.result === 'L' %}badge-danger{% else %}badge-primary{% endif %}">{{ score.goals }} - {{ score.conceded }}</span>
                     </div>
-                {% endfor %}
-              </td>
-            </tr>
-          {% endfor %}
-        </table>
-      </div>
-    </div>
-  </div>
-  <div class="col-md-6">
-    <div class="card">
-      <div class="card-header">
-        Table
-      </div>
-      <div class="card-body">
-        <table class="table table-hover small">
-          <tr>
-            <th>Pos</th>
-            <th>Manager</th>
-            <th>P</th>
-            <th class="no-mobile">W</th>
-            <th class="no-mobile">D</th>
-            <th class="no-mobile">L</th>
-            <th class="no-mobile">GF</th>
-            <th class="no-mobile">GA</th>
-            <th class="no-mobile">GD</th>
-            <th>Pts</th>
-          </tr>
-          {% for row in results.table %}
-            <tr>
-              <td>{{ row.position }}</td>
-              <td>{{ row.manager }}</td>
-              <td class="no-mobile">{{ row.played }}</td>
-              <td class="no-mobile">{{ row.won }}</td>
-              <td class="no-mobile">{{ row.drawn }}</td>
-              <td class="no-mobile">{{ row.lost }}</td>
-              <td class="no-mobile">{{ row.gf }}</td>
-              <td class="no-mobile">{{ row.ga }}</td>
-              <td class="no-mobile">{{ row.gd }}</td>
-              <td>{{ row.points }}</td>
-            </tr>
-          {% endfor %}
-        </table>
-      </div>
-    </div>
-  </div>
-</div>
+                  </div>
+                  {% for scorer in score.scorers %}
+                      <div class="row">
+                        <div class="col-md-12">
+                          <em>
+                            {{ scorer.name }}
 
-{% else %}
-<div class="alert alert-info">
-  Results coming soon.
-</div>
-{% endif %}
+                            {% if scorer.goals > 1 %}
+                              ({{ scorer.goals }})
+                            {% endif %}
+                          </em>
+                        </div>
+                      </div>
+                  {% endfor %}
+                </td>
+              </tr>
+            {% endfor %}
+          </table>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="card">
+        <div class="card-header">
+          Table
+        </div>
+        <div class="card-body">
+          <table class="table table-hover small">
+            <tr>
+              <th>Pos</th>
+              <th>Manager</th>
+              <th>P</th>
+              <th class="no-mobile">W</th>
+              <th class="no-mobile">D</th>
+              <th class="no-mobile">L</th>
+              <th class="no-mobile">GF</th>
+              <th class="no-mobile">GA</th>
+              <th class="no-mobile">GD</th>
+              <th>Pts</th>
+            </tr>
+            {% for row in results.table %}
+              <tr>
+                <td>{{ row.position }}</td>
+                <td>{{ row.manager }}</td>
+                <td class="no-mobile">{{ row.played }}</td>
+                <td class="no-mobile">{{ row.won }}</td>
+                <td class="no-mobile">{{ row.drawn }}</td>
+                <td class="no-mobile">{{ row.lost }}</td>
+                <td class="no-mobile">{{ row.gf }}</td>
+                <td class="no-mobile">{{ row.ga }}</td>
+                <td class="no-mobile">{{ row.gd }}</td>
+                <td>{{ row.points }}</td>
+              </tr>
+            {% endfor %}
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  {% else %}
+  <div class="alert alert-info">
+    Results coming soon.
+  </div>
+  {% endif %}
+{% endblock %}
+
+{% block bodyEnd %}
+  <script src="{{ assetPath }}/results.js"></script>
 {% endblock %}

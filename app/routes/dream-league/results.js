@@ -5,10 +5,21 @@ const boom = require('@hapi/boom')
 module.exports = [{
   method: 'GET',
   path: '/results',
-  handler: async (request, h) => {
-    const results = await api.get('/dream-league/results', request.state.dl_token)
-    const gameweeks = await api.get('/dream-league/gameweeks', request.state.dl_token)
-    return h.view('dream-league/results', { results, gameweeks })
+  options: {
+    validate: {
+      query: joi.object({
+        gameweekId: joi.number().optional()
+      }),
+      failAction: async (request, h, error) => {
+        return boom.badRequest(error)
+      }
+    },
+    handler: async (request, h) => {
+      const gameweekId = request.query?.gameweekId || 0
+      const results = await api.get(`/dream-league/results?gameweekId=${gameweekId}`, request.state.dl_token)
+      const gameweeks = await api.get('/dream-league/gameweeks', request.state.dl_token)
+      return h.view('dream-league/results', { results, gameweeks })
+    }
   }
 }, {
   method: 'GET',

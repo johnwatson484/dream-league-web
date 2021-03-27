@@ -1,0 +1,27 @@
+{
+  // See https://go.microsoft.com/fwlink/?LinkId=733558
+  // for the documentation about the tasks.json format
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "compose-debug-up",
+      "type": "shell",
+      "command": "docker-compose -f docker-compose.yaml -f docker-compose.override.yaml -f docker-compose.debug.yaml up -d"
+    },
+    {
+      "label": "compose-debug-down",
+      "type": "shell",
+      "command": "docker-compose -f docker-compose.yaml -f docker-compose.override.yaml -f docker-compose.debug.yaml down"
+    },
+    {
+      "label": "compose-test-debug-up",
+      "type": "shell",
+      "command": "docker-compose -f docker-compose.yaml -f docker-compose.test.yaml -f docker-compose.test.debug.yaml up -d"
+    },
+    {
+      "label": "compose-test-debug-down",
+      "type": "shell",
+      "command": "docker-compose -f docker-compose.yaml -f docker-compose.test.yaml -f docker-compose.test.debug.yaml down"
+    }
+  ]
+}

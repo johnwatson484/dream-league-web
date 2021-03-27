@@ -5,13 +5,128 @@
   "version": "0.2.0",
   "configurations": [
     {
+      "name": "Node: Launch",
+      "program": "${workspaceFolder}/app",
+      "request": "launch",
+      "skipFiles": [
+        "<node_internals>/**",
+        "**/node_modules/**"
+      ],
+      "type": "pwa-node",
+      "serverReadyAction": {
+        "pattern": "Server running on",
+        "uriFormat": "http://localhost:3000",
+        "action": "debugWithChrome"
+      }
+    },
+    {
+      "name": "Node: Server",
+      "program": "${workspaceFolder}/app",
+      "request": "launch",
+      "skipFiles": [
+        "<node_internals>/**",
+        "**/node_modules/**"
+      ],
+      "type": "pwa-node"
+    },
+    {
+      "name": "Node: Client",
+      "type": "pwa-chrome",
+      "request": "launch",
+      "url": "http://localhost:3000",
+      "webRoot": "${workspaceFolder}"
+    },
+    {
+      "name": "Docker: Attach",
       "type": "node",
       "request": "attach",
-      "name": "Docker: Attach to Node",
+      "restart": true,
+      "port": 9230,
       "remoteRoot": "/home/node",
+      "skipFiles": [
+        "<node_internals>/**",
+        "**/node_modules/**"
+      ]
+    },
+    {
+      "name": "Docker: Attach Launch",
+      "type": "node",
+      "request": "attach",
+      "remoteRoot": "/home/node",
+      "restart": true,
       "port": 9230,
       "skipFiles": [
-        "<node_internals>/**"
+        "<node_internals>/**",
+        "**/node_modules/**"
+      ],
+      "preLaunchTask": "compose-debug-up",
+      "postDebugTask": "compose-debug-down"
+    },
+    {
+      "name": "Docker: Jest Attach Launch",
+      "type": "node",
+      "request": "attach",
+      "port": 9230,
+      "remoteRoot": "/home/node",
+      "skipFiles": [
+        "<node_internals>/**",
+        "**/node_modules/**"
+      ],
+      "internalConsoleOptions": "neverOpen",
+      "disableOptimisticBPs": true,
+      "windows": {
+        "program": "${workspaceFolder}/node_modules/jest/bin/jest",
+      },
+      "preLaunchTask": "compose-test-debug-up",
+      "postDebugTask": "compose-test-debug-down"
+    },
+    {
+      "name": "Node: Jest",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/node_modules/.bin/jest",
+      "args": [
+        "--runInBand"
+      ],
+      "skipFiles": [
+        "<node_internals>/**",
+        "**/node_modules/**"
+      ],
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen",
+      "disableOptimisticBPs": true,
+      "windows": {
+        "program": "${workspaceFolder}/node_modules/jest/bin/jest",
+      }
+    },
+    {
+      "name": "Node: Jest Current File",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/node_modules/.bin/jest",
+      "args": [
+        "${fileBasenameNoExtension}",
+        "--config",
+        "jest.config.js"
+      ],
+      "skipFiles": [
+        "<node_internals>/**",
+        "**/node_modules/**"
+      ],
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen",
+      "disableOptimisticBPs": true,
+      "windows": {
+        "program": "${workspaceFolder}/node_modules/jest/bin/jest",
+      }
+    }
+  ],
+  "compounds": [
+    {
+      "name": "Node: Client/Server",
+      "configurations": [
+        "Node: Server",
+        "Node: Client"
       ]
     }
   ]
