@@ -1,7 +1,10 @@
 {% extends '_layout.html' %}
 
 {% block content %}
-  <h1>Hello world</h1>
+  <div class="jumbotron">
+    <h1>Dream League</h1>
+    <p>Private fantasy football league</p>
+  </div>
 
   {% if auth.isAuthenticated %}
     <p>Authenticated</p>

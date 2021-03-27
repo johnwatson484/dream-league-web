@@ -8,7 +8,6 @@ module.exports = [{
   handler: async (request, h) => {
     const results = await api.get('/dream-league/results', request.state.dl_token)
     const gameweeks = await api.get('/dream-league/gameweeks', request.state.dl_token)
-    console.log(results.table)
     return h.view('dream-league/results', { results, gameweeks })
   }
 }, {
