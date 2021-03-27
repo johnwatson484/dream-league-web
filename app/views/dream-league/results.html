@@ -28,7 +28,7 @@
               <td>
                 <div class="row">
                   <div class="col-md-12">
-                    <span class="label @(score.Result == "Won" ? "label-success" : score.Result == "Lost" ? "label-danger" : "label-primary")"><strong>{{ score.goals }} - {{ score.conceded }}</strong></span>
+                    <span class="badge {% if score.result === 'W' %}badge-success{% elif score.result === 'L' %}badge-danger{% else %}badge-primary{% endif %}">{{ score.goals }} - {{ score.conceded }}</span>
                   </div>
                 </div>
                 {% for scorer in score.scorers %}
