@@ -41,7 +41,7 @@
       "type": "node",
       "request": "attach",
       "restart": true,
-      "port": 9230,
+      "port": 9229,
       "remoteRoot": "/home/node",
       "skipFiles": [
         "<node_internals>/**",
@@ -54,7 +54,7 @@
       "request": "attach",
       "remoteRoot": "/home/node",
       "restart": true,
-      "port": 9230,
+      "port": 9229,
       "skipFiles": [
         "<node_internals>/**",
         "**/node_modules/**"
@@ -66,7 +66,7 @@
       "name": "Docker: Jest Attach Launch",
       "type": "node",
       "request": "attach",
-      "port": 9230,
+      "port": 9229,
       "remoteRoot": "/home/node",
       "skipFiles": [
         "<node_internals>/**",

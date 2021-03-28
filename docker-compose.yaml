@@ -6,4 +6,4 @@ services:
     container_name: dream-league-web
     environment:
       JWT_SECRET: secret
-      API_HOST: http://dream-league-api:3000
+      API_HOST: http://dream-league-api:3001

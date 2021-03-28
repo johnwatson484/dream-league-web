@@ -5,8 +5,8 @@ services:
       context: .
       target: development
     ports:
-      - "3001:3001"
-      - "9230:9229"    
+      - "3000:3000"
+      - "9229:9229"    
     volumes:
       - ./app/:/home/node/app/
       - ./package.json:/home/node/package.json

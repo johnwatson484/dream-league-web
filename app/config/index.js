@@ -3,13 +3,13 @@ const envs = ['development', 'test', 'production']
 
 // Define config schema
 const schema = joi.object().keys({
-  port: joi.number().default(3001),
+  port: joi.number().default(3000),
   env: joi.string().valid(...envs).default(envs[0]),
   appName: joi.string(),
   jwtConfig: joi.object({
     secret: joi.string()
   }),
-  apiHost: joi.string().default('http://localhost:3000'),
+  apiHost: joi.string().default('http://localhost:3001'),
   cookieOptions: joi.object({
     ttl: joi.number().default(60 * 60 * 1000),
     encoding: joi.string().valid('none').default('none'),
