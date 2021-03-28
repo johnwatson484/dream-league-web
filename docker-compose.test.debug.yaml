@@ -1,0 +1,6 @@
+version: '3.7'
+services:
+  dream-league-web:
+    command: npm run test:debug
+    ports:
+      - "9229:9229"

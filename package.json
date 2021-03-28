@@ -6,11 +6,13 @@
   "scripts": {
     "start": "node app/index.js",
     "start:watch": "nodemon --inspect=0.0.0.0 --ext css,js,njk --legacy-watch app/index.js",
+    "start:debug": "nodemon --inspect-brk=0.0.0.0 --ext css,js,njk --legacy-watch app/index.js",
     "test": "jest --runInBand --forceExit",
     "test:lint": "standard",
     "test:integration": "jest --testPathPattern=test/integration --coverage=false",
     "test:unit": "jest --testPathPattern=test/unit --coverage=false",
-    "test:watch": "jest --coverage=false --onlyChanged --watch --runInBand"
+    "test:watch": "jest --coverage=false --onlyChanged --watch --runInBand",
+    "test:debug": "node --inspect-brk=0.0.0.0 ./node_modules/jest/bin/jest.js --runInBand --no-cache --watchAll"
   },
   "author": "John Watson",
   "license": "MIT",
