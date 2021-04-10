@@ -1,0 +1,14 @@
+<table class="table table-hover small">
+  <tr>
+    <th class="no-mobile">Pos</th>
+    <th>Manager</th>
+    <th>Form</th>
+  </tr>
+  {% for row in form %}
+    <tr>
+      <td class="no-mobile">{{ row.position }}</td>
+      <td>{{ row.manager }}</td>
+      <td>{{ row.results }}</td>
+    </tr>
+  {% endfor %}
+</table>
