@@ -1,72 +1,85 @@
 {% extends '_layout.html' %}
 
 {% block content %}
-  <div class="jumbotron">
-    <h1>Dream League</h1>
-    <p>Private fantasy football league</p>
+<div class="jumbotron">
+  <h1>Dream League</h1>
+  <p>Private fantasy football league</p>
+</div>
+
+{% if results.gameweekId %}
+<div class="row">
+  <div class="col-md-6">
+    <div class="card">
+      <div class="card-header">
+        Latest scores - Week {{ results.gameweekId }}
+      </div>
+      <div class="card-body">
+        {% include "./dream-league/_scores.html" %}
+      </div>
+    </div>
   </div>
-
-  {% if results.gameweekId %}
-    <div class="row">
-      <div class="col-md-6">
-        <div class="card">
-          <div class="card-header">
-            Latest scores - Week {{ results.gameweekId }}
-          </div>
-          <div class="card-body">
-            {% include "./dream-league/_scores.html" %}
-          </div>
-        </div>
+  <div class="col-md-6">
+    <div class="card">
+      <div class="card-header">
+        Table
       </div>
-      <div class="col-md-6">
-        <div class="card">
-          <div class="card-header">
-            Table
-          </div>
-          <div class="card-body">
-            {% include "./dream-league/_table.html" %}
-          </div>
-        </div>
+      <div class="card-body">
+        {% include "./dream-league/_table.html" %}
       </div>
     </div>
+  </div>
+</div>
 
-    <div class="row">
-      <div class="col-md-6">
-        <div class="card">
-          <div class="card-header">
-            Form
-          </div>
-          <div class="card-body">
-            {% include "./dream-league/_form.html" %}
-          </div>
-        </div>
+<div class="row">
+  <div class="col-md-6">
+    <div class="card">
+      <div class="card-header">
+        Form
       </div>
-      <div class="col-md-6">
-        <div class="card">
-          <div class="card-header">
-            Top Scorers
-          </div>
-          <div class="card-body">
-            {% include "./dream-league/_top-scorers.html" %}
-          </div>
-        </div>
+      <div class="card-body">
+        {% include "./dream-league/_form.html" %}
       </div>
     </div>
-  {% else %}
-    <div class="alert alert-info">
-      New season coming soon.
+  </div>
+  <div class="col-md-6">
+    <div class="card">
+      <div class="card-header">
+        Top Scorers
+      </div>
+      <div class="card-body">
+        {% include "./dream-league/_top-scorers.html" %}
+      </div>
     </div>
-  {% endif %}
+  </div>
+</div>
 
-  {% if auth.isAuthenticated %}
-    <p>Authenticated</p>
-  {% endif %}
+<div class="row">
+  <div class="col-md-6">
+    <h2>Finances</h2>
+    <p>Visit external site <a href="https://www.dreamleaguefinance.co.uk" target="_blank">www.dreamleaguefinance.co.uk<i class="fa fa-external-link" aria-hidden="true"></i></a> to view and manage your Dream League finances.</p>
+    <img class="img-fluid rounded" src="../assets/money.jpeg" />
+  </div>
+  <div class="col-md-6">
+    <h2>Next meeting</h2>
+    <p>Unknown</p>
+    <img class="img-fluid rounded" src="../assets/beer.jpeg" />
+  </div>
+</div>
+{% else %}
+<div class="alert alert-info">
+  New season coming soon.
+</div>
+{% endif %}
 
-  {% if auth.isAdmin %}
-    <p>Admin role</p>
-  {% endif %}
+{% if auth.isAuthenticated %}
+<p>Authenticated</p>
+{% endif %}
 
-  {% if auth.isUser %}
-    <p>User role</p>
-  {% endif %}
+{% if auth.isAdmin %}
+<p>Admin role</p>
+{% endif %}
+
+{% if auth.isUser %}
+<p>User role</p>
+{% endif %}
 {% endblock %}
