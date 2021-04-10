@@ -48,7 +48,8 @@
       "beforeAll",
       "afterAll",
       "$",
-      "XMLHttpRequest"
+      "XMLHttpRequest",
+      "dataLayer"
     ]
   }
 }

@@ -4,7 +4,9 @@
 <head>
   <meta charset="UTF-8">
   {% if cookiesPolicy and cookiesPolicy.analytics %}
-  <!-- Google Analytics -->
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-C35GGT2X1B"></script>
+  <script src="{{ assetPath }}/google-analytics.js"></script>
   {% endif %}
   <title>{{ appName }}</title>
   <link rel="icon" type="image/x-icon" href="{{ assetPath }}/favicon.ico" />
@@ -29,7 +31,7 @@
 
 <body>
   {% if cookiesPolicy and not cookiesPolicy.confirmed %}
-    {% include "./cookies/_cookie-banner.html" %}
+  {% include "./cookies/_cookie-banner.html" %}
   {% endif %}
   {% block bodyStart %}
   {% endblock %}
