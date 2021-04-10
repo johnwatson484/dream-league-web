@@ -1,77 +1,86 @@
 {% extends '_layout.html' %}
 
 {% block content %}
-  <h2>Current teams</h2>
+<h2>Current teams</h2>
 
-  <p>Upload new teamsheet</p>
+<div class="row">
+  <div class="col-md-6">
+    <p>Upload new teamsheet</p>
 
-  <form method="POST" action="/teamsheet/refresh" enctype="multipart/form-data">
-    <input type="hidden" name="crumb" value="{{crumb}}"/>
-    <div class="form-group">
-      <div class="custom-file">
-        <input type="file" class="custom-file-input" id="file-control" name="teamFile">
-        <label class="custom-file-label" for="teamFile">Choose file</label>
-      </div>
-    </div>
-    <button type="submit" class="btn btn-primary">Submit</button>
-  </form>
-  <p>{{ message }}</p>
-
-  {% for team in teamsheet %}
-    <div class="col-12">
-      <div class="card">
-        <div class="card-body">
-          <h5 class="card-title">{{team.name}}</h5>
-          <input type="hidden" class="manager-id" value="{{ team.managerId }}" >
-          <div class="row">
-            <div class="col-md-5">Player</div>
-            <div class="col-md-1">Sub</div>
-            <div class="col-md-4">Source</div>
-            <div class="col-md-1">Dist</div>
-          </div>           
-          {% for player in team.keepers %}
-            <div class="row">
-              <div class="col-md-5">
-                <input type="text" class="form-control keeper-input" onClick = "this.select()" value="{{ player.name }} - GK" >
-                <input type="hidden" class="team-id" data-managerId="{{ player.managerId }}" value="{{ player.teamId }}" >
-              </div>
-              <div class="col-md-1">
-                <input type="checkbox" class="keeper-substitute" {% if player.substitute %}checked{% endif %}>
-              </div>
-              <div class="col-md-4">{{ player.sourceName }}</div>
-              <div class="col-md-1">{{ player.matchDistance }}</div>
-            </div>
-          {% endfor %}
-          <hr />
-          {% for player in team.players %}
-            <div class="row">
-              <div class="col-md-5">
-                <input type="text" class="form-control player-input" onClick = "this.select()" value="{{ player.lastNameFirstName }} - {{ player.team }} - {{ player.position[0] }}" >
-                <input type="hidden" class="player-id" data-managerId="{{ player.managerId }}" value="{{ player.playerId }}">
-              </div>
-              <div class="col-md-1">
-                <input type="checkbox" class="player-substitute" {% if player.substitute %}checked{% endif %}>
-              </div>
-              <div class="col-md-4">{{ player.sourceName }}</div>
-              <div class="col-md-1">{{ player.matchDistance }}</div>
-            </div>
-          {% endfor %}          
+    <form method="POST" action="/teamsheet/refresh" enctype="multipart/form-data">
+      <input type="hidden" name="crumb" value="{{crumb}}" />
+      <div class="form-group">
+        <div class="custom-file">
+          <input type="file" class="custom-file-input" id="file-control" name="teamFile">
+          <label class="custom-file-label" for="teamFile">Choose file</label>
         </div>
       </div>
-    </div>
-  {% endfor %}
+      <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+    <p>{{ message }}</p>
+  </div>
+</div>
 
-  <div class="row" id="save-confirmation" style="display:none">
-    <div class="alert alert-dismissible alert-info col-md-2" style="position: fixed; bottom: 10px; left: 10px;">
-        <button type="button" class="close" data-dismiss="alert">&times;</button>
-        Changes saved.
+<div class="row">
+  {% for team in teamsheet %}
+  <div class="col-12">
+    <div class="card border-dark">
+      <div class="card-header bg-dark text-light">
+        {{team.name}}
+      </div>
+      <div class="card-body small">
+        <input type="hidden" class="manager-id" value="{{ team.managerId }}">
+        <div class="row">
+          <div class="col-md-6">Player</div>
+          <div class="col-md-1">Sub</div>
+          <div class="col-md-4">Source</div>
+          <div class="col-md-1">Dist</div>
+        </div>
+        {% for player in team.keepers %}
+        <div class="row">
+          <div class="col-md-6">
+            <input type="text" class="form-control keeper-input" style="max-width: 100%;" onClick="this.select()" value="{{ player.name }} - GK">
+            <input type="hidden" class="team-id" data-managerId="{{ player.managerId }}" value="{{ player.teamId }}">
+          </div>
+          <div class="col-md-1">
+            <input type="checkbox" class="keeper-substitute" {% if player.substitute %}checked{% endif %}>
+          </div>
+          <div class="col-md-4">{{ player.sourceName }}</div>
+          <div class="col-md-1">{{ player.matchDistance }}</div>
+        </div>
+        {% endfor %}
+        <hr />
+        {% for player in team.players %}
+        <div class="row">
+          <div class="col-md-6">
+            <input type="text" class="form-control player-input" style="max-width: 100%;" onClick="this.select()"
+              value="{{ player.lastNameFirstName }} - {{ player.team }} - {{ player.position[0] }}">
+            <input type="hidden" class="player-id" data-managerId="{{ player.managerId }}"
+              value="{{ player.playerId }}">
+          </div>
+          <div class="col-md-1">
+            <input type="checkbox" class="player-substitute" {% if player.substitute %}checked{% endif %}>
+          </div>
+          <div class="col-md-4">{{ player.sourceName }}</div>
+          <div class="col-md-1">{{ player.matchDistance }}</div>
+        </div>
+        {% endfor %}
+      </div>
     </div>
   </div>
-  
+  {% endfor %}
+</div>
+
+<div class="row" id="save-confirmation" style="display:none">
+  <div class="alert alert-dismissible alert-info col-md-2" style="position: fixed; bottom: 10px; left: 10px;">
+    <button type="button" class="close" data-dismiss="alert">&times;</button>
+    Changes saved.
+  </div>
+</div>
+
 {% endblock %}
 
 {% block bodyEnd %}
-  <script src="{{ assetPath }}/file-input.js"></script>
-  <script src="{{ assetPath }}/teamsheet.js"></script>
+<script src="{{ assetPath }}/file-input.js"></script>
+<script src="{{ assetPath }}/teamsheet.js"></script>
 {% endblock %}
-
