@@ -3,6 +3,9 @@
 
 <head>
   <meta charset="UTF-8">
+  {% if cookiesPolicy and cookiesPolicy.analytics %}
+  <!-- Google Analytics -->
+  {% endif %}
   <title>{{ appName }}</title>
   <link rel="icon" type="image/x-icon" href="{{ assetPath }}/favicon.ico" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -25,6 +28,11 @@
 </head>
 
 <body>
+  {% if cookiesPolicy and not cookiesPolicy.confirmed %}
+    {% include "./cookies/_cookie-banner.html" %}
+  {% endif %}
+  {% block bodyStart %}
+  {% endblock %}
   <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark bg-dark box-shadow mb-3">
     <a class="navbar-brand" href="/">{{ appName }}</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse"
@@ -89,19 +97,26 @@
     {% block bodyEnd %}
     {% endblock %}
     <hr />
-    <footer class="row">
-      <div class="col-md-10">
-        <p>&copy; {{ currentYear }} - John Watson</p>
-        <address>
-          <strong>Email:</strong> <a href="mailto:admin@dreamleaguefantasyfootball.co.uk?Subject=Dream League Enquiry"
-            target="_top">admin@dreamleaguefantasyfootball.co.uk</a><br />
-        </address>
+    <footer>
+      <div class="row">
+        <div class="col-md-10">
+          <p>&copy; {{ currentYear }} - John Watson</p>
+          <address>
+            <strong>Email:</strong> <a href="mailto:admin@dreamleaguefantasyfootball.co.uk?Subject=Dream League Enquiry"
+              target="_top">admin@dreamleaguefantasyfootball.co.uk</a><br />
+          </address>
+        </div>
+        <div class="col-md-2">
+          <a
+            href='https://play.google.com/store/apps/details?id=dreamleague.mobile&hl=en&pcampaignid=MKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'><img
+              alt='Get it on Google Play'
+              src='https://play.google.com/intl/en_gb/badges/images/generic/en_badge_web_generic.png' width="160" /></a>
+        </div>
       </div>
-      <div class="col-md-2">
-        <a
-          href='https://play.google.com/store/apps/details?id=dreamleague.mobile&hl=en&pcampaignid=MKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'><img
-            alt='Get it on Google Play'
-            src='https://play.google.com/intl/en_gb/badges/images/generic/en_badge_web_generic.png' width="160" /></a>
+      <div class="row">
+        <div class="col-md-10">
+          <a href="/cookies">Cookies</a>
+        </div>
       </div>
     </footer>
   </div>

@@ -3,7 +3,6 @@
 }
 
 body {
-  padding-top: 50px;
   padding-bottom: 20px;
   font-family: 'Play', sans-serif;
 }
@@ -58,9 +57,5 @@ table a:not(.btn), .table a:not(.btn) {
 @media(max-width:650px) {
   .no-mobile {
     display: none;
-  }
-
-  body {
-    padding-top: 65px;
   }
 }
