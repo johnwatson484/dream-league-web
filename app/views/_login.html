@@ -1,0 +1,17 @@
+<ul class="nav navbar-nav navbar-right">
+  {% if not auth.isAuthenticated %}
+  <li class="nav-item">
+    <a class="nav-link text-light" href="/register">Register</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link text-light" href="/login">Login</a>
+  </li>
+  {% else %}
+  <li class="nav-item">
+    <form action="/logout" method="POST">
+      <input type="hidden" name="crumb" value="{{crumb}}" />
+      <button type="submit" class="btn btn-link nav-link text-light">Logout</button>
+    </form>
+    {% endif %}
+  </li>
+</ul>
