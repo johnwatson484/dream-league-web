@@ -1,12 +1,20 @@
+// const config = require('../config').cookieOptions
+// const { getCurrentPolicy } = require('../cookies')
+
 module.exports = {
   plugin: {
-    name: 'map-auth',
+    name: 'view-context',
     register: (server, options) => {
+      // server.state('cookies_policy', config)
+
       server.ext('onPreResponse', (request, h) => {
         const statusCode = request.response.statusCode
         if (request.response.variety === 'view' && statusCode !== 404 && statusCode !== 500 && request.response.source.context) {
+          request.response.source.context.currentYear = new Date().getUTCFullYear()
           const auth = mapAuth(request)
           request.response.source.context.auth = auth
+          // const cookiesPolicy = getCurrentPolicy(request, h)
+          // request.response.source.context.cookiesPolicy = cookiesPolicy
         }
         return h.continue
       })

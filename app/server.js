@@ -27,7 +27,7 @@ async function createServer () {
   await server.register(require('./plugins/errors'))
   await server.register(require('./plugins/logging'))
   await server.register(require('./plugins/crumb'))
-  await server.register(require('./plugins/map-auth'))
+  await server.register(require('./plugins/view-context'))
   await server.register(require('blipp'))
 
   return server
