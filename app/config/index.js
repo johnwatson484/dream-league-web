@@ -5,14 +5,14 @@ const envs = ['development', 'test', 'production']
 const schema = joi.object().keys({
   port: joi.number().default(3000),
   env: joi.string().valid(...envs).default(envs[0]),
-  appName: joi.string(),
+  appName: joi.string().default('Dream League'),
   jwtConfig: joi.object({
     secret: joi.string()
   }),
   apiHost: joi.string().default('http://localhost:3001'),
   cookieOptions: joi.object({
-    ttl: joi.number().default(60 * 60 * 1000),
-    encoding: joi.string().valid('none').default('none'),
+    ttl: joi.number().default(1000 * 60 * 60 * 24 * 365),
+    encoding: joi.string().valid('base64json').default('base64json'),
     isSecure: joi.bool().default(true),
     isHttpOnly: joi.bool().default(true),
     clearInvalid: joi.bool().default(false),
@@ -24,18 +24,18 @@ const schema = joi.object().keys({
 const config = {
   port: process.env.PORT,
   env: process.env.NODE_ENV,
-  appName: 'Dream League',
+  appName: process.env.APP_NAME,
   jwtConfig: {
     secret: process.env.JWT_SECRET
   },
   apiHost: process.env.API_HOST,
   cookieOptions: {
-    ttl: 60 * 60 * 1000,
-    encoding: 'none',
+    ttl: process.env.COOKIE_TTL,
+    encoding: process.env.COOKIE_ENCODING,
     isSecure: process.env.NODE_ENV === 'production',
-    isHttpOnly: true,
-    clearInvalid: false,
-    strictHeader: true
+    isHttpOnly: process.env.COOKIE_HTTP_ONLY,
+    clearInvalid: process.env.COOKIE_CLEAR_INVALID,
+    strictHeader: process.env.COOKIE_STRICT_HEADER
   }
 }
 
@@ -43,6 +43,11 @@ const config = {
 const { error, value } = schema.validate(config)
 
 value.isDev = value.env === 'development'
+value.cookieOptionsIdentity = {
+  ...value.cookieOptions,
+  ttl: 1000 * 60 * 60 * 24 * 30,
+  encoding: 'none'
+}
 
 // Throw if config is invalid
 if (error) {

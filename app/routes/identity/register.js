@@ -34,7 +34,7 @@ module.exports = [{
         }
         return h.redirect('/')
           .header('Authorization', response.token)
-          .state('dl_token', response.token, config.cookieOptions)
+          .state('dl_token', response.token, config.cookieOptionsIdentity)
       } catch {
         return h.view('identity/register', {
           message: 'Invalid credentials'

@@ -6,6 +6,6 @@ module.exports = [{
   handler: async (request, h) => {
     console.log('logging out')
     return h.redirect('/')
-      .unstate('dl_token', config.cookieOptions)
+      .unstate('dl_token', config.cookieOptionsIdentity)
   }
 }]

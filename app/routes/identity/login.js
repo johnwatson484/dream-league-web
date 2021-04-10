@@ -29,7 +29,7 @@ module.exports = [{
         const response = await api.post('/login', request.payload)
         return h.redirect('/')
           .header('Authorization', response.token)
-          .state('dl_token', response.token, config.cookieOptions)
+          .state('dl_token', response.token, config.cookieOptionsIdentity)
       } catch {
         return h.view('identity/login', {
           message: 'Invalid credentials'
