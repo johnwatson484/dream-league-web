@@ -1,6 +1,5 @@
 function ViewModel (teamsheet) {
   const teams = teamsheet.map(mapTeam)
-  console.log(teams)
   return teams
 }
 

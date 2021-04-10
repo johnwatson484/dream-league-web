@@ -1,49 +1,50 @@
 {% extends '_layout.html' %}
 
 {% block content %}
-  {% if results.gameweekId %}
-    <h2>Week {{ results.gameweekId }} Results</h2>
+{% if results.gameweekId %}
+<h2>Week {{ results.gameweekId }} Results</h2>
 
-    <form action="/results" method="GET" id="frm-gameweek">
-      <div class="form-group">
-        <label for="gameweekId">Game Week</label>
-        <select class="form-control" id="gameweekId" name="gameweekId">
-          {% for gameweek in gameweeks %}
-            <option value="{{ gameweek.gameweekId }}" {% if results.gameweekId === gameweek.gameweekId %}selected{% endif %}>Gameweek {{ gameweek.gameweekId }} - {{ gameweek.startDate }} - {{ gameweek.endDate }}</option>
-          {% endfor %}
-        </select>
-      </div>
-    </form>
+<form action="/results" method="GET" id="frm-gameweek">
+  <div class="form-group">
+    <label for="gameweekId">Game Week</label>
+    <select class="form-control" id="gameweekId" name="gameweekId">
+      {% for gameweek in gameweeks %}
+      <option value="{{ gameweek.gameweekId }}" {% if results.gameweekId===gameweek.gameweekId %}selected{% endif %}>
+        Gameweek {{ gameweek.gameweekId }} - {{ gameweek.startDate }} - {{ gameweek.endDate }}</option>
+      {% endfor %}
+    </select>
+  </div>
+</form>
 
-    <div class="row">
-      <div class="col-md-6">
-        <div class="card">
-          <div class="card-header">
-            Scores
-          </div>
-          <div class="card-body">
-            {% include "./dream-league/_scores.html" %}
-          </div>
-        </div>
+<div class="row" style="padding-bottom: 20px;">
+  <div class="col-md-6">
+    <div class="card border-dark">
+      <div class="card-header bg-dark text-light">
+        Scores
       </div>
-      <div class="col-md-6">
-        <div class="card">
-          <div class="card-header">
-            Table
-          </div>
-          <div class="card-body">
-            {% include "./dream-league/_table.html" %}
-          </div>
-        </div>
+      <div class="card-body">
+        {% include "./dream-league/_scores.html" %}
       </div>
     </div>
-  {% else %}
-    <div class="alert alert-info">
-      Results coming soon.
+  </div>
+  <div class="col-md-6">
+    <div class="card border-dark">
+      <div class="card-header bg-dark text-light">
+        Table
+      </div>
+      <div class="card-body">
+        {% include "./dream-league/_table.html" %}
+      </div>
     </div>
-  {% endif %}
+  </div>
+</div>
+{% else %}
+<div class="alert alert-info">
+  Results coming soon.
+</div>
+{% endif %}
 {% endblock %}
 
 {% block bodyEnd %}
-  <script src="{{ assetPath }}/results.js"></script>
+<script src="{{ assetPath }}/results.js"></script>
 {% endblock %}

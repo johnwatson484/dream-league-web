@@ -4,7 +4,7 @@
 
 body {
   padding-bottom: 20px;
-  font-family: 'Play', sans-serif;
+  font-family: 'Inter', sans-serif;
 }
 
 /* Set padding to keep content from hitting the edges */
@@ -14,7 +14,7 @@ body {
 }
 
 h1, h2, h3, h4, h5, h6 {
-  font-family: 'Play', sans-serif;
+  font-family: 'Inter', sans-serif;
 }
 
 /* Override the default bootstrap behavior where horizontal description lists 
