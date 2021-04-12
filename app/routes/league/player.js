@@ -65,11 +65,36 @@ module.exports = [{
       }),
       failAction: async (request, h, error) => {
         const teams = await api.get('/league/teams', request.state.dl_token)
-        return h.view('league/edit-player', { player: request.payload, teams, positions }).code(400).takeover()
+        return h.view('league/edit-player', { player: request.payload, teams, positions, error }).code(400).takeover()
       }
     },
     handler: async (request, h) => {
       await api.post('/league/player/edit', request.payload, request.state.dl_token)
+      return h.redirect('/league/players')
+    }
+  }
+}, {
+  method: 'GET',
+  path: '/league/player/delete',
+  handler: async (request, h) => {
+    const player = await api.get(`/league/player/?playerId=${request.query.playerId}`, request.state.dl_token)
+    return h.view('league/delete-player', { player })
+  }
+}, {
+  method: 'POST',
+  path: '/league/player/delete',
+  options: {
+    validate: {
+      payload: joi.object({
+        playerId: joi.number().required()
+      }),
+      failAction: async (request, h, error) => {
+        const player = await api.get(`/league/player/?playerId=${request.query.playerId}`, request.state.dl_token)
+        return h.view('league/delete-player', { player, error }).code(400).takeover()
+      }
+    },
+    handler: async (request, h) => {
+      await api.post('/league/player/delete', request.payload, request.state.dl_token)
       return h.redirect('/league/players')
     }
   }
