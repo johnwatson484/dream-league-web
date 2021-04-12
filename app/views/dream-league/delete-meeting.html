@@ -7,14 +7,13 @@
         {{ error }}
       </div>
     {% endif %}
-    <h2>Delete player</h2>
-    <p>Are you sure wish to delete this player?</p>
-    <p>{{ player.firstName }} {{ player.lastName }}</p>
-    <form method="POST" action="/league/player/delete">
+    <h2>Delete meeting</h2>
+    <p>Are you sure wish to delete the meeting on {{ meeting.date }}?</p>
+    <form method="POST" action="/dream-league/meeting/delete">
       <input type="hidden" name="crumb" value="{{crumb}}"/>
-      <input type="hidden" id="playerId" name="playerId" value="{{ player.playerId }}"> 
+      <input type="hidden" id="meetingId" name="meetingId" value="{{ meeting.meetingId }}"> 
       <button type="submit" class="btn btn-primary">Confirm</button>
-      <a href="/league/players">Cancel</a>
+      <a href="/dream-league/meetings">Cancel</a>
     </form>
   </div>
 {% endblock %}

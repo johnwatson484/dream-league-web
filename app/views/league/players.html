@@ -31,7 +31,7 @@
           <td>{{ player.lastNameFirstName }}</td>
           <td>{{ player.position }}</td>
           <td>{{ player.team.name }}</td>
-          <td><a href="/league/player/edit?playerId={{ player.playerId }}">Edit</a></td>
+          <td><a href="/league/player/edit?playerId={{ player.playerId }}">Edit</a> | <a href="/league/player/delete?playerId={{ player.playerId }}">Delete</a></td>
         </tr>
       {% endfor %}
     </table>

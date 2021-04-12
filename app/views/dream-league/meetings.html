@@ -1,0 +1,28 @@
+{% extends '_layout.html' %}
+
+{% block content %}
+  <h2>Meetings</h2>
+
+  <a href="/dream-league/meeting/create">Create meeting</a>
+
+  {%if meetings.length %}
+    <table class="table table-hover">
+      <tr>
+        <th>Number</th>
+        <th>Date</th>
+        <th></th>
+      </tr>
+      {% for meeting in meetings %}
+        <tr>
+          <td>{{ meeting.meetingId }}</td>
+          <td>{{ meeting.date }}</td>
+          <td><a href="/dream-league/meeting/edit?meetingId={{ meeting.meetingId }}">Edit</a> | <a href="/dream-league/meeting/delete?meetingId={{ meeting.meetingId }}">Delete</a></td>
+        </tr>
+      {% endfor %}
+    </table>
+  {% else %}
+    <div class="alert alert-info">
+      No meetings scheduled.
+    </div>
+  {% endif %}
+{% endblock %}
