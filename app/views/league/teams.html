@@ -14,7 +14,7 @@
         <tr>
           <td>{{ team.name }}</td>
           <td>{{ team.division.name }}</td>
-          <td><a href="/league/team/edit?teamId={{ team.teamId }}">Edit</a></td>
+          <td><a href="/league/team/edit?teamId={{ team.teamId }}">Edit</a> | <a href="/league/team/delete?teamId={{ team.teamId }}">Delete</a></td>
         </tr>
       {% endfor %}
     </table>

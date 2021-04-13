@@ -66,6 +66,31 @@ module.exports = [{
     }
   }
 }, {
+  method: 'GET',
+  path: '/league/team/delete',
+  handler: async (request, h) => {
+    const team = await api.get(`/league/team/?teamId=${request.query.teamId}`, request.state.dl_token)
+    return h.view('league/delete-team', { team })
+  }
+}, {
+  method: 'POST',
+  path: '/league/team/delete',
+  options: {
+    validate: {
+      payload: joi.object({
+        teamId: joi.number().required()
+      }),
+      failAction: async (request, h, error) => {
+        const team = await api.get(`/league/player/?playerId=${request.query.teamId}`, request.state.dl_token)
+        return h.view('league/delete-team', { team, error }).code(400).takeover()
+      }
+    },
+    handler: async (request, h) => {
+      await api.post('/league/team/delete', request.payload, request.state.dl_token)
+      return h.redirect('/league/teams')
+    }
+  }
+}, {
   method: 'POST',
   path: '/league/teams/autocomplete',
   options: {
