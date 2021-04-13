@@ -48,7 +48,7 @@ module.exports = [{
         date: joi.date()
       }),
       failAction: async (request, h, error) => {
-        return h.view('league/edit-player', { meeting: request.payload, error }).code(400).takeover()
+        return h.view('league/edit-meeting', { meeting: request.payload, error }).code(400).takeover()
       }
     },
     handler: async (request, h) => {

@@ -1,0 +1,26 @@
+{% extends '_layout.html' %}
+
+{% block content %}
+  <h2>Managers</h2>
+
+  <a href="/dream-league/meeting/create">Create manager</a>
+
+  {%if managers.length %}
+    <table class="table table-hover">
+      <tr>
+        <th>Name</th>
+        <th></th>
+      </tr>
+      {% for manager in managers %}
+        <tr>
+          <td>{{ manager.name }}</td>
+          <td><a href="/dream-league/manager/edit?managerId={{ manager.managerId }}">Edit</a> | <a href="/dream-league/manager/delete?managerId={{ manager.managerId }}">Delete</a></td>
+        </tr>
+      {% endfor %}
+    </table>
+  {% else %}
+    <div class="alert alert-info">
+      No managers participating.
+    </div>
+  {% endif %}
+{% endblock %}
