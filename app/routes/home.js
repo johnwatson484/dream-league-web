@@ -15,10 +15,10 @@ module.exports = [{
   }
 }, {
   method: 'GET',
-  path: '/about',
+  path: '/rules',
   config: {
   },
   handler: async (request, h) => {
-    return h.view('about')
+    return h.view('rules')
   }
 }]
