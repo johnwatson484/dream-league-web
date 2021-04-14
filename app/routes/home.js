@@ -13,4 +13,12 @@ module.exports = [{
 
     return h.view('home', { results, topScorers, form, nextMeeting })
   }
+}, {
+  method: 'GET',
+  path: '/about',
+  config: {
+  },
+  handler: async (request, h) => {
+    return h.view('about')
+  }
 }]
