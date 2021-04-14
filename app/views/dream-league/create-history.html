@@ -1,0 +1,43 @@
+{% extends '_layout.html' %}
+
+{% block content %}
+  <div class="col-md-6">
+    {% if error %}
+      <div class="alert alert-danger">
+        {{ error }}
+      </div>
+    {% endif %}
+    <form method="POST" action="/dream-league/history/create">
+      <input type="hidden" name="crumb" value="{{crumb}}"/>
+      <div class="form-group">
+        <label for="year">Year</label>
+        <input type="text" class="form-control" id="year" name="year" value="{{ history.year }}">
+      </div>
+      <div class="form-group">
+        <label for="teams">Teams</label>
+        <input type="text" class="form-control" id="teams" name="teams" value="{{ history.teams }}">
+      </div>
+      <div class="form-group">
+        <label for="league1">League</label>
+        <input type="text" class="form-control" id="league1" name="league1" value="{{ history.league1 }}">
+      </div>
+      <div class="form-group">
+        <label for="league2">Championship</label>
+        <input type="text" class="form-control" id="league2" name="league2" value="{{ history.league2 }}">
+      </div>
+      <div class="form-group">
+        <label for="cup">Cup</label>
+        <input type="text" class="form-control" id="cup" name="cup" value="{{ history.cup }}">
+      </div>
+      <div class="form-group">
+        <label for="leagueCup">League Cup</label>
+        <input type="text" class="form-control" id="leagueCup" name="leagueCup" value="{{ history.leagueCup }}">
+      </div>
+      <div class="form-group">
+        <label for="plate">Plate</label>
+        <input type="text" class="form-control" id="plate" name="plate" value="{{ history.plate }}">
+      </div>
+      <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+  </div>
+{% endblock %}

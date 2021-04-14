@@ -1,0 +1,34 @@
+{% extends '_layout.html' %}
+
+{% block content %}
+  <h2>History</h2>
+
+  <a href="/dream-league/history/create">Create history</a>
+
+  {%if history.length %}
+    <table class="table table-hover">
+      <tr>
+        <th>Year</th>
+        <th>Teams</th>
+        <th>League</th>
+        <th>Cup</th>
+        <th>League Cup</th>
+        <th></th>
+      </tr>
+      {% for year in history %}
+        <tr>
+          <td>{{ year.year }}</td>
+          <td>{{ year.teams }}</td>
+          <td>{{ year.league1 }}</td>
+          <td>{{ year.cup }}</td>
+          <td>{{ year.leagueCup }}</td>
+          <td><a href="/dream-league/history/edit?historyId={{ year.historyId }}">Edit</a> | <a href="/dream-league/history/delete?historyId={{ year.historyId }}">Delete</a></td>
+        </tr>
+      {% endfor %}
+    </table>
+  {% else %}
+    <div class="alert alert-info">
+      No recorded history.
+    </div>
+  {% endif %}
+{% endblock %}

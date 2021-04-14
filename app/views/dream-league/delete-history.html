@@ -1,0 +1,19 @@
+{% extends '_layout.html' %}
+
+{% block content %}
+  <div class="col-md-6">
+    {% if error %}
+      <div class="alert alert-danger">
+        {{ error }}
+      </div>
+    {% endif %}
+    <h2>Delete history</h2>
+    <p>Are you sure wish to delete history for {{ history.year }}?</p>
+    <form method="POST" action="/dream-league/history/delete">
+      <input type="hidden" name="crumb" value="{{crumb}}"/>
+      <input type="hidden" id="historyId" name="historyId" value="{{ history.historyId }}"> 
+      <button type="submit" class="btn btn-primary">Confirm</button>
+      <a href="/dream-league/history">Cancel</a>
+    </form>
+  </div>
+{% endblock %}
