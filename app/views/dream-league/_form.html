@@ -8,7 +8,11 @@
     <tr>
       <td class="no-mobile">{{ row.position }}</td>
       <td>{{ row.manager }}</td>
-      <td>{{ row.results }}</td>
+      <td>
+        {% for result in row.results %}
+          <span class="badge {% if result == 'W' %}badge-success{% elseif result == 'L' %}badge-danger{% else %}badge-primary{% endif %}"><strong>{{ result }}</strong></span>
+        {% endfor %}
+      </td>
     </tr>
   {% endfor %}
 </table>
