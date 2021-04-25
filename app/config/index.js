@@ -13,6 +13,7 @@ const schema = joi.object().keys({
   cookieOptions: joi.object({
     ttl: joi.number().default(1000 * 60 * 60 * 24 * 365),
     encoding: joi.string().valid('base64json').default('base64json'),
+    isSameSite: joi.string().valid('Lax').default('Lax'),
     isSecure: joi.bool().default(true),
     isHttpOnly: joi.bool().default(true),
     clearInvalid: joi.bool().default(false),
@@ -32,6 +33,7 @@ const config = {
   cookieOptions: {
     ttl: process.env.COOKIE_TTL,
     encoding: process.env.COOKIE_ENCODING,
+    isSameSite: process.env.COOKIE_SAME_SITE,
     isSecure: process.env.NODE_ENV === 'production',
     isHttpOnly: process.env.COOKIE_HTTP_ONLY,
     clearInvalid: process.env.COOKIE_CLEAR_INVALID,
