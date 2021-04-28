@@ -37,13 +37,14 @@
     <th>Plate</th>
   </tr>
   {% for year in history %}
-  {% if year.year >= 1995 and year.year <= 2006 %} <tr>
-    <td>{{ year.year }}</td>
-    <td>{{ year.league2 }}</td>
-    <td>{{ year.plate }}</td>
+  {% if year.year >= 1995 and year.year <= 2006 %}
+    <tr>
+      <td>{{ year.year }}</td>
+      <td>{{ year.league2 }}</td>
+      <td>{{ year.plate }}</td>
     </tr>
-    {% endif %}
-    {% endfor %}
+  {% endif %}
+  {% endfor %}
 </table>
 {% else %}
 <div class="alert alert-info">
