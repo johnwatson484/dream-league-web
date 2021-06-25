@@ -8,7 +8,7 @@
       </div>
     {% endif %}
     <h2>Delete cup</h2>
-    <p>Are you sure wish to delete the {{ cup.date }}?</p>
+    <p>Are you sure wish to delete the {{ cup.name }}?</p>
     <form method="POST" action="/dream-league/cup/delete">
       <input type="hidden" name="crumb" value="{{crumb}}"/>
       <input type="hidden" id="cupId" name="cupId" value="{{ cup.cupId }}"> 

@@ -26,8 +26,8 @@ module.exports = [{
     validate: {
       payload: joi.object({
         name: joi.string(),
-        hasGroupStage: joi.boolean(),
-        knockoutLegs: joi.number().integer()
+        hasGroupStage: joi.boolean().default(false),
+        knockoutLegs: joi.number().integer().default(1)
       }),
       failAction: async (request, h, error) => {
         return h.view('dream-league/create-cup', { error, cup: request.payload }).code(400).takeover()
@@ -35,7 +35,7 @@ module.exports = [{
     },
     handler: async (request, h) => {
       await api.post('/dream-league/cup/create', request.payload, request.state.dl_token)
-      return h.redirect('/cups')
+      return h.redirect('/dream-league/cups')
     }
   }
 }, {
@@ -51,10 +51,10 @@ module.exports = [{
   options: {
     validate: {
       payload: joi.object({
-        cupId: joi.number().integer(),
+        cupId: joi.number().integer().required(),
         name: joi.string(),
-        hasGroupStage: joi.boolean(),
-        knockoutLegs: joi.number().integer()
+        hasGroupStage: joi.boolean().required(),
+        knockoutLegs: joi.number().integer().required()
       }),
       failAction: async (request, h, error) => {
         return h.view('dream-league/edit-cup', { cup: request.payload, error }).code(400).takeover()
