@@ -1,0 +1,26 @@
+{% extends '_layout.html' %}
+
+{% block content %}
+  <h2>Cups</h2>
+
+  <a href="/dream-league/cup/create">Create cup</a>
+
+  {%if cup.length %}
+    <table class="table table-hover table-sm small">
+      <tr>
+        <th>Cup</th>
+        <th></th>
+      </tr>
+      {% for cup in cups %}
+        <tr>
+          <td>{{ cup.name }}</td>
+          <td><a href="/dream-league/cup/edit?cupId={{ cup.meetingId }}">Edit</a> | <a href="/dream-league/cup/delete?cupId={{ cup.cupId }}">Delete</a></td>
+        </tr>
+      {% endfor %}
+    </table>
+  {% else %}
+    <div class="alert alert-info">
+      No cups created.
+    </div>
+  {% endif %}
+{% endblock %}
