@@ -1,0 +1,34 @@
+{% extends '_layout.html' %}
+
+{% block content %}
+  <h2>Fixtures</h2>
+
+  <a href="/dream-league/fixture/create">Create fixture</a>
+
+  {%if fixtures.length %}
+    <table class="table table-hover table-sm small">
+      <tr>
+        <th>Gameweek</th>
+        <th>Cup</th>
+        <th>Round</th>
+        <th>Home</th>
+        <th>Away</th>
+        <th></th>
+      </tr>
+      {% for fixture in fixtures %}
+        <tr>
+          <td>{{ fixture.gameweek.gameweekId }}</td>
+          <td>{{ fixture.cup.name }}</td>
+          <td>{{ fixture.round }}</td>
+          <td>{{ fixture.homeManager.name }}</td>
+          <td>{{ fixture.awayManager.name }}</td>
+          <td><a href="/dream-league/fixture/edit?fixtureId={{ fixture.fixtureId }}">Edit</a> | <a href="/dream-league/fixture/delete?fixtureId={{ fixture.fixtureId }}">Delete</a></td>
+        </tr>
+      {% endfor %}
+    </table>
+  {% else %}
+    <div class="alert alert-info">
+      No fixtures created.
+    </div>
+  {% endif %}
+{% endblock %}
