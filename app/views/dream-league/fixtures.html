@@ -17,11 +17,11 @@
       </tr>
       {% for fixture in fixtures %}
         <tr>
-          <td>{{ fixture.gameweek.gameweekId }}</td>
-          <td>{{ fixture.cup.name }}</td>
+          <td>{{ fixture.gameweekId }}</td>
+          <td>{{ fixture.cupName }}</td>
           <td>{{ fixture.round }}</td>
-          <td>{{ fixture.homeManager.name }}</td>
-          <td>{{ fixture.awayManager.name }}</td>
+          <td>{{ fixture.homeManagerName }}</td>
+          <td>{{ fixture.awayManagerName }}</td>
           <td><a href="/dream-league/fixture/edit?fixtureId={{ fixture.fixtureId }}">Edit</a> | <a href="/dream-league/fixture/delete?fixtureId={{ fixture.fixtureId }}">Delete</a></td>
         </tr>
       {% endfor %}

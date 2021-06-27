@@ -10,6 +10,7 @@ module.exports = [{
     },
     handler: async (request, h) => {
       const fixtures = await api.get('/dream-league/fixtures', request.state.dl_token)
+      console.log(fixtures)
       return h.view('dream-league/fixtures', { fixtures })
     }
   }
