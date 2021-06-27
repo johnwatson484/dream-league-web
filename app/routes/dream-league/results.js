@@ -17,7 +17,7 @@ module.exports = [{
     handler: async (request, h) => {
       const gameweekId = request.query?.gameweekId || 0
       const results = await api.get(`/dream-league/results?gameweekId=${gameweekId}`, request.state.dl_token)
-      const gameweeks = await api.get('/dream-league/gameweeks', request.state.dl_token)
+      const gameweeks = await api.get('/dream-league/gameweeks?completed=true', request.state.dl_token)
       return h.view('dream-league/results', { results, gameweeks })
     }
   }

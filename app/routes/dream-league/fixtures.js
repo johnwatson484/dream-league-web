@@ -10,7 +10,6 @@ module.exports = [{
     },
     handler: async (request, h) => {
       const fixtures = await api.get('/dream-league/fixtures', request.state.dl_token)
-      console.log(fixtures)
       return h.view('dream-league/fixtures', { fixtures })
     }
   }
@@ -18,7 +17,10 @@ module.exports = [{
   method: 'GET',
   path: '/dream-league/fixture/create',
   handler: async (request, h) => {
-    return h.view('dream-league/create-fixture')
+    const gameweeks = await api.get('/dream-league/gameweeks', request.state.dl_token)
+    const cups = await api.get('/dream-league/cups', request.state.dl_token)
+    const managers = await api.get('/dream-league/managers', request.state.dl_token)
+    return h.view('dream-league/create-fixture', { gameweeks, cups, managers })
   }
 }, {
   method: 'POST',
@@ -33,7 +35,10 @@ module.exports = [{
         round: joi.number().integer().required()
       }),
       failAction: async (request, h, error) => {
-        return h.view('dream-league/create-fixture', { error, fixture: request.payload }).code(400).takeover()
+        const gameweeks = await api.get('/dream-league/gameweeks', request.state.dl_token)
+        const cups = await api.get('/dream-league/cups', request.state.dl_token)
+        const managers = await api.get('/dream-league/managers', request.state.dl_token)
+        return h.view('dream-league/create-fixture', { error, fixture: request.payload, gameweeks, cups, managers }).code(400).takeover()
       }
     },
     handler: async (request, h) => {
@@ -46,7 +51,10 @@ module.exports = [{
   path: '/dream-league/fixture/edit',
   handler: async (request, h) => {
     const fixture = await api.get(`/dream-league/fixture/?fixtureId=${request.query.fixtureId}`, request.state.dl_token)
-    return h.view('dream-league/edit-fixture', { fixture })
+    const gameweeks = await api.get('/dream-league/gameweeks', request.state.dl_token)
+    const cups = await api.get('/dream-league/cups', request.state.dl_token)
+    const managers = await api.get('/dream-league/managers', request.state.dl_token)
+    return h.view('dream-league/edit-fixture', { fixture, gameweeks, cups, managers })
   }
 }, {
   method: 'POST',
@@ -62,7 +70,10 @@ module.exports = [{
         round: joi.number().integer().required()
       }),
       failAction: async (request, h, error) => {
-        return h.view('dream-league/edit-fixture', { fixture: request.payload, error }).code(400).takeover()
+        const gameweeks = await api.get('/dream-league/gameweeks', request.state.dl_token)
+        const cups = await api.get('/dream-league/cups', request.state.dl_token)
+        const managers = await api.get('/dream-league/managers', request.state.dl_token)
+        return h.view('dream-league/edit-fixture', { fixture: request.payload, error, gameweeks, cups, managers }).code(400).takeover()
       }
     },
     handler: async (request, h) => {

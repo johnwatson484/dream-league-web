@@ -7,8 +7,9 @@
         {{ error }}
       </div>
     {% endif %}
-    <form method="POST" action="/dream-league/fixture/create">
+    <form method="POST" action="/dream-league/cup/edit">
       <input type="hidden" name="crumb" value="{{crumb}}"/>
+      <input type="hidden" id="fixtureId" name="fixtureId" value="{{ fixture.fixtureId }}"> 
       <div class="form-group">
         <label for="cupId">Cup</label>
         <select class="form-control" id="cupId" name="cupId">

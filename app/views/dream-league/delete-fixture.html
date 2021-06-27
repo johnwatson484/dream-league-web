@@ -8,7 +8,7 @@
       </div>
     {% endif %}
     <h2>Delete fixture</h2>
-    <p>Are you sure wish to delete the fixture?</p>
+    <p>Are you sure wish to delete {{ fixture.homeManagerName }} v {{ fixture.awayManagerName}}?</p>
     <form method="POST" action="/dream-league/fixture/delete">
       <input type="hidden" name="crumb" value="{{crumb}}"/>
       <input type="hidden" id="fixtureId" name="fixtureId" value="{{ fixture.fixtureId }}"> 
