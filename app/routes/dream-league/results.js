@@ -37,8 +37,10 @@ module.exports = [{
     validate: {
       payload: joi.object({
         gameweekId: joi.number(),
-        conceded: joi.alternatives().try(joi.array().items(joi.object({ teamId: joi.number(), conceded: joi.number() })), joi.string()),
-        goals: joi.alternatives().try(joi.array().items(joi.object({ playerId: joi.number(), goals: joi.number() })), joi.string())
+        conceded: joi.array().items(joi.object({ teamId: joi.number(), conceded: joi.number() })).single(),
+        concededCup: joi.array().items(joi.object({ teamId: joi.number(), conceded: joi.number() })).single(),
+        goals: joi.array().items(joi.object({ playerId: joi.number(), goals: joi.number() })).single(),
+        goalsCup: joi.array().items(joi.object({ playerId: joi.number(), goals: joi.number() })).single()
       }),
       failAction: async (request, h, error) => {
         return boom.badRequest(error)
