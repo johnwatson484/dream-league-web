@@ -3,14 +3,14 @@
 {% block content %}
   <h2>Results sheet</h2>
 
-  {%if players.keepers.length %}
+  {%if resultsInput.keepers.length %}
     <form method="POST" action="/results/edit" >
       <input type="hidden" name="crumb" value="{{crumb}}"/>
     
       <div class="form-group">
         <label for="gameweekId">Game Week</label>
         <select class="form-control" id="gameweekId" name="gameweekId">
-        {% for gameweek in players.gameweeks %}
+        {% for gameweek in resultsInput.gameweeks %}
           <option value="{{ gameweek.gameweekId }}" {% if gameweek.isCurrent %}selected{% endif %}>Gameweek {{ gameweek.gameweekId }} - {{ gameweek.startDate }} - {{ gameweek.endDate }}</option>
         {% endfor %}
         </select> 
@@ -28,7 +28,7 @@
           <th>Manager</th>
           <th width="110px;">Conceded</th>
         </tr>
-        {% for keeper in players.keepers %}
+        {% for keeper in resultsInput.keepers %}
           <tr>
             <td>{{ keeper.division }}</td>
             <td>{{ keeper.team }}</td>
@@ -64,7 +64,7 @@
           <th>Manager</th>
           <th width="110px;">Goals</th>
         </tr>
-        {% for player in players.players %}
+        {% for player in resultsInput.players %}
           <tr>
             <td>{{ player.division }}</td>
             <td>{{ player.team }}</td>

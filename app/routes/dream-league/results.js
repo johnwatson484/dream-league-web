@@ -25,10 +25,10 @@ module.exports = [{
   method: 'GET',
   path: '/results/edit',
   handler: async (request, h) => {
-    const players = await api.get('/dream-league/results-edit', request.state.dl_token)
-    players.keepers = players.keepers.sort((a, b) => { return sortFn(a.division, b.division) || sortFn(a.team, b.team) })
-    players.players = players.players.sort((a, b) => { return sortFn(a.division, b.division) || sortFn(a.team, b.team) || sortFn(a.lastName, b.lastName) || sortFn(a.firstName, b.firstName) })
-    return h.view('dream-league/results-edit', { players })
+    const resultsInput = await api.get('/dream-league/results-edit', request.state.dl_token)
+    resultsInput.keepers = resultsInput.keepers.sort((a, b) => { return sortFn(a.division, b.division) || sortFn(a.team, b.team) })
+    resultsInput.players = resultsInput.players.sort((a, b) => { return sortFn(a.division, b.division) || sortFn(a.team, b.team) || sortFn(a.lastName, b.lastName) || sortFn(a.firstName, b.firstName) })
+    return h.view('dream-league/results-edit', { resultsInput })
   }
 }, {
   method: 'POST',
