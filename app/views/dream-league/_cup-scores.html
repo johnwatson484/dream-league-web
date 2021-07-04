@@ -1,0 +1,12 @@
+<table class="table table-hover table-sm small">
+  {% for score in results.cupScores %}
+    <tr>
+      <td>R{{ score.round }}</td>
+      <td>{{ score.homeScore.manager }}</td>
+      <td>{{ score.homeMargin }}</td>
+      <td> v </td>
+      <td>{{ score.awayMargin }}</td>
+      <td>{{ score.awayScore.manager }}</td>
+    </tr>
+  {% endfor %}
+</table>

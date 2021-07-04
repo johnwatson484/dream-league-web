@@ -30,6 +30,21 @@
   </div>
 </div>
 
+{% if results.cupScores %}
+  <div class="row" style="padding-bottom: 20px;">
+    <div class="col-md-6">
+      <div class="card border-dark">
+        <div class="card-header bg-dark text-light">
+          Cup results
+        </div>
+        <div class="card-body">
+          {% include "./dream-league/_cup-scores.html" %}
+        </div>
+      </div>
+    </div>  
+  </div>
+  {% endif %}
+
 <div class="row" style="padding-bottom: 20px;">
   <div class="col-md-6">
     <div class="card border-dark">
