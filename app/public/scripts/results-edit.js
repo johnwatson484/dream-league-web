@@ -1,3 +1,15 @@
+$('#gameweekId').change(function () {
+  $('.manager-cup-input').hide()
+
+  const gameweekId = Number($(this).val())
+
+  cupWeeks.forEach(cupWeek => { // eslint-disable-line
+    if (cupWeek.gameweekId === gameweekId) {
+      $('.manager-cup-' + cupWeek.managerId).show()
+    }
+  })
+})
+
 $(function () {
   $('#gameweekId').change()
 })

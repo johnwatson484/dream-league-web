@@ -52,7 +52,7 @@
               </span>
             </td>
             <td width="110px;">
-              <span class="input-group">
+              <span class="input-group manager-cup-input manager-cup-{{ keeper.managerId }}">
                 <span class="input-group-prepend">
                   <button type="button" class="btn btn-danger btn-number btn-sm minus" data-type="minus" data-field="conceded">
                     <span class="glyphicon glyphicon-minus"></span>
@@ -105,7 +105,7 @@
               </span>
             </td>
             <td width="110px;">
-              <span class="input-group">
+              <span class="input-group manager-cup-input manager-cup-{{ player.managerId }}">
                 <span class="input-group-prepend">
                   <button type="button" class="btn btn-danger btn-number btn-sm minus" data-type="minus" data-field="goals">
                     <span class="glyphicon glyphicon-minus"></span>
@@ -132,5 +132,8 @@
 {% endblock %}
 
 {% block bodyEnd %}
+  <script>
+    const cupWeeks = {{ resultsInput.cupWeeks | dump | safe }}
+  </script>
   <script src="{{ assetPath }}/results-edit.js"></script>
 {% endblock %}
