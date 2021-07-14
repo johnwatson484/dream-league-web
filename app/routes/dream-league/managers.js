@@ -21,7 +21,8 @@ module.exports = [{
     validate: {
       payload: joi.object({
         name: joi.string(),
-        alias: joi.string()
+        alias: joi.string(),
+        emails: joi.array().items(joi.string().email().allow('')).single()
       }),
       failAction: async (request, h, error) => {
         return h.view('dream-league/create-manager', { error, manager: request.payload }).code(400).takeover()
@@ -47,7 +48,8 @@ module.exports = [{
       payload: joi.object({
         managerId: joi.number().required(),
         name: joi.string(),
-        alias: joi.string()
+        alias: joi.string(),
+        emails: joi.array().items(joi.string().email().allow('')).single()
       }),
       failAction: async (request, h, error) => {
         return h.view('league/edit-manager', { manager: request.payload, error }).code(400).takeover()
