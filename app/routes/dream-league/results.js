@@ -51,6 +51,26 @@ module.exports = [{
       return h.redirect('/results')
     }
   }
+}, {
+  method: 'POST',
+  path: '/results/send',
+  options: {
+    plugins: {
+      crumb: false
+    },
+    validate: {
+      payload: joi.object({
+        gameweekId: joi.number().required()
+      }),
+      failAction: async (request, h, error) => {
+        return boom.badRequest(error)
+      }
+    },
+    handler: async (request, h) => {
+      await api.post('/dream-league/results-send', request.payload, request.state.dl_token)
+      return h.response()
+    }
+  }
 }]
 
 function sortFn (a, b) {
