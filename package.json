@@ -30,7 +30,7 @@
     "joi": "^17.1.1",
     "nunjucks": "^3.2.1",
     "wreck": "^14.2.0",
-    "xlsx": "^0.16.6"
+    "xlsx": "^0.17.0"
   },
   "devDependencies": {
     "jest": "^26.4.0",
