@@ -48,7 +48,7 @@ module.exports = [{
     },
     handler: async (request, h) => {
       await api.post('/dream-league/results-edit', request.payload, request.state.dl_token)
-      return h.redirect('/results')
+      return h.redirect(`/results?gameweekId=${request.payload.gameweekId}`)
     }
   }
 }, {

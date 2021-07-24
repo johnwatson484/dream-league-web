@@ -1,0 +1,10 @@
+{% for winner in results.winners %}
+<div class="row">
+  <div class="col-md-12">
+    {{ winner.manager }}
+    {% if winner.goals >= 9 %}
+     - JACKPOT!
+    {% endif %}
+  </div>
+</div>
+{% endfor %}
