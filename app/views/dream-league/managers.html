@@ -3,7 +3,9 @@
 {% block content %}
   <h2>Managers</h2>
 
+  {% if auth.isAdmin %}
   <a href="/dream-league/manager/create">Create manager</a>
+  {% endif %}
 
   {%if managers.length %}
     <table class="table table-hover table-sm small">
@@ -14,7 +16,11 @@
       {% for manager in managers %}
         <tr>
           <td>{{ manager.name }}</td>
-          <td><a href="/dream-league/manager/edit?managerId={{ manager.managerId }}">Edit</a> | <a href="/dream-league/manager/delete?managerId={{ manager.managerId }}">Delete</a></td>
+          <td>
+            {% if auth.isAdmin %}
+            <a href="/dream-league/manager/edit?managerId={{ manager.managerId }}">Edit</a> | <a href="/dream-league/manager/delete?managerId={{ manager.managerId }}">Delete</a>
+            {% endif %}
+          </td>
         </tr>
       {% endfor %}
     </table>

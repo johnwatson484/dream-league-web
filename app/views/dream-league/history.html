@@ -3,7 +3,9 @@
 {% block content %}
 <h2>History</h2>
 
+{% if auth.isAdmin %}
 <a href="/dream-league/history/create">Create history</a>
+{% endif %}
 
 {%if history.length %}
 <h3>Current competitions</h3>
@@ -23,8 +25,12 @@
     <td>{{ year.league1 }}</td>
     <td>{{ year.cup }}</td>
     <td>{{ year.leagueCup }}</td>
-    <td><a href="/dream-league/history/edit?historyId={{ year.historyId }}">Edit</a> | <a
-        href="/dream-league/history/delete?historyId={{ year.historyId }}">Delete</a></td>
+    <td>
+      {% if auth.isAdmin %}
+      <a href="/dream-league/history/edit?historyId={{ year.historyId }}">Edit</a> | <a
+        href="/dream-league/history/delete?historyId={{ year.historyId }}">Delete</a>
+      {% endif %}
+    </td>
   </tr>
   {% endfor %}
 </table>

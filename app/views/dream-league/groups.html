@@ -3,7 +3,9 @@
 {% block content %}
 <h2>Groups</h2>
 
+{% if auth.isAdmin %}
 <a href="/dream-league/group/create">Create group</a>
+{% endif %}
 
 {%if groups.length %}
 <table class="table table-hover table-sm small">
@@ -23,8 +25,12 @@
       {% endfor %}
     </td>
     <td>{{ group.homeManagerName }}</td>
-    <td><a href="/dream-league/group/edit?groupId={{ group.groupId }}">Edit</a> | <a
-        href="/dream-league/group/delete?groupId={{ group.groupId }}">Delete</a></td>
+    <td>
+      {% if auth.isAdmin %}
+      <a href="/dream-league/group/edit?groupId={{ group.groupId }}">Edit</a> | <a
+        href="/dream-league/group/delete?groupId={{ group.groupId }}">Delete</a>
+      {% endif %}
+    </td>
   </tr>
   {% endfor %}
 </table>

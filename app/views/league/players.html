@@ -16,7 +16,9 @@
     </div>
   </div>
 
+  {% if auth.isAdmin %}
   <a href="/league/player/create">Create player</a>
+  {% endif %}
 
   {%if players.length %}
     <table class="table table-hover table-sm small">
@@ -31,7 +33,11 @@
           <td>{{ player.lastNameFirstName }}</td>
           <td>{{ player.position }}</td>
           <td>{{ player.team.name }}</td>
-          <td><a href="/league/player/edit?playerId={{ player.playerId }}">Edit</a> | <a href="/league/player/delete?playerId={{ player.playerId }}">Delete</a></td>
+          <td>
+            {% if auth.isAdmin %}
+            <a href="/league/player/edit?playerId={{ player.playerId }}">Edit</a> | <a href="/league/player/delete?playerId={{ player.playerId }}">Delete</a>
+            {% endif %}
+          </td>
         </tr>
       {% endfor %}
     </table>

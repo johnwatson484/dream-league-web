@@ -3,7 +3,9 @@
 {% block content %}
   <h2>Fixtures</h2>
 
+  {% if auth.isAdmin %}
   <a href="/dream-league/fixture/create">Create fixture</a>
+  {% endif %}
 
   {%if fixtures.length %}
     <table class="table table-hover table-sm small">
@@ -22,7 +24,11 @@
           <td>{{ fixture.round }}</td>
           <td>{{ fixture.homeManagerName }}</td>
           <td>{{ fixture.awayManagerName }}</td>
-          <td><a href="/dream-league/fixture/edit?fixtureId={{ fixture.fixtureId }}">Edit</a> | <a href="/dream-league/fixture/delete?fixtureId={{ fixture.fixtureId }}">Delete</a></td>
+          <td>
+            {% if auth.isAdmin %}
+            <a href="/dream-league/fixture/edit?fixtureId={{ fixture.fixtureId }}">Edit</a> | <a href="/dream-league/fixture/delete?fixtureId={{ fixture.fixtureId }}">Delete</a>
+            {% endif %}
+          </td>
         </tr>
       {% endfor %}
     </table>
