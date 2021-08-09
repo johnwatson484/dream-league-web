@@ -11,6 +11,7 @@ module.exports = [{
 }, {
   method: 'GET',
   path: '/dream-league/manager/create',
+  options: { auth: { strategy: 'jwt', scope: ['admin'] } },
   handler: async (request, h) => {
     return h.view('dream-league/create-manager')
   }
@@ -18,6 +19,7 @@ module.exports = [{
   method: 'POST',
   path: '/dream-league/manager/create',
   options: {
+    auth: { strategy: 'jwt', scope: ['admin'] },
     validate: {
       payload: joi.object({
         name: joi.string(),
@@ -36,6 +38,7 @@ module.exports = [{
 }, {
   method: 'GET',
   path: '/dream-league/manager/edit',
+  options: { auth: { strategy: 'jwt', scope: ['admin'] } },
   handler: async (request, h) => {
     const manager = await api.get(`/dream-league/manager/?managerId=${request.query.managerId}`, request.state.dl_token)
     return h.view('dream-league/edit-manager', { manager })
@@ -44,6 +47,7 @@ module.exports = [{
   method: 'POST',
   path: '/dream-league/manager/edit',
   options: {
+    auth: { strategy: 'jwt', scope: ['admin'] },
     validate: {
       payload: joi.object({
         managerId: joi.number().required(),
@@ -63,6 +67,7 @@ module.exports = [{
 }, {
   method: 'GET',
   path: '/dream-league/manager/delete',
+  options: { auth: { strategy: 'jwt', scope: ['admin'] } },
   handler: async (request, h) => {
     const manager = await api.get(`/dream-league/manager/?managerId=${request.query.managerId}`, request.state.dl_token)
     return h.view('dream-league/delete-manager', { manager })
@@ -71,6 +76,7 @@ module.exports = [{
   method: 'POST',
   path: '/dream-league/manager/delete',
   options: {
+    auth: { strategy: 'jwt', scope: ['admin'] },
     validate: {
       payload: joi.object({
         managerId: joi.number().required()

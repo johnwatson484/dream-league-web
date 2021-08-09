@@ -13,6 +13,7 @@ module.exports = [{
 }, {
   method: 'GET',
   path: '/dream-league/group/create',
+  options: { auth: { strategy: 'jwt', scope: ['admin'] } },
   handler: async (request, h) => {
     const cups = await api.get('/dream-league/cups', request.state.dl_token)
     const managers = await api.get('/dream-league/managers', request.state.dl_token)
@@ -22,6 +23,7 @@ module.exports = [{
   method: 'POST',
   path: '/dream-league/group/create',
   options: {
+    auth: { strategy: 'jwt', scope: ['admin'] },
     validate: {
       payload: joi.object({
         cupId: joi.number().required(),
@@ -44,6 +46,7 @@ module.exports = [{
 }, {
   method: 'GET',
   path: '/dream-league/group/edit',
+  options: { auth: { strategy: 'jwt', scope: ['admin'] } },
   handler: async (request, h) => {
     const group = await api.get(`/dream-league/group/?groupId=${request.query.groupId}`, request.state.dl_token)
     const cups = await api.get('/dream-league/cups', request.state.dl_token)
@@ -54,6 +57,7 @@ module.exports = [{
   method: 'POST',
   path: '/dream-league/group/edit',
   options: {
+    auth: { strategy: 'jwt', scope: ['admin'] },
     validate: {
       payload: joi.object({
         groupId: joi.number().integer().required(),
@@ -77,6 +81,7 @@ module.exports = [{
 }, {
   method: 'GET',
   path: '/dream-league/group/delete',
+  options: { auth: { strategy: 'jwt', scope: ['admin'] } },
   handler: async (request, h) => {
     const group = await api.get(`/dream-league/group/?groupId=${request.query.groupId}`, request.state.dl_token)
     return h.view('dream-league/delete-group', { group })
@@ -85,6 +90,7 @@ module.exports = [{
   method: 'POST',
   path: '/dream-league/group/delete',
   options: {
+    auth: { strategy: 'jwt', scope: ['admin'] },
     validate: {
       payload: joi.object({
         groupId: joi.number().required()

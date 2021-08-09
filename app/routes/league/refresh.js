@@ -3,6 +3,7 @@ const refreshPlayers = require('../../league/player-refresh')
 module.exports = [{
   method: 'GET',
   path: '/league/refresh',
+  options: { auth: { strategy: 'jwt', scope: ['admin'] } },
   handler: (request, h) => {
     return h.view('league/refresh')
   }
@@ -10,6 +11,7 @@ module.exports = [{
   method: 'POST',
   path: '/league/refresh/players',
   options: {
+    auth: { strategy: 'jwt', scope: ['admin'] },
     payload: {
       maxBytes: 209715200,
       output: 'file',

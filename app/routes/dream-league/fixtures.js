@@ -16,6 +16,7 @@ module.exports = [{
 }, {
   method: 'GET',
   path: '/dream-league/fixture/create',
+  options: { auth: { strategy: 'jwt', scope: ['admin'] } },
   handler: async (request, h) => {
     const gameweeks = await api.get('/dream-league/gameweeks', request.state.dl_token)
     const cups = await api.get('/dream-league/cups', request.state.dl_token)
@@ -26,6 +27,7 @@ module.exports = [{
   method: 'POST',
   path: '/dream-league/fixture/create',
   options: {
+    auth: { strategy: 'jwt', scope: ['admin'] },
     validate: {
       payload: joi.object({
         cupId: joi.number().integer().required(),
@@ -49,6 +51,7 @@ module.exports = [{
 }, {
   method: 'GET',
   path: '/dream-league/fixture/edit',
+  options: { auth: { strategy: 'jwt', scope: ['admin'] } },
   handler: async (request, h) => {
     const fixture = await api.get(`/dream-league/fixture/?fixtureId=${request.query.fixtureId}`, request.state.dl_token)
     const gameweeks = await api.get('/dream-league/gameweeks', request.state.dl_token)
@@ -60,6 +63,7 @@ module.exports = [{
   method: 'POST',
   path: '/dream-league/fixture/edit',
   options: {
+    auth: { strategy: 'jwt', scope: ['admin'] },
     validate: {
       payload: joi.object({
         fixtureId: joi.number().integer().required(),
@@ -84,6 +88,7 @@ module.exports = [{
 }, {
   method: 'GET',
   path: '/dream-league/fixture/delete',
+  options: { auth: { strategy: 'jwt', scope: ['admin'] } },
   handler: async (request, h) => {
     const fixture = await api.get(`/dream-league/fixture/?fixtureId=${request.query.fixtureId}`, request.state.dl_token)
     return h.view('dream-league/delete-fixture', { fixture })
@@ -92,6 +97,7 @@ module.exports = [{
   method: 'POST',
   path: '/dream-league/fixture/delete',
   options: {
+    auth: { strategy: 'jwt', scope: ['admin'] },
     validate: {
       payload: joi.object({
         fixtureId: joi.number().required()

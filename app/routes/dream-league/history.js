@@ -10,6 +10,7 @@ module.exports = [{
   }
 }, {
   method: 'GET',
+  options: { auth: { strategy: 'jwt', scope: ['admin'] } },
   path: '/dream-league/history/create',
   handler: async (request, h) => {
     return h.view('dream-league/create-history')
@@ -18,6 +19,7 @@ module.exports = [{
   method: 'POST',
   path: '/dream-league/history/create',
   options: {
+    auth: { strategy: 'jwt', scope: ['admin'] },
     validate: {
       payload: joi.object({
         year: joi.number().required(),
@@ -40,6 +42,7 @@ module.exports = [{
 }, {
   method: 'GET',
   path: '/dream-league/history/edit',
+  options: { auth: { strategy: 'jwt', scope: ['admin'] } },
   handler: async (request, h) => {
     const history = await api.get(`/dream-league/history/?historyId=${request.query.historyId}`, request.state.dl_token)
     return h.view('dream-league/edit-history', { history })
@@ -48,6 +51,7 @@ module.exports = [{
   method: 'POST',
   path: '/dream-league/history/edit',
   options: {
+    auth: { strategy: 'jwt', scope: ['admin'] },
     validate: {
       payload: joi.object({
         historyId: joi.number().required(),
@@ -71,6 +75,7 @@ module.exports = [{
 }, {
   method: 'GET',
   path: '/dream-league/history/delete',
+  options: { auth: { strategy: 'jwt', scope: ['admin'] } },
   handler: async (request, h) => {
     const history = await api.get(`/dream-league/history/?historyId=${request.query.historyId}`, request.state.dl_token)
     return h.view('dream-league/delete-history', { history })
@@ -79,6 +84,7 @@ module.exports = [{
   method: 'POST',
   path: '/dream-league/history/delete',
   options: {
+    auth: { strategy: 'jwt', scope: ['admin'] },
     validate: {
       payload: joi.object({
         historyId: joi.number().required()

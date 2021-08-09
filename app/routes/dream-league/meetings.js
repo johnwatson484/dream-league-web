@@ -11,6 +11,7 @@ module.exports = [{
 }, {
   method: 'GET',
   path: '/dream-league/meeting/create',
+  options: { auth: { strategy: 'jwt', scope: ['admin'] } },
   handler: async (request, h) => {
     return h.view('dream-league/create-meeting')
   }
@@ -18,6 +19,7 @@ module.exports = [{
   method: 'POST',
   path: '/dream-league/meeting/create',
   options: {
+    auth: { strategy: 'jwt', scope: ['admin'] },
     validate: {
       payload: joi.object({
         date: joi.date()
@@ -34,6 +36,7 @@ module.exports = [{
 }, {
   method: 'GET',
   path: '/dream-league/meeting/edit',
+  options: { auth: { strategy: 'jwt', scope: ['admin'] } },
   handler: async (request, h) => {
     const meeting = await api.get(`/dream-league/meeting/?meetingId=${request.query.meetingId}`, request.state.dl_token)
     return h.view('dream-league/edit-meeting', { meeting })
@@ -42,6 +45,7 @@ module.exports = [{
   method: 'POST',
   path: '/dream-league/meeting/edit',
   options: {
+    auth: { strategy: 'jwt', scope: ['admin'] },
     validate: {
       payload: joi.object({
         meetingId: joi.number().required(),
@@ -59,6 +63,7 @@ module.exports = [{
 }, {
   method: 'GET',
   path: '/dream-league/meeting/delete',
+  options: { auth: { strategy: 'jwt', scope: ['admin'] } },
   handler: async (request, h) => {
     const meeting = await api.get(`/dream-league/meeting/?meetingId=${request.query.meetingId}`, request.state.dl_token)
     return h.view('dream-league/delete-meeting', { meeting })
@@ -67,6 +72,7 @@ module.exports = [{
   method: 'POST',
   path: '/dream-league/meeting/delete',
   options: {
+    auth: { strategy: 'jwt', scope: ['admin'] },
     validate: {
       payload: joi.object({
         meetingId: joi.number().required()

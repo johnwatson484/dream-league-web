@@ -14,6 +14,7 @@ module.exports = [{
 }, {
   method: 'GET',
   path: '/teamsheet/edit',
+  options: { auth: { strategy: 'jwt', scope: ['admin'] } },
   handler: async (request, h) => {
     const teamsheet = await api.get('/dream-league/teamsheet', request.state.dl_token)
     const teamsheetViewModel = new ViewModel(teamsheet)
@@ -23,6 +24,7 @@ module.exports = [{
   method: 'POST',
   path: '/teamsheet/edit/player',
   options: {
+    auth: { strategy: 'jwt', scope: ['admin'] },
     plugins: {
       crumb: false
     },
@@ -44,6 +46,7 @@ module.exports = [{
   method: 'POST',
   path: '/teamsheet/edit/keeper',
   options: {
+    auth: { strategy: 'jwt', scope: ['admin'] },
     plugins: {
       crumb: false
     },
@@ -65,6 +68,7 @@ module.exports = [{
   method: 'POST',
   path: '/teamsheet/refresh',
   options: {
+    auth: { strategy: 'jwt', scope: ['admin'] },
     payload: {
       maxBytes: 209715200,
       output: 'file',

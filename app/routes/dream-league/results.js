@@ -24,6 +24,7 @@ module.exports = [{
 }, {
   method: 'GET',
   path: '/results/edit',
+  options: { auth: { strategy: 'jwt', scope: ['admin'] } },
   handler: async (request, h) => {
     const resultsInput = await api.get('/dream-league/results-edit', request.state.dl_token)
     resultsInput.keepers = resultsInput.keepers.sort((a, b) => { return sortFn(a.division, b.division) || sortFn(a.team, b.team) })
@@ -34,6 +35,7 @@ module.exports = [{
   method: 'POST',
   path: '/results/edit',
   options: {
+    auth: { strategy: 'jwt', scope: ['admin'] },
     validate: {
       payload: joi.object({
         gameweekId: joi.number(),
@@ -55,6 +57,7 @@ module.exports = [{
   method: 'POST',
   path: '/results/send',
   options: {
+    auth: { strategy: 'jwt', scope: ['admin'] },
     plugins: {
       crumb: false
     },

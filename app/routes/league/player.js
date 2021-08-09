@@ -18,6 +18,7 @@ module.exports = [{
 }, {
   method: 'GET',
   path: '/league/player/create',
+  options: { auth: { strategy: 'jwt', scope: ['admin'] } },
   handler: async (request, h) => {
     const teams = await api.get('/league/teams', request.state.dl_token)
     return h.view('league/create-player', { teams, positions })
@@ -26,6 +27,7 @@ module.exports = [{
   method: 'POST',
   path: '/league/player/create',
   options: {
+    auth: { strategy: 'jwt', scope: ['admin'] },
     validate: {
       payload: joi.object({
         firstName: joi.string().allow(''),
@@ -46,6 +48,7 @@ module.exports = [{
 }, {
   method: 'GET',
   path: '/league/player/edit',
+  options: { auth: { strategy: 'jwt', scope: ['admin'] } },
   handler: async (request, h) => {
     const player = await api.get(`/league/player/?playerId=${request.query.playerId}`, request.state.dl_token)
     const teams = await api.get('/league/teams', request.state.dl_token)
@@ -55,6 +58,7 @@ module.exports = [{
   method: 'POST',
   path: '/league/player/edit',
   options: {
+    auth: { strategy: 'jwt', scope: ['admin'] },
     validate: {
       payload: joi.object({
         playerId: joi.number().required(),
@@ -76,6 +80,7 @@ module.exports = [{
 }, {
   method: 'GET',
   path: '/league/player/delete',
+  options: { auth: { strategy: 'jwt', scope: ['admin'] } },
   handler: async (request, h) => {
     const player = await api.get(`/league/player/?playerId=${request.query.playerId}`, request.state.dl_token)
     return h.view('league/delete-player', { player })
@@ -84,6 +89,7 @@ module.exports = [{
   method: 'POST',
   path: '/league/player/delete',
   options: {
+    auth: { strategy: 'jwt', scope: ['admin'] },
     validate: {
       payload: joi.object({
         playerId: joi.number().required()
