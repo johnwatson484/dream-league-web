@@ -72,6 +72,23 @@
   {% endif %}
 </div>
 
+{% if results.groups %}
+<div class="row" style="padding-bottom: 20px;">
+  {% for group in results.groups %}
+  <div class="col-md-6">
+    <div class="card border-dark">
+      <div class="card-header bg-dark text-light">
+        Group {{ loop.index }}
+      </div>
+      <div class="card-body">
+        {% include "./dream-league/_group.html" %}
+      </div>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+{% endif %}
+
 {% else %}
 <div class="alert alert-info">
   Results coming soon.
