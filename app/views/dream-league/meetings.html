@@ -1,34 +1,34 @@
 {% extends '_layout.html' %}
 
 {% block content %}
-  <h2>Meetings</h2>
+<h2>Meetings</h2>
 
-  {% if auth.isAdmin %}
-  <a href="/dream-league/meeting/create">Create meeting</a>
-  {% endif %}
+{% if auth.isAdmin %}
+<a href="/dream-league/meeting/create">Create meeting</a>
+{% endif %}
 
-  {%if meetings.length %}
-    <table class="table table-hover table-sm small">
-      <tr>
-        <th>Number</th>
-        <th>Date</th>
-        <th></th>
-      </tr>
-      {% for meeting in meetings %}
-        <tr>
-          <td>{{ meeting.meetingId }}</td>
-          <td>{{ meeting.date }}</td>
-          <td>
-            {% if auth.isAdmin %}
-            <a href="/dream-league/meeting/edit?meetingId={{ meeting.meetingId }}">Edit</a> | <a href="/dream-league/meeting/delete?meetingId={{ meeting.meetingId }}">Delete</a>
-            {% end if%}
-          </td>
-        </tr>
-      {% endfor %}
-    </table>
-  {% else %}
-    <div class="alert alert-info">
-      No meetings scheduled.
-    </div>
-  {% endif %}
+{% if meetings.length %}
+<table class="table table-hover table-sm small">
+  <tr>
+    <th>Number</th>
+    <th>Date</th>
+    <th></th>
+  </tr>
+  {% for meeting in meetings %}
+  <tr>
+    <td>{{ meeting.meetingId }}</td>
+    <td>{{ meeting.date }}</td>
+    <td>
+      {% if auth.isAdmin %}
+      <a href="/dream-league/meeting/edit?meetingId={{ meeting.meetingId }}">Edit</a> | <a href="/dream-league/meeting/delete?meetingId={{ meeting.meetingId }}">Delete</a>
+      {% endif %}
+    </td>
+  </tr>
+  {% endfor %}
+</table>
+{% else %}
+<div class="alert alert-info">
+  No meetings scheduled.
+</div>
+{% endif %}
 {% endblock %}
