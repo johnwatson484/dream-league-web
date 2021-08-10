@@ -5,5 +5,5 @@ type: application
 version: 1.0.0
 dependencies:
 - name: helm-library
-  version: ^2.4.2
+  version: ^2.5.1
   repository: https://helm.lynxmagnus.com
