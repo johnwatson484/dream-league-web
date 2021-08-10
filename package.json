@@ -1,6 +1,6 @@
 {
   "name": "dream-league-web",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "",
   "main": "app/index.js",
   "scripts": {
@@ -24,8 +24,7 @@
     "@hapi/good-squeeze": "^6.0.0",
     "@hapi/hapi": "^20.1.5",
     "@hapi/inert": "^6.0.3",
-    "@hapi/vision": "^6.1.0",
-    "blipp": "^4.0.2",
+    "@hapi/vision": "^6.1.0",    
     "hapi-auth-jwt2": "^10.2.0",
     "joi": "^17.4.1",
     "nunjucks": "^3.2.3",
@@ -36,7 +35,8 @@
   "devDependencies": {
     "jest": "^27.0.6",
     "nodemon": "^2.0.12",
-    "standard": "^16.0.3"
+    "standard": "^16.0.3",
+    "blipp": "^4.0.2"
   },
   "standard": {
     "globals": [
