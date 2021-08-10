@@ -24,9 +24,9 @@ module.exports = {
           // Log the error
           request.log('error', {
             statusCode: statusCode,
-            message: response.message,
-            payloadMessage: response.data ? response.data.payload.message : '',
-            stack: response.data ? response.data.stack : response.stack
+            message: response?.message,
+            payloadMessage: response?.data?.payload?.message,
+            stack: response?.data?.stack
           })
 
           // The return the `500` view
