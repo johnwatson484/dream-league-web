@@ -20,8 +20,7 @@ module.exports = {
           if (statusCode === 404) {
             return h.view('404').code(statusCode)
           }
-          console.log(statusCode)
-          console.log(response)
+
           // Log the error
           request.log('error', {
             statusCode: statusCode,
