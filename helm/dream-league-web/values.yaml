@@ -4,10 +4,10 @@ image: dream-league-web
 
 container:
   imagePullPolicy: Always
-  requestMemory: 60Mi
-  requestCpu: 60m
-  limitMemory: 60Mi
-  limitCpu: 60m
+  requestMemory: 120Mi
+  requestCpu: 120m
+  limitMemory: 120Mi
+  limitCpu: 120m
   port: 3000
   readOnlyRootFilesystem: true
   allowPrivilegeEscalation: false
