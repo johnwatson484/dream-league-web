@@ -60,7 +60,7 @@
       </div>
     </div>
   </div>
-  {% if results.cupScores %}
+  {% if results.cupScores.length %}
   <div class="col-md-6">
     <div class="card border-dark">
       <div class="card-header bg-dark text-light">
@@ -74,7 +74,7 @@
   {% endif %}
 </div>
 
-{% if results.groups %}
+{% if results.cupScores.length and results.groups %}
 <div class="row" style="padding-bottom: 20px;">
   {% for group in results.groups %}
   <div class="col-md-6">
