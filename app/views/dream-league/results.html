@@ -9,7 +9,7 @@
     <select class="form-control" id="gameweekId" name="gameweekId">
       {% for gameweek in gameweeks %}
       <option value="{{ gameweek.gameweekId }}" {% if results.gameweekId===gameweek.gameweekId %}selected{% endif %}>
-        Gameweek {{ gameweek.gameweekId }} - {{ gameweek.startDate }} - {{ gameweek.endDate }}</option>
+        Gameweek {{ gameweek.gameweekId }} - {{ gameweek.shortDate }}</option>
       {% endfor %}
     </select>
   </div>

@@ -17,7 +17,7 @@
   {% for meeting in meetings %}
   <tr>
     <td>{{ meeting.meetingId }}</td>
-    <td>{{ meeting.date }}</td>
+    <td>{{ meeting.shortDate }}</td>
     <td>
       {% if auth.isAdmin %}
       <a href="/dream-league/meeting/edit?meetingId={{ meeting.meetingId }}">Edit</a> | <a href="/dream-league/meeting/delete?meetingId={{ meeting.meetingId }}">Delete</a>

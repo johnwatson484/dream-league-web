@@ -11,7 +11,7 @@
         <label for="gameweekId">Game Week</label>
         <select class="form-control" id="gameweekId" name="gameweekId">
         {% for gameweek in resultsInput.gameweeks %}
-          <option value="{{ gameweek.gameweekId }}" {% if gameweek.isCurrent %}selected{% endif %}>Gameweek {{ gameweek.gameweekId }} - {{ gameweek.startDate }} - {{ gameweek.endDate }}</option>
+          <option value="{{ gameweek.gameweekId }}" {% if gameweek.isCurrent %}selected{% endif %}>Gameweek {{ gameweek.gameweekId }} - {{ gameweek.shortDate }}</option>
         {% endfor %}
         </select> 
       </div>
@@ -133,7 +133,7 @@
 
 {% block bodyEnd %}
   <script>
-    const cupWeeks = {{ resultsInput.cupWeeks | dump | safe }}
+    const cupWeeks = {{ resultsInput.cupWeeks | dump | safe }} // eslint-disable-line
   </script>
   <script src="{{ assetPath }}/results-edit.js"></script>
 {% endblock %}
