@@ -2,11 +2,11 @@
   {% for score in results.cupScores %}
     <tr>
       <td>R{{ score.round }}</td>
-      <td>{{ score.homeScore.manager }}</td>
+      <td><a href="/dream-league/manager?managerId={{ score.homeScore.managerId }}">{{ score.homeScore.manager }}</a></td>
       <td>{{ score.homeMargin }}</td>
       <td> v </td>
       <td>{{ score.awayMargin }}</td>
-      <td>{{ score.awayScore.manager }}</td>
+      <td><a href="/dream-league/manager?managerId={{ score.awayScore.managerId }}">{{ score.awayScore.manager }}</a></td>
     </tr>
   {% endfor %}
 </table>

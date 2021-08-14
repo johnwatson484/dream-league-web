@@ -10,6 +10,13 @@ module.exports = [{
   }
 }, {
   method: 'GET',
+  path: '/dream-league/manager',
+  handler: async (request, h) => {
+    const manager = await api.get(`/dream-league/manager/detail/?managerId=${request.query.managerId}`, request.state.dl_token)
+    return h.view('dream-league/manager', { manager })
+  }
+}, {
+  method: 'GET',
   path: '/dream-league/manager/create',
   options: { auth: { strategy: 'jwt', scope: ['admin'] } },
   handler: async (request, h) => {
