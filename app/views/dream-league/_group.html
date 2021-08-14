@@ -14,8 +14,8 @@
   {% for row in group %}
     <tr>
       <td>{{ row.position }}</td>
-      <td><a href="/dream-league/manager?managerId={{ row.managerId }}"></a>{{ row.manager }}</a></td>
-      <td class="no-mobile">{{ row.played }}</td>
+      <td><a href="/dream-league/manager?managerId={{ row.managerId }}">{{ row.manager }}</a></td>
+      <td>{{ row.played }}</td>
       <td class="no-mobile">{{ row.won }}</td>
       <td class="no-mobile">{{ row.drawn }}</td>
       <td class="no-mobile">{{ row.lost }}</td>

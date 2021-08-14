@@ -9,7 +9,7 @@
     <tr>
       <td>{{ [row.firstName, row.lastName] | join(" ") }}</td>
       <td  class="no-mobile">{{ row.team }}</td>
-      <td>{{ row.manager }}</td>
+      <td><a href="/dream-league/manager?managerId={{ row.managerId }}">{{ row.manager }}</a></td>
       <td>{{ row.goals }}</td>
     </tr>
   {% endfor %}

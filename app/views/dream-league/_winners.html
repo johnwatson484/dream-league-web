@@ -1,7 +1,7 @@
 {% for winner in results.winners %}
 <div class="row">
   <div class="col-md-12">
-    {{ winner.manager }}
+    <a href="/dream-league/manager?managerId={{ winner.managerId }}">{{ winner.manager }}</a>
     {% if winner.goals >= 9 %}
      - JACKPOT!
     {% endif %}
