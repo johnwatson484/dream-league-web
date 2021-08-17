@@ -11,7 +11,7 @@
         <label for="gameweekId">Game Week</label>
         <select class="form-control" id="gameweekId" name="gameweekId">
         {% for gameweek in resultsInput.gameweeks %}
-          <option value="{{ gameweek.gameweekId }}" {% if gameweek.isCurrent %}selected{% endif %}>Gameweek {{ gameweek.gameweekId }} - {{ gameweek.shortDate }}</option>
+          <option value="{{ gameweek.gameweekId }}" {% if gameweek.isActive %}selected{% endif %}>Gameweek {{ gameweek.gameweekId }} - {{ gameweek.shortDate }}</option>
         {% endfor %}
         </select> 
       </div>
