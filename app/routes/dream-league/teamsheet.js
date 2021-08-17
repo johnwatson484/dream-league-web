@@ -39,7 +39,7 @@ module.exports = [{
       }
     },
     handler: async (request, h) => {
-      return await api.post('/dream-league/teamsheet/edit/player', request.payload, request.state.dl_token)
+      return api.post('/dream-league/teamsheet/edit/player', request.payload, request.state.dl_token)
     }
   }
 }, {
@@ -61,7 +61,7 @@ module.exports = [{
       }
     },
     handler: async (request, h) => {
-      return await api.post('/dream-league/teamsheet/edit/keeper', request.payload, request.state.dl_token)
+      return api.post('/dream-league/teamsheet/edit/keeper', request.payload, request.state.dl_token)
     }
   }
 }, {

@@ -2,7 +2,7 @@ const api = require('../../app/api')
 jest.mock('../../app/api')
 const fs = require('fs')
 const path = require('path')
-const refresh = require('../../app/refresh/players')
+const { refreshPlayers } = require('../../app/refresh')
 
 const BASE_TEST_FILE = path.resolve(__dirname, '../files/player-list.xlsx')
 const TEST_FILE = path.resolve(__dirname, '../files/player-list-tmp.xlsx')
@@ -24,7 +24,7 @@ describe('refreshing player list', () => {
   test('should return success if list valid', async () => {
     api.post.mockResolvedValue({ success: true })
 
-    const result = await refresh(TEST_FILE)
+    const result = await refreshPlayers(TEST_FILE)
 
     expect(result.success).toBeTruthy()
     expect(api.post.mock.calls.length).toBe(1)
@@ -33,7 +33,7 @@ describe('refreshing player list', () => {
   test('should return failure if list invalid', async () => {
     api.post.mockResolvedValue({ success: false })
 
-    const result = await refresh(TEST_FILE)
+    const result = await refreshPlayers(TEST_FILE)
 
     expect(result.success).toBeFalsy()
     expect(api.post.mock.calls.length).toBe(1)
@@ -42,7 +42,7 @@ describe('refreshing player list', () => {
   test('request should be made to refresh endpoint', async () => {
     api.post.mockResolvedValue({ success: true })
 
-    await refresh(TEST_FILE)
+    await refreshPlayers(TEST_FILE)
 
     expect(api.post.mock.calls[0][0]).toBe('/league/players/refresh')
   })
@@ -50,7 +50,7 @@ describe('refreshing player list', () => {
   test('request should include all players', async () => {
     api.post.mockResolvedValue({ success: true })
 
-    await refresh(TEST_FILE)
+    await refreshPlayers(TEST_FILE)
 
     expect(api.post.mock.calls[0][1].players.length).toBe(2176)
   })
@@ -58,7 +58,7 @@ describe('refreshing player list', () => {
   test('request should include example player', async () => {
     api.post.mockResolvedValue({ success: true })
 
-    await refresh(TEST_FILE)
+    await refreshPlayers(TEST_FILE)
 
     expect(api.post.mock.calls[0][1].players).toContainEqual({ firstName: 'Ian', lastName: 'Henderson', position: 'FWD', team: 'Rochdale' })
   })
@@ -66,7 +66,7 @@ describe('refreshing player list', () => {
   test('should return failure should include unmapped players', async () => {
     api.post.mockResolvedValue({ success: false, unmappedPlayers: [{ firstName: 'Adebayo', lastName: 'Akinfenwa', position: 'FWD', team: 'Wycombe' }] })
 
-    const result = await refresh(TEST_FILE)
+    const result = await refreshPlayers(TEST_FILE)
 
     expect(result.success).toBeFalsy()
     expect(result.unmappedPlayers.length).toBe(1)

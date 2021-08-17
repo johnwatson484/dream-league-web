@@ -2,7 +2,7 @@ const api = require('../../app/api')
 jest.mock('../../app/api')
 const fs = require('fs')
 const path = require('path')
-const refresh = require('../../app/refresh/teamsheet')
+const { refreshTeamSheet } = require('../../app/refresh')
 
 const BASE_TEST_FILE = path.resolve(__dirname, '../files/teamsheet.xlsx')
 const TEST_FILE = path.resolve(__dirname, '../files/teamsheet-tmp.xlsx')
@@ -24,7 +24,7 @@ describe('refreshing teamsheet', () => {
   test('should return success if list valid', async () => {
     api.post.mockResolvedValue({ success: true })
 
-    const result = await refresh(TEST_FILE)
+    const result = await refreshTeamSheet(TEST_FILE)
 
     expect(result.success).toBeTruthy()
     expect(api.post.mock.calls.length).toBe(1)
@@ -33,7 +33,7 @@ describe('refreshing teamsheet', () => {
   test('should return failure if list invalid', async () => {
     api.post.mockResolvedValue({ success: false })
 
-    const result = await refresh(TEST_FILE)
+    const result = await refreshTeamSheet(TEST_FILE)
 
     expect(result.success).toBeFalsy()
     expect(api.post.mock.calls.length).toBe(1)
@@ -42,7 +42,7 @@ describe('refreshing teamsheet', () => {
   test('request should be made to refresh endpoint', async () => {
     api.post.mockResolvedValue({ success: true })
 
-    await refresh(TEST_FILE)
+    await refreshTeamSheet(TEST_FILE)
 
     expect(api.post.mock.calls[0][0]).toBe('/dream-league/teamsheet/refresh')
   })
@@ -50,7 +50,7 @@ describe('refreshing teamsheet', () => {
   test('request should include all teams', async () => {
     api.post.mockResolvedValue({ success: true })
 
-    await refresh(TEST_FILE)
+    await refreshTeamSheet(TEST_FILE)
 
     expect(api.post.mock.calls[0][1].teams.length).toBe(13)
     expect(api.post.mock.calls[0][1].teams.filter(x => x.manager === 'John').length).toBe(1)
@@ -71,7 +71,7 @@ describe('refreshing teamsheet', () => {
   test('request should include all players', async () => {
     api.post.mockResolvedValue({ success: true })
 
-    await refresh(TEST_FILE)
+    await refreshTeamSheet(TEST_FILE)
 
     expect(api.post.mock.calls[0][1].teams[0].players.length).toBe(15)
     expect(api.post.mock.calls[0][1].teams[1].players.length).toBe(15)
