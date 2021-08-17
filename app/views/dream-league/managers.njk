@@ -1,0 +1,32 @@
+{% extends '_layout.njk' %}
+
+{% block content %}
+  <h2>Managers</h2>
+
+  {% if auth.isAdmin %}
+  <a href="/dream-league/manager/create">Create manager</a>
+  {% endif %}
+
+  {%if managers.length %}
+    <table class="table table-hover table-sm small">
+      <tr>
+        <th>Name</th>
+        <th></th>
+      </tr>
+      {% for manager in managers %}
+        <tr>
+          <td>{{ manager.name }}</td>
+          <td>
+            {% if auth.isAdmin %}
+            <a href="/dream-league/manager/edit?managerId={{ manager.managerId }}">Edit</a> | <a href="/dream-league/manager/delete?managerId={{ manager.managerId }}">Delete</a>
+            {% endif %}
+          </td>
+        </tr>
+      {% endfor %}
+    </table>
+  {% else %}
+    <div class="alert alert-info">
+      No managers participating.
+    </div>
+  {% endif %}
+{% endblock %}

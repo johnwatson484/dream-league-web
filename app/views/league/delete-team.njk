@@ -1,0 +1,20 @@
+{% extends '_layout.njk' %}
+
+{% block content %}
+  <div class="col-md-6">
+    {% if error %}
+      <div class="alert alert-danger">
+        {{ error }}
+      </div>
+    {% endif %}
+    <h2>Delete team</h2>
+    <p>Are you sure wish to delete this team?</p>
+    <p>{{ team.name }}</p>
+    <form method="POST" action="/league/team/delete">
+      <input type="hidden" name="crumb" value="{{crumb}}"/>
+      <input type="hidden" id="teamId" name="teamId" value="{{ team.teamId }}"> 
+      <button type="submit" class="btn btn-primary">Confirm</button>
+      <a href="/league/teams">Cancel</a>
+    </form>
+  </div>
+{% endblock %}

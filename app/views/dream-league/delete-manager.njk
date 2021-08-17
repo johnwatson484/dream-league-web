@@ -1,0 +1,19 @@
+{% extends '_layout.njk' %}
+
+{% block content %}
+  <div class="col-md-6">
+    {% if error %}
+      <div class="alert alert-danger">
+        {{ error }}
+      </div>
+    {% endif %}
+    <h2>Delete manager</h2>
+    <p>Are you sure wish to delete {{ manager.name }}?</p>
+    <form method="POST" action="/dream-league/manager/delete">
+      <input type="hidden" name="crumb" value="{{crumb}}"/>
+      <input type="hidden" id="managerId" name="managerId" value="{{ manager.managerId }}"> 
+      <button type="submit" class="btn btn-primary">Confirm</button>
+      <a href="/dream-league/managers">Cancel</a>
+    </form>
+  </div>
+{% endblock %}

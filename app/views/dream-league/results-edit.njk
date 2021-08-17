@@ -1,0 +1,139 @@
+{% extends '_layout.njk' %}
+
+{% block content %}
+  <h2>Results sheet</h2>
+
+  {%if resultsInput.keepers.length %}
+    <form method="POST" action="/results/edit" >
+      <input type="hidden" name="crumb" value="{{crumb}}"/>
+    
+      <div class="form-group">
+        <label for="gameweekId">Game Week</label>
+        <select class="form-control" id="gameweekId" name="gameweekId">
+        {% for gameweek in resultsInput.gameweeks %}
+          <option value="{{ gameweek.gameweekId }}" {% if gameweek.isActive %}selected{% endif %}>Gameweek {{ gameweek.gameweekId }} - {{ gameweek.shortDate }}</option>
+        {% endfor %}
+        </select> 
+      </div>
+
+      <button type="submit" class="btn btn-primary">Submit</button>
+
+      <h4>Goalkeepers</h4>
+
+      <table class="table table-sm table-hover small">
+        <tr>
+          <th>Division</th>
+          <th>Team</th>
+          <th>Substitute</th>
+          <th>Manager</th>
+          <th width="110px;">Conceded</th>
+          <th width="110px;">Cup</th>
+        </tr>
+        {% for keeper in resultsInput.keepers %}
+          <tr>
+            <td>{{ keeper.division }}</td>
+            <td>{{ keeper.team }}</td>
+            <td>{{ keeper.substitute }}</td>
+            <td>{{ keeper.manager }}</td>
+            <td width="110px;">
+              <span class="input-group">
+                <span class="input-group-prepend">
+                  <button type="button" class="btn btn-danger btn-number btn-sm minus" data-type="minus" data-field="conceded">
+                    <span class="glyphicon glyphicon-minus"></span>
+                  </button>
+                </span>
+                <input type="hidden" name="conceded[{{ loop.index0 }}][teamId]" value="{{ keeper.teamId }}"/>
+                <input type="text" onClick="this.select()" name="conceded[{{ loop.index0 }}][conceded]" class="form-control input-xs result-input" style="text-align:center; min-width:50px;" value="0"/>
+                <span class="input-group-append">
+                  <button type="button" class="btn btn-success btn-number btn-sm plus" data-type="plus" data-field="conceded">
+                    <span class="glyphicon glyphicon-plus"></span>
+                  </button>
+                </span>
+              </span>
+            </td>
+            <td width="110px;">
+              <span class="input-group manager-cup-input manager-cup-{{ keeper.managerId }}">
+                <span class="input-group-prepend">
+                  <button type="button" class="btn btn-danger btn-number btn-sm minus" data-type="minus" data-field="conceded">
+                    <span class="glyphicon glyphicon-minus"></span>
+                  </button>
+                </span>
+                <input type="hidden" name="concededCup[{{ loop.index0 }}][teamId]" value="{{ keeper.teamId }}"/>
+                <input type="text" onClick="this.select()" name="concededCup[{{ loop.index0 }}][conceded]" class="form-control input-xs result-input" style="text-align:center; min-width:50px;" value="0"/>
+                <span class="input-group-append">
+                  <button type="button" class="btn btn-success btn-number btn-sm plus" data-type="plus" data-field="conceded">
+                    <span class="glyphicon glyphicon-plus"></span>
+                  </button>
+                </span>
+              </span>
+            </td>
+          </tr>
+        {% endfor %}
+        </table>
+
+        <h4>Players</h4>
+
+        <table class="table table-sm table-hover small">
+        <tr>
+          <th>Division</th>
+          <th>Team</th>
+          <th>Player</th>
+          <th>Manager</th>
+          <th width="110px;">Goals</th>
+          <th width="110px;">Cup</th>
+        </tr>
+        {% for player in resultsInput.players %}
+          <tr>
+            <td>{{ player.division }}</td>
+            <td>{{ player.team }}</td>
+            <td>{{ player.lastName }}, {{ player.firstName }}</td>
+            <td>{{ player.manager }}</td>
+            <td width="110px;">
+              <span class="input-group">
+                <span class="input-group-prepend">
+                  <button type="button" class="btn btn-danger btn-number btn-sm minus" data-type="minus" data-field="goals">
+                    <span class="glyphicon glyphicon-minus"></span>
+                  </button>
+                </span>
+                <input type="hidden" name="goals[{{ loop.index0 }}][playerId]" value="{{ player.playerId }}"/>
+                <input type="text" onClick="this.select()" name="goals[{{ loop.index0 }}][goals]" class="form-control input-xs result-input" style="text-align:center; min-width:50px;" value="0" />
+                <span class="input-group-append">
+                  <button type="button" class="btn btn-success btn-number btn-sm plus" data-type="plus" data-field="goals">
+                    <span class="glyphicon glyphicon-plus"></span>
+                  </button>
+                </span>
+              </span>
+            </td>
+            <td width="110px;">
+              <span class="input-group manager-cup-input manager-cup-{{ player.managerId }}">
+                <span class="input-group-prepend">
+                  <button type="button" class="btn btn-danger btn-number btn-sm minus" data-type="minus" data-field="goals">
+                    <span class="glyphicon glyphicon-minus"></span>
+                  </button>
+                </span>
+                <input type="hidden" name="goalsCup[{{ loop.index0 }}][playerId]" value="{{ player.playerId }}"/>
+                <input type="text" onClick="this.select()" name="goalsCup[{{ loop.index0 }}][goals]" class="form-control input-xs result-input" style="text-align:center; min-width:50px;" value="0" />
+                <span class="input-group-append">
+                  <button type="button" class="btn btn-success btn-number btn-sm plus" data-type="plus" data-field="goals">
+                    <span class="glyphicon glyphicon-plus"></span>
+                  </button>
+                </span>
+              </span>
+            </td>
+          </tr>
+        {% endfor %}
+      </table>
+    </form>
+  {% else %}
+    <div class="alert alert-info">
+      No players available.
+    </div>
+  {% endif %}
+{% endblock %}
+
+{% block bodyEnd %}
+  <script>
+    const cupWeeks = {{ resultsInput.cupWeeks | dump | safe }} // eslint-disable-line
+  </script>
+  <script src="{{ assetPath }}/results-edit.js"></script>
+{% endblock %}

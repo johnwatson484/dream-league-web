@@ -1,0 +1,91 @@
+{% extends '_layout.njk' %}
+
+{% block content %}
+
+{% if updated %}
+<div class="alert alert-info">
+  You’ve set your cookie preferences. <a href="/">Go back to the page you were looking at</a>
+</div>
+{% endif %}
+
+<h2>Cookies</h2>
+
+<p>Cookies are small files saved on your phone, tablet or computer when you visit a website.</p>
+
+<p>We use cookies to make this site work and collect information about how you use our service.</p>
+
+<h3>Essential cookies</h3>
+
+<p>Essential cookies keep your information secure while you use this service. We do not need to ask permission to use
+  them.</p>
+
+<table class="table table-hover small">
+  <tr>
+    <th>Name</th>
+    <th>Purpose</th>
+    <th>Expires</th>
+  </tr>
+  <tr>
+    <td>cookies_policy</td>
+    <td>Saves your cookie consent settings.</td>
+    <td>1 year</td>
+  </tr>
+  <tr>
+    <td>dl_token</td>
+    <td>Saves your authentication settings.</td>
+    <td>30 days</td>
+  </tr>
+</table>
+
+<h3>Analytics cookies (optional)</h3>
+
+<p>With your permission, we use Google Analytics to collect data about how you use this service. This information helps
+  us to improve our service.</p>
+
+<p>Google is not allowed to use or share our analytics data with anyone.</p>
+
+<p>Google Analytics stores anonymised information about:</p>
+
+<ul>
+  <li>how you got to this service</li>
+  <li>the pages you visit on this service and how long you spend on them</li>
+  <li>any errors you see while using this service</li>
+</ul>
+
+<table class="table table-hover small">
+  <tr>
+    <th>Name</th>
+    <th>Purpose</th>
+    <th>Expires</th>
+  </tr>
+  <tr>
+    <td>_ga</td>
+    <td>Checks if you’ve visited this before.</td>
+    <td>2 years</td>
+  </tr>
+  <tr>
+    <td>_gid</td>
+    <td>Used to distinguish users.</td>
+    <td>24 hours</td>
+  </tr>
+</table>
+
+<h3>Change your cookie settings</h3>
+<form action="/cookies" method="POST" novalidate>
+  Do you want to accept analytics cookies?
+  <div class="form-check">
+    <input class="form-check-input" type="radio" name="analytics" id="analytics" value="true" {% if cookiesPolicy.analytics %}checked{% endif %}>
+    <label class="form-check-label" for="analytics">
+      Yes
+    </label>
+  </div>
+  <div class="form-check">
+    <input class="form-check-input" type="radio" name="analytics" id="analytics2" value="false" {% if not cookiesPolicy.analytics %}checked{% endif %}>
+    <label class="form-check-label" for="analytics2">
+      No
+    </label>
+  </div>
+  <button type="submit" class="btn btn-primary">Submit</button>
+</form>
+
+{% endblock %}

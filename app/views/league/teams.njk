@@ -1,0 +1,32 @@
+{% extends '_layout.njk' %}
+
+{% block content %}
+  {% if auth.isAdmin %}
+  <a href="/league/team/create">Create team</a>
+  {% endif %}
+
+  {%if teams.length %}
+    <table class="table table-hover table-sm small">
+      <tr>
+        <th>Team</th>
+        <th>Division</th>
+        <th></th>
+      </tr>
+      {% for team in teams %}
+        <tr>
+          <td>{{ team.name }}</td>
+          <td>{{ team.division.name }}</td>
+          <td>
+            {% if auth.isAdmin %}
+            <a href="/league/team/edit?teamId={{ team.teamId }}">Edit</a> | <a href="/league/team/delete?teamId={{ team.teamId }}">Delete</a>
+            {% endif %}
+          </td>
+        </tr>
+      {% endfor %}
+    </table>
+  {% else %}
+    <div class="alert alert-info">
+      No teams available.
+    </div>
+  {% endif %}
+{% endblock %}

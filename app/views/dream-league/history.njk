@@ -1,0 +1,60 @@
+{% extends '_layout.njk' %}
+
+{% block content %}
+<h2>History</h2>
+
+{% if auth.isAdmin %}
+<a href="/dream-league/history/create">Create history</a>
+{% endif %}
+
+{%if history.length %}
+<h3>Current competitions</h3>
+<table class="table table-hover table-sm small">
+  <tr>
+    <th>Year</th>
+    <th>Teams</th>
+    <th>League</th>
+    <th>Cup</th>
+    <th>League Cup</th>
+    <th></th>
+  </tr>
+  {% for year in history %}
+  <tr>
+    <td>{{ year.year }}</td>
+    <td>{{ year.teams }}</td>
+    <td>{{ year.league1 }}</td>
+    <td>{{ year.cup }}</td>
+    <td>{{ year.leagueCup }}</td>
+    <td>
+      {% if auth.isAdmin %}
+      <a href="/dream-league/history/edit?historyId={{ year.historyId }}">Edit</a> | <a
+        href="/dream-league/history/delete?historyId={{ year.historyId }}">Delete</a>
+      {% endif %}
+    </td>
+  </tr>
+  {% endfor %}
+</table>
+
+<h3>Defunct competitions</h3>
+<table class="table table-hover table-sm small">
+  <tr>
+    <th>Year</th>
+    <th>Championship</th>
+    <th>Plate</th>
+  </tr>
+  {% for year in history %}
+  {% if year.year >= 1995 and year.year <= 2006 %}
+    <tr>
+      <td>{{ year.year }}</td>
+      <td>{{ year.league2 }}</td>
+      <td>{{ year.plate }}</td>
+    </tr>
+  {% endif %}
+  {% endfor %}
+</table>
+{% else %}
+<div class="alert alert-info">
+  No recorded history.
+</div>
+{% endif %}
+{% endblock %}
