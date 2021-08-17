@@ -1,4 +1,4 @@
-const refreshTeamSheet = require('../../dream-league/teamsheet-refresh')
+const refreshTeamSheet = require('../../teamsheet-refresh')
 const api = require('../../api')
 const joi = require('joi')
 const boom = require('@hapi/boom')

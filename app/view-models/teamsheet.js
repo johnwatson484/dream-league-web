@@ -3,7 +3,7 @@ function ViewModel (teamsheet) {
   return teams
 }
 
-function mapTeam (team) {
+const mapTeam = (team) => {
   const keepers = []
   const players = []
   for (let i = 0; i < 2; i++) {
