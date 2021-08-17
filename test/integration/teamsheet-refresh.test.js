@@ -2,7 +2,7 @@ const api = require('../../app/api')
 jest.mock('../../app/api')
 const fs = require('fs')
 const path = require('path')
-const refresh = require('../../app/teamsheet-refresh')
+const refresh = require('../../app/refresh/teamsheet')
 
 const BASE_TEST_FILE = path.resolve(__dirname, '../files/teamsheet.xlsx')
 const TEST_FILE = path.resolve(__dirname, '../files/teamsheet-tmp.xlsx')

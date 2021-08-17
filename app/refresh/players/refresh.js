@@ -1,6 +1,6 @@
 const XLSX = require('xlsx')
-const api = require('../api')
-const deleteFile = require('./delete-file')
+const api = require('../../api')
+const deleteFile = require('../delete-file')
 const mapPlayer = require('./map-player')
 
 const refresh = async (path, token) => {

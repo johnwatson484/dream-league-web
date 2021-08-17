@@ -2,7 +2,7 @@ const api = require('../../app/api')
 jest.mock('../../app/api')
 const fs = require('fs')
 const path = require('path')
-const refresh = require('../../app/player-refresh')
+const refresh = require('../../app/refresh/players')
 
 const BASE_TEST_FILE = path.resolve(__dirname, '../files/player-list.xlsx')
 const TEST_FILE = path.resolve(__dirname, '../files/player-list-tmp.xlsx')

@@ -1,8 +1,8 @@
-const refreshTeamSheet = require('../../teamsheet-refresh')
+const { refreshTeamSheet } = require('../../refresh')
 const api = require('../../api')
 const joi = require('joi')
 const boom = require('@hapi/boom')
-const ViewModel = require('../../view-models/teamsheet')
+const ViewModel = require('./models/teamsheet')
 
 module.exports = [{
   method: 'GET',

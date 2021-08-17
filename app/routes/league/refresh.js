@@ -1,4 +1,4 @@
-const refreshPlayers = require('../../player-refresh')
+const { refreshPlayers } = require('../../refresh')
 
 module.exports = [{
   method: 'GET',
