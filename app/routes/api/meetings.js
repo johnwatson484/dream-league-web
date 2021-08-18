@@ -5,7 +5,7 @@ module.exports = [{
   path: '/api/v1/meetings',
   options: {
     handler: async (request, h) => {
-      const meetings = await api.get('/dream-league/meetings', request.state.dl_token)
+      const meetings = await api.get('/meetings', request.state.dl_token)
       return h.response(meetings)
     }
   }

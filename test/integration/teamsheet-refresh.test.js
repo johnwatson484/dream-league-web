@@ -44,7 +44,7 @@ describe('refreshing teamsheet', () => {
 
     await refreshTeamSheet(TEST_FILE)
 
-    expect(api.post.mock.calls[0][0]).toBe('/dream-league/teamsheet/refresh')
+    expect(api.post.mock.calls[0][0]).toBe('/teamsheet/refresh')
   })
 
   test('request should include all teams', async () => {

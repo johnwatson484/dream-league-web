@@ -1,0 +1,32 @@
+{% extends '_layout.njk' %}
+
+{% block content %}
+  <h2>Cups</h2>
+
+  {% if auth.isAdmin %}
+  <a href="/cup/create">Create cup</a>
+  {% endif %}
+
+  {%if cups.length %}
+    <table class="table table-hover table-sm small">
+      <tr>
+        <th>Cup</th>
+        <th></th>
+      </tr>
+      {% for cup in cups %}
+        <tr>
+          <td>{{ cup.name }}</td>
+          <td>
+            {% if auth.isAdmin %}
+            <a href="/cup/edit?cupId={{ cup.cupId }}">Edit</a> | <a href="/cup/delete?cupId={{ cup.cupId }}">Delete</a>
+            {% endif %}
+            </td>
+        </tr>
+      {% endfor %}
+    </table>
+  {% else %}
+    <div class="alert alert-info">
+      No cups created.
+    </div>
+  {% endif %}
+{% endblock %}

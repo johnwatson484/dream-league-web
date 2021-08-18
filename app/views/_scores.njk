@@ -1,0 +1,27 @@
+<table class="table table-hover table-sm small">
+  {% for score in results.scores %}
+    <tr>
+      <td><a href="/manager?managerId={{ score.managerId }}">{{ score.manager }}</a></td>
+      <td>
+        <div class="row">
+          <div class="col-md-12">
+            <span class="badge {% if score.result === 'W' %}badge-success{% elif score.result === 'L' %}badge-danger{% else %}badge-primary{% endif %}">{{ score.goals }} - {{ score.conceded }}</span>
+          </div>
+        </div>
+        {% for scorer in score.scorers %}
+            <div class="row">
+              <div class="col-md-12">
+                <em>
+                  {{ scorer.name }}
+
+                  {% if scorer.goals > 1 %}
+                    ({{ scorer.goals }})
+                  {% endif %}
+                </em>
+              </div>
+            </div>
+        {% endfor %}
+      </td>
+    </tr>
+  {% endfor %}
+</table>

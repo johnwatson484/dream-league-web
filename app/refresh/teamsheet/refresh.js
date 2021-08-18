@@ -8,7 +8,7 @@ const refresh = async (path, token) => {
   const worksheet = workbook.Sheets['DL Teams']
   const teams = mapTeams(worksheet)
   deleteFile(path)
-  return api.post('/dream-league/teamsheet/refresh', { teams }, token)
+  return api.post('/teamsheet/refresh', { teams }, token)
 }
 
 module.exports = refresh

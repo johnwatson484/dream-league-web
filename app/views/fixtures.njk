@@ -1,0 +1,40 @@
+{% extends '_layout.njk' %}
+
+{% block content %}
+  <h2>Fixtures</h2>
+
+  {% if auth.isAdmin %}
+  <a href="/fixture/create">Create fixture</a>
+  {% endif %}
+
+  {%if fixtures.length %}
+    <table class="table table-hover table-sm small">
+      <tr>
+        <th>Gameweek</th>
+        <th>Cup</th>
+        <th>Round</th>
+        <th>Home</th>
+        <th>Away</th>
+        <th></th>
+      </tr>
+      {% for fixture in fixtures %}
+        <tr>
+          <td>{{ fixture.gameweekId }}</td>
+          <td>{{ fixture.cupName }}</td>
+          <td>{{ fixture.round }}</td>
+          <td>{{ fixture.homeManagerName }}</td>
+          <td>{{ fixture.awayManagerName }}</td>
+          <td>
+            {% if auth.isAdmin %}
+            <a href="/fixture/edit?fixtureId={{ fixture.fixtureId }}">Edit</a> | <a href="/fixture/delete?fixtureId={{ fixture.fixtureId }}">Delete</a>
+            {% endif %}
+          </td>
+        </tr>
+      {% endfor %}
+    </table>
+  {% else %}
+    <div class="alert alert-info">
+      No fixtures created.
+    </div>
+  {% endif %}
+{% endblock %}

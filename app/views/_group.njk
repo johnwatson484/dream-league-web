@@ -1,0 +1,28 @@
+<table class="table table-hover table-sm small">
+  <tr>
+    <th>Pos</th>
+    <th>Manager</th>
+    <th>P</th>
+    <th class="no-mobile">W</th>
+    <th class="no-mobile">D</th>
+    <th class="no-mobile">L</th>
+    <th class="no-mobile">GF</th>
+    <th class="no-mobile">GA</th>
+    <th class="no-mobile">GD</th>
+    <th>Pts</th>
+  </tr>
+  {% for row in group %}
+    <tr>
+      <td>{{ row.position }}</td>
+      <td><a href="/manager?managerId={{ row.managerId }}">{{ row.manager }}</a></td>
+      <td>{{ row.played }}</td>
+      <td class="no-mobile">{{ row.won }}</td>
+      <td class="no-mobile">{{ row.drawn }}</td>
+      <td class="no-mobile">{{ row.lost }}</td>
+      <td class="no-mobile">{{ row.gf }}</td>
+      <td class="no-mobile">{{ row.ga }}</td>
+      <td class="no-mobile">{{ row.gd }}</td>
+      <td>{{ row.points }}</td>
+    </tr>
+  {% endfor %}
+</table>

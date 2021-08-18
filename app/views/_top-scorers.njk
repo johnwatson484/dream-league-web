@@ -1,0 +1,16 @@
+<table class="table table-hover table-sm small">
+  <tr>
+    <th>Player</th>
+    <th class="no-mobile">Team</th>
+    <th>Manager</th>
+    <th>Goals</th>
+  </tr>
+  {% for row in topScorers %}
+    <tr>
+      <td>{{ [row.firstName, row.lastName] | join(" ") }}</td>
+      <td  class="no-mobile">{{ row.team }}</td>
+      <td><a href="/manager?managerId={{ row.managerId }}">{{ row.manager }}</a></td>
+      <td>{{ row.goals }}</td>
+    </tr>
+  {% endfor %}
+</table>

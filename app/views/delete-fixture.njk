@@ -1,0 +1,19 @@
+{% extends '_layout.njk' %}
+
+{% block content %}
+  <div class="col-md-6">
+    {% if error %}
+      <div class="alert alert-danger">
+        {{ error }}
+      </div>
+    {% endif %}
+    <h2>Delete fixture</h2>
+    <p>Are you sure wish to delete {{ fixture.homeManagerName }} v {{ fixture.awayManagerName}}?</p>
+    <form method="POST" action="/fixture/delete">
+      <input type="hidden" name="crumb" value="{{crumb}}"/>
+      <input type="hidden" id="fixtureId" name="fixtureId" value="{{ fixture.fixtureId }}"> 
+      <button type="submit" class="btn btn-primary">Confirm</button>
+      <a href="/fixtures">Cancel</a>
+    </form>
+  </div>
+{% endblock %}
