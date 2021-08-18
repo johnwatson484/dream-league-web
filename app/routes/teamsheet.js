@@ -1,4 +1,4 @@
-const { refreshTeamSheet } = require('../refresh')
+const { refreshTeamsheet } = require('../refresh')
 const api = require('../api')
 const joi = require('joi')
 const boom = require('@hapi/boom')
@@ -78,7 +78,7 @@ module.exports = [{
       timeout: false
     },
     handler: async (request, h) => {
-      const response = await refreshTeamSheet(request.payload.teamFile.path, request.state.dl_token)
+      const response = await refreshTeamsheet(request.payload.teamFile.path, request.state.dl_token)
       if (response.success) {
         return h.redirect('/teamsheet/edit')
       }
