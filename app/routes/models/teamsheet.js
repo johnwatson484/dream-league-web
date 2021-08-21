@@ -1,6 +1,5 @@
 function ViewModel (teamsheet) {
-  const teams = teamsheet.map(mapTeam)
-  return teams
+  return teamsheet.map(mapTeam)
 }
 
 const mapTeam = (team) => {
