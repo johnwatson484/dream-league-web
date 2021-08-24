@@ -3,3 +3,63 @@
 [![Known Vulnerabilities](https://snyk.io/test/github/johnwatson484/dream-league-web/badge.svg)](https://snyk.io/test/github/johnwatson484/dream-league-web)
 # Dream League Web
 Dream League website
+
+# Prerequisites
+- Docker
+- Docker Compose
+
+Optional:
+- Kubernetes
+- Helm
+
+## Running the application
+The application is designed to run in containerised environments, using Docker Compose in development and Kubernetes in production.
+
+- A Helm chart is provided for production deployments to Kubernetes.
+
+## Run production application in container with Docker
+
+```
+docker-compose -f docker-compose.yaml build
+docker-compose -f docker-compose.yaml up
+```
+
+## Develop application in container
+
+This service is dependent on the availability of [Dream League API](https://github.com/johnwatson484/dream-league-api) running in the same Docker network.
+
+A helper script will start this service in a shared network.
+
+```
+./scripts/start
+```
+
+Alternatively, the commands can be run individually.
+
+```
+docker network create dream-league
+docker-compose build
+docker-compose docker-compose.yaml \
+  -f docker-compose.override \
+  -f docker-compose.link \
+  up
+```
+
+### Running tests
+
+A convenience script is provided to run automated tests in a containerised
+environment. This will rebuild images before running tests via docker-compose,
+using a combination of `docker-compose.yaml` and `docker-compose.test.yaml`.
+The command given to `docker-compose run` may be customised by passing
+arguments to the test script.
+
+Examples:
+
+```
+# Run all tests
+scripts/test
+
+# Run tests with file watch
+scripts/test -w
+```
+
