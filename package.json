@@ -1,6 +1,6 @@
 {
   "name": "dream-league-web",
-  "version": "1.1.11",
+  "version": "1.1.12",
   "description": "",
   "main": "app/index.js",
   "scripts": {
