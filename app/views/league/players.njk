@@ -26,6 +26,7 @@
         <th>Name</th>
         <th>Position</th>
         <th>Team</th>
+        <th>Manager</th>
         <th></th>
       </tr>
       {% for player in players %}
@@ -33,6 +34,11 @@
           <td>{{ player.lastNameFirstName }}</td>
           <td>{{ player.position }}</td>
           <td>{{ player.team.name }}</td>
+          <td>
+            {% if player.managers.length %}
+              <a href="/manager?managerId={{ player.managers[0].managerId }}">{{ player.managers[0].name }}</a>
+            {% endif %}
+          </td>
           <td>
             {% if auth.isAdmin %}
             <a href="/league/player/edit?playerId={{ player.playerId }}">Edit</a> | <a href="/league/player/delete?playerId={{ player.playerId }}">Delete</a>
