@@ -1,12 +1,12 @@
 <table class="table table-hover table-sm small">
   <tr>
-    <th class="no-mobile">Pos</th>
+    <th class="no-mobile numeric">Pos</th>
     <th>Manager</th>
     <th>Form</th>
   </tr>
   {% for row in form %}
     <tr>
-      <td class="no-mobile">{{ row.position }}</td>
+      <td class="no-mobile numeric">{{ row.position }}</td>
       <td><a href="/manager?managerId={{ row.managerId }}">{{ row.manager }}</a></td>
       <td>
         {% for result in row.results %}
