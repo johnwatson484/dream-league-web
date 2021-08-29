@@ -43,9 +43,13 @@ table a:not(.btn), .table a:not(.btn) {
   text-decoration: none;
 }
 
-  table a:not(.btn):hover, .table a:not(.btn):hover {
-    text-decoration: underline;
-  }
+table a:not(.btn):hover, .table a:not(.btn):hover {
+  text-decoration: underline;
+}
+
+td.numeric, th.numeric {
+  text-align: right;
+}
 
 .jumbotron {
   background-image: url("../assets/football-pitch.jpg");
