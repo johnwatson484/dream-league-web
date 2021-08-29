@@ -5,38 +5,6 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "Node: Launch",
-      "program": "${workspaceFolder}/app",
-      "request": "launch",
-      "skipFiles": [
-        "<node_internals>/**",
-        "**/node_modules/**"
-      ],
-      "type": "pwa-node",
-      "serverReadyAction": {
-        "pattern": "Server running on",
-        "uriFormat": "http://localhost:3000",
-        "action": "debugWithChrome"
-      }
-    },
-    {
-      "name": "Node: Server",
-      "program": "${workspaceFolder}/app",
-      "request": "launch",
-      "skipFiles": [
-        "<node_internals>/**",
-        "**/node_modules/**"
-      ],
-      "type": "pwa-node"
-    },
-    {
-      "name": "Node: Client",
-      "type": "pwa-chrome",
-      "request": "launch",
-      "url": "http://localhost:3000",
-      "webRoot": "${workspaceFolder}"
-    },
-    {
       "name": "Docker: Attach",
       "type": "node",
       "request": "attach",
@@ -79,6 +47,38 @@
       },
       "preLaunchTask": "compose-test-debug-up",
       "postDebugTask": "compose-test-debug-down"
+    },
+    {
+      "name": "Node: Launch",
+      "program": "${workspaceFolder}/app",
+      "request": "launch",
+      "skipFiles": [
+        "<node_internals>/**",
+        "**/node_modules/**"
+      ],
+      "type": "pwa-node",
+      "serverReadyAction": {
+        "pattern": "Server running on",
+        "uriFormat": "http://localhost:3000",
+        "action": "debugWithChrome"
+      }
+    },
+    {
+      "name": "Node: Server",
+      "program": "${workspaceFolder}/app",
+      "request": "launch",
+      "skipFiles": [
+        "<node_internals>/**",
+        "**/node_modules/**"
+      ],
+      "type": "pwa-node"
+    },
+    {
+      "name": "Node: Client",
+      "type": "pwa-chrome",
+      "request": "launch",
+      "url": "http://localhost:3000",
+      "webRoot": "${workspaceFolder}"
     },
     {
       "name": "Node: Jest",
