@@ -6,8 +6,8 @@ container:
   imagePullPolicy: Always
   requestMemory: 120Mi
   requestCpu: 120m
-  limitMemory: 120Mi
-  limitCpu: 120m
+  limitMemory: 300Mi
+  limitCpu: 300m
   port: 3000
   readOnlyRootFilesystem: true
   allowPrivilegeEscalation: false
