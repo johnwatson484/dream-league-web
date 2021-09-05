@@ -13,7 +13,7 @@ module.exports = [{
   path: '/manager',
   handler: async (request, h) => {
     const manager = await api.get(`/manager/detail/?managerId=${request.query.managerId}`, request.state.dl_token)
-    return h.view('manager', { manager })
+    return h.view('manager', manager)
   }
 }, {
   method: 'GET',

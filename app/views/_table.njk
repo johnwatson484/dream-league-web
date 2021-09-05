@@ -14,7 +14,10 @@
   {% for row in results.table %}
     <tr>
       <td class="numeric">{{ row.position }}</td>
-      <td><a href="/manager?managerId={{ row.managerId }}">{{ row.manager }}</a></td>
+      <td>
+        <a href="/manager?managerId={{ row.managerId }}">{{ row.manager }}</a>
+        <input type="hidden" class="manager-id" value="{{ row.managerId }}" />
+      </td>
       <td class="numeric">{{ row.played }}</td>
       <td class="no-mobile numeric">{{ row.won }}</td>
       <td class="no-mobile numeric">{{ row.drawn }}</td>

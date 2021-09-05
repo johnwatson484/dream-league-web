@@ -3,40 +3,66 @@
 {% block content %}
   <h2>{{ manager.name }}</h2>
 
-  <div class="col-md-6">
-    <div class="card border-dark">
-      <div class="card-body small">
-        <div style="padding-bottom:20px;">
-          <h6>Goalkeepers</h6>
+  <div class="row" style="padding-bottom: 20px;">
+    <div class="col-md-6">
+      <div class="card border-dark">
+        <div class="card-header bg-dark text-light">
+        Team
+      </div>
+        <div class="card-body small">
+          <div style="padding-bottom:20px;">
+            <h6>Goalkeepers</h6>
+            <div class="row">
+              <div class="col-md-2 font-weight-bold">Position</div>
+              <div class="col-md-4 font-weight-bold">Team</div>
+              <div class="col-md-4 font-weight-bold">Conceded</div>
+            </div>
+            {% for keeper in team.keepers %}
+              <div class="row">
+                <div class="col-md-2">GK {% if keeper.substitute %}(sub){% endif %}
+                </div>
+                <div class="col-md-4">{{ keeper.name}}</div>
+                <div class="col-md-4">{{ keeper.conceded}} ({{ keeper.cupConceded }})</div>
+              </div>
+            {% endfor %}
+          </div>
+          <h6>Players</h6>
           <div class="row">
             <div class="col-md-2 font-weight-bold">Position</div>
+            <div class="col-md-4 font-weight-bold">Name</div>
             <div class="col-md-4 font-weight-bold">Team</div>
-            <div class="col-md-4 font-weight-bold">Conceded</div>
+            <div class="col-md-2 font-weight-bold">Goals</div>
           </div>
-          {% for keeper in manager.keepers %}
-          <div class="row">
-            <div class="col-md-2">GK {% if keeper.substitute %}(sub){% endif %}</div>
-            <div class="col-md-4">{{ keeper.name}}</div>
-            <div class="col-md-4">{{ keeper.conceded}} ({{ keeper.cupConceded }})</div>
-          </div>
+          {% for player in team.players %}
+            <div class="row">
+              <div class="col-md-2">{{ player.position[0] }}
+                {% if player.substitute %}(sub){% endif %}
+              </div>
+              <div class="col-md-4">{{ player.fullName}}</div>
+              <div class="col-md-4">{{ player.team}}</div>
+              <div class="col-md-2">{{ player.goals}} ({{ player.cupGoals }})</div>
+            </div>
           {% endfor %}
         </div>
-        <h6>Players</h6>
-        <div class="row">
-          <div class="col-md-2 font-weight-bold">Position</div>
-          <div class="col-md-4 font-weight-bold">Name</div>
-          <div class="col-md-4 font-weight-bold">Team</div>
-          <div class="col-md-2 font-weight-bold">Goals</div>
+      </div>
+    </div>
+
+    <div class="col-md-6">
+      <div class="card border-dark">
+        <div class="card-header bg-dark text-light">
+        Table
+      </div>
+        <div class="card-body">
+          {% include "./_table.njk" %}
         </div>
-        {% for player in manager.players %}
-        <div class="row">
-          <div class="col-md-2">{{ player.position[0] }} {% if player.substitute %}(sub){% endif %}</div>
-          <div class="col-md-4">{{ player.fullName}}</div>
-          <div class="col-md-4">{{ player.team}}</div>
-          <div class="col-md-2">{{ player.goals}} ({{ player.cupGoals }})</div>
-        </div>
-        {% endfor %}
       </div>
     </div>
   </div>
+{% endblock %}
+
+{% block bodyEnd %}
+  <script>
+    const manager = {{ manager | dump | safe }} // eslint-disable-line
+  </script>
+  <script src="{{ assetPath }}/manager.js"></script>
 {% endblock %}
