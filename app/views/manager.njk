@@ -6,16 +6,34 @@
   <div class="col-md-6">
     <div class="card border-dark">
       <div class="card-body small">
-        {% for keeper in manager.keepers %}
-        <div class="row">
-          <div class="col-md-2">GK</div>
-          <div class="col-md-9">{{ keeper.name}}{% if keeper.substitute %} (sub){% endif %}</div>
+        <div style="padding-bottom:20px;">
+          <h6>Goalkeepers</h6>
+          <div class="row">
+            <div class="col-md-2 font-weight-bold">Position</div>
+            <div class="col-md-4 font-weight-bold">Team</div>
+            <div class="col-md-4 font-weight-bold">Conceded</div>
+          </div>
+          {% for keeper in manager.keepers %}
+          <div class="row">
+            <div class="col-md-2">GK {% if keeper.substitute %}(sub){% endif %}</div>
+            <div class="col-md-4">{{ keeper.name}}</div>
+            <div class="col-md-4">{{ keeper.conceded}} ({{ keeper.cupConceded }})</div>
+          </div>
+          {% endfor %}
         </div>
-        {% endfor %}
+        <h6>Players</h6>
+        <div class="row">
+          <div class="col-md-2 font-weight-bold">Position</div>
+          <div class="col-md-4 font-weight-bold">Name</div>
+          <div class="col-md-4 font-weight-bold">Team</div>
+          <div class="col-md-2 font-weight-bold">Goals</div>
+        </div>
         {% for player in manager.players %}
         <div class="row">
-          <div class="col-md-2">{{ player.position[0] }}</div>
-          <div class="col-md-9">{{ player.fullName}}{% if player.substitute %} (sub){% endif %}</div>
+          <div class="col-md-2">{{ player.position[0] }} {% if player.substitute %}(sub){% endif %}</div>
+          <div class="col-md-4">{{ player.fullName}}</div>
+          <div class="col-md-4">{{ player.team}}</div>
+          <div class="col-md-2">{{ player.goals}} ({{ player.cupGoals }})</div>
         </div>
         {% endfor %}
       </div>
