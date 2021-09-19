@@ -31,6 +31,21 @@
       "postDebugTask": "compose-debug-down"
     },
     {
+      "name": "Docker: Jest Attach",
+      "type": "node",
+      "request": "attach",
+      "port": 9229,
+      "restart": true,
+      "timeout": 10000,
+      "remoteRoot": "/home/node",
+      "disableOptimisticBPs": true,
+      "continueOnAttach": true,
+      "skipFiles": [
+        "<node_internals>/**",
+        "**/node_modules/**"
+      ]
+    },
+    {
       "name": "Docker: Jest Attach Launch",
       "type": "node",
       "request": "attach",

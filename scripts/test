@@ -12,6 +12,7 @@ show_help() {
 
     Options:
       -w, --watch   watch tests
+      -d, --debug   debug tests
       -h, --help    display this help text
     "
 }
@@ -20,6 +21,10 @@ while :; do
   case $1 in
     -w|--watch)
       watch="true"
+      ;;
+
+    -d|--debug)
+      debug="true"
       ;;
 
     -h|--help)   # Call a "show_help" function to display a synopsis, then exit.
@@ -34,10 +39,12 @@ while :; do
 done
 
 compose() {
-  if [ "${watch}" != "true" ]; then
-    docker-compose -f docker-compose.yaml -f docker-compose.test.yaml -p "${service}-test" $@
-  else
+  if [ "${watch}" = "true" ]; then
     docker-compose -f docker-compose.yaml -f docker-compose.test.yaml -f docker-compose.test.watch.yaml -p "${service}-test" $@
+  elif [ "${debug}" = "true" ]; then
+    docker-compose -f docker-compose.yaml -f docker-compose.test.yaml -f docker-compose.test.watch.yaml -f docker-compose.test.debug.yaml -p "${service}-test" $@
+  else
+    docker-compose -f docker-compose.yaml -f docker-compose.test.yaml -p "${service}-test" $@
   fi
 }
 
@@ -51,7 +58,11 @@ compose() {
   compose build
 
   # Run tests
-  compose run ${service} ${command}
+  if [ "${debug}" = "true" ]; then
+    compose run --service-ports ${service} ${command}
+  else
+    compose run ${service} ${command}
+  fi
 
   # Clean up
   compose down -v
