@@ -11,7 +11,7 @@ const schema = joi.object().keys({
   }),
   apiHost: joi.string().default('http://localhost:3001'),
   cookieOptions: joi.object({
-    ttl: joi.number().default(1000 * 60 * 60 * 24 * 365),
+    ttl: joi.number().default(1000 * 60 * 60 * 24 * 365), // 1 year
     encoding: joi.string().valid('base64json').default('base64json'),
     isSameSite: joi.string().valid('Lax').default('Lax'),
     isSecure: joi.bool().default(true),
@@ -47,7 +47,7 @@ const { error, value } = schema.validate(config)
 value.isDev = value.env === 'development'
 value.cookieOptionsIdentity = {
   ...value.cookieOptions,
-  ttl: 1000 * 60 * 60 * 24 * 30,
+  ttl: 1000 * 60 * 60 * 24 * 30, // 30 days
   encoding: 'none'
 }
 
