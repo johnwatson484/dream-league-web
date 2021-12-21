@@ -29,7 +29,7 @@ module.exports = [{
         const response = await api.post('/register', request.payload)
         if (!response) {
           return h.view('identity/register', {
-            message: 'Email already registered'
+            message: 'Email already registered or not a league member'
           })
         }
         return h.redirect('/')
