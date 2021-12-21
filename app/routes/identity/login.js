@@ -19,7 +19,7 @@ module.exports = [{
         password: joi.string().required()
       }),
       failAction: async (request, h, error) => {
-        return h.view('login', {
+        return h.view('identity/login', {
           message: 'Email format incorrect'
         }).takeover()
       }

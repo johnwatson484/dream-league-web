@@ -1,6 +1,7 @@
 {% extends '_layout.njk' %}
 
 {% block content %}
+  <h2>Register</h2>
   <form method="POST" action="/register">
     <input type="hidden" name="crumb" value="{{crumb}}"/>
     <div class="form-group">

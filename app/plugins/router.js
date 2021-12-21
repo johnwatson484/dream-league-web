@@ -4,6 +4,8 @@ const routes = [].concat(
   require('../routes/identity/register'),
   require('../routes/identity/login'),
   require('../routes/identity/logout'),
+  require('../routes/identity/forgot-password'),
+  require('../routes/identity/reset-password'),
   require('../routes/league/team'),
   require('../routes/league/player'),
   require('../routes/league/refresh'),
