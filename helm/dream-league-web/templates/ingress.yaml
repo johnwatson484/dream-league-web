@@ -1,5 +1,5 @@
-{{- include "helm-library.ingress" (list . "lynx-magnus-web.ingress") -}}
-{{- define "lynx-magnus-web.ingress" -}}
+{{- include "helm-library.ingress" (list . "dream-league-web.ingress") -}}
+{{- define "dream-league-web.ingress" -}}
 metadata:
   annotations:
   {{- if .Values.ingress.host }}
