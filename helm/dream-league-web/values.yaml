@@ -9,19 +9,12 @@ container:
   limitMemory: 300Mi
   limitCpu: 300m
   port: 3000
-  readOnlyRootFilesystem: true
-  allowPrivilegeEscalation: false
   jwtSecret: secret
   apiHost: http://dream-league-api
 
 deployment:
   restartPolicy: Always
   replicas: 1
-  minReadySeconds: 5
-  redeployOnChange: update this field to force a change
-  imagePullSecret:
-  runAsNonRoot: true
-  runAsUser: 1000
 
 ingress:
   class: nginx
