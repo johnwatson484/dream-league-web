@@ -12,7 +12,7 @@ module.exports = [{
   method: 'GET',
   options: { auth: { strategy: 'jwt', scope: ['admin'] } },
   path: '/history/create',
-  handler: async (request, h) => {
+  handler: async (_request, h) => {
     return h.view('create-history')
   }
 }, {

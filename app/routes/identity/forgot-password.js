@@ -4,7 +4,7 @@ const api = require('../../api')
 module.exports = [{
   method: 'GET',
   path: '/forgot-password',
-  handler: (request, h) => {
+  handler: (_request, h) => {
     return h.view('identity/forgot-password')
   }
 },
@@ -16,7 +16,7 @@ module.exports = [{
       payload: joi.object({
         email: joi.string().email().required()
       }),
-      failAction: async (request, h, error) => {
+      failAction: async (_request, h, _error) => {
         return h.view('identity/forgot-password', {
           message: 'Email format incorrect'
         }).takeover()

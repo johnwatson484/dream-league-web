@@ -13,7 +13,7 @@ module.exports = [{
   method: 'GET',
   path: '/api/data/winners',
   options: {
-    handler: async (request, h) => {
+    handler: async (_request, h) => {
       return h.redirect('/api/v1/winners')
     }
   }

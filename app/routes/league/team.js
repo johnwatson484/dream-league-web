@@ -107,11 +107,11 @@ module.exports = [{
       payload: joi.object({
         prefix: joi.string()
       }),
-      failAction: async (request, h, error) => {
+      failAction: async (_request, _h, error) => {
         return boom.badRequest(error)
       }
     },
-    handler: async (request, h) => {
+    handler: async (request, _h) => {
       const teams = await api.post('/league/teams/autocomplete', request.payload, request.state.dl_token)
       return teams.map(function (team) {
         return {

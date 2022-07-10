@@ -17,7 +17,7 @@ module.exports = [{
   method: 'GET',
   path: '/cup/create',
   options: { auth: { strategy: 'jwt', scope: ['admin'] } },
-  handler: async (request, h) => {
+  handler: async (_request, h) => {
     return h.view('create-cup')
   }
 }, {

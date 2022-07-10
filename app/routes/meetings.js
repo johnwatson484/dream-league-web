@@ -12,7 +12,7 @@ module.exports = [{
   method: 'GET',
   path: '/meeting/create',
   options: { auth: { strategy: 'jwt', scope: ['admin'] } },
-  handler: async (request, h) => {
+  handler: async (_request, h) => {
     return h.view('create-meeting')
   }
 }, {

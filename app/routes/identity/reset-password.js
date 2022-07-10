@@ -28,7 +28,7 @@ module.exports = [{
         password: joi.string().required(),
         confirmPassword: joi.string().valid(joi.ref('password')).required()
       }),
-      failAction: async (request, h, error) => {
+      failAction: async (request, h, _error) => {
         return h.view('identity/reset-password', {
           message: 'Passwords must match', ...request.payload
         }).takeover()

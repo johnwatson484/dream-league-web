@@ -4,7 +4,7 @@ module.exports = [{
   method: 'GET',
   path: '/league/refresh',
   options: { auth: { strategy: 'jwt', scope: ['admin'] } },
-  handler: (request, h) => {
+  handler: (_request, h) => {
     return h.view('league/refresh')
   }
 }, {

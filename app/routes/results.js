@@ -10,7 +10,7 @@ module.exports = [{
       query: joi.object({
         gameweekId: joi.number().optional()
       }),
-      failAction: async (request, h, error) => {
+      failAction: async (_request, _h, error) => {
         return boom.badRequest(error)
       }
     },
@@ -44,7 +44,7 @@ module.exports = [{
         goals: joi.array().items(joi.object({ playerId: joi.number(), goals: joi.number() })).single(),
         goalsCup: joi.array().items(joi.object({ playerId: joi.number(), goals: joi.number() })).single()
       }),
-      failAction: async (request, h, error) => {
+      failAction: async (_request, _h, error) => {
         return boom.badRequest(error)
       }
     },
@@ -65,7 +65,7 @@ module.exports = [{
       payload: joi.object({
         gameweekId: joi.number().required()
       }),
-      failAction: async (request, h, error) => {
+      failAction: async (_request, _h, error) => {
         return boom.badRequest(error)
       }
     },

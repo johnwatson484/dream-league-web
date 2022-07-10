@@ -5,7 +5,7 @@ const { mapAuth } = require('../auth')
 module.exports = {
   plugin: {
     name: 'view-context',
-    register: (server, options) => {
+    register: (server, _options) => {
       server.state('cookies_policy', cookieOptions)
 
       server.ext('onPreResponse', (request, h) => {

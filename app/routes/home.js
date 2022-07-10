@@ -18,7 +18,7 @@ module.exports = [{
   path: '/rules',
   config: {
   },
-  handler: async (request, h) => {
+  handler: async (_request, h) => {
     return h.view('rules')
   }
 }]

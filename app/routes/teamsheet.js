@@ -34,11 +34,11 @@ module.exports = [{
         playerIds: joi.alternatives().try(joi.array().items(joi.number()), joi.number()),
         playerSubs: joi.alternatives().try(joi.array().items(joi.number()), joi.number())
       }),
-      failAction: async (request, h, error) => {
+      failAction: async (_request, _h, error) => {
         return boom.badRequest(error)
       }
     },
-    handler: async (request, h) => {
+    handler: async (request, _h) => {
       return api.post('/teamsheet/edit/player', request.payload, request.state.dl_token)
     }
   }
@@ -56,11 +56,11 @@ module.exports = [{
         teamIds: joi.alternatives().try(joi.array().items(joi.string()), joi.string()),
         teamSubs: joi.alternatives().try(joi.array().items(joi.string()), joi.string())
       }),
-      failAction: async (request, h, error) => {
+      failAction: async (_request, _h, error) => {
         return boom.badRequest(error)
       }
     },
-    handler: async (request, h) => {
+    handler: async (request, _h) => {
       return api.post('/teamsheet/edit/keeper', request.payload, request.state.dl_token)
     }
   }
