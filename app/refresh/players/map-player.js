@@ -1,9 +1,9 @@
 const mapPlayer = (player) => {
   return {
-    firstName: player['First Name'],
-    lastName: player.Surname,
-    position: player.Position,
-    team: player.Club
+    firstName: player['First Name'].trim(),
+    lastName: player.Surname.trim(),
+    position: player.Position.trim(),
+    team: player.Club.trim()
   }
 }
 
