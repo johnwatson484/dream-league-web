@@ -1,4 +1,4 @@
-const wreck = require('wreck')
+const wreck = require('@hapi/wreck')
 const config = require('../config')
 const getConfiguration = require('./get-configuration')
 
