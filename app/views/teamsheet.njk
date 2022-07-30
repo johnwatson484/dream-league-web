@@ -22,7 +22,7 @@
         <div class="row">
           <div class="col-md-2">{{ player.position[0] }}</div>
           <div class="col-md-6">{{ player.fullName}}{% if player.substitute %} (sub){% endif %}</div>
-          <div class="col-md-4">{{ player.team}}</div>
+          <div class="col-md-4 no-mobile">{{ player.team}}</div>
         </div>
         {% endfor %}
       </div>
