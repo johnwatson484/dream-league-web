@@ -14,15 +14,15 @@
       <div class="card-body small">
         {% for player in team.keepers %}
         <div class="row">
-          <div class="col-md-2">GK</div>
-          <div class="col-md-9">{{ player.name}}{% if player.substitute %} (sub){% endif %}</div>
+          <div class="col-2">GK</div>
+          <div class="col-9">{{ player.name}}{% if player.substitute %} (sub){% endif %}</div>
         </div>
         {% endfor %}
         {% for player in team.players %}
         <div class="row">
-          <div class="col-md-2">{{ player.position[0] }}</div>
-          <div class="col-md-6">{{ player.fullName}}{% if player.substitute %} (sub){% endif %}</div>
-          <div class="col-md-4">{{ player.team}}</div>
+          <div class="col-2">{{ player.position[0] }}</div>
+          <div class="col-6">{{ player.fullName}}{% if player.substitute %} (sub){% endif %}</div>
+          <div class="col-4">{{ player.team}}</div>
         </div>
         {% endfor %}
       </div>
