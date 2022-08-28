@@ -19,7 +19,7 @@
             </div>
             {% for keeper in team.keepers %}
               <div class="row">
-                <div class="col-2">GK {% if keeper.substitute %}(sub){% endif %}
+                <div class="col-2">GK {% if keeper.substitute %}(s){% endif %}
                 </div>
                 <div class="col-4">{{ keeper.name}}</div>
                 <div class="col-4">{{ keeper.conceded}} ({{ keeper.cupConceded }})</div>
@@ -36,7 +36,7 @@
           {% for player in team.players %}
             <div class="row">
               <div class="col-2">{{ player.position[0] }}
-                {% if player.substitute %}(sub){% endif %}
+                {% if player.substitute %}(s){% endif %}
               </div>
               <div class="col-4">{{ player.fullName}}</div>
               <div class="col-4">{{ player.team}}</div>
