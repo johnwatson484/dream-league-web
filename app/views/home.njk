@@ -93,7 +93,7 @@
   </div>
   <div class="col-md-6">
     <h3>Next meeting</h3>
-    {% if nextMeeting %}
+    {% if nextMeeting.date %}
     <p>The next transfer meeting is {{ nextMeeting.date }}.</p>
     {% else %}
     <p>No meetings scheduled</p>
