@@ -6,8 +6,8 @@ services:
       target: development
     command: npm run test
     volumes:
-      - ./app/:/home/node/app/
+      - ./app:/home/node/app
       - ./package.json:/home/node/package.json
-      - ./test/integration/:/home/node/test/integration/
-      - ./test/unit/:/home/node/test/unit/
-      - ./test-output/:/home/node/test-output/      
+      - ./test/integration:/home/node/test/integration
+      - ./test/unit:/home/node/test/unit
+      - ./test-output:/home/node/test-output
