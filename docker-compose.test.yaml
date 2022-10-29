@@ -7,6 +7,6 @@ services:
     command: npm run test
     volumes:
       - ./app:/home/node/app
-      - ./package.json:/home/node/package.json
       - ./test:/home/node/test
       - ./test-output:/home/node/test-output
+      - ./package.json:/home/node/package.json
