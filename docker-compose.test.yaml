@@ -8,6 +8,5 @@ services:
     volumes:
       - ./app:/home/node/app
       - ./package.json:/home/node/package.json
-      - ./test/integration:/home/node/test/integration
-      - ./test/unit:/home/node/test/unit
+      - ./test:/home/node/test
       - ./test-output:/home/node/test-output

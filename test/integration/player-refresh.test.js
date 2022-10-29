@@ -8,13 +8,8 @@ const BASE_TEST_FILE = path.resolve(__dirname, '../files/player-list.xlsx')
 const TEST_FILE = path.resolve(__dirname, '../files/player-list-tmp.xlsx')
 
 describe('refreshing player list', () => {
-  afterEach(() => {
-    jest.clearAllMocks()
-    if (fs.existsSync(TEST_FILE)) {
-      fs.unlinkSync(TEST_FILE)
-    }
-  })
   beforeEach(() => {
+    jest.clearAllMocks()
     if (fs.existsSync(TEST_FILE)) {
       fs.unlinkSync(TEST_FILE)
     }
