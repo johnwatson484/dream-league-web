@@ -11,11 +11,11 @@ ENV PATH=$PATH:/home/node/.npm-global/bin
 # Add Git
 RUN apk update && \
     apk add --no-cache git
-    
+
 USER node
 WORKDIR /home/node
 COPY --chown=node:node package*.json ./
-RUN npm install --production=false
+RUN npm install
 COPY --chown=node:node . .
 CMD [ "npm", "run", "start:watch" ]
 

@@ -1,6 +1,6 @@
 {
   "name": "dream-league-web",
-  "version": "1.3.33",
+  "version": "1.3.34",
   "description": "Dream League web frontend",
   "main": "app/index.js",
   "scripts": {
