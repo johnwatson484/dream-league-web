@@ -1,9 +1,8 @@
-environment: development
+environment: production
 name: dream-league-web
 image: dream-league-web
 
 container:
-  imagePullPolicy: Always
   requestMemory: 120Mi
   requestCpu: 120m
   limitMemory: 300Mi
@@ -12,15 +11,7 @@ container:
   jwtSecret: secret
   apiHost: http://dream-league-api
 
-deployment:
-  restartPolicy: Always
-  replicas: 1
-  minReadySeconds: 0
+deployment: {}
 
-ingress:
-  class: nginx
-  host:
-  certIssuer: letsencrypt
+ingress: {}
 
-service:
-  port: 80

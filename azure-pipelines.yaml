@@ -15,3 +15,5 @@ extends:
   template: build.yaml@templates
   parameters:
     repo: dream-league-web
+    hasSecureHelmValuesFile: true
+    deploy: true

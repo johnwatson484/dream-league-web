@@ -106,3 +106,5 @@ dist
 *.lock
 
 test-output
+
+production-values.yaml
