@@ -17,3 +17,4 @@ extends:
     repo: dream-league-web
     hasSecureHelmValuesFile: true
     deploy: true
+    namespace: dream-league
