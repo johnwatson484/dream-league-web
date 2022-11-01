@@ -14,6 +14,7 @@ resources:
 extends:
   template: build.yaml@templates
   parameters:
-    hasSecureHelmValuesFile: true
+    name: dream-league-web
     deploy: true
     namespace: dream-league
+    hasSecureHelmValuesFile: true
