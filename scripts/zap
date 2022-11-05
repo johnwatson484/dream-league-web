@@ -1,0 +1,11 @@
+#!/usr/bin/env sh
+
+set -e
+projectRoot="$(a="/$0"; a=${a%/*}; a=${a:-.}; a=${a#/}/; cd "$a/.." || return; pwd)"
+
+service="dream-league-web"
+
+cd "${projectRoot}"
+
+# Run ZAP scan
+docker-compose -f docker-compose.yaml -f docker-compose.zap.yaml run --rm ${service}-zap
