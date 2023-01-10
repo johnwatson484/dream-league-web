@@ -23,7 +23,7 @@
     "@hapi/inert": "7.0.0",
     "@hapi/vision": "7.0.0",
     "@hapi/wreck": "^18.0.0",
-    "hapi-auth-jwt2": "10.2.0",
+    "hapi-auth-jwt2": "10.4.0",
     "hapi-pino": "10.1.0",
     "joi": "17.6.0",
     "nunjucks": "3.2.3",
