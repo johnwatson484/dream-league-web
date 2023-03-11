@@ -28,7 +28,9 @@
           <th>Substitute</th>
           <th>Manager</th>
           <th width="110px;">Conceded</th>
+          {% if resultsInput.cupWeeks.length %}
           <th width="110px;">Cup</th>
+          {% endif %}
         </tr>
         {% for keeper in resultsInput.keepers %}
           <tr>
@@ -52,6 +54,7 @@
                 </span>
               </span>
             </td>
+            {% if resultsInput.cupWeeks.length %}
             <td width="110px;">
               <span class="input-group manager-cup-input manager-cup-{{ keeper.managerId }}">
                 <span class="input-group-prepend">
@@ -68,6 +71,7 @@
                 </span>
               </span>
             </td>
+            {% endif %}
           </tr>
         {% endfor %}
         </table>
@@ -81,7 +85,9 @@
           <th>Player</th>
           <th>Manager</th>
           <th width="110px;">Goals</th>
+          {% if resultsInput.cupWeeks.length %}
           <th width="110px;">Cup</th>
+          {% endif %}
         </tr>
         {% for player in resultsInput.players %}
           <tr>
@@ -105,6 +111,7 @@
                 </span>
               </span>
             </td>
+            {% if resultsInput.cupWeeks.length %}
             <td width="110px;">
               <span class="input-group manager-cup-input manager-cup-{{ player.managerId }}">
                 <span class="input-group-prepend">
@@ -121,6 +128,7 @@
                 </span>
               </span>
             </td>
+            {% endif %}
           </tr>
         {% endfor %}
       </table>
