@@ -8,7 +8,6 @@
       <input type="hidden" name="crumb" value="{{crumb}}"/>
     
       <div class="form-group">
-        <label for="gameweekId">Game Week</label>
         <select class="form-control" id="gameweekId" name="gameweekId">
         {% for gameweek in resultsInput.gameweeks %}
           <option value="{{ gameweek.gameweekId }}" {% if gameweek.isActive %}selected{% endif %}>Gameweek {{ gameweek.gameweekId }} - {{ gameweek.shortDate }}</option>
@@ -16,7 +15,9 @@
         </select> 
       </div>
 
-      <button type="submit" class="btn btn-primary">Submit</button>
+      <div class="form-group">
+        <button type="submit" class="btn btn-primary">Submit results</button>
+      </div>
 
       <h4>Goalkeepers</h4>
 
