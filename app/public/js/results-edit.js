@@ -1,10 +1,12 @@
 $('#gameweekId').change(function () {
   $('.manager-cup-input').hide()
+  $('.manager-cup-input-container').hide()
 
   const gameweekId = Number($(this).val())
 
   cupWeeks.forEach(cupWeek => { // eslint-disable-line
     if (cupWeek.gameweekId === gameweekId) {
+      $('.manager-cup-input-container').show()
       $('.manager-cup-' + cupWeek.managerId).show()
     }
   })
