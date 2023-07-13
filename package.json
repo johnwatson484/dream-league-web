@@ -1,6 +1,6 @@
 {
   "name": "dream-league-web",
-  "version": "1.3.56",
+  "version": "1.3.57",
   "description": "Dream League web frontend",
   "main": "app/index.js",
   "scripts": {
@@ -28,12 +28,12 @@
     "joi": "17.6.0",
     "nunjucks": "3.2.4",
     "qs": "6.11.0",
-    "xlsx": "0.18.5"
+    "xlsx": "https://cdn.sheetjs.com/xlsx-0.20.0/xlsx-0.20.0.tgz"
   },
   "devDependencies": {
     "blipp": "4.0.2",
     "jest": "28.1.3",
-    "nodemon": "2.0.19",
+    "nodemon": "3.0.1",
     "standard": "17.0.0"
   },
   "standard": {
