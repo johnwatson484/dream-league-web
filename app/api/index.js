@@ -1,5 +1,5 @@
-const get = require('./get')
-const post = require('./post')
+const { get } = require('./get')
+const { post } = require('./post')
 
 module.exports = {
   get,

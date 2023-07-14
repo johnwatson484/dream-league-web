@@ -1,14 +1,14 @@
-const joi = require('joi')
-const api = require('../../api')
+const Joi = require('joi')
+const { post } = require('../../api')
 
 module.exports = [{
   method: 'GET',
   path: '/reset-password',
   options: {
     validate: {
-      query: joi.object({
-        token: joi.string().required(),
-        userId: joi.number().required()
+      query: Joi.object({
+        token: Joi.string().required(),
+        userId: Joi.number().required()
       })
     },
     handler: (request, h) => {
@@ -22,11 +22,11 @@ module.exports = [{
   path: '/reset-password',
   options: {
     validate: {
-      payload: joi.object({
-        userId: joi.number().required(),
-        token: joi.string().required(),
-        password: joi.string().required(),
-        confirmPassword: joi.string().valid(joi.ref('password')).required()
+      payload: Joi.object({
+        userId: Joi.number().required(),
+        token: Joi.string().required(),
+        password: Joi.string().required(),
+        confirmPassword: Joi.string().valid(Joi.ref('password')).required()
       }),
       failAction: async (request, h, _error) => {
         return h.view('identity/reset-password', {
@@ -37,7 +37,7 @@ module.exports = [{
     handler: async (request, h) => {
       try {
         const { userId, password, token } = request.payload
-        await api.post('/reset-password', { userId, password, token })
+        await post('/reset-password', { userId, password, token })
         return h.redirect('/login')
       } catch {
         return h.view('identity/reset-password', {

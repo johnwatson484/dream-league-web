@@ -1,14 +1,14 @@
-const api = require('../api')
-const joi = require('joi')
+const Joi = require('joi')
 const boom = require('@hapi/boom')
+const { get, post } = require('../api')
 
 module.exports = [{
   method: 'GET',
   path: '/results',
   options: {
     validate: {
-      query: joi.object({
-        gameweekId: joi.number().optional()
+      query: Joi.object({
+        gameweekId: Joi.number().optional()
       }),
       failAction: async (_request, _h, error) => {
         return boom.badRequest(error)
@@ -16,8 +16,8 @@ module.exports = [{
     },
     handler: async (request, h) => {
       const gameweekId = request.query?.gameweekId || 0
-      const results = await api.get(`/results?gameweekId=${gameweekId}`, request.state.dl_token)
-      const gameweeks = await api.get('/gameweeks?completed=true', request.state.dl_token)
+      const results = await get(`/results?gameweekId=${gameweekId}`, request.state.dl_token)
+      const gameweeks = await get('/gameweeks?completed=true', request.state.dl_token)
       return h.view('results', { results, gameweeks })
     }
   }
@@ -26,7 +26,7 @@ module.exports = [{
   path: '/results/edit',
   options: { auth: { strategy: 'jwt', scope: ['admin'] } },
   handler: async (request, h) => {
-    const resultsInput = await api.get('/results-edit', request.state.dl_token)
+    const resultsInput = await get('/results-edit', request.state.dl_token)
     resultsInput.keepers = resultsInput.keepers.sort((a, b) => { return sortFn(a.division, b.division) || sortFn(a.team, b.team) })
     resultsInput.players = resultsInput.players.sort((a, b) => { return sortFn(a.division, b.division) || sortFn(a.team, b.team) || sortFn(a.lastName, b.lastName) || sortFn(a.firstName, b.firstName) })
     return h.view('results-edit', { resultsInput })
@@ -37,19 +37,19 @@ module.exports = [{
   options: {
     auth: { strategy: 'jwt', scope: ['admin'] },
     validate: {
-      payload: joi.object({
-        gameweekId: joi.number(),
-        conceded: joi.array().items(joi.object({ teamId: joi.number(), conceded: joi.number() })).single(),
-        concededCup: joi.array().items(joi.object({ teamId: joi.number(), conceded: joi.number() })).single(),
-        goals: joi.array().items(joi.object({ playerId: joi.number(), goals: joi.number() })).single(),
-        goalsCup: joi.array().items(joi.object({ playerId: joi.number(), goals: joi.number() })).single()
+      payload: Joi.object({
+        gameweekId: Joi.number(),
+        conceded: Joi.array().items(Joi.object({ teamId: Joi.number(), conceded: Joi.number() })).single(),
+        concededCup: Joi.array().items(Joi.object({ teamId: Joi.number(), conceded: Joi.number() })).single(),
+        goals: Joi.array().items(Joi.object({ playerId: Joi.number(), goals: Joi.number() })).single(),
+        goalsCup: Joi.array().items(Joi.object({ playerId: Joi.number(), goals: Joi.number() })).single()
       }),
       failAction: async (_request, _h, error) => {
         return boom.badRequest(error)
       }
     },
     handler: async (request, h) => {
-      await api.post('/results-edit', request.payload, request.state.dl_token)
+      await post('/results-edit', request.payload, request.state.dl_token)
       return h.redirect(`/results?gameweekId=${request.payload.gameweekId}`)
     }
   }
@@ -62,15 +62,15 @@ module.exports = [{
       crumb: false
     },
     validate: {
-      payload: joi.object({
-        gameweekId: joi.number().required()
+      payload: Joi.object({
+        gameweekId: Joi.number().required()
       }),
       failAction: async (_request, _h, error) => {
         return boom.badRequest(error)
       }
     },
     handler: async (request, h) => {
-      await api.post('/results-send', request.payload, request.state.dl_token)
+      await post('/results-send', request.payload, request.state.dl_token)
       return h.response()
     }
   }

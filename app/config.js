@@ -1,27 +1,25 @@
-const joi = require('joi')
+const Joi = require('joi')
 const envs = ['development', 'test', 'production']
 
-// Define config schema
-const schema = joi.object().keys({
-  port: joi.number().default(3000),
-  env: joi.string().valid(...envs).default(envs[0]),
-  appName: joi.string().default('Dream League'),
-  jwtConfig: joi.object({
-    secret: joi.string()
+const schema = Joi.object().keys({
+  port: Joi.number().default(3000),
+  env: Joi.string().valid(...envs).default(envs[0]),
+  appName: Joi.string().default('Dream League'),
+  jwtConfig: Joi.object({
+    secret: Joi.string()
   }),
-  apiHost: joi.string().default('http://localhost:3001'),
-  cookieOptions: joi.object({
-    ttl: joi.number().default(1000 * 60 * 60 * 24 * 365), // 1 year
-    encoding: joi.string().valid('base64json').default('base64json'),
-    isSameSite: joi.string().valid('Lax').default('Lax'),
-    isSecure: joi.bool().default(true),
-    isHttpOnly: joi.bool().default(true),
-    clearInvalid: joi.bool().default(false),
-    strictHeader: joi.bool().default(true)
+  apiHost: Joi.string().default('http://localhost:3001'),
+  cookieOptions: Joi.object({
+    ttl: Joi.number().default(1000 * 60 * 60 * 24 * 365), // 1 year
+    encoding: Joi.string().valid('base64json').default('base64json'),
+    isSameSite: Joi.string().valid('Lax').default('Lax'),
+    isSecure: Joi.bool().default(true),
+    isHttpOnly: Joi.bool().default(true),
+    clearInvalid: Joi.bool().default(false),
+    strictHeader: Joi.bool().default(true)
   })
 })
 
-// Build config
 const config = {
   port: process.env.PORT,
   env: process.env.NODE_ENV,
@@ -41,7 +39,6 @@ const config = {
   }
 }
 
-// Validate config
 const { error, value } = schema.validate(config)
 
 value.isDev = value.env === 'development'
@@ -51,7 +48,6 @@ value.cookieOptionsIdentity = {
   encoding: 'none'
 }
 
-// Throw if config is invalid
 if (error) {
   throw new Error(`The server config is invalid. ${error.message}`)
 }

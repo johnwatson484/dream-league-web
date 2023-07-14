@@ -1,5 +1,5 @@
-const joi = require('joi')
-const api = require('../../api')
+const Joi = require('joi')
+const { post } = require('../../api')
 
 module.exports = [{
   method: 'GET',
@@ -13,8 +13,8 @@ module.exports = [{
   path: '/forgot-password',
   options: {
     validate: {
-      payload: joi.object({
-        email: joi.string().email().required()
+      payload: Joi.object({
+        email: Joi.string().email().required()
       }),
       failAction: async (_request, h, _error) => {
         return h.view('identity/forgot-password', {
@@ -23,7 +23,7 @@ module.exports = [{
       }
     },
     handler: async (request, h) => {
-      await api.post('/forgot-password', request.payload)
+      await post('/forgot-password', request.payload)
       return h.redirect('/')
     }
   }

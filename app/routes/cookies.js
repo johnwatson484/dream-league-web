@@ -1,5 +1,5 @@
+const Joi = require('joi')
 const { updatePolicy } = require('../cookies')
-const joi = require('joi')
 
 module.exports = [{
   method: 'GET',
@@ -15,9 +15,9 @@ module.exports = [{
       crumb: false
     },
     validate: {
-      payload: joi.object({
-        analytics: joi.boolean(),
-        async: joi.boolean().default(false)
+      payload: Joi.object({
+        analytics: Joi.boolean(),
+        async: Joi.boolean().default(false)
       }),
       failAction: async (request, h, _error) => {
         return h.view('cookies/cookie-policy', { cookiesPolicy: request.state.cookies_policy, updated: false }).code(400).takeover()

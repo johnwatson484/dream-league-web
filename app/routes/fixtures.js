@@ -1,5 +1,5 @@
-const api = require('../api')
-const joi = require('joi')
+const Joi = require('joi')
+const { get, post } = require('../api')
 
 module.exports = [{
   method: 'GET',
@@ -9,7 +9,7 @@ module.exports = [{
       crumb: false
     },
     handler: async (request, h) => {
-      const fixtures = await api.get('/fixtures', request.state.dl_token)
+      const fixtures = await get('/fixtures', request.state.dl_token)
       return h.view('fixtures', { fixtures })
     }
   }
@@ -18,9 +18,9 @@ module.exports = [{
   path: '/fixture/create',
   options: { auth: { strategy: 'jwt', scope: ['admin'] } },
   handler: async (request, h) => {
-    const gameweeks = await api.get('/gameweeks', request.state.dl_token)
-    const cups = await api.get('/cups', request.state.dl_token)
-    const managers = await api.get('/managers', request.state.dl_token)
+    const gameweeks = await get('/gameweeks', request.state.dl_token)
+    const cups = await get('/cups', request.state.dl_token)
+    const managers = await get('/managers', request.state.dl_token)
     return h.view('create-fixture', { gameweeks, cups, managers })
   }
 }, {
@@ -29,22 +29,22 @@ module.exports = [{
   options: {
     auth: { strategy: 'jwt', scope: ['admin'] },
     validate: {
-      payload: joi.object({
-        cupId: joi.number().integer().required(),
-        gameweekId: joi.number().integer().required(),
-        homeManagerId: joi.number().integer().required(),
-        awayManagerId: joi.number().integer().required(),
-        round: joi.number().integer().required()
+      payload: Joi.object({
+        cupId: Joi.number().integer().required(),
+        gameweekId: Joi.number().integer().required(),
+        homeManagerId: Joi.number().integer().required(),
+        awayManagerId: Joi.number().integer().required(),
+        round: Joi.number().integer().required()
       }),
       failAction: async (request, h, error) => {
-        const gameweeks = await api.get('/gameweeks', request.state.dl_token)
-        const cups = await api.get('/cups', request.state.dl_token)
-        const managers = await api.get('/managers', request.state.dl_token)
+        const gameweeks = await get('/gameweeks', request.state.dl_token)
+        const cups = await get('/cups', request.state.dl_token)
+        const managers = await get('/managers', request.state.dl_token)
         return h.view('create-fixture', { error, fixture: request.payload, gameweeks, cups, managers }).code(400).takeover()
       }
     },
     handler: async (request, h) => {
-      await api.post('/fixture/create', request.payload, request.state.dl_token)
+      await post('/fixture/create', request.payload, request.state.dl_token)
       return h.redirect('/fixtures')
     }
   }
@@ -53,10 +53,10 @@ module.exports = [{
   path: '/fixture/edit',
   options: { auth: { strategy: 'jwt', scope: ['admin'] } },
   handler: async (request, h) => {
-    const fixture = await api.get(`/fixture/?fixtureId=${request.query.fixtureId}`, request.state.dl_token)
-    const gameweeks = await api.get('/gameweeks', request.state.dl_token)
-    const cups = await api.get('/cups', request.state.dl_token)
-    const managers = await api.get('/managers', request.state.dl_token)
+    const fixture = await get(`/fixture/?fixtureId=${request.query.fixtureId}`, request.state.dl_token)
+    const gameweeks = await get('/gameweeks', request.state.dl_token)
+    const cups = await get('/cups', request.state.dl_token)
+    const managers = await get('/managers', request.state.dl_token)
     return h.view('edit-fixture', { fixture, gameweeks, cups, managers })
   }
 }, {
@@ -65,23 +65,23 @@ module.exports = [{
   options: {
     auth: { strategy: 'jwt', scope: ['admin'] },
     validate: {
-      payload: joi.object({
-        fixtureId: joi.number().integer().required(),
-        cupId: joi.number().integer().required(),
-        gameweekId: joi.number().integer().required(),
-        homeManagerId: joi.number().integer().required(),
-        awayManagerId: joi.number().integer().required(),
-        round: joi.number().integer().required()
+      payload: Joi.object({
+        fixtureId: Joi.number().integer().required(),
+        cupId: Joi.number().integer().required(),
+        gameweekId: Joi.number().integer().required(),
+        homeManagerId: Joi.number().integer().required(),
+        awayManagerId: Joi.number().integer().required(),
+        round: Joi.number().integer().required()
       }),
       failAction: async (request, h, error) => {
-        const gameweeks = await api.get('/gameweeks', request.state.dl_token)
-        const cups = await api.get('/cups', request.state.dl_token)
-        const managers = await api.get('/managers', request.state.dl_token)
+        const gameweeks = await get('/gameweeks', request.state.dl_token)
+        const cups = await get('/cups', request.state.dl_token)
+        const managers = await get('/managers', request.state.dl_token)
         return h.view('edit-fixture', { fixture: request.payload, error, gameweeks, cups, managers }).code(400).takeover()
       }
     },
     handler: async (request, h) => {
-      await api.post('/fixture/edit', request.payload, request.state.dl_token)
+      await post('/fixture/edit', request.payload, request.state.dl_token)
       return h.redirect('/fixtures')
     }
   }
@@ -90,7 +90,7 @@ module.exports = [{
   path: '/fixture/delete',
   options: { auth: { strategy: 'jwt', scope: ['admin'] } },
   handler: async (request, h) => {
-    const fixture = await api.get(`/fixture/?fixtureId=${request.query.fixtureId}`, request.state.dl_token)
+    const fixture = await get(`/fixture/?fixtureId=${request.query.fixtureId}`, request.state.dl_token)
     return h.view('delete-fixture', { fixture })
   }
 }, {
@@ -99,16 +99,16 @@ module.exports = [{
   options: {
     auth: { strategy: 'jwt', scope: ['admin'] },
     validate: {
-      payload: joi.object({
-        fixtureId: joi.number().required()
+      payload: Joi.object({
+        fixtureId: Joi.number().required()
       }),
       failAction: async (request, h, error) => {
-        const fixture = await api.get(`/fixture/?fixtureId=${request.query.fixtureId}`, request.state.dl_token)
+        const fixture = await get(`/fixture/?fixtureId=${request.query.fixtureId}`, request.state.dl_token)
         return h.view('delete-fixture', { fixture, error }).code(400).takeover()
       }
     },
     handler: async (request, h) => {
-      await api.post('/fixture/delete', request.payload, request.state.dl_token)
+      await post('/fixture/delete', request.payload, request.state.dl_token)
       return h.redirect('/fixtures')
     }
   }

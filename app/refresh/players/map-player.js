@@ -7,4 +7,6 @@ const mapPlayer = (player) => {
   }
 }
 
-module.exports = mapPlayer
+module.exports = {
+  mapPlayer
+}

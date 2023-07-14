@@ -6,4 +6,6 @@ const createDefaultPolicy = (h) => {
   return cookiesPolicy
 }
 
-module.exports = createDefaultPolicy
+module.exports = {
+  createDefaultPolicy
+}

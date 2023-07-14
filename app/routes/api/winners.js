@@ -1,11 +1,11 @@
-const api = require('../../api')
+const { get } = require('../../api')
 
 module.exports = [{
   method: 'GET',
   path: '/api/v1/winners',
   options: {
     handler: async (request, h) => {
-      const winners = await api.get('/winners', request.state.dl_token)
+      const winners = await get('/winners', request.state.dl_token)
       return h.response(winners)
     }
   }

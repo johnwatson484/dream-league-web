@@ -1,8 +1,10 @@
 const isInRole = (credentials, role) => {
-  if (!credentials || !credentials.scope) {
+  if (!credentials?.scope) {
     return false
   }
   return credentials.scope.includes(role)
 }
 
-module.exports = isInRole
+module.exports = {
+  isInRole
+}

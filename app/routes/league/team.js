@@ -1,12 +1,12 @@
-const api = require('../../api')
-const joi = require('joi')
+const Joi = require('joi')
 const boom = require('@hapi/boom')
+const { get, post } = require('../../api')
 
 module.exports = [{
   method: 'GET',
   path: '/league/teams',
   handler: async (request, h) => {
-    const teams = await api.get('/league/teams', request.state.dl_token)
+    const teams = await get('/league/teams', request.state.dl_token)
     return h.view('league/teams', { teams })
   }
 }, {
@@ -14,7 +14,7 @@ module.exports = [{
   path: '/league/team/create',
   options: { auth: { strategy: 'jwt', scope: ['admin'] } },
   handler: async (request, h) => {
-    const divisions = await api.get('/league/divisions', request.state.dl_token)
+    const divisions = await get('/league/divisions', request.state.dl_token)
     return h.view('league/create-team', { divisions })
   }
 }, {
@@ -23,18 +23,18 @@ module.exports = [{
   options: {
     auth: { strategy: 'jwt', scope: ['admin'] },
     validate: {
-      payload: joi.object({
-        name: joi.string().required(),
-        alias: joi.string().required(),
-        divisionId: joi.number().required()
+      payload: Joi.object({
+        name: Joi.string().required(),
+        alias: Joi.string().required(),
+        divisionId: Joi.number().required()
       }),
       failAction: async (request, h, error) => {
-        const divisions = await api.get('/league/divisions', request.state.dl_token)
+        const divisions = await get('/league/divisions', request.state.dl_token)
         return h.view('league/create-team', { divisions, team: request.payload, error }).code(400).takeover()
       }
     },
     handler: async (request, h) => {
-      await api.post('/league/team/create', request.payload, request.state.dl_token)
+      await post('/league/team/create', request.payload, request.state.dl_token)
       return h.redirect('/league/teams')
     }
   }
@@ -43,8 +43,8 @@ module.exports = [{
   path: '/league/team/edit',
   options: { auth: { strategy: 'jwt', scope: ['admin'] } },
   handler: async (request, h) => {
-    const team = await api.get(`/league/team/?teamId=${request.query.teamId}`, request.state.dl_token)
-    const divisions = await api.get('/league/divisions', request.state.dl_token)
+    const team = await get(`/league/team/?teamId=${request.query.teamId}`, request.state.dl_token)
+    const divisions = await get('/league/divisions', request.state.dl_token)
     return h.view('league/edit-team', { team, divisions })
   }
 }, {
@@ -53,19 +53,19 @@ module.exports = [{
   options: {
     auth: { strategy: 'jwt', scope: ['admin'] },
     validate: {
-      payload: joi.object({
-        teamId: joi.string().required(),
-        name: joi.string().required(),
-        alias: joi.string().required(),
-        divisionId: joi.number().required()
+      payload: Joi.object({
+        teamId: Joi.string().required(),
+        name: Joi.string().required(),
+        alias: Joi.string().required(),
+        divisionId: Joi.number().required()
       }),
       failAction: async (request, h, error) => {
-        const divisions = await api.get('/league/divisions', request.state.dl_token)
+        const divisions = await get('/league/divisions', request.state.dl_token)
         return h.view('league/create-team', { divisions, team: request.payload, error }).code(400).takeover()
       }
     },
     handler: async (request, h) => {
-      await api.post('/league/team/edit', request.payload, request.state.dl_token)
+      await post('/league/team/edit', request.payload, request.state.dl_token)
       return h.redirect('/league/teams')
     }
   }
@@ -74,7 +74,7 @@ module.exports = [{
   path: '/league/team/delete',
   options: { auth: { strategy: 'jwt', scope: ['admin'] } },
   handler: async (request, h) => {
-    const team = await api.get(`/league/team/?teamId=${request.query.teamId}`, request.state.dl_token)
+    const team = await get(`/league/team/?teamId=${request.query.teamId}`, request.state.dl_token)
     return h.view('league/delete-team', { team })
   }
 }, {
@@ -83,16 +83,16 @@ module.exports = [{
   options: {
     auth: { strategy: 'jwt', scope: ['admin'] },
     validate: {
-      payload: joi.object({
-        teamId: joi.number().required()
+      payload: Joi.object({
+        teamId: Joi.number().required()
       }),
       failAction: async (request, h, error) => {
-        const team = await api.get(`/league/player/?playerId=${request.query.teamId}`, request.state.dl_token)
+        const team = await get(`/league/player/?playerId=${request.query.teamId}`, request.state.dl_token)
         return h.view('league/delete-team', { team, error }).code(400).takeover()
       }
     },
     handler: async (request, h) => {
-      await api.post('/league/team/delete', request.payload, request.state.dl_token)
+      await post('/league/team/delete', request.payload, request.state.dl_token)
       return h.redirect('/league/teams')
     }
   }
@@ -104,15 +104,15 @@ module.exports = [{
       crumb: false
     },
     validate: {
-      payload: joi.object({
-        prefix: joi.string()
+      payload: Joi.object({
+        prefix: Joi.string()
       }),
       failAction: async (_request, _h, error) => {
         return boom.badRequest(error)
       }
     },
     handler: async (request, _h) => {
-      const teams = await api.post('/league/teams/autocomplete', request.payload, request.state.dl_token)
+      const teams = await post('/league/teams/autocomplete', request.payload, request.state.dl_token)
       return teams.map(function (team) {
         return {
           label: team.name,

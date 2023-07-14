@@ -11,4 +11,6 @@ const mapPosition = (index) => {
   return 'FWD'
 }
 
-module.exports = mapPosition
+module.exports = {
+  mapPosition
+}

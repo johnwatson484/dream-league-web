@@ -1,9 +1,11 @@
-const api = require('../api')
+const { post } = require('../api')
 
 const validate = async (decoded, _request, _h) => {
-  return api.post('/validate', {
+  return post('/validate', {
     token: decoded
   })
 }
 
-module.exports = validate
+module.exports = {
+  validate
+}

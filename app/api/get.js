@@ -7,4 +7,6 @@ const get = async (url, token) => {
   return payload
 }
 
-module.exports = get
+module.exports = {
+  get
+}

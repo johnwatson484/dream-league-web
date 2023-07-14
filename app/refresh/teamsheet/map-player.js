@@ -5,4 +5,6 @@ const mapPlayer = (worksheet, cellAddress, position, substitute) => {
   return player ? { player: player.v.trim(), position, substitute } : undefined
 }
 
-module.exports = mapPlayer
+module.exports = {
+  mapPlayer
+}

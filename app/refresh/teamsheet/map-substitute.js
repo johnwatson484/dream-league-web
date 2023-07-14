@@ -3,4 +3,6 @@ const mapSubstitute = (index) => {
   return substitutes.includes(index)
 }
 
-module.exports = mapSubstitute
+module.exports = {
+  mapSubstitute
+}

@@ -1,14 +1,14 @@
-const { refreshTeamsheet } = require('../refresh')
-const api = require('../api')
 const joi = require('joi')
 const boom = require('@hapi/boom')
+const { refreshTeamsheet } = require('../refresh')
+const { get, post } = require('../api')
 const ViewModel = require('./models/teamsheet')
 
 module.exports = [{
   method: 'GET',
   path: '/teamsheet',
   handler: async (request, h) => {
-    const teamsheet = await api.get('/teamsheet', request.state.dl_token)
+    const teamsheet = await get('/teamsheet', request.state.dl_token)
     return h.view('teamsheet', { teamsheet })
   }
 }, {
@@ -16,7 +16,7 @@ module.exports = [{
   path: '/teamsheet/edit',
   options: { auth: { strategy: 'jwt', scope: ['admin'] } },
   handler: async (request, h) => {
-    const teamsheet = await api.get('/teamsheet', request.state.dl_token)
+    const teamsheet = await get('/teamsheet', request.state.dl_token)
     const teamsheetViewModel = new ViewModel(teamsheet)
     return h.view('teamsheet-edit', { teamsheet: teamsheetViewModel })
   }
@@ -39,7 +39,7 @@ module.exports = [{
       }
     },
     handler: async (request, _h) => {
-      return api.post('/teamsheet/edit/player', request.payload, request.state.dl_token)
+      return post('/teamsheet/edit/player', request.payload, request.state.dl_token)
     }
   }
 }, {
@@ -61,7 +61,7 @@ module.exports = [{
       }
     },
     handler: async (request, _h) => {
-      return api.post('/teamsheet/edit/keeper', request.payload, request.state.dl_token)
+      return post('/teamsheet/edit/keeper', request.payload, request.state.dl_token)
     }
   }
 }, {
