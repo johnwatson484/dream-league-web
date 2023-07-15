@@ -11,6 +11,8 @@ const routes = [].concat(
   require('../routes/league/refresh'),
   require('../routes/teamsheet'),
   require('../routes/results'),
+  require('../routes/goals'),
+  require('../routes/conceded'),
   require('../routes/meetings'),
   require('../routes/managers'),
   require('../routes/cups'),
