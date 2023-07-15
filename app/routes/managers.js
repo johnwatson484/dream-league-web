@@ -1,29 +1,30 @@
 const Joi = require('joi')
 const { get, post } = require('../api')
+const { GET, POST } = require('../../constants/verbs')
 
 module.exports = [{
-  method: 'GET',
+  method: GET,
   path: '/managers',
   handler: async (request, h) => {
     const managers = await get('/managers', request.state.dl_token)
     return h.view('managers', { managers })
   }
 }, {
-  method: 'GET',
+  method: GET,
   path: '/manager',
   handler: async (request, h) => {
     const manager = await get(`/manager/detail/?managerId=${request.query.managerId}`, request.state.dl_token)
     return h.view('manager', manager)
   }
 }, {
-  method: 'GET',
+  method: GET,
   path: '/manager/create',
   options: { auth: { strategy: 'jwt', scope: ['admin'] } },
   handler: async (_request, h) => {
     return h.view('create-manager')
   }
 }, {
-  method: 'POST',
+  method: POST,
   path: '/manager/create',
   options: {
     auth: { strategy: 'jwt', scope: ['admin'] },
@@ -43,7 +44,7 @@ module.exports = [{
     }
   }
 }, {
-  method: 'GET',
+  method: GET,
   path: '/manager/edit',
   options: { auth: { strategy: 'jwt', scope: ['admin'] } },
   handler: async (request, h) => {
@@ -51,7 +52,7 @@ module.exports = [{
     return h.view('edit-manager', { manager })
   }
 }, {
-  method: 'POST',
+  method: POST,
   path: '/manager/edit',
   options: {
     auth: { strategy: 'jwt', scope: ['admin'] },
@@ -72,7 +73,7 @@ module.exports = [{
     }
   }
 }, {
-  method: 'GET',
+  method: GET,
   path: '/manager/delete',
   options: { auth: { strategy: 'jwt', scope: ['admin'] } },
   handler: async (request, h) => {
@@ -80,7 +81,7 @@ module.exports = [{
     return h.view('delete-manager', { manager })
   }
 }, {
-  method: 'POST',
+  method: POST,
   path: '/manager/delete',
   options: {
     auth: { strategy: 'jwt', scope: ['admin'] },

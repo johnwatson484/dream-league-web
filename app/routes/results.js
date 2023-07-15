@@ -1,9 +1,10 @@
 const Joi = require('joi')
 const boom = require('@hapi/boom')
 const { get, post } = require('../api')
+const { GET, POST } = require('../../constants/verbs')
 
 module.exports = [{
-  method: 'GET',
+  method: GET,
   path: '/results',
   options: {
     validate: {
@@ -22,7 +23,7 @@ module.exports = [{
     }
   }
 }, {
-  method: 'GET',
+  method: GET,
   path: '/results/edit',
   options: { auth: { strategy: 'jwt', scope: ['admin'] } },
   handler: async (request, h) => {
@@ -32,7 +33,7 @@ module.exports = [{
     return h.view('results-edit', { resultsInput })
   }
 }, {
-  method: 'POST',
+  method: POST,
   path: '/results/edit',
   options: {
     auth: { strategy: 'jwt', scope: ['admin'] },
@@ -54,7 +55,7 @@ module.exports = [{
     }
   }
 }, {
-  method: 'POST',
+  method: POST,
   path: '/results/send',
   options: {
     auth: { strategy: 'jwt', scope: ['admin'] },

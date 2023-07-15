@@ -1,14 +1,15 @@
 const Joi = require('joi')
 const { updatePolicy } = require('../cookies')
+const { GET, POST } = require('../../constants/verbs')
 
 module.exports = [{
-  method: 'GET',
+  method: GET,
   path: '/cookies',
   handler: (request, h) => {
     return h.view('cookies/cookie-policy', { cookiesPolicy: request.state.cookies_policy, updated: request.query.updated || false })
   }
 }, {
-  method: 'POST',
+  method: POST,
   path: '/cookies',
   options: {
     plugins: {

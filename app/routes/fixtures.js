@@ -1,8 +1,9 @@
 const Joi = require('joi')
 const { get, post } = require('../api')
+const { GET, POST } = require('../../constants/verbs')
 
 module.exports = [{
-  method: 'GET',
+  method: GET,
   path: '/fixtures',
   options: {
     plugins: {
@@ -14,7 +15,7 @@ module.exports = [{
     }
   }
 }, {
-  method: 'GET',
+  method: GET,
   path: '/fixture/create',
   options: { auth: { strategy: 'jwt', scope: ['admin'] } },
   handler: async (request, h) => {
@@ -24,7 +25,7 @@ module.exports = [{
     return h.view('create-fixture', { gameweeks, cups, managers })
   }
 }, {
-  method: 'POST',
+  method: POST,
   path: '/fixture/create',
   options: {
     auth: { strategy: 'jwt', scope: ['admin'] },
@@ -49,7 +50,7 @@ module.exports = [{
     }
   }
 }, {
-  method: 'GET',
+  method: GET,
   path: '/fixture/edit',
   options: { auth: { strategy: 'jwt', scope: ['admin'] } },
   handler: async (request, h) => {
@@ -60,7 +61,7 @@ module.exports = [{
     return h.view('edit-fixture', { fixture, gameweeks, cups, managers })
   }
 }, {
-  method: 'POST',
+  method: POST,
   path: '/fixture/edit',
   options: {
     auth: { strategy: 'jwt', scope: ['admin'] },
@@ -86,7 +87,7 @@ module.exports = [{
     }
   }
 }, {
-  method: 'GET',
+  method: GET,
   path: '/fixture/delete',
   options: { auth: { strategy: 'jwt', scope: ['admin'] } },
   handler: async (request, h) => {
@@ -94,7 +95,7 @@ module.exports = [{
     return h.view('delete-fixture', { fixture })
   }
 }, {
-  method: 'POST',
+  method: POST,
   path: '/fixture/delete',
   options: {
     auth: { strategy: 'jwt', scope: ['admin'] },

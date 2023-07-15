@@ -1,8 +1,9 @@
 const Joi = require('joi')
 const { post } = require('../../api')
+const { GET, POST } = require('../../constants/verbs')
 
 module.exports = [{
-  method: 'GET',
+  method: GET,
   path: '/reset-password',
   options: {
     validate: {
@@ -18,7 +19,7 @@ module.exports = [{
   }
 },
 {
-  method: 'POST',
+  method: POST,
   path: '/reset-password',
   options: {
     validate: {

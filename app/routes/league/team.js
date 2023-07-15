@@ -1,16 +1,17 @@
 const Joi = require('joi')
 const boom = require('@hapi/boom')
 const { get, post } = require('../../api')
+const { GET, POST } = require('../../constants/verbs')
 
 module.exports = [{
-  method: 'GET',
+  method: GET,
   path: '/league/teams',
   handler: async (request, h) => {
     const teams = await get('/league/teams', request.state.dl_token)
     return h.view('league/teams', { teams })
   }
 }, {
-  method: 'GET',
+  method: GET,
   path: '/league/team/create',
   options: { auth: { strategy: 'jwt', scope: ['admin'] } },
   handler: async (request, h) => {
@@ -18,7 +19,7 @@ module.exports = [{
     return h.view('league/create-team', { divisions })
   }
 }, {
-  method: 'POST',
+  method: POST,
   path: '/league/team/create',
   options: {
     auth: { strategy: 'jwt', scope: ['admin'] },
@@ -39,7 +40,7 @@ module.exports = [{
     }
   }
 }, {
-  method: 'GET',
+  method: GET,
   path: '/league/team/edit',
   options: { auth: { strategy: 'jwt', scope: ['admin'] } },
   handler: async (request, h) => {
@@ -48,7 +49,7 @@ module.exports = [{
     return h.view('league/edit-team', { team, divisions })
   }
 }, {
-  method: 'POST',
+  method: POST,
   path: '/league/team/edit',
   options: {
     auth: { strategy: 'jwt', scope: ['admin'] },
@@ -70,7 +71,7 @@ module.exports = [{
     }
   }
 }, {
-  method: 'GET',
+  method: GET,
   path: '/league/team/delete',
   options: { auth: { strategy: 'jwt', scope: ['admin'] } },
   handler: async (request, h) => {
@@ -78,7 +79,7 @@ module.exports = [{
     return h.view('league/delete-team', { team })
   }
 }, {
-  method: 'POST',
+  method: POST,
   path: '/league/team/delete',
   options: {
     auth: { strategy: 'jwt', scope: ['admin'] },
@@ -97,7 +98,7 @@ module.exports = [{
     }
   }
 }, {
-  method: 'POST',
+  method: POST,
   path: '/league/teams/autocomplete',
   options: {
     plugins: {

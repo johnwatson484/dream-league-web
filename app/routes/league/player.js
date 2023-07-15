@@ -2,9 +2,10 @@ const Joi = require('joi')
 const boom = require('@hapi/boom')
 const { get, post } = require('../../api')
 const positions = ['Defender', 'Midfielder', 'Forward']
+const { GET, POST } = require('../../constants/verbs')
 
 module.exports = [{
-  method: 'GET',
+  method: GET,
   path: '/league/players',
   options: {
     plugins: {
@@ -16,7 +17,7 @@ module.exports = [{
     }
   }
 }, {
-  method: 'GET',
+  method: GET,
   path: '/league/player/create',
   options: { auth: { strategy: 'jwt', scope: ['admin'] } },
   handler: async (request, h) => {
@@ -24,7 +25,7 @@ module.exports = [{
     return h.view('league/create-player', { teams, positions })
   }
 }, {
-  method: 'POST',
+  method: POST,
   path: '/league/player/create',
   options: {
     auth: { strategy: 'jwt', scope: ['admin'] },
@@ -46,7 +47,7 @@ module.exports = [{
     }
   }
 }, {
-  method: 'GET',
+  method: GET,
   path: '/league/player/edit',
   options: { auth: { strategy: 'jwt', scope: ['admin'] } },
   handler: async (request, h) => {
@@ -55,7 +56,7 @@ module.exports = [{
     return h.view('league/edit-player', { player, teams, positions })
   }
 }, {
-  method: 'POST',
+  method: POST,
   path: '/league/player/edit',
   options: {
     auth: { strategy: 'jwt', scope: ['admin'] },
@@ -78,7 +79,7 @@ module.exports = [{
     }
   }
 }, {
-  method: 'GET',
+  method: GET,
   path: '/league/player/delete',
   options: { auth: { strategy: 'jwt', scope: ['admin'] } },
   handler: async (request, h) => {
@@ -86,7 +87,7 @@ module.exports = [{
     return h.view('league/delete-player', { player })
   }
 }, {
-  method: 'POST',
+  method: POST,
   path: '/league/player/delete',
   options: {
     auth: { strategy: 'jwt', scope: ['admin'] },
@@ -105,7 +106,7 @@ module.exports = [{
     }
   }
 }, {
-  method: 'POST',
+  method: POST,
   path: '/league/players/autocomplete',
   options: {
     plugins: {

@@ -1,6 +1,7 @@
+const { GET } = require('../../constants/verbs')
 
 module.exports = [{
-  method: 'GET',
+  method: GET,
   path: '/live-scores',
   options: {
     handler: async (_request, h) => {

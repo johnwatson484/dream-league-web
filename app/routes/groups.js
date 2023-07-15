@@ -1,8 +1,9 @@
 const Joi = require('joi')
 const { get, post } = require('../api')
+const { GET, POST } = require('../../constants/verbs')
 
 module.exports = [{
-  method: 'GET',
+  method: GET,
   path: '/groups',
   options: {
     handler: async (request, h) => {
@@ -11,7 +12,7 @@ module.exports = [{
     }
   }
 }, {
-  method: 'GET',
+  method: GET,
   path: '/group/create',
   options: { auth: { strategy: 'jwt', scope: ['admin'] } },
   handler: async (request, h) => {
@@ -20,7 +21,7 @@ module.exports = [{
     return h.view('create-group', { cups, managers })
   }
 }, {
-  method: 'POST',
+  method: POST,
   path: '/group/create',
   options: {
     auth: { strategy: 'jwt', scope: ['admin'] },
@@ -44,7 +45,7 @@ module.exports = [{
     }
   }
 }, {
-  method: 'GET',
+  method: GET,
   path: '/group/edit',
   options: { auth: { strategy: 'jwt', scope: ['admin'] } },
   handler: async (request, h) => {
@@ -54,7 +55,7 @@ module.exports = [{
     return h.view('edit-group', { group, cups, managers })
   }
 }, {
-  method: 'POST',
+  method: POST,
   path: '/group/edit',
   options: {
     auth: { strategy: 'jwt', scope: ['admin'] },
@@ -79,7 +80,7 @@ module.exports = [{
     }
   }
 }, {
-  method: 'GET',
+  method: GET,
   path: '/group/delete',
   options: { auth: { strategy: 'jwt', scope: ['admin'] } },
   handler: async (request, h) => {
@@ -87,7 +88,7 @@ module.exports = [{
     return h.view('delete-group', { group })
   }
 }, {
-  method: 'POST',
+  method: POST,
   path: '/group/delete',
   options: {
     auth: { strategy: 'jwt', scope: ['admin'] },

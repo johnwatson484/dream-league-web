@@ -1,7 +1,8 @@
 const config = require('../../config')
+const { POST } = require('../../constants/verbs')
 
 module.exports = [{
-  method: 'POST',
+  method: POST,
   path: '/logout',
   handler: async (_request, h) => {
     return h.redirect('/')

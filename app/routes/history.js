@@ -1,22 +1,23 @@
 const Joi = require('joi')
 const { get, post } = require('../api')
+const { GET, POST } = require('../../constants/verbs')
 
 module.exports = [{
-  method: 'GET',
+  method: GET,
   path: '/history',
   handler: async (request, h) => {
     const history = await get('/history', request.state.dl_token)
     return h.view('history', { history })
   }
 }, {
-  method: 'GET',
+  method: GET,
   options: { auth: { strategy: 'jwt', scope: ['admin'] } },
   path: '/history/create',
   handler: async (_request, h) => {
     return h.view('create-history')
   }
 }, {
-  method: 'POST',
+  method: POST,
   path: '/history/create',
   options: {
     auth: { strategy: 'jwt', scope: ['admin'] },
@@ -40,7 +41,7 @@ module.exports = [{
     }
   }
 }, {
-  method: 'GET',
+  method: GET,
   path: '/history/edit',
   options: { auth: { strategy: 'jwt', scope: ['admin'] } },
   handler: async (request, h) => {
@@ -48,7 +49,7 @@ module.exports = [{
     return h.view('edit-history', { history })
   }
 }, {
-  method: 'POST',
+  method: POST,
   path: '/history/edit',
   options: {
     auth: { strategy: 'jwt', scope: ['admin'] },
@@ -73,7 +74,7 @@ module.exports = [{
     }
   }
 }, {
-  method: 'GET',
+  method: GET,
   path: '/history/delete',
   options: { auth: { strategy: 'jwt', scope: ['admin'] } },
   handler: async (request, h) => {
@@ -81,7 +82,7 @@ module.exports = [{
     return h.view('delete-history', { history })
   }
 }, {
-  method: 'POST',
+  method: POST,
   path: '/history/delete',
   options: {
     auth: { strategy: 'jwt', scope: ['admin'] },

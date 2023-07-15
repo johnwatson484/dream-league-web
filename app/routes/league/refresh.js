@@ -1,14 +1,15 @@
 const { refreshPlayers } = require('../../refresh')
+const { GET, POST } = require('../../constants/verbs')
 
 module.exports = [{
-  method: 'GET',
+  method: GET,
   path: '/league/refresh',
   options: { auth: { strategy: 'jwt', scope: ['admin'] } },
   handler: (_request, h) => {
     return h.view('league/refresh')
   }
 }, {
-  method: 'POST',
+  method: POST,
   path: '/league/refresh/players',
   options: {
     auth: { strategy: 'jwt', scope: ['admin'] },

@@ -1,8 +1,9 @@
 const Joi = require('joi')
 const { get, post } = require('../api')
+const { GET, POST } = require('../../constants/verbs')
 
 module.exports = [{
-  method: 'GET',
+  method: GET,
   path: '/cups',
   options: {
     plugins: {
@@ -14,14 +15,14 @@ module.exports = [{
     }
   }
 }, {
-  method: 'GET',
+  method: GET,
   path: '/cup/create',
   options: { auth: { strategy: 'jwt', scope: ['admin'] } },
   handler: async (_request, h) => {
     return h.view('create-cup')
   }
 }, {
-  method: 'POST',
+  method: POST,
   path: '/cup/create',
   options: {
     auth: { strategy: 'jwt', scope: ['admin'] },
@@ -41,7 +42,7 @@ module.exports = [{
     }
   }
 }, {
-  method: 'GET',
+  method: GET,
   path: '/cup/edit',
   options: { auth: { strategy: 'jwt', scope: ['admin'] } },
   handler: async (request, h) => {
@@ -49,7 +50,7 @@ module.exports = [{
     return h.view('edit-cup', { cup })
   }
 }, {
-  method: 'POST',
+  method: POST,
   path: '/cup/edit',
   options: {
     auth: { strategy: 'jwt', scope: ['admin'] },
@@ -70,7 +71,7 @@ module.exports = [{
     }
   }
 }, {
-  method: 'GET',
+  method: GET,
   path: '/cup/delete',
   options: { auth: { strategy: 'jwt', scope: ['admin'] } },
   handler: async (request, h) => {
@@ -78,7 +79,7 @@ module.exports = [{
     return h.view('delete-cup', { cup })
   }
 }, {
-  method: 'POST',
+  method: POST,
   path: '/cup/delete',
   options: {
     auth: { strategy: 'jwt', scope: ['admin'] },

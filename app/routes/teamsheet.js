@@ -3,16 +3,17 @@ const boom = require('@hapi/boom')
 const { refreshTeamsheet } = require('../refresh')
 const { get, post } = require('../api')
 const ViewModel = require('./models/teamsheet')
+const { GET, POST } = require('../../constants/verbs')
 
 module.exports = [{
-  method: 'GET',
+  method: GET,
   path: '/teamsheet',
   handler: async (request, h) => {
     const teamsheet = await get('/teamsheet', request.state.dl_token)
     return h.view('teamsheet', { teamsheet })
   }
 }, {
-  method: 'GET',
+  method: GET,
   path: '/teamsheet/edit',
   options: { auth: { strategy: 'jwt', scope: ['admin'] } },
   handler: async (request, h) => {
@@ -21,7 +22,7 @@ module.exports = [{
     return h.view('teamsheet-edit', { teamsheet: teamsheetViewModel })
   }
 }, {
-  method: 'POST',
+  method: POST,
   path: '/teamsheet/edit/player',
   options: {
     auth: { strategy: 'jwt', scope: ['admin'] },
@@ -43,7 +44,7 @@ module.exports = [{
     }
   }
 }, {
-  method: 'POST',
+  method: POST,
   path: '/teamsheet/edit/keeper',
   options: {
     auth: { strategy: 'jwt', scope: ['admin'] },
@@ -65,7 +66,7 @@ module.exports = [{
     }
   }
 }, {
-  method: 'POST',
+  method: POST,
   path: '/teamsheet/refresh',
   options: {
     auth: { strategy: 'jwt', scope: ['admin'] },

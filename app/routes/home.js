@@ -1,7 +1,8 @@
 const { get } = require('../api')
+const { GET } = require('../../constants/verbs')
 
 module.exports = [{
-  method: 'GET',
+  method: GET,
   path: '/',
   config: {
   },
@@ -14,7 +15,7 @@ module.exports = [{
     return h.view('home', { results, topScorers, form, nextMeeting })
   }
 }, {
-  method: 'GET',
+  method: GET,
   path: '/rules',
   config: {
   },

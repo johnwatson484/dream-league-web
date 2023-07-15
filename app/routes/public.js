@@ -1,5 +1,7 @@
+const { GET } = require('../../constants/verbs')
+
 module.exports = [{
-  method: 'GET',
+  method: GET,
   path: '/assets/{path*}',
   handler: {
     directory: {

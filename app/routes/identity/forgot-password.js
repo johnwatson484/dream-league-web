@@ -1,15 +1,16 @@
 const Joi = require('joi')
 const { post } = require('../../api')
+const { GET, POST } = require('../../constants/verbs')
 
 module.exports = [{
-  method: 'GET',
+  method: GET,
   path: '/forgot-password',
   handler: (_request, h) => {
     return h.view('identity/forgot-password')
   }
 },
 {
-  method: 'POST',
+  method: POST,
   path: '/forgot-password',
   options: {
     validate: {

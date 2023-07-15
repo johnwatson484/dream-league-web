@@ -1,22 +1,23 @@
 const Joi = require('joi')
 const { get, post } = require('../api')
+const { GET, POST } = require('../../constants/verbs')
 
 module.exports = [{
-  method: 'GET',
+  method: GET,
   path: '/meetings',
   handler: async (request, h) => {
     const meetings = await get('/meetings', request.state.dl_token)
     return h.view('meetings', { meetings })
   }
 }, {
-  method: 'GET',
+  method: GET,
   path: '/meeting/create',
   options: { auth: { strategy: 'jwt', scope: ['admin'] } },
   handler: async (_request, h) => {
     return h.view('create-meeting')
   }
 }, {
-  method: 'POST',
+  method: POST,
   path: '/meeting/create',
   options: {
     auth: { strategy: 'jwt', scope: ['admin'] },
@@ -34,7 +35,7 @@ module.exports = [{
     }
   }
 }, {
-  method: 'GET',
+  method: GET,
   path: '/meeting/edit',
   options: { auth: { strategy: 'jwt', scope: ['admin'] } },
   handler: async (request, h) => {
@@ -42,7 +43,7 @@ module.exports = [{
     return h.view('edit-meeting', { meeting })
   }
 }, {
-  method: 'POST',
+  method: POST,
   path: '/meeting/edit',
   options: {
     auth: { strategy: 'jwt', scope: ['admin'] },
@@ -61,7 +62,7 @@ module.exports = [{
     }
   }
 }, {
-  method: 'GET',
+  method: GET,
   path: '/meeting/delete',
   options: { auth: { strategy: 'jwt', scope: ['admin'] } },
   handler: async (request, h) => {
@@ -69,7 +70,7 @@ module.exports = [{
     return h.view('delete-meeting', { meeting })
   }
 }, {
-  method: 'POST',
+  method: POST,
   path: '/meeting/delete',
   options: {
     auth: { strategy: 'jwt', scope: ['admin'] },
