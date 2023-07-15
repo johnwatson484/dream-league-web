@@ -1,6 +1,6 @@
 const Joi = require('joi')
 const { get, post } = require('../api')
-const { GET, POST } = require('../../constants/verbs')
+const { GET, POST } = require('../constants/verbs')
 
 module.exports = [{
   method: GET,

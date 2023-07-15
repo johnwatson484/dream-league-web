@@ -1,5 +1,5 @@
 const { get } = require('../api')
-const { GET } = require('../../constants/verbs')
+const { GET } = require('../constants/verbs')
 
 module.exports = [{
   method: GET,

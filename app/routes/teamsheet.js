@@ -3,7 +3,7 @@ const boom = require('@hapi/boom')
 const { refreshTeamsheet } = require('../refresh')
 const { get, post } = require('../api')
 const ViewModel = require('./models/teamsheet')
-const { GET, POST } = require('../../constants/verbs')
+const { GET, POST } = require('../constants/verbs')
 
 module.exports = [{
   method: GET,

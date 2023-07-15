@@ -1,6 +1,6 @@
 const Joi = require('joi')
 const { updatePolicy } = require('../cookies')
-const { GET, POST } = require('../../constants/verbs')
+const { GET, POST } = require('../constants/verbs')
 
 module.exports = [{
   method: GET,

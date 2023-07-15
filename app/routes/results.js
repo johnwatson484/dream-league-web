@@ -2,7 +2,7 @@ const Joi = require('joi')
 const boom = require('@hapi/boom')
 const { get, post } = require('../api')
 const { sortArray } = require('../sort-array')
-const { GET, POST } = require('../../constants/verbs')
+const { GET, POST } = require('../constants/verbs')
 
 module.exports = [{
   method: GET,
