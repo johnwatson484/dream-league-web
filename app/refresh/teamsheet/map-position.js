@@ -1,4 +1,4 @@
-const { GK, DEF, MID, FWD } = require('../../../constants/position-codes')
+const { GK, DEF, MID, FWD } = require('../../constants/position-codes')
 
 const mapPosition = (index) => {
   if (index <= 1) {
