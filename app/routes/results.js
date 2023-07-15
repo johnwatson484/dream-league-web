@@ -1,6 +1,7 @@
 const Joi = require('joi')
 const boom = require('@hapi/boom')
 const { get, post } = require('../api')
+const { sortArray } = require('../sort-array')
 const { GET, POST } = require('../../constants/verbs')
 
 module.exports = [{
@@ -28,8 +29,8 @@ module.exports = [{
   options: { auth: { strategy: 'jwt', scope: ['admin'] } },
   handler: async (request, h) => {
     const resultsInput = await get('/results-edit', request.state.dl_token)
-    resultsInput.keepers = resultsInput.keepers.sort((a, b) => { return sortFn(a.division, b.division) || sortFn(a.team, b.team) })
-    resultsInput.players = resultsInput.players.sort((a, b) => { return sortFn(a.division, b.division) || sortFn(a.team, b.team) || sortFn(a.lastName, b.lastName) || sortFn(a.firstName, b.firstName) })
+    resultsInput.keepers = resultsInput.keepers.sort((a, b) => { return sortArray(a.division, b.division) || sortArray(a.team, b.team) })
+    resultsInput.players = resultsInput.players.sort((a, b) => { return sortArray(a.division, b.division) || sortArray(a.team, b.team) || sortArray(a.lastName, b.lastName) || sortArray(a.firstName, b.firstName) })
     return h.view('results-edit', { resultsInput })
   }
 }, {
@@ -76,7 +77,3 @@ module.exports = [{
     }
   }
 }]
-
-function sortFn (a, b) {
-  return a === b ? 0 : a < b ? -1 : 1
-}

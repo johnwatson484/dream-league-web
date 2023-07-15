@@ -1,14 +1,16 @@
+const { GK, DEF, MID, FWD } = require('../../../constants/position-codes')
+
 const mapPosition = (index) => {
   if (index <= 1) {
-    return 'GK'
+    return GK
   }
   if (index <= 4) {
-    return 'DEF'
+    return DEF
   }
   if (index <= 8) {
-    return 'MID'
+    return MID
   }
-  return 'FWD'
+  return FWD
 }
 
 module.exports = {

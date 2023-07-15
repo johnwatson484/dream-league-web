@@ -1,8 +1,9 @@
 const Joi = require('joi')
 const boom = require('@hapi/boom')
 const { get, post } = require('../../api')
-const positions = ['Defender', 'Midfielder', 'Forward']
 const { GET, POST } = require('../../constants/verbs')
+const { DEFENDER, MIDFIELDER, FORWARD } = require('../../constants/positions')
+const positions = [DEFENDER, MIDFIELDER, FORWARD]
 
 module.exports = [{
   method: GET,
