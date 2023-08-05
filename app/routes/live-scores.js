@@ -1,11 +1,13 @@
 const { GET } = require('../constants/verbs')
+const { get } = require('../api')
 
 module.exports = [{
   method: GET,
   path: '/live-scores',
   options: {
-    handler: async (_request, h) => {
-      return h.view('live-scores')
+    handler: async (request, h) => {
+      const matches = await get('/live-scores', request.state.dl_token)
+      return h.view('live-scores', matches)
     }
   }
 }]
