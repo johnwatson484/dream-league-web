@@ -7,8 +7,7 @@ module.exports = [{
   options: {
     handler: async (request, h) => {
       const matches = await get('/live-scores', request.state.dl_token)
-      console.log(matches)
-      return h.view('live-scores', matches)
+      return h.view('live-scores', { matches })
     }
   }
 }]
