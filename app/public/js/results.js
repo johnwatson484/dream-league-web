@@ -2,8 +2,8 @@ $('#gameweekId').change(function () {
   $('#frm-gameweek').submit()
 })
 
-$('#send-results').click(function () {
-  $('#send-results').button('loading')
+$('#send').click(function () {
+  $('#send-results').html("<i class='fa-solid fa-circle-notch fa-spin'></i> Sending Results...")
   $.ajax({
     type: 'POST',
     url: '/results/send',
@@ -14,7 +14,7 @@ $('#send-results').click(function () {
       $('#email-confirmation').fadeOut(2000)
     },
     complete: function () {
-      $('#send-results').button('reset')
+      $('#send-results').html('Send results')
     }
   })
 })

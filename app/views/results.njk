@@ -1,111 +1,128 @@
 {% extends '_layout.njk' %}
 
 {% block content %}
-{% if results.gameweekId %}
-<h2>Week {{ results.gameweekId }} Results</h2>
+  {% if results.gameweekId %}
+    <h2>Week {{ results.gameweekId }} Results</h2>
 
-<form action="/results" method="GET" id="frm-gameweek">
-  <div class="form-group">
-    <select class="form-control" id="gameweekId" name="gameweekId">
-      {% for gameweek in gameweeks %}
-      <option value="{{ gameweek.gameweekId }}" {% if results.gameweekId===gameweek.gameweekId %}selected{% endif %}>
+    <form action="/results" method="GET" id="frm-gameweek">
+      <div class="form-group">
+        <select class="form-control" id="gameweekId" name="gameweekId">
+          {% for gameweek in gameweeks %}
+            <option value="{{ gameweek.gameweekId }}" {% if results.gameweekId===gameweek.gameweekId %}selected{% endif %}>
         Gameweek {{ gameweek.gameweekId }} - {{ gameweek.shortDate }}</option>
-      {% endfor %}
-    </select>
-  </div>
-</form>
+          {% endfor %}
+        </select>
+      </div>
+    </form>
 
-{% if auth.isAdmin %}
-<div class="row" style="padding-bottom: 20px;">
-  <div class="col-md-6">
-    <div class="btn-group" role="group">
-      <button type="button" class="btn btn-secondary" id="send-results"
-        data-loading-text="<i class='fa fa-circle-o-notch fa-spin'></i> Sending Results...">Send results</button>
-    </div>
-  </div>
-</div>
-{% endif %}
+    {% if auth.isAdmin %}
+      <div class="row" style="padding-bottom: 20px;">
+        <div class="col-md-6">
+          <div class="btn-group" role="group">
+            <button id="send-results" class="btn btn-success" data-toggle="modal" data-target="#send-confirm">Send results</button>
+          </div>
+        </div>
+      </div>
+    {% endif %}
 
-<div class="row" style="padding-bottom: 20px;">
-  <div class="col-md-6">
-    <div class="card border-dark">
-      <div class="card-header bg-dark text-light">
+    <div class="row" style="padding-bottom: 20px;">
+      <div class="col-md-6">
+        <div class="card border-dark">
+          <div class="card-header bg-dark text-light">
         Scores
       </div>
-      <div class="card-body">
-        {% include "./_scores.njk" %}
+          <div class="card-body">
+            {% include "./_scores.njk" %}
+          </div>
+        </div>
       </div>
-    </div>
-  </div>
-  <div class="col-md-6">
-    <div class="card border-dark">
-      <div class="card-header bg-dark text-light">
+      <div class="col-md-6">
+        <div class="card border-dark">
+          <div class="card-header bg-dark text-light">
         Table
       </div>
-      <div class="card-body">
-        {% include "./_table.njk" %}
+          <div class="card-body">
+            {% include "./_table.njk" %}
+          </div>
+        </div>
       </div>
     </div>
-  </div>
-</div>
 
-<div class="row" style="padding-bottom: 20px;">
-  <div class="col-md-6">
-    <div class="card border-dark">
-      <div class="card-header bg-dark text-light">
+    <div class="row" style="padding-bottom: 20px;">
+      <div class="col-md-6">
+        <div class="card border-dark">
+          <div class="card-header bg-dark text-light">
         Weekly winners
       </div>
-      <div class="card-body">
-        {% include "./_winners.njk" %}
+          <div class="card-body">
+            {% include "./_winners.njk" %}
+          </div>
+        </div>
       </div>
-    </div>
-  </div>
-  {% if results.cupScores.length %}
-  <div class="col-md-6">
-    <div class="card border-dark">
-      <div class="card-header bg-dark text-light">
+      {% if results.cupScores.length %}
+        <div class="col-md-6">
+          <div class="card border-dark">
+            <div class="card-header bg-dark text-light">
         Cup results
       </div>
-      <div class="card-body">
-        {% include "./_cup-scores.njk" %}
-      </div>
+            <div class="card-body">
+              {% include "./_cup-scores.njk" %}
+            </div>
+          </div>
+        </div>
+      {% endif %}
     </div>
-  </div>
-  {% endif %}
-</div>
 
-{% if results.cupScores.length and results.groups %}
-<div class="row" style="padding-bottom: 20px;">
-  {% for group in results.groups %}
-  <div class="col-md-6">
-    <div class="card border-dark">
-      <div class="card-header bg-dark text-light">
+    {% if results.cupScores.length and results.groups %}
+      <div class="row" style="padding-bottom: 20px;">
+        {% for group in results.groups %}
+          <div class="col-md-6">
+            <div class="card border-dark">
+              <div class="card-header bg-dark text-light">
         Group {{ loop.index }}
+              </div>
+              <div class="card-body">
+                {% include "./_group.njk" %}
+              </div>
+            </div>
+          </div>
+        {% endfor %}
       </div>
-      <div class="card-body">
-        {% include "./_group.njk" %}
-      </div>
-    </div>
-  </div>
-  {% endfor %}
-</div>
-{% endif %}
+    {% endif %}
 
-{% else %}
-<div class="alert alert-info">
+  {% else %}
+    <div class="alert alert-info">
   Results coming soon.
 </div>
-{% endif %}
+  {% endif %}
 
-<div class="row" id="email-confirmation" style="display:none">
-  <div class="alert alert-dismissible alert-info col-md-2" style="position: fixed; bottom: 10px; left: 10px;">
-    <button type="button" class="close" data-dismiss="alert">&times;</button>
+  <div class="row" id="email-confirmation" style="display:none">
+    <div class="alert alert-dismissible alert-info col-md-2" style="position: fixed; bottom: 10px; left: 10px;">
+      <button type="button" class="close" data-dismiss="alert">&times;</button>
     Email sent.
   </div>
-</div>
+  </div>
+
+  <div class="modal fade" id="send-confirm" role="dialog" data-backdrop="false">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Send Results</h5>
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+        </div>
+        <div class="modal-body">
+          <p>Are you sure you want to email the results to all managers?</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+          <button type="submit" id="send" data-dismiss="modal" class="btn btn-success">Confirm</button>
+        </div>
+      </div>
+    </div>
+  </div>
 
 {% endblock %}
 
 {% block bodyEnd %}
-<script src="{{ assetPath }}/results.js"></script>
+  <script src="{{ assetPath }}/results.js"></script>
 {% endblock %}
