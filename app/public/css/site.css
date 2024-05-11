@@ -31,6 +31,10 @@ textarea {
   max-width: 280px;
 }
 
+.input-result {
+  max-width: 110px;
+}
+
 .input-xs {
   height: 25px;
   padding: 1px 5px;
