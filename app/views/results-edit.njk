@@ -23,29 +23,25 @@
 
       <table class="table table-sm table-hover small">
         <tr>
-          <th>Division</th>
+          <th>
+            <span class="no-mobile">Division</span>
+            <span class="mobile-only">Div</span>
+          </th>
           <th>Team</th>
-          <th>Substitute</th>
+          <th>
+            <span class="no-mobile">Substitute</span>
+            <span class="mobile-only">Sub</span>
+          </th>
           <th>Manager</th>
           <th width="110px;">Conceded</th>
           <th width="110px;" class="manager-cup-input-container">Cup</th>
         </tr>
-
-
-
-<div class="input-group mb-3">
-  <div class="input-group-prepend">
-    <span class="input-group-text">$</span>
-  </div>
-  <input type="text" class="form-control" aria-label="Amount (to the nearest dollar)">
-  <div class="input-group-append">
-    <span class="input-group-text">.00</span>
-  </div>
-</div>
-
         {% for keeper in resultsInput.keepers %}
           <tr>
-            <td>{{ keeper.division }}</td>
+            <td>
+              <span class="no-mobile">{{ keeper.division }}</span>
+              <span class="mobile-only">{{ keeper.divisionShortName }}</span>
+            </td>
             <td>{{ keeper.team }}</td>
             <td>{{ keeper.substitute }}</td>
             <td>{{ keeper.manager }}</td>
@@ -53,14 +49,14 @@
               <div class="input-group">
                 <div class="input-group-prepend">
                   <button type="button" class="btn btn-danger btn-number btn-sm minus" data-type="minus" data-field="conceded">
-                    <span class="glyphicon glyphicon-minus"></span>
+                    <i class="fa-solid fa-minus fa-2xs"></i>
                   </button>
                 </div>
                 <input type="hidden" name="conceded[{{ loop.index0 }}][teamId]" value="{{ keeper.teamId }}"/>
-                <input type="text" onClick="this.select()" name="conceded[{{ loop.index0 }}][conceded]" class="form-control input-xs result-input" style="text-align:center; min-width:25px;" value="0"/>
+                <input type="text" onClick="this.select()" name="conceded[{{ loop.index0 }}][conceded]" class="form-control input-xs result-input" style="text-align:center; min-width:20px;" value="0"/>
                 <div class="input-group-append">
                   <button type="button" class="btn btn-success btn-number btn-sm plus" data-type="plus" data-field="conceded">
-                    <span class="glyphicon glyphicon-plus"></span>
+                    <i class="fa-solid fa-plus fa-2xs"></i>
                   </button>
                 </div>
               </div>
@@ -69,14 +65,14 @@
               <div class="input-group manager-cup-input manager-cup-{{ keeper.managerId }}">
                 <div class="input-group-prepend">
                   <button type="button" class="btn btn-danger btn-number btn-sm minus" data-type="minus" data-field="conceded">
-                    <span class="glyphicon glyphicon-minus"></span>
+                    <i class="fa-solid fa-minus fa-2xs"></i>
                   </button>
                 </div>
                 <input type="hidden" name="concededCup[{{ loop.index0 }}][teamId]" value="{{ keeper.teamId }}"/>
-                <input type="text" onClick="this.select()" name="concededCup[{{ loop.index0 }}][conceded]" class="form-control input-xs result-input" style="text-align:center; min-width:25px;" value="0"/>
+                <input type="text" onClick="this.select()" name="concededCup[{{ loop.index0 }}][conceded]" class="form-control input-xs result-input" style="text-align:center; min-width:20px;" value="0"/>
                 <div class="input-group-append">
                   <button type="button" class="btn btn-success btn-number btn-sm plus" data-type="plus" data-field="conceded">
-                    <span class="glyphicon glyphicon-plus"></span>
+                    <i class="fa-solid fa-plus fa-2xs"></i>
                   </button>
                 </div>
               </div>
@@ -89,7 +85,10 @@
 
         <table class="table table-sm table-hover small">
         <tr>
-          <th>Division</th>
+          <th>
+            <span class="no-mobile">Division</span>
+            <span class="mobile-only">Div</span>
+          </th>
           <th>Team</th>
           <th>Player</th>
           <th>Manager</th>
@@ -98,7 +97,10 @@
         </tr>
         {% for player in resultsInput.players %}
           <tr>
-            <td>{{ player.division }}</td>
+            <td>
+              <span class="no-mobile">{{ player.division }}</span>
+              <span class="mobile-only">{{ player.divisionShortName }}</span>
+            </td>
             <td>{{ player.team }}</td>
             <td>{{ player.lastName }}, {{ player.firstName }}</td>
             <td>{{ player.manager }}</td>
@@ -106,14 +108,14 @@
               <div class="input-group">
                 <div class="input-group-prepend">
                   <button type="button" class="btn btn-danger btn-number btn-sm minus" data-type="minus" data-field="goals">
-                    <span class="glyphicon glyphicon-minus"></span>
+                    <i class="fa-solid fa-minus fa-2xs"></i>
                   </button>
                 </div>
                 <input type="hidden" name="goals[{{ loop.index0 }}][playerId]" value="{{ player.playerId }}"/>
-                <input type="text" onClick="this.select()" name="goals[{{ loop.index0 }}][goals]" class="form-control input-xs result-input" style="text-align:center; min-width:25px;" value="0" />
+                <input type="text" onClick="this.select()" name="goals[{{ loop.index0 }}][goals]" class="form-control input-xs result-input" style="text-align:center; min-width:20px;" value="0" />
                 <div class="input-group-append">
                   <button type="button" class="btn btn-success btn-number btn-sm plus" data-type="plus" data-field="goals">
-                    <span class="glyphicon glyphicon-plus"></span>
+                    <i class="fa-solid fa-plus fa-2xs"></i>
                   </button>
                 </div>
               </div>
@@ -122,14 +124,14 @@
               <div class="input-group manager-cup-input manager-cup-{{ player.managerId }}">
                 <div class="input-group-prepend">
                   <button type="button" class="btn btn-danger btn-number btn-sm minus" data-type="minus" data-field="goals">
-                    <span class="glyphicon glyphicon-minus"></span>
+                    <i class="fa-solid fa-minus fa-2xs"></i>
                   </button>
                 </div>
                 <input type="hidden" name="goalsCup[{{ loop.index0 }}][playerId]" value="{{ player.playerId }}"/>
-                <input type="text" onClick="this.select()" name="goalsCup[{{ loop.index0 }}][goals]" class="form-control input-xs result-input" style="text-align:center; min-width:25px;" value="0" />
+                <input type="text" onClick="this.select()" name="goalsCup[{{ loop.index0 }}][goals]" class="form-control input-xs result-input" style="text-align:center; min-width:20px;" value="0" />
                 <div class="input-group-append">
                   <button type="button" class="btn btn-success btn-number btn-sm plus" data-type="plus" data-field="goals">
-                    <span class="glyphicon glyphicon-plus"></span>
+                    <i class="fa-solid fa-plus fa-2xs"></i>
                   </button>
                 </div>
               </div>
