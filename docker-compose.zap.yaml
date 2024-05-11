@@ -7,8 +7,8 @@ services:
       - ./test-output:/home/node/test-output
 
   dream-league-web-zap:
-    image: owasp/zap2docker-stable:2.12.0
-    command: zap-baseline.py -t http://dream-league-web:${PORT:-3000} -c config/zap.conf -r test-output/zap-report.html -a -d -I
+    image: softwaresecurityproject/zap-bare:2.14.0
+    command: zap.sh -cmd -quickurl http://dream-league-web:${PORT:-3000} -configfile wrk/config/zap.conf -quickout wrk/test-output/zap-report.html
     depends_on:
       - dream-league-web
     volumes:

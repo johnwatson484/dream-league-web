@@ -1,4 +1,3 @@
-version: '3.8'
 services:
   dream-league-web:
     command: npm run test:watch

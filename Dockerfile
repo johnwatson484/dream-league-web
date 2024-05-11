@@ -1,5 +1,5 @@
 # Development
-FROM node:18-alpine AS development
+FROM node:20-alpine AS development
 ENV NODE_ENV development
 ARG PORT=3000
 ENV PORT ${PORT}
