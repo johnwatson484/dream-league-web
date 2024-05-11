@@ -18,3 +18,16 @@ $('#send').click(function () {
     }
   })
 })
+
+$('#delete').click(function () {
+  $('#delete-results').html("<i class='fa-solid fa-circle-notch fa-spin'></i> Sending Results...")
+  $.ajax({
+    type: 'DELETE',
+    url: '/results',
+    data: { gameweekId: $('#gameweekId').val() },
+    traditional: true,
+    success: function () {
+      window.location.href = '/results'
+    }
+  })
+})

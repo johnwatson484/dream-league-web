@@ -2,8 +2,8 @@ const Wreck = require('@hapi/wreck')
 const config = require('../config')
 const { getConfiguration } = require('./get-configuration')
 
-const post = async (url, data, token) => {
-  const { payload } = await Wreck.post(`${config.apiHost}${url}`, {
+const deleteRequest = async (url, data, token) => {
+  const { payload } = await Wreck.delete(`${config.apiHost}${url}`, {
     payload: data,
     ...getConfiguration(token)
   })
@@ -11,5 +11,5 @@ const post = async (url, data, token) => {
 }
 
 module.exports = {
-  post
+  deleteRequest
 }

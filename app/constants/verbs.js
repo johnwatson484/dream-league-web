@@ -1,4 +1,5 @@
 module.exports = {
   GET: 'GET',
-  POST: 'POST'
+  POST: 'POST',
+  DELETE: 'DELETE'
 }
