@@ -6,17 +6,23 @@
   {%if resultsInput.keepers.length %}
     <form method="POST" action="/results/edit" >
       <input type="hidden" name="crumb" value="{{crumb}}"/>
-    
-      <div class="form-group">
-        <select class="form-control" id="gameweekId" name="gameweekId">
-        {% for gameweek in resultsInput.gameweeks %}
-          <option value="{{ gameweek.gameweekId }}" {% if gameweek.isActive %}selected{% endif %}>Gameweek {{ gameweek.gameweekId }} - {{ gameweek.shortDate }}</option>
-        {% endfor %}
-        </select> 
-      </div>
 
-      <div class="form-group">
-        <button type="submit" class="btn btn-primary">Submit results</button>
+      <div class="row">
+        <div class="col-md-8">
+          <div class="form-group">
+            <select class="form-control" id="gameweekId" name="gameweekId">
+            {% for gameweek in resultsInput.gameweeks %}
+              <option value="{{ gameweek.gameweekId }}" {% if gameweek.isActive %}selected{% endif %}>Gameweek {{ gameweek.gameweekId }} - {{ gameweek.shortDate }}</option>
+            {% endfor %}
+            </select> 
+          </div>
+        </div>
+
+        <div class="col-md-4">
+          <div class="form-group float-md-right">
+            <button type="submit" class="btn btn-success">Submit results</button>
+          </div>
+        </div>
       </div>
 
       <h4>Goalkeepers</h4>

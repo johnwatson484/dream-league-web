@@ -13,7 +13,12 @@ body {
   padding-right: 15px;
 }
 
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   font-family: 'Catamaran', sans-serif;
 }
 
@@ -39,7 +44,8 @@ textarea {
   height: 25px;
   padding: 1px 5px;
   font-size: 13px;
-  line-height: 1.5; /* If Placeholder of the input is moved up, rem/modify this. */
+  line-height: 1.5;
+  /* If Placeholder of the input is moved up, rem/modify this. */
   border-radius: 3px;
 }
 
@@ -48,15 +54,18 @@ button.plus {
   padding: 0px 4px;
 }
 
-table a:not(.btn), .table a:not(.btn) {
+table a:not(.btn),
+.table a:not(.btn) {
   text-decoration: none;
 }
 
-table a:not(.btn):hover, .table a:not(.btn):hover {
+table a:not(.btn):hover,
+.table a:not(.btn):hover {
   text-decoration: underline;
 }
 
-td.numeric, th.numeric {
+td.numeric,
+th.numeric {
   text-align: right;
 }
 
@@ -78,5 +87,10 @@ td.numeric, th.numeric {
 
   .mobile-only {
     display: block;
+  }
+
+  button.minus,
+  button.plus {
+    padding: 0px 0px;
   }
 }

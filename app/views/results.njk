@@ -4,30 +4,32 @@
   {% if results.gameweekId %}
     <h2>Week {{ results.gameweekId }} Results</h2>
 
-    <form action="/results" method="GET" id="frm-gameweek">
-      <div class="form-group">
-        <select class="form-control" id="gameweekId" name="gameweekId">
-          {% for gameweek in gameweeks %}
-            <option value="{{ gameweek.gameweekId }}" {% if results.gameweekId===gameweek.gameweekId %}selected{% endif %}>
-        Gameweek {{ gameweek.gameweekId }} - {{ gameweek.shortDate }}</option>
-          {% endfor %}
-        </select>
-      </div>
-    </form>
+  <div class="row" style="padding-bottom: 20px;">
+    <div class="col-md-6">
+      <form action="/results" method="GET" id="frm-gameweek">
+        <div class="form-group">
+          <select class="form-control" id="gameweekId" name="gameweekId">
+            {% for gameweek in gameweeks %}
+              <option value="{{ gameweek.gameweekId }}" {% if results.gameweekId===gameweek.gameweekId %}selected{% endif %}>
+          Gameweek {{ gameweek.gameweekId }} - {{ gameweek.shortDate }}</option>
+            {% endfor %}
+          </select>
+        </div>
+      </form>
+    </div>
 
     {% if auth.isAdmin %}
-      <div class="row" style="padding-bottom: 20px;">
-        <div class="col-md-6">
-          <div class="btn-group" role="group">
-            <button id="send-results" class="btn btn-success" data-toggle="modal" data-target="#send-confirm">Send results</button>
-            <button id="delete-results" class="btn btn-danger" data-toggle="modal" data-target="#delete-confirm">Delete results</button>
-          </div>
+      <div class="col-md-6">
+        <div class="btn-group float-md-right" role="group">
+          <button id="send-results" class="btn btn-success" data-toggle="modal" data-target="#send-confirm">Send results</button>
+          <button id="delete-results" class="btn btn-danger" data-toggle="modal" data-target="#delete-confirm">Delete results</button>
         </div>
       </div>
     {% endif %}
+  </div>
 
     <div class="row" style="padding-bottom: 20px;">
-      <div class="col-md-6">
+      <div class="col-md-6" style="padding-bottom: 20px;">
         <div class="card border-dark">
           <div class="card-header bg-dark text-light">
         Scores
@@ -50,7 +52,7 @@
     </div>
 
     <div class="row" style="padding-bottom: 20px;">
-      <div class="col-md-6">
+      <div class="col-md-6" style="padding-bottom: 20px;">
         <div class="card border-dark">
           <div class="card-header bg-dark text-light">
         Weekly winners
@@ -77,7 +79,7 @@
     {% if results.cupScores.length and results.groups %}
       <div class="row" style="padding-bottom: 20px;">
         {% for group in results.groups %}
-          <div class="col-md-6">
+          <div class="col-md-6" style="padding-bottom: 20px;">
             <div class="card border-dark">
               <div class="card-header bg-dark text-light">
         Group {{ loop.index }}
