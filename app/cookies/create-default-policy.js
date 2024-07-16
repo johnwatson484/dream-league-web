@@ -7,5 +7,5 @@ const createDefaultPolicy = (h) => {
 }
 
 module.exports = {
-  createDefaultPolicy
+  createDefaultPolicy,
 }

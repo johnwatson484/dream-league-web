@@ -3,5 +3,5 @@ const { updatePolicy } = require('./update-policy')
 
 module.exports = {
   getCurrentPolicy,
-  updatePolicy
+  updatePolicy,
 }

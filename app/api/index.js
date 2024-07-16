@@ -5,5 +5,5 @@ const { deleteRequest } = require('./delete')
 module.exports = {
   get,
   post,
-  deleteRequest
+  deleteRequest,
 }

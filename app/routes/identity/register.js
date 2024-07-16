@@ -8,7 +8,7 @@ module.exports = [{
   path: '/register',
   handler: (_request, h) => {
     return h.view('identity/register')
-  }
+  },
 },
 {
   method: POST,
@@ -17,20 +17,20 @@ module.exports = [{
     validate: {
       payload: Joi.object({
         email: Joi.string().email().required(),
-        password: Joi.string().required()
+        password: Joi.string().required(),
       }),
       failAction: async (_request, h, _error) => {
         return h.view('identity/register', {
-          message: 'email format incorrect'
+          message: 'email format incorrect',
         }).takeover()
-      }
+      },
     },
     handler: async (request, h) => {
       try {
         const response = await post('/register', request.payload)
         if (!response) {
           return h.view('identity/register', {
-            message: 'Email already registered or not a league member'
+            message: 'Email already registered or not a league member',
           })
         }
         return h.redirect('/')
@@ -38,9 +38,9 @@ module.exports = [{
           .state('dl_token', response.token, config.cookieOptionsIdentity)
       } catch {
         return h.view('identity/register', {
-          message: 'Invalid credentials'
+          message: 'Invalid credentials',
         })
       }
-    }
-  }
+    },
+  },
 }]

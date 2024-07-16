@@ -10,13 +10,13 @@ module.exports = [{
   path: '/league/players',
   options: {
     plugins: {
-      crumb: false
+      crumb: false,
     },
     handler: async (request, h) => {
       const players = await get(`/league/players?search=${request.query.search}`, request.state.dl_token)
       return h.view('league/players', { players })
-    }
-  }
+    },
+  },
 }, {
   method: GET,
   path: '/league/player/create',
@@ -24,7 +24,7 @@ module.exports = [{
   handler: async (request, h) => {
     const teams = await get('/league/teams', request.state.dl_token)
     return h.view('league/create-player', { teams, positions })
-  }
+  },
 }, {
   method: POST,
   path: '/league/player/create',
@@ -35,18 +35,18 @@ module.exports = [{
         firstName: Joi.string().allow(''),
         lastName: Joi.string().required(),
         position: Joi.string().valid(...positions),
-        teamId: Joi.number().required()
+        teamId: Joi.number().required(),
       }),
       failAction: async (request, h, error) => {
         const teams = await get('/league/teams', request.state.dl_token)
         return h.view('league/create-player', { teams, positions, error, player: request.payload }).code(400).takeover()
-      }
+      },
     },
     handler: async (request, h) => {
       await post('/league/player/create', request.payload, request.state.dl_token)
       return h.redirect('/league/players')
-    }
-  }
+    },
+  },
 }, {
   method: GET,
   path: '/league/player/edit',
@@ -55,7 +55,7 @@ module.exports = [{
     const player = await get(`/league/player/?playerId=${request.query.playerId}`, request.state.dl_token)
     const teams = await get('/league/teams', request.state.dl_token)
     return h.view('league/edit-player', { player, teams, positions })
-  }
+  },
 }, {
   method: POST,
   path: '/league/player/edit',
@@ -67,18 +67,18 @@ module.exports = [{
         firstName: Joi.string().allow(''),
         lastName: Joi.string().required(),
         position: Joi.string().valid(...positions),
-        teamId: Joi.number().required()
+        teamId: Joi.number().required(),
       }),
       failAction: async (request, h, error) => {
         const teams = await get('/league/teams', request.state.dl_token)
         return h.view('league/edit-player', { player: request.payload, teams, positions, error }).code(400).takeover()
-      }
+      },
     },
     handler: async (request, h) => {
       await post('/league/player/edit', request.payload, request.state.dl_token)
       return h.redirect('/league/players')
-    }
-  }
+    },
+  },
 }, {
   method: GET,
   path: '/league/player/delete',
@@ -86,7 +86,7 @@ module.exports = [{
   handler: async (request, h) => {
     const player = await get(`/league/player/?playerId=${request.query.playerId}`, request.state.dl_token)
     return h.view('league/delete-player', { player })
-  }
+  },
 }, {
   method: POST,
   path: '/league/player/delete',
@@ -94,41 +94,41 @@ module.exports = [{
     auth: { strategy: 'jwt', scope: ['admin'] },
     validate: {
       payload: Joi.object({
-        playerId: Joi.number().required()
+        playerId: Joi.number().required(),
       }),
       failAction: async (request, h, error) => {
         const player = await get(`/league/player/?playerId=${request.query.playerId}`, request.state.dl_token)
         return h.view('league/delete-player', { player, error }).code(400).takeover()
-      }
+      },
     },
     handler: async (request, h) => {
       await post('/league/player/delete', request.payload, request.state.dl_token)
       return h.redirect('/league/players')
-    }
-  }
+    },
+  },
 }, {
   method: POST,
   path: '/league/players/autocomplete',
   options: {
     plugins: {
-      crumb: false
+      crumb: false,
     },
     validate: {
       payload: Joi.object({
-        prefix: Joi.string()
+        prefix: Joi.string(),
       }),
       failAction: async (_request, _h, error) => {
         return boom.badRequest(error)
-      }
+      },
     },
     handler: async (request, _h) => {
       const players = await post('/league/players/autocomplete', request.payload, request.state.dl_token)
       return players.map(function (player) {
         return {
           label: `${player.lastNameFirstName} - ${player.team.name} - ${player.position}`,
-          val: player.playerId
+          val: player.playerId,
         }
       })
-    }
-  }
+    },
+  },
 }]

@@ -1,5 +1,5 @@
 module.exports = {
   DEFENDER: 'Defender',
   MIDFIELDER: 'Midfielder',
-  FORWARD: 'Forward'
+  FORWARD: 'Forward',
 }

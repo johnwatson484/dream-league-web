@@ -7,7 +7,7 @@ module.exports = [{
   path: '/forgot-password',
   handler: (_request, h) => {
     return h.view('identity/forgot-password')
-  }
+  },
 },
 {
   method: POST,
@@ -15,17 +15,17 @@ module.exports = [{
   options: {
     validate: {
       payload: Joi.object({
-        email: Joi.string().email().required()
+        email: Joi.string().email().required(),
       }),
       failAction: async (_request, h, _error) => {
         return h.view('identity/forgot-password', {
-          message: 'Email format incorrect'
+          message: 'Email format incorrect',
         }).takeover()
-      }
+      },
     },
     handler: async (request, h) => {
       await post('/forgot-password', request.payload)
       return h.redirect('/')
-    }
-  }
+    },
+  },
 }]

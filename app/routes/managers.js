@@ -8,21 +8,21 @@ module.exports = [{
   handler: async (request, h) => {
     const managers = await get('/managers', request.state.dl_token)
     return h.view('managers', { managers })
-  }
+  },
 }, {
   method: GET,
   path: '/manager',
   handler: async (request, h) => {
     const manager = await get(`/manager/detail/?managerId=${request.query.managerId}`, request.state.dl_token)
     return h.view('manager', manager)
-  }
+  },
 }, {
   method: GET,
   path: '/manager/create',
   options: { auth: { strategy: 'jwt', scope: ['admin'] } },
   handler: async (_request, h) => {
     return h.view('create-manager')
-  }
+  },
 }, {
   method: POST,
   path: '/manager/create',
@@ -32,17 +32,17 @@ module.exports = [{
       payload: Joi.object({
         name: Joi.string(),
         alias: Joi.string(),
-        emails: Joi.array().items(Joi.string().email().allow('')).single()
+        emails: Joi.array().items(Joi.string().email().allow('')).single(),
       }),
       failAction: async (request, h, error) => {
         return h.view('create-manager', { error, manager: request.payload }).code(400).takeover()
-      }
+      },
     },
     handler: async (request, h) => {
       await post('/manager/create', request.payload, request.state.dl_token)
       return h.redirect('/managers')
-    }
-  }
+    },
+  },
 }, {
   method: GET,
   path: '/manager/edit',
@@ -50,7 +50,7 @@ module.exports = [{
   handler: async (request, h) => {
     const manager = await get(`/manager/?managerId=${request.query.managerId}`, request.state.dl_token)
     return h.view('edit-manager', { manager })
-  }
+  },
 }, {
   method: POST,
   path: '/manager/edit',
@@ -61,17 +61,17 @@ module.exports = [{
         managerId: Joi.number().required(),
         name: Joi.string(),
         alias: Joi.string(),
-        emails: Joi.array().items(Joi.string().email().allow('')).single()
+        emails: Joi.array().items(Joi.string().email().allow('')).single(),
       }),
       failAction: async (request, h, error) => {
         return h.view('league/edit-manager', { manager: request.payload, error }).code(400).takeover()
-      }
+      },
     },
     handler: async (request, h) => {
       await post('/manager/edit', request.payload, request.state.dl_token)
       return h.redirect('/managers')
-    }
-  }
+    },
+  },
 }, {
   method: GET,
   path: '/manager/delete',
@@ -79,7 +79,7 @@ module.exports = [{
   handler: async (request, h) => {
     const manager = await get(`/manager/?managerId=${request.query.managerId}`, request.state.dl_token)
     return h.view('delete-manager', { manager })
-  }
+  },
 }, {
   method: POST,
   path: '/manager/delete',
@@ -87,16 +87,16 @@ module.exports = [{
     auth: { strategy: 'jwt', scope: ['admin'] },
     validate: {
       payload: Joi.object({
-        managerId: Joi.number().required()
+        managerId: Joi.number().required(),
       }),
       failAction: async (request, h, error) => {
         const manager = await get(`/manager/?managerId=${request.query.managerId}`, request.state.dl_token)
         return h.view('delete-manager', { manager, error }).code(400).takeover()
-      }
+      },
     },
     handler: async (request, h) => {
       await post('/manager/delete', request.payload, request.state.dl_token)
       return h.redirect('/managers')
-    }
-  }
+    },
+  },
 }]

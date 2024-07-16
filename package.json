@@ -1,6 +1,6 @@
 {
   "name": "dream-league-web",
-  "version": "1.6.1",
+  "version": "1.6.2",
   "description": "Dream League web frontend",
   "main": "app/index.js",
   "scripts": {
@@ -8,7 +8,7 @@
     "start:watch": "nodemon --inspect=0.0.0.0 --ext css,js,njk --legacy-watch app/index.js",
     "start:debug": "nodemon --inspect-brk=0.0.0.0 --ext css,js,njk --legacy-watch app/index.js",
     "test": "jest --runInBand --forceExit",
-    "test:lint": "standard",
+    "test:lint": "eslint",
     "test:integration": "jest --testPathPattern=test/integration --coverage=false",
     "test:unit": "jest --testPathPattern=test/unit --coverage=false",
     "test:watch": "jest --coverage=false --onlyChanged --watch --runInBand",
@@ -28,27 +28,13 @@
     "joi": "17.6.0",
     "nunjucks": "3.2.4",
     "qs": "6.11.0",
-    "xlsx": "https://cdn.sheetjs.com/xlsx-0.20.0/xlsx-0.20.0.tgz"
+    "xlsx": "https://cdn.sheetjs.com/xlsx-0.20.2/xlsx-0.20.2.tgz"
   },
   "devDependencies": {
     "blipp": "4.0.2",
+    "eslint": "9.7.0",
     "jest": "28.1.3",
-    "nodemon": "3.0.1",
-    "standard": "17.0.0"
-  },
-  "standard": {
-    "globals": [
-      "describe",
-      "beforeEach",
-      "expect",
-      "test",
-      "afterEach",
-      "jest",
-      "beforeAll",
-      "afterAll",
-      "$",
-      "XMLHttpRequest",
-      "dataLayer"
-    ]
+    "neostandard": "0.11.1",
+    "nodemon": "3.0.1"
   }
 }

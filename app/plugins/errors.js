@@ -20,13 +20,13 @@ module.exports = {
             statusCode,
             message: response?.message,
             payloadMessage: response?.data?.payload?.message,
-            stack: response?.data?.stack
+            stack: response?.data?.stack,
           })
 
           return h.view('500').code(statusCode)
         }
         return h.continue
       })
-    }
-  }
+    },
+  },
 }

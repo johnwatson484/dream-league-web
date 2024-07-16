@@ -6,7 +6,7 @@ const schema = Joi.object().keys({
   env: Joi.string().valid(...envs).default(envs[0]),
   appName: Joi.string().default('Dream League'),
   jwtConfig: Joi.object({
-    secret: Joi.string()
+    secret: Joi.string(),
   }),
   apiHost: Joi.string().default('http://localhost:3001'),
   cookieOptions: Joi.object({
@@ -16,8 +16,8 @@ const schema = Joi.object().keys({
     isSecure: Joi.bool().default(true),
     isHttpOnly: Joi.bool().default(true),
     clearInvalid: Joi.bool().default(false),
-    strictHeader: Joi.bool().default(true)
-  })
+    strictHeader: Joi.bool().default(true),
+  }),
 })
 
 const config = {
@@ -25,7 +25,7 @@ const config = {
   env: process.env.NODE_ENV,
   appName: process.env.APP_NAME,
   jwtConfig: {
-    secret: process.env.JWT_SECRET
+    secret: process.env.JWT_SECRET,
   },
   apiHost: process.env.API_HOST,
   cookieOptions: {
@@ -35,8 +35,8 @@ const config = {
     isSecure: process.env.NODE_ENV === 'production',
     isHttpOnly: process.env.COOKIE_HTTP_ONLY,
     clearInvalid: process.env.COOKIE_CLEAR_INVALID,
-    strictHeader: process.env.COOKIE_STRICT_HEADER
-  }
+    strictHeader: process.env.COOKIE_STRICT_HEADER,
+  },
 }
 
 const { error, value } = schema.validate(config)
@@ -45,7 +45,7 @@ value.isDev = value.env === 'development'
 value.cookieOptionsIdentity = {
   ...value.cookieOptions,
   ttl: 1000 * 60 * 60 * 24 * 30, // 30 days
-  encoding: 'none'
+  encoding: 'none',
 }
 
 if (error) {

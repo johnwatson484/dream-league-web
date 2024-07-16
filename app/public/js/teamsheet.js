@@ -10,12 +10,12 @@ $(function () {
           response($.map(data, function (item) {
             return item
           }))
-        }
+        },
       })
     },
     select: function (event, ui) {
       $(this).closest('.row').find('.player-id').val(ui.item.val).trigger('change')
-    }
+    },
   })
 })
 
@@ -40,7 +40,7 @@ $('.player-id').change(function () {
     success: function () {
       $('#save-confirmation').fadeIn(2000)
       $('#save-confirmation').fadeOut(2000)
-    }
+    },
   })
 })
 
@@ -66,12 +66,12 @@ $(function () {
           response($.map(data, function (item) {
             return item
           }))
-        }
+        },
       })
     },
     select: function (event, ui) {
       $(this).closest('.row').find('.team-id').val(ui.item.val).trigger('change')
-    }
+    },
   })
 })
 
@@ -96,7 +96,7 @@ $('.team-id').change(function () {
     success: function () {
       $('#save-confirmation').fadeIn(2000)
       $('#save-confirmation').fadeOut(2000)
-    }
+    },
   })
 })
 

@@ -26,5 +26,5 @@ const mapTeams = (worksheet) => {
 }
 
 module.exports = {
-  mapTeams
+  mapTeams,
 }

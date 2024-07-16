@@ -7,5 +7,5 @@ module.exports = [{
   handler: async (_request, h) => {
     return h.redirect('/')
       .unstate('dl_token', config.cookieOptionsIdentity)
-  }
+  },
 }]

@@ -9,14 +9,14 @@ module.exports = [{
     validate: {
       query: Joi.object({
         token: Joi.string().required(),
-        userId: Joi.number().required()
-      })
+        userId: Joi.number().required(),
+      }),
     },
     handler: (request, h) => {
       const { userId, token } = request.query
       return h.view('identity/reset-password', { userId, token })
-    }
-  }
+    },
+  },
 },
 {
   method: POST,
@@ -27,13 +27,13 @@ module.exports = [{
         userId: Joi.number().required(),
         token: Joi.string().required(),
         password: Joi.string().required(),
-        confirmPassword: Joi.string().valid(Joi.ref('password')).required()
+        confirmPassword: Joi.string().valid(Joi.ref('password')).required(),
       }),
       failAction: async (request, h, _error) => {
         return h.view('identity/reset-password', {
-          message: 'Passwords must match', ...request.payload
+          message: 'Passwords must match', ...request.payload,
         }).takeover()
-      }
+      },
     },
     handler: async (request, h) => {
       try {
@@ -44,9 +44,9 @@ module.exports = [{
         return h.view('identity/reset-password', {
           message: 'Link expired',
           userId: request.payload.userId,
-          token: request.payload.token
+          token: request.payload.token,
         })
       }
-    }
-  }
+    },
+  },
 }]

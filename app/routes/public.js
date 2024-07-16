@@ -8,8 +8,8 @@ module.exports = [{
       path: [
         'app/public/css',
         'app/public/js',
-        'app/public/assets'
-      ]
-    }
-  }
+        'app/public/assets',
+      ],
+    },
+  },
 }]

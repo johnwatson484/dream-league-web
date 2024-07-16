@@ -22,6 +22,6 @@ function submitPreference (accepted) {
   xhr.setRequestHeader('Content-Type', 'application/json')
   xhr.send(JSON.stringify({
     analytics: accepted,
-    async: true
+    async: true,
   }))
 }

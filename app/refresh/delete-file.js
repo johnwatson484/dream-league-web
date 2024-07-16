@@ -7,5 +7,5 @@ const deleteFile = (path) => {
 }
 
 module.exports = {
-  deleteFile
+  deleteFile,
 }

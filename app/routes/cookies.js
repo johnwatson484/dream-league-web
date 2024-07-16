@@ -7,22 +7,22 @@ module.exports = [{
   path: '/cookies',
   handler: (request, h) => {
     return h.view('cookies/cookie-policy', { cookiesPolicy: request.state.cookies_policy, updated: request.query.updated || false })
-  }
+  },
 }, {
   method: POST,
   path: '/cookies',
   options: {
     plugins: {
-      crumb: false
+      crumb: false,
     },
     validate: {
       payload: Joi.object({
         analytics: Joi.boolean(),
-        async: Joi.boolean().default(false)
+        async: Joi.boolean().default(false),
       }),
       failAction: async (request, h, _error) => {
         return h.view('cookies/cookie-policy', { cookiesPolicy: request.state.cookies_policy, updated: false }).code(400).takeover()
-      }
+      },
     },
     handler: (request, h) => {
       updatePolicy(request, h, request.payload.analytics)
@@ -30,6 +30,6 @@ module.exports = [{
         return h.response()
       }
       return h.redirect('/cookies?updated=true')
-    }
-  }
+    },
+  },
 }]

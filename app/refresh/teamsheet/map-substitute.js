@@ -4,5 +4,5 @@ const mapSubstitute = (index) => {
 }
 
 module.exports = {
-  mapSubstitute
+  mapSubstitute,
 }

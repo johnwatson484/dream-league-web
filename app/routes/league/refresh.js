@@ -7,7 +7,7 @@ module.exports = [{
   options: { auth: { strategy: 'jwt', scope: ['admin'] } },
   handler: (_request, h) => {
     return h.view('league/refresh')
-  }
+  },
 }, {
   method: POST,
   path: '/league/refresh/players',
@@ -19,7 +19,7 @@ module.exports = [{
       parse: true,
       allow: 'multipart/form-data',
       multipart: true,
-      timeout: false
+      timeout: false,
     },
     handler: async (request, h) => {
       const response = await refreshPlayers(request.payload.playerFile.path, request.state.dl_token)
@@ -28,8 +28,8 @@ module.exports = [{
       }
       return h.view('league/refresh', {
         message: 'Some players could not be mapped',
-        unmappedPlayers: response.unmappedPlayers
+        unmappedPlayers: response.unmappedPlayers,
       })
-    }
-  }
+    },
+  },
 }]

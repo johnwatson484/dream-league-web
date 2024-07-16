@@ -1,12 +1,12 @@
 const getConfiguration = (token = '') => {
   return {
     headers: {
-      Authorization: token
+      Authorization: token,
     },
-    json: true
+    json: true,
   }
 }
 
 module.exports = {
-  getConfiguration
+  getConfiguration,
 }

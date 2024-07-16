@@ -4,5 +4,5 @@ const sortArray = (a, b) => {
 }
 
 module.exports = {
-  sortArray
+  sortArray,
 }

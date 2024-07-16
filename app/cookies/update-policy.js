@@ -14,5 +14,5 @@ const updatePolicy = (request, h, analytics) => {
 }
 
 module.exports = {
-  updatePolicy
+  updatePolicy,
 }

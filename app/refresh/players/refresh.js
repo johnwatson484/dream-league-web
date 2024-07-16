@@ -13,5 +13,5 @@ const refresh = async (path, token) => {
 }
 
 module.exports = {
-  refresh
+  refresh,
 }

@@ -5,11 +5,11 @@ const { getConfiguration } = require('./get-configuration')
 const post = async (url, data, token) => {
   const { payload } = await Wreck.post(`${config.apiHost}${url}`, {
     payload: data,
-    ...getConfiguration(token)
+    ...getConfiguration(token),
   })
   return payload
 }
 
 module.exports = {
-  post
+  post,
 }

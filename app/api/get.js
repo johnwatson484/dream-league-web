@@ -8,5 +8,5 @@ const get = async (url, token) => {
 }
 
 module.exports = {
-  get
+  get,
 }

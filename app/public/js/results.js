@@ -15,7 +15,7 @@ $('#send').click(function () {
     },
     complete: function () {
       $('#send-results').html('Send results')
-    }
+    },
   })
 })
 
@@ -28,6 +28,6 @@ $('#delete').click(function () {
     traditional: true,
     success: function () {
       window.location.href = '/results'
-    }
+    },
   })
 })

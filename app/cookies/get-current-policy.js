@@ -9,5 +9,5 @@ const getCurrentPolicy = (request, h) => {
 }
 
 module.exports = {
-  getCurrentPolicy
+  getCurrentPolicy,
 }

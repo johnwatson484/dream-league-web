@@ -5,5 +5,5 @@ const { isInRole } = require('./is-in-role')
 module.exports = {
   validate,
   mapAuth,
-  isInRole
+  isInRole,
 }

@@ -7,13 +7,13 @@ async function createServer () {
     routes: {
       validate: {
         options: {
-          abortEarly: false
-        }
-      }
+          abortEarly: false,
+        },
+      },
     },
     router: {
-      stripTrailingSlash: true
-    }
+      stripTrailingSlash: true,
+    },
   })
 
   await server.register(require('@hapi/inert'))
@@ -34,5 +34,5 @@ async function createServer () {
 }
 
 module.exports = {
-  createServer
+  createServer,
 }

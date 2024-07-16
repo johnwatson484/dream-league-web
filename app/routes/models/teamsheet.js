@@ -15,7 +15,7 @@ const mapTeam = (team) => {
     managerId: team.managerId,
     name: team.name,
     keepers,
-    players
+    players,
   }
 }
 

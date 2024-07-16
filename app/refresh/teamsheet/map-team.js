@@ -23,10 +23,10 @@ const mapTeam = (worksheet, manager, cellAddress) => {
 
   return {
     manager: manager.trim(),
-    players
+    players,
   }
 }
 
 module.exports = {
-  mapTeam
+  mapTeam,
 }

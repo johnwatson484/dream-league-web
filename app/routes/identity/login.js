@@ -8,7 +8,7 @@ module.exports = [{
   path: '/login',
   handler: (_request, h) => {
     return h.view('identity/login')
-  }
+  },
 },
 {
   method: POST,
@@ -17,13 +17,13 @@ module.exports = [{
     validate: {
       payload: Joi.object({
         email: Joi.string().email().required(),
-        password: Joi.string().required()
+        password: Joi.string().required(),
       }),
       failAction: async (_request, h, _error) => {
         return h.view('identity/login', {
-          message: 'Email format incorrect'
+          message: 'Email format incorrect',
         }).takeover()
-      }
+      },
     },
     handler: async (request, h) => {
       try {
@@ -33,9 +33,9 @@ module.exports = [{
           .state('dl_token', response.token, config.cookieOptionsIdentity)
       } catch {
         return h.view('identity/login', {
-          message: 'Invalid credentials'
+          message: 'Invalid credentials',
         })
       }
-    }
-  }
+    },
+  },
 }]

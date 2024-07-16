@@ -6,5 +6,5 @@ const mapPlayer = (worksheet, cellAddress, position, substitute) => {
 }
 
 module.exports = {
-  mapPlayer
+  mapPlayer,
 }

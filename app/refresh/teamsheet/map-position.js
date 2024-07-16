@@ -14,5 +14,5 @@ const mapPosition = (index) => {
 }
 
 module.exports = {
-  mapPosition
+  mapPosition,
 }

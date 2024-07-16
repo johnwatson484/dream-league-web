@@ -6,5 +6,5 @@ const isInRole = (credentials, role) => {
 }
 
 module.exports = {
-  isInRole
+  isInRole,
 }

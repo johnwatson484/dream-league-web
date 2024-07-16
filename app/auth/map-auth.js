@@ -5,10 +5,10 @@ const mapAuth = (request) => {
     isAuthenticated: request.auth.isAuthenticated,
     isAnonymous: !request.auth.isAuthenticated,
     isUser: request.auth.isAuthenticated && isInRole(request.auth.credentials, 'user'),
-    isAdmin: request.auth.isAuthenticated && isInRole(request.auth.credentials, 'admin')
+    isAdmin: request.auth.isAuthenticated && isInRole(request.auth.credentials, 'admin'),
   }
 }
 
 module.exports = {
-  mapAuth
+  mapAuth,
 }

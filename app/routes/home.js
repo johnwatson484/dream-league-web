@@ -13,7 +13,7 @@ module.exports = [{
     const nextMeeting = await get('/meetings/next', request.state.dl_token)
 
     return h.view('home', { results, topScorers, form, nextMeeting })
-  }
+  },
 }, {
   method: GET,
   path: '/rules',
@@ -21,5 +21,5 @@ module.exports = [{
   },
   handler: async (_request, h) => {
     return h.view('rules')
-  }
+  },
 }]
