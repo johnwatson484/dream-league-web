@@ -28,8 +28,7 @@ const formatTeamsheet = (teamsheet) => {
     for (const player of team.players) {
       players.push({
         playerId: player.playerId,
-        firstName: player.firstName,
-        lastName: player.lastName,
+        name: player.lastNameFirstName,
         position: player.position,
         team: player.team,
         manager: team.name,
