@@ -21,6 +21,7 @@ const routes = [].concat(
   require('../routes/history'),
   require('../routes/api/winners'),
   require('../routes/api/meetings'),
+  require('../routes/api/managers'),
   require('../routes/public')
 )
 
