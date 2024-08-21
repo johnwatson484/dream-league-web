@@ -1,4 +1,0 @@
-networks:
-  default:
-    external: true
-    name: dream-league

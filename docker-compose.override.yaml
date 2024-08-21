@@ -5,7 +5,14 @@ services:
       target: development
     ports:
       - "3000:3000"
-      - "9229:9229"    
+      - "9229:9229"
     volumes:
       - ./app:/home/node/app
       - ./package.json:/home/node/package.json
+    networks:
+      - dream-league
+
+networks:
+  dream-league:
+    driver: bridge
+    name: dream-league
