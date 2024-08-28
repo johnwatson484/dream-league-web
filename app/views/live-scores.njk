@@ -14,6 +14,30 @@
       <td>{{ match.awayScore }}</td>
       <td>{{ match.awayTeam }}</td>
     </tr>
+    <tr>
+      <td></td>
+      <td>
+        {% for goal in match.goals %}
+          {% if goal.team == match.homeTeam %}
+            <tr>
+              <td>{{ goal.player }} ({{ goal.minute }}')</td>
+            </tr>
+          {% endif %}
+        {% endfor %}
+      </td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td>
+        {% for goal in match.goals %}
+          {% if goal.team == match.awayTeam %}
+            <tr>
+              <td>{{ goal.player }} ({{ goal.minute }}')</td>
+            </tr>
+          {% endif %}
+        {% endfor %}
+      </td>
+    </tr>
   {% endfor %}
   </table>
   {% else %}
