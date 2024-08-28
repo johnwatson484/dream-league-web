@@ -19,6 +19,7 @@ const routes = [].concat(
   require('../routes/fixtures'),
   require('../routes/groups'),
   require('../routes/history'),
+  require('../routes/live-scores'),
   require('../routes/api/winners'),
   require('../routes/api/meetings'),
   require('../routes/api/managers'),
