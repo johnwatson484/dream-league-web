@@ -15,5 +15,6 @@ secret:
 
 deployment: {}
 
-ingress: {}
+ingress:
+  host: dreamleaguefantasyfootball.co.uk
 
