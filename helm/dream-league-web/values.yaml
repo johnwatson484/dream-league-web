@@ -8,8 +8,10 @@ container:
   limitMemory: 300Mi
   limitCpu: 300m
   port: 3000
-  jwtSecret: secret
   apiHost: http://dream-league-api
+
+secret:
+  secretsPath: /dream-league-web
 
 deployment: {}
 

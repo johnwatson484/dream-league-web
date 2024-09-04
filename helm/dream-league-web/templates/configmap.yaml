@@ -3,6 +3,5 @@
 data:
   NODE_ENV: {{ quote .Values.environment }}
   PORT: {{ quote .Values.container.port }}
-  JWT_SECRET: {{ quote .Values.container.jwtSecret }}
   API_HOST: {{ quote .Values.container.apiHost }}
 {{- end -}}
