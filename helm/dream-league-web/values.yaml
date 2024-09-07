@@ -3,11 +3,10 @@ name: dream-league-web
 image: dream-league-web
 
 container:
-  requestMemory: 120Mi
-  requestCpu: 120m
-  limitMemory: 300Mi
-  limitCpu: 300m
+  resourceTier: M
   port: 3000
+
+config:
   apiHost: http://dream-league-api
 
 secret:

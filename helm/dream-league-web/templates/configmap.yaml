@@ -3,5 +3,5 @@
 data:
   NODE_ENV: {{ quote .Values.environment }}
   PORT: {{ quote .Values.container.port }}
-  API_HOST: {{ quote .Values.container.apiHost }}
+  API_HOST: {{ quote .Values.config.apiHost }}
 {{- end -}}
