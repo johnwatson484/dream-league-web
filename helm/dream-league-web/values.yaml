@@ -1,4 +1,5 @@
 container:
+  image: dream-league-web
   resourceTier: M
   port: 3000
 

@@ -1,7 +1,7 @@
 {{- include "helm-library.configmap" (list . "dream-league-web.configmap") -}}
 {{- define "dream-league-web.configmap" -}}
 data:
-  PORT: {{ quote .Values.container.port }}
-  NODE_ENV: {{ quote .Values.configMap.environment }}
-  API_HOST: {{ quote .Values.configMap.apiHost }}
+  PORT: {{ .Values.container.port | quote }}
+  NODE_ENV: {{ .Values.configMap.environment | quote }}
+  API_HOST: {{ .Values.configMap.apiHost | quote }}
 {{- end -}}
