@@ -1,12 +1,9 @@
-environment: production
-name: dream-league-web
-image: dream-league-web
-
 container:
   resourceTier: M
   port: 3000
 
-config:
+configMap:
+  environment: production
   apiHost: http://dream-league-api
 
 secret:
