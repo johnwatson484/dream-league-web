@@ -1,6 +1,6 @@
 {
   "name": "dream-league-web",
-  "version": "1.10.5",
+  "version": "1.11.0",
   "description": "Dream League web frontend",
   "main": "app/index.js",
   "scripts": {
@@ -23,7 +23,7 @@
     "@hapi/inert": "7.0.0",
     "@hapi/vision": "7.0.0",
     "@hapi/wreck": "18.0.0",
-    "hapi-auth-jwt2": "10.4.0",
+    "hapi-auth-jwt2": "10.7.0",
     "hapi-pino": "10.1.0",
     "joi": "17.6.0",
     "nunjucks": "3.2.4",
