@@ -1,0 +1,6 @@
+services:
+  dream-league-web:
+    extends:
+      file: compose.override.yaml
+      service: dream-league-web
+    command: npm run start:debug

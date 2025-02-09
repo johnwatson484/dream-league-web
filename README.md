@@ -20,37 +20,22 @@ The application is designed to run in containerised environments, using Docker C
 ## Run production application in container with Docker
 
 ```
-docker-compose -f docker-compose.yaml build
-docker-compose -f docker-compose.yaml up
+docker compose build
+docker compose up
 ```
 
 ## Develop application in container
 
 This service is dependent on the availability of [Dream League API](https://github.com/johnwatson484/dream-league-api) running in the same Docker network.
 
-A helper script will start this service in a shared network.
-
-```
-./scripts/start
-```
-
-Alternatively, the commands can be run individually.
-
-```
-docker network create dream-league
-docker-compose build
-docker-compose docker-compose.yaml \
-  -f docker-compose.override \
-  -f docker-compose.link \
-  up
-```
+Running `docker compose up` in each repository will start the services in the same network.
 
 ### Running tests
 
 A convenience script is provided to run automated tests in a containerised
 environment. This will rebuild images before running tests via docker-compose,
-using a combination of `docker-compose.yaml` and `docker-compose.test.yaml`.
-The command given to `docker-compose run` may be customised by passing
+using a combination of `compose.yaml` and `compose.test.yaml`.
+The command given to `compose run` may be customised by passing
 arguments to the test script.
 
 Examples:

@@ -1,0 +1,6 @@
+services:
+  dream-league-web:
+    extends:
+      file: compose.test.yaml
+      service: dream-league-web
+    command: npm run test:watch

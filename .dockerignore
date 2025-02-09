@@ -2,7 +2,7 @@ node_modules/
 test-output/
 .dockerignore
 .gitignore
-docker-compose*
+compose*
 LICENSE
 README.md
 Dockerfile

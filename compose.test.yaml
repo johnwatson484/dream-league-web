@@ -1,7 +1,9 @@
 services:
   dream-league-web:
+    extends:
+      file: compose.yaml
+      service: dream-league-web
     build:
-      context: .
       target: development
     command: npm run test
     volumes:
