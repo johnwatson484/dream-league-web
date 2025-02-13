@@ -1,8 +1,5 @@
 services:
   dream-league-web:
-    extends:
-      file: compose.yaml
-      service: dream-league-web
     build:
       target: development
     image: dream-league-web-zap

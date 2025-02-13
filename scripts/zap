@@ -8,4 +8,4 @@ service="dream-league-web"
 cd "${projectRoot}"
 
 # Run ZAP scan
-docker compose -f compose.zap.yaml run --rm ${service}-zap
+docker compose -f compose.yaml -f compose.zap.yaml run --rm ${service}-zap

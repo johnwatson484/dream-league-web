@@ -40,11 +40,11 @@ done
 
 compose() {
   if [ "${watch}" = "true" ]; then
-    docker compose -f compose.test.watch.yaml -p "${service}-test" $@
+    docker compose -f compose.yaml -f compose.test.yaml -f compose.test.watch.yaml -p "${service}-test" $@
   elif [ "${debug}" = "true" ]; then
-    docker compose -f compose.test.debug.yaml -p "${service}-test" $@
+    docker compose -f compose.yaml -f compose.test.yaml -f compose.test.watch.yaml -f compose.test.debug.yaml -p "${service}-test" $@
   else
-    docker compose -f compose.test.yaml -p "${service}-test" $@
+    docker compose -f compose.yaml -f compose.test.yaml -p "${service}-test" $@
   fi
 }
 
