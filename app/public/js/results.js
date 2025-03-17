@@ -7,7 +7,10 @@ $('#send').click(function () {
   $.ajax({
     type: 'POST',
     url: '/results/send',
-    data: { gameweekId: $('#gameweekId').val() },
+    data: {
+      crumb: $('#crumb').val(),
+      gameweekId: $('#gameweekId').val(),
+    },
     traditional: true,
     success: function () {
       $('#email-confirmation').fadeIn(2000)
@@ -24,7 +27,10 @@ $('#delete').click(function () {
   $.ajax({
     type: 'DELETE',
     url: '/results',
-    data: { gameweekId: $('#gameweekId').val() },
+    data: {
+      crumb: $('#crumb').val(),
+      gameweekId: $('#gameweekId').val(),
+    },
     traditional: true,
     success: function () {
       window.location.href = '/results'

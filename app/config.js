@@ -2,7 +2,7 @@ const Joi = require('joi')
 const envs = ['development', 'test', 'production']
 
 const schema = Joi.object().keys({
-  port: Joi.number().default(3000),
+  port: Joi.number().integer().default(3000),
   env: Joi.string().valid(...envs).default(envs[0]),
   appName: Joi.string().default('Dream League'),
   jwtConfig: Joi.object({
@@ -10,7 +10,7 @@ const schema = Joi.object().keys({
   }),
   apiHost: Joi.string().default('http://localhost:3001'),
   cookieOptions: Joi.object({
-    ttl: Joi.number().default(1000 * 60 * 60 * 24 * 365), // 1 year
+    ttl: Joi.number().integer().default(1000 * 60 * 60 * 24 * 365), // 1 year
     encoding: Joi.string().valid('base64json').default('base64json'),
     isSameSite: Joi.string().valid('Lax').default('Lax'),
     isSecure: Joi.bool().default(true),

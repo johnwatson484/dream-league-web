@@ -15,10 +15,10 @@ module.exports = [{
   path: '/login',
   options: {
     validate: {
-      payload: Joi.object({
+      payload: {
         email: Joi.string().email().required(),
         password: Joi.string().required(),
-      }),
+      },
       failAction: async (_request, h, _error) => {
         return h.view('identity/login', {
           message: 'Email format incorrect',

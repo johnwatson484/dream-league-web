@@ -21,6 +21,7 @@ function submitPreference (accepted) {
   xhr.open('POST', '/cookies', true)
   xhr.setRequestHeader('Content-Type', 'application/json')
   xhr.send(JSON.stringify({
+    crumb: document.querySelector('input[name="crumb"]').value,
     analytics: accepted,
     async: true,
   }))

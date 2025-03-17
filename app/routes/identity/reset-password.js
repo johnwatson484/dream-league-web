@@ -7,10 +7,10 @@ module.exports = [{
   path: '/reset-password',
   options: {
     validate: {
-      query: Joi.object({
+      query: {
         token: Joi.string().required(),
-        userId: Joi.number().required(),
-      }),
+        userId: Joi.number().integer().required(),
+      },
     },
     handler: (request, h) => {
       const { userId, token } = request.query
@@ -23,12 +23,12 @@ module.exports = [{
   path: '/reset-password',
   options: {
     validate: {
-      payload: Joi.object({
-        userId: Joi.number().required(),
+      payload: {
+        userId: Joi.number().integer().required(),
         token: Joi.string().required(),
         password: Joi.string().required(),
         confirmPassword: Joi.string().valid(Joi.ref('password')).required(),
-      }),
+      },
       failAction: async (request, h, _error) => {
         return h.view('identity/reset-password', {
           message: 'Passwords must match', ...request.payload,

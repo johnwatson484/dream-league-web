@@ -30,11 +30,11 @@ module.exports = [{
       crumb: false,
     },
     validate: {
-      payload: joi.object({
-        managerId: joi.number(),
-        playerIds: joi.alternatives().try(joi.array().items(joi.number()), joi.number()),
-        playerSubs: joi.alternatives().try(joi.array().items(joi.number()), joi.number()),
-      }),
+      payload: {
+        managerId: joi.number().integer(),
+        playerIds: joi.alternatives().try(joi.array().items(joi.number().integer()), joi.number().integer()),
+        playerSubs: joi.alternatives().try(joi.array().items(joi.number().integer()), joi.number().integer()),
+      },
       failAction: async (_request, _h, error) => {
         return boom.badRequest(error)
       },
@@ -53,9 +53,9 @@ module.exports = [{
     },
     validate: {
       payload: joi.object({
-        managerId: joi.number(),
-        teamIds: joi.alternatives().try(joi.array().items(joi.string()), joi.string()),
-        teamSubs: joi.alternatives().try(joi.array().items(joi.string()), joi.string()),
+        managerId: joi.number().integer(),
+        teamIds: joi.alternatives().try(joi.array().items(joi.number().integer()), joi.number().integer()),
+        teamSubs: joi.alternatives().try(joi.array().items(joi.number().integer()), joi.number().integer()),
       }),
       failAction: async (_request, _h, error) => {
         return boom.badRequest(error)

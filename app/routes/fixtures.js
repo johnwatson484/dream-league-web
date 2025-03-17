@@ -5,14 +5,9 @@ const { GET, POST } = require('../constants/verbs')
 module.exports = [{
   method: GET,
   path: '/fixtures',
-  options: {
-    plugins: {
-      crumb: false,
-    },
-    handler: async (request, h) => {
-      const fixtures = await get('/fixtures', request.state.dl_token)
-      return h.view('fixtures', { fixtures })
-    },
+  handler: async (request, h) => {
+    const fixtures = await get('/fixtures', request.state.dl_token)
+    return h.view('fixtures', { fixtures })
   },
 }, {
   method: GET,
@@ -30,13 +25,13 @@ module.exports = [{
   options: {
     auth: { strategy: 'jwt', scope: ['admin'] },
     validate: {
-      payload: Joi.object({
+      payload: {
         cupId: Joi.number().integer().required(),
         gameweekId: Joi.number().integer().required(),
         homeManagerId: Joi.number().integer().required(),
         awayManagerId: Joi.number().integer().required(),
         round: Joi.number().integer().required(),
-      }),
+      },
       failAction: async (request, h, error) => {
         const gameweeks = await get('/gameweeks', request.state.dl_token)
         const cups = await get('/cups', request.state.dl_token)
@@ -52,7 +47,17 @@ module.exports = [{
 }, {
   method: GET,
   path: '/fixture/edit',
-  options: { auth: { strategy: 'jwt', scope: ['admin'] } },
+  options: {
+    auth: { strategy: 'jwt', scope: ['admin'] },
+    validate: {
+      query: {
+        fixtureId: Joi.number().integer().required(),
+      },
+      failAction: async (_request, h, error) => {
+        return h.view('404').code(404).takeover()
+      },
+    },
+  },
   handler: async (request, h) => {
     const fixture = await get(`/fixture/?fixtureId=${request.query.fixtureId}`, request.state.dl_token)
     const gameweeks = await get('/gameweeks', request.state.dl_token)
@@ -66,14 +71,14 @@ module.exports = [{
   options: {
     auth: { strategy: 'jwt', scope: ['admin'] },
     validate: {
-      payload: Joi.object({
+      payload: {
         fixtureId: Joi.number().integer().required(),
         cupId: Joi.number().integer().required(),
         gameweekId: Joi.number().integer().required(),
         homeManagerId: Joi.number().integer().required(),
         awayManagerId: Joi.number().integer().required(),
         round: Joi.number().integer().required(),
-      }),
+      },
       failAction: async (request, h, error) => {
         const gameweeks = await get('/gameweeks', request.state.dl_token)
         const cups = await get('/cups', request.state.dl_token)
@@ -89,7 +94,17 @@ module.exports = [{
 }, {
   method: GET,
   path: '/fixture/delete',
-  options: { auth: { strategy: 'jwt', scope: ['admin'] } },
+  options: {
+    auth: { strategy: 'jwt', scope: ['admin'] },
+    validate: {
+      query: {
+        fixtureId: Joi.number().integer().required(),
+      },
+      failAction: async (_request, h, error) => {
+        return h.view('404').code(400).takeover()
+      },
+    },
+  },
   handler: async (request, h) => {
     const fixture = await get(`/fixture/?fixtureId=${request.query.fixtureId}`, request.state.dl_token)
     return h.view('delete-fixture', { fixture })
@@ -100,9 +115,9 @@ module.exports = [{
   options: {
     auth: { strategy: 'jwt', scope: ['admin'] },
     validate: {
-      payload: Joi.object({
-        fixtureId: Joi.number().required(),
-      }),
+      payload: {
+        fixtureId: Joi.number().integer().required(),
+      },
       failAction: async (request, h, error) => {
         const fixture = await get(`/fixture/?fixtureId=${request.query.fixtureId}`, request.state.dl_token)
         return h.view('delete-fixture', { fixture, error }).code(400).takeover()

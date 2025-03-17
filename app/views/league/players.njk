@@ -8,6 +8,7 @@
       <form method="GET" action="/league/players">
         <div class="input-group mb-3">
           <input type="text" class="form-control" name="search" id="search">
+          <input type="hidden" name="crumb" value="{{ crumb }}">
           <div class="input-group-append">
             <button class="btn btn-outline-secondary" type="submit" id="button-addon2">Search</button>
           </div>

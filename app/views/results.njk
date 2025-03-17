@@ -21,6 +21,7 @@
     {% if auth.isAdmin %}
       <div class="col-md-6">
         <div class="btn-group float-md-right" role="group">
+          <input type="hidden" id="crumb" name="crumb" value="{{ crumb }}">
           <button id="send-results" class="btn btn-success" data-toggle="modal" data-target="#send-confirm">Send results</button>
           <button id="delete-results" class="btn btn-danger" data-toggle="modal" data-target="#delete-confirm">Delete results</button>
         </div>

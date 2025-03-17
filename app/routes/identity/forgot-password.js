@@ -14,9 +14,9 @@ module.exports = [{
   path: '/forgot-password',
   options: {
     validate: {
-      payload: Joi.object({
+      payload: {
         email: Joi.string().email().required(),
-      }),
+      },
       failAction: async (_request, h, _error) => {
         return h.view('identity/forgot-password', {
           message: 'Email format incorrect',

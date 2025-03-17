@@ -22,9 +22,9 @@ module.exports = [{
   options: {
     auth: { strategy: 'jwt', scope: ['admin'] },
     validate: {
-      payload: Joi.object({
+      payload: {
         date: Joi.date(),
-      }),
+      },
       failAction: async (request, h, error) => {
         return h.view('create-meeting', { error, meeting: request.payload }).code(400).takeover()
       },
@@ -37,7 +37,17 @@ module.exports = [{
 }, {
   method: GET,
   path: '/meeting/edit',
-  options: { auth: { strategy: 'jwt', scope: ['admin'] } },
+  options: {
+    auth: { strategy: 'jwt', scope: ['admin'] },
+    validate: {
+      query: {
+        meetingId: Joi.number().integer().required(),
+      },
+      failAction: async (request, h, error) => {
+        return h.view('404').code(404).takeover()
+      },
+    },
+  },
   handler: async (request, h) => {
     const meeting = await get(`/meeting/?meetingId=${request.query.meetingId}`, request.state.dl_token)
     return h.view('edit-meeting', { meeting })
@@ -48,10 +58,10 @@ module.exports = [{
   options: {
     auth: { strategy: 'jwt', scope: ['admin'] },
     validate: {
-      payload: Joi.object({
-        meetingId: Joi.number().required(),
+      payload: {
+        meetingId: Joi.number().integer().required(),
         date: Joi.date(),
-      }),
+      },
       failAction: async (request, h, error) => {
         return h.view('league/edit-meeting', { meeting: request.payload, error }).code(400).takeover()
       },
@@ -75,9 +85,9 @@ module.exports = [{
   options: {
     auth: { strategy: 'jwt', scope: ['admin'] },
     validate: {
-      payload: Joi.object({
-        meetingId: Joi.number().required(),
-      }),
+      payload: {
+        meetingId: Joi.number().integer().required(),
+      },
       failAction: async (request, h, error) => {
         const meeting = await get(`/meeting/?meetingId=${request.query.meetingId}`, request.state.dl_token)
         return h.view('delete-meeting', { meeting, error }).code(400).takeover()

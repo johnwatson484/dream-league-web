@@ -10,7 +10,7 @@ module.exports = [{
   options: {
     validate: {
       query: Joi.object({
-        gameweekId: Joi.number().optional(),
+        gameweekId: Joi.number().integer().optional(),
       }),
       failAction: async (_request, _h, error) => {
         return boom.badRequest(error)
@@ -26,7 +26,17 @@ module.exports = [{
 }, {
   method: GET,
   path: '/results/edit',
-  options: { auth: { strategy: 'jwt', scope: ['admin'] } },
+  options: {
+    auth: { strategy: 'jwt', scope: ['admin'] },
+    validate: {
+      query: {
+        gameweekId: Joi.number().integer().required(),
+      },
+      failAction: async (_request, h, error) => {
+        return h.view('404').code(404).takeover()
+      },
+    },
+  },
   handler: async (request, h) => {
     const resultsInput = await get('/results-edit', request.state.dl_token)
     resultsInput.keepers = resultsInput.keepers.sort((a, b) => { return sortArray(a.division, b.division) || sortArray(a.team, b.team) })
@@ -39,13 +49,13 @@ module.exports = [{
   options: {
     auth: { strategy: 'jwt', scope: ['admin'] },
     validate: {
-      payload: Joi.object({
-        gameweekId: Joi.number(),
-        conceded: Joi.array().items(Joi.object({ teamId: Joi.number(), conceded: Joi.number() })).single(),
-        concededCup: Joi.array().items(Joi.object({ teamId: Joi.number(), conceded: Joi.number() })).single(),
-        goals: Joi.array().items(Joi.object({ playerId: Joi.number(), goals: Joi.number() })).single(),
-        goalsCup: Joi.array().items(Joi.object({ playerId: Joi.number(), goals: Joi.number() })).single(),
-      }),
+      payload: {
+        gameweekId: Joi.number().integer(),
+        conceded: Joi.array().items(Joi.object({ teamId: Joi.number().integer(), conceded: Joi.number().integer() })).single(),
+        concededCup: Joi.array().items(Joi.object({ teamId: Joi.number().integer(), conceded: Joi.number().integer() })).single(),
+        goals: Joi.array().items(Joi.object({ playerId: Joi.number().integer(), goals: Joi.number().integer() })).single(),
+        goalsCup: Joi.array().items(Joi.object({ playerId: Joi.number().integer(), goals: Joi.number().integer() })).single(),
+      },
       failAction: async (_request, _h, error) => {
         return boom.badRequest(error)
       },
@@ -60,13 +70,10 @@ module.exports = [{
   path: '/results/send',
   options: {
     auth: { strategy: 'jwt', scope: ['admin'] },
-    plugins: {
-      crumb: false,
-    },
     validate: {
-      payload: Joi.object({
-        gameweekId: Joi.number().required(),
-      }),
+      payload: {
+        gameweekId: Joi.number().integer().required(),
+      },
       failAction: async (_request, _h, error) => {
         return boom.badRequest(error)
       },
@@ -81,13 +88,10 @@ module.exports = [{
   path: '/results',
   options: {
     auth: { strategy: 'jwt', scope: ['admin'] },
-    plugins: {
-      crumb: false,
-    },
     validate: {
-      payload: Joi.object({
-        gameweekId: Joi.number().required(),
-      }),
+      payload: {
+        gameweekId: Joi.number().integer().required(),
+      },
       failAction: async (_request, _h, error) => {
         return boom.badRequest(error)
       },

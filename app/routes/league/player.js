@@ -9,13 +9,18 @@ module.exports = [{
   method: GET,
   path: '/league/players',
   options: {
-    plugins: {
-      crumb: false,
+    validate: {
+      query: {
+        search: Joi.string().allow(''),
+      },
+      failAction: async (_request, h, error) => {
+        return h.view('404').code(400).takeover()
+      },
     },
-    handler: async (request, h) => {
-      const players = await get(`/league/players?search=${request.query.search}`, request.state.dl_token)
-      return h.view('league/players', { players })
-    },
+  },
+  handler: async (request, h) => {
+    const players = await get(`/league/players?search=${request.query.search}`, request.state.dl_token)
+    return h.view('league/players', { players })
   },
 }, {
   method: GET,
@@ -31,12 +36,12 @@ module.exports = [{
   options: {
     auth: { strategy: 'jwt', scope: ['admin'] },
     validate: {
-      payload: Joi.object({
+      payload: {
         firstName: Joi.string().allow(''),
         lastName: Joi.string().required(),
         position: Joi.string().valid(...positions),
-        teamId: Joi.number().required(),
-      }),
+        teamId: Joi.number().integer().required(),
+      },
       failAction: async (request, h, error) => {
         const teams = await get('/league/teams', request.state.dl_token)
         return h.view('league/create-player', { teams, positions, error, player: request.payload }).code(400).takeover()
@@ -50,7 +55,17 @@ module.exports = [{
 }, {
   method: GET,
   path: '/league/player/edit',
-  options: { auth: { strategy: 'jwt', scope: ['admin'] } },
+  options: {
+    auth: { strategy: 'jwt', scope: ['admin'] },
+    validate: {
+      query: {
+        playerId: Joi.number().integer().required(),
+      },
+      failAction: async (_request, h, error) => {
+        return h.view('404').code(404).takeover()
+      },
+    },
+  },
   handler: async (request, h) => {
     const player = await get(`/league/player/?playerId=${request.query.playerId}`, request.state.dl_token)
     const teams = await get('/league/teams', request.state.dl_token)
@@ -62,13 +77,13 @@ module.exports = [{
   options: {
     auth: { strategy: 'jwt', scope: ['admin'] },
     validate: {
-      payload: Joi.object({
-        playerId: Joi.number().required(),
+      payload: {
+        playerId: Joi.number().integer().required(),
         firstName: Joi.string().allow(''),
         lastName: Joi.string().required(),
         position: Joi.string().valid(...positions),
-        teamId: Joi.number().required(),
-      }),
+        teamId: Joi.number().integer().required(),
+      },
       failAction: async (request, h, error) => {
         const teams = await get('/league/teams', request.state.dl_token)
         return h.view('league/edit-player', { player: request.payload, teams, positions, error }).code(400).takeover()
@@ -82,7 +97,17 @@ module.exports = [{
 }, {
   method: GET,
   path: '/league/player/delete',
-  options: { auth: { strategy: 'jwt', scope: ['admin'] } },
+  options: {
+    auth: { strategy: 'jwt', scope: ['admin'] },
+    validate: {
+      query: {
+        playerId: Joi.number().integer().required(),
+      },
+      failAction: async (_request, h, error) => {
+        return h.view('404').code(404).takeover()
+      },
+    },
+  },
   handler: async (request, h) => {
     const player = await get(`/league/player/?playerId=${request.query.playerId}`, request.state.dl_token)
     return h.view('league/delete-player', { player })
@@ -93,9 +118,9 @@ module.exports = [{
   options: {
     auth: { strategy: 'jwt', scope: ['admin'] },
     validate: {
-      payload: Joi.object({
-        playerId: Joi.number().required(),
-      }),
+      payload: {
+        playerId: Joi.number().integer().required(),
+      },
       failAction: async (request, h, error) => {
         const player = await get(`/league/player/?playerId=${request.query.playerId}`, request.state.dl_token)
         return h.view('league/delete-player', { player, error }).code(400).takeover()
@@ -110,13 +135,10 @@ module.exports = [{
   method: POST,
   path: '/league/players/autocomplete',
   options: {
-    plugins: {
-      crumb: false,
-    },
     validate: {
-      payload: Joi.object({
+      payload: {
         prefix: Joi.string(),
-      }),
+      },
       failAction: async (_request, _h, error) => {
         return boom.badRequest(error)
       },

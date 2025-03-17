@@ -26,13 +26,13 @@ module.exports = [{
   options: {
     auth: { strategy: 'jwt', scope: ['admin'] },
     validate: {
-      payload: Joi.object({
-        cupId: Joi.number().required(),
+      payload: {
+        cupId: Joi.number().integer().required(),
         name: Joi.string(),
-        groupLegs: Joi.number(),
-        teamsAdvancing: Joi.number(),
-        managers: Joi.array().items(Joi.number()).single(),
-      }),
+        groupLegs: Joi.number().integer(),
+        teamsAdvancing: Joi.number().integer(),
+        managers: Joi.array().items(Joi.number().integer()).single(),
+      },
       failAction: async (request, h, error) => {
         const cups = await get('/cups', request.state.dl_token)
         const managers = await get('/managers', request.state.dl_token)
@@ -47,7 +47,17 @@ module.exports = [{
 }, {
   method: GET,
   path: '/group/edit',
-  options: { auth: { strategy: 'jwt', scope: ['admin'] } },
+  options: {
+    auth: { strategy: 'jwt', scope: ['admin'] },
+    validate: {
+      query: {
+        groupId: Joi.number().integer().required(),
+      },
+      failAction: async (_request, h, error) => {
+        return h.view('404').code(404).takeover()
+      },
+    },
+  },
   handler: async (request, h) => {
     const group = await get(`/group/?groupId=${request.query.groupId}`, request.state.dl_token)
     const cups = await get('/cups', request.state.dl_token)
@@ -60,14 +70,14 @@ module.exports = [{
   options: {
     auth: { strategy: 'jwt', scope: ['admin'] },
     validate: {
-      payload: Joi.object({
+      payload: {
         groupId: Joi.number().integer().required(),
-        cupId: Joi.number().required(),
+        cupId: Joi.number().integer().required(),
         name: Joi.string(),
-        groupLegs: Joi.number(),
-        teamsAdvancing: Joi.number(),
-        managers: Joi.array().items(Joi.number()).single(),
-      }),
+        groupLegs: Joi.number().integer(),
+        teamsAdvancing: Joi.number().integer(),
+        managers: Joi.array().items(Joi.number().integer()).single(),
+      },
       failAction: async (request, h, error) => {
         const cups = await get('/cups', request.state.dl_token)
         const managers = await get('/managers', request.state.dl_token)
@@ -82,7 +92,17 @@ module.exports = [{
 }, {
   method: GET,
   path: '/group/delete',
-  options: { auth: { strategy: 'jwt', scope: ['admin'] } },
+  options: {
+    auth: { strategy: 'jwt', scope: ['admin'] },
+    validate: {
+      query: {
+        groupId: Joi.number().integer().required(),
+      },
+      failAction: async (request, h, error) => {
+        return h.view('404').code(404).takeover()
+      },
+    },
+  },
   handler: async (request, h) => {
     const group = await get(`/group/?groupId=${request.query.groupId}`, request.state.dl_token)
     return h.view('delete-group', { group })
@@ -93,9 +113,9 @@ module.exports = [{
   options: {
     auth: { strategy: 'jwt', scope: ['admin'] },
     validate: {
-      payload: Joi.object({
-        groupId: Joi.number().required(),
-      }),
+      payload: {
+        groupId: Joi.number().integer().required(),
+      },
       failAction: async (request, h, error) => {
         const group = await get(`/group/?groupId=${request.query.groupId}`, request.state.dl_token)
         return h.view('delete-group', { group, error }).code(400).takeover()

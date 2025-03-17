@@ -5,7 +5,10 @@ $(function () {
         url: '/league/players/autocomplete',
         type: 'POST',
         dataType: 'json',
-        data: { prefix: request.term },
+        data: {
+          crumb: $('#crumb').val(),
+          prefix: request.term,
+        },
         success: function (data) {
           response($.map(data, function (item) {
             return item
@@ -61,7 +64,10 @@ $(function () {
         url: '/league/teams/autocomplete',
         type: 'POST',
         dataType: 'json',
-        data: { prefix: request.term },
+        data: {
+          crumb: $('#crumb').val(),
+          prefix: request.term,
+        },
         success: function (data) {
           response($.map(data, function (item) {
             return item

@@ -24,11 +24,11 @@ module.exports = [{
   options: {
     auth: { strategy: 'jwt', scope: ['admin'] },
     validate: {
-      payload: Joi.object({
+      payload: {
         name: Joi.string().required(),
         alias: Joi.string().required(),
-        divisionId: Joi.number().required(),
-      }),
+        divisionId: Joi.number().integer().required(),
+      },
       failAction: async (request, h, error) => {
         const divisions = await get('/league/divisions', request.state.dl_token)
         return h.view('league/create-team', { divisions, team: request.payload, error }).code(400).takeover()
@@ -42,7 +42,17 @@ module.exports = [{
 }, {
   method: GET,
   path: '/league/team/edit',
-  options: { auth: { strategy: 'jwt', scope: ['admin'] } },
+  options: {
+    auth: { strategy: 'jwt', scope: ['admin'] },
+    validate: {
+      query: {
+        teamId: Joi.number().integer().required(),
+      },
+      failAction: async (request, h, error) => {
+        return h.view('404').code(404).takeover()
+      },
+    },
+  },
   handler: async (request, h) => {
     const team = await get(`/league/team/?teamId=${request.query.teamId}`, request.state.dl_token)
     const divisions = await get('/league/divisions', request.state.dl_token)
@@ -54,12 +64,12 @@ module.exports = [{
   options: {
     auth: { strategy: 'jwt', scope: ['admin'] },
     validate: {
-      payload: Joi.object({
+      payload: {
         teamId: Joi.string().required(),
         name: Joi.string().required(),
         alias: Joi.string().required(),
-        divisionId: Joi.number().required(),
-      }),
+        divisionId: Joi.number().integer().required(),
+      },
       failAction: async (request, h, error) => {
         const divisions = await get('/league/divisions', request.state.dl_token)
         return h.view('league/create-team', { divisions, team: request.payload, error }).code(400).takeover()
@@ -73,7 +83,17 @@ module.exports = [{
 }, {
   method: GET,
   path: '/league/team/delete',
-  options: { auth: { strategy: 'jwt', scope: ['admin'] } },
+  options: {
+    auth: { strategy: 'jwt', scope: ['admin'] },
+    validate: {
+      query: {
+        teamId: Joi.number().integer().required(),
+      },
+      failAction: async (request, h, error) => {
+        return h.view('404').code(404).takeover()
+      },
+    },
+  },
   handler: async (request, h) => {
     const team = await get(`/league/team/?teamId=${request.query.teamId}`, request.state.dl_token)
     return h.view('league/delete-team', { team })
@@ -84,9 +104,9 @@ module.exports = [{
   options: {
     auth: { strategy: 'jwt', scope: ['admin'] },
     validate: {
-      payload: Joi.object({
-        teamId: Joi.number().required(),
-      }),
+      payload: {
+        teamId: Joi.number().integer().required(),
+      },
       failAction: async (request, h, error) => {
         const team = await get(`/league/player/?playerId=${request.query.teamId}`, request.state.dl_token)
         return h.view('league/delete-team', { team, error }).code(400).takeover()
@@ -101,13 +121,10 @@ module.exports = [{
   method: POST,
   path: '/league/teams/autocomplete',
   options: {
-    plugins: {
-      crumb: false,
-    },
     validate: {
-      payload: Joi.object({
+      payload: {
         prefix: Joi.string(),
-      }),
+      },
       failAction: async (_request, _h, error) => {
         return boom.badRequest(error)
       },
