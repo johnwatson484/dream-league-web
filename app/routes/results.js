@@ -77,6 +77,7 @@ module.exports = [{
   path: '/results',
   options: {
     auth: { strategy: 'jwt', scope: ['admin'] },
+    plugins: { crumb: false },
     validate: {
       payload: {
         gameweekId: Joi.number().integer().required(),
