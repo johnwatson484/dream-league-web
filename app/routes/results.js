@@ -26,17 +26,6 @@ module.exports = [{
 }, {
   method: GET,
   path: '/results/edit',
-  options: {
-    auth: { strategy: 'jwt', scope: ['admin'] },
-    validate: {
-      query: {
-        gameweekId: Joi.number().integer().required(),
-      },
-      failAction: async (_request, h, error) => {
-        return h.view('404').code(404).takeover()
-      },
-    },
-  },
   handler: async (request, h) => {
     const resultsInput = await get('/results-edit', request.state.dl_token)
     resultsInput.keepers = resultsInput.keepers.sort((a, b) => { return sortArray(a.division, b.division) || sortArray(a.team, b.team) })
