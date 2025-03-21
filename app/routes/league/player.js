@@ -11,7 +11,7 @@ module.exports = [{
   options: {
     validate: {
       query: {
-        search: Joi.string().allow('')
+        search: Joi.string().allow(''),
       },
       failAction: async (_request, h, error) => {
         return h.view('404').code(404).takeover()
