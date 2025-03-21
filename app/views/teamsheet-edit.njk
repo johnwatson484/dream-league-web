@@ -8,7 +8,7 @@
     <p>Upload new teamsheet</p>
 
     <form method="POST" action="/teamsheet/refresh" enctype="multipart/form-data">
-      <input type="hidden" name="crumb" value="{{crumb}}" />
+      <input id="crumb" type="hidden" name="crumb" value="{{crumb}}" />
       <div class="form-group">
         <div class="custom-file">
           <input type="file" class="custom-file-input" id="file-control" name="teamFile">
