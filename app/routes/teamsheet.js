@@ -4,6 +4,7 @@ const { refreshTeamsheet } = require('../refresh')
 const { get, post } = require('../api')
 const ViewModel = require('./models/teamsheet')
 const { GET, POST } = require('../constants/verbs')
+const Joi = require('joi')
 
 module.exports = [{
   method: GET,
@@ -77,6 +78,24 @@ module.exports = [{
       allow: 'multipart/form-data',
       multipart: true,
       timeout: false,
+    },
+    validate: {
+      payload: {
+        teamFile: Joi.object({
+          headers: Joi.object({
+            'content-type': Joi.string().valid('application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'),
+          }).unknown(),
+          filename: Joi.string().required().custom((value, helpers) => {
+            if (!value.endsWith('.xlsx')) {
+              return helpers.error('any.invalid', { message: 'Only .xlsx files are permitted' })
+            }
+            return value
+          }),
+        }).unknown(),
+      },
+      failAction: async (_request, h, error) => {
+        return h.view('teamsheet-edit', { message: 'Only .xlsx files are permitted' }).code(400).takeover()
+      },
     },
     handler: async (request, h) => {
       const response = await refreshTeamsheet(request.payload.teamFile.path, request.state.dl_token)
