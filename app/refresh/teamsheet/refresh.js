@@ -7,7 +7,7 @@ const refresh = async (path, token) => {
   const workbook = XLSX.readFile(path)
   const worksheet = workbook.Sheets['DL Teams']
   const teams = mapTeams(worksheet)
-  deleteFile(path)
+  await deleteFile(path)
   return post('/teamsheet/refresh', { teams }, token)
 }
 
