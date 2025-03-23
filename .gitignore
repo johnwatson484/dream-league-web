@@ -108,3 +108,5 @@ dist
 test-output
 
 production-values.yaml
+
+.vscode
