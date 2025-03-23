@@ -10,7 +10,8 @@ module.exports = {
           headers['X-Frame-Options'] = 'DENY'
           headers['X-Robots-Tag'] = 'noindex, nofollow'
           headers['X-XSS-Protection'] = '1; mode=block'
-          headers['Cache-Control'] = 'no-cache'
+          // Cache-Control must be lower case to avoid conflicts with Hapi's built-in header handling
+          headers['cache-control'] = 'no-cache'
           headers['Cross-Origin-Opener-Policy'] = 'same-origin'
           headers['Cross-Origin-Resource-Policy'] = 'same-site'
           headers['Referrer-Policy'] = 'no-referrer'
