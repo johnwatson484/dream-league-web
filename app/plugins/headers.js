@@ -8,7 +8,6 @@ module.exports = {
         if (headers) {
           headers['X-Content-Type-Options'] = 'nosniff'
           headers['X-Frame-Options'] = 'DENY'
-          headers['X-Robots-Tag'] = 'noindex, nofollow'
           headers['X-XSS-Protection'] = '1; mode=block'
           // Cache-Control must be lower case to avoid conflicts with Hapi's built-in header handling
           headers['cache-control'] = 'no-cache'
