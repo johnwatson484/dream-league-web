@@ -6,7 +6,6 @@ $(function () {
         type: 'POST',
         dataType: 'json',
         data: {
-          crumb: $('#crumb').val(),
           prefix: request.term,
         },
         success: function (data) {
@@ -65,7 +64,6 @@ $(function () {
         type: 'POST',
         dataType: 'json',
         data: {
-          crumb: $('#crumb').val(),
           prefix: request.term,
         },
         success: function (data) {

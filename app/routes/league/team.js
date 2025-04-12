@@ -121,6 +121,9 @@ module.exports = [{
   method: POST,
   path: '/league/teams/autocomplete',
   options: {
+    plugins: {
+      crumb: false,
+    },
     validate: {
       payload: {
         prefix: Joi.string(),
