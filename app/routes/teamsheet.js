@@ -55,8 +55,8 @@ module.exports = [{
     validate: {
       payload: {
         managerId: joi.number().integer(),
-        teamIds: joi.alternatives().try(joi.array().items(joi.number().integer()), joi.number().integer()),
-        teamSubs: joi.alternatives().try(joi.array().items(joi.number().integer()), joi.number().integer()),
+        teamIds: joi.alternatives().try(joi.array().items(joi.string()), joi.string()),
+        teamSubs: joi.alternatives().try(joi.array().items(joi.string()), joi.string()),
       },
       failAction: async (_request, _h, error) => {
         return boom.badRequest(error)
