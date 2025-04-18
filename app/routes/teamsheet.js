@@ -53,11 +53,11 @@ module.exports = [{
       crumb: false,
     },
     validate: {
-      payload: joi.object({
+      payload: {
         managerId: joi.number().integer(),
         teamIds: joi.alternatives().try(joi.array().items(joi.number().integer()), joi.number().integer()),
         teamSubs: joi.alternatives().try(joi.array().items(joi.number().integer()), joi.number().integer()),
-      }),
+      },
       failAction: async (_request, _h, error) => {
         return boom.badRequest(error)
       },
