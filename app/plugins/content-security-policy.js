@@ -21,6 +21,7 @@ module.exports = {
       'self',
       '*.fontawesome.com',
       '*.google-analytics.com',
+      '*.analytics.google.com',
       '*.googletagmanager.com',
     ],
     frameAncestors: ['self'],
