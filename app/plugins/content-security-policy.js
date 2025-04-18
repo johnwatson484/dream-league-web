@@ -15,6 +15,7 @@ module.exports = {
       '*.googletagmanager.com',
       '*.google.com',
       '*.google-analytics.com',
+      'https://www.google-analytics.com',
     ],
     styleSrc: ['self', 'unsafe-inline', 'fonts.googleapis.com', '*.bootstrapcdn.com', 'cdnjs.cloudflare.com', 'code.jquery.com'],
     connectSrc: [
