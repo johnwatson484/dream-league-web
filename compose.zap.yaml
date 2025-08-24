@@ -7,7 +7,7 @@ services:
       - ./test-output:/home/node/test-output
 
   dream-league-web-zap:
-    image: softwaresecurityproject/zap-bare:2.14.0
+    image: ghcr.io/zaproxy/zaproxy:bare
     command: zap.sh -cmd -quickurl http://dream-league-web:${PORT:-3000} -configfile wrk/config/zap.conf -quickout wrk/test-output/zap-report.html
     depends_on:
       - dream-league-web
