@@ -1,5 +1,13 @@
+{% set sortedScores = results.cupScores | sort(attribute='cupName') %}
+{% set lastCupName = null %}
 <table class="table table-hover table-sm small">
-  {% for score in results.cupScores %}
+  {% for score in sortedScores %}
+    {% if lastCupName != score.cupName %}
+      {% if not loop.first %}</table>{% endif %}
+      <h6>{{ score.cupName }}</h6>
+      <table class="table table-hover table-sm small">
+      {% set lastCupName = score.cupName %}
+    {% endif %}
     <tr>
       <td class="numeric">R{{ score.round }}</td>
       <td><a href="/manager?managerId={{ score.homeScore.managerId }}">{{ score.homeScore.manager }}</a></td>
@@ -8,5 +16,5 @@
       <td>{{ score.awayMargin }}</td>
       <td><a href="/manager?managerId={{ score.awayScore.managerId }}">{{ score.awayScore.manager }}</a></td>
     </tr>
+    {% if loop.last %}</table>{% endif %}
   {% endfor %}
-</table>

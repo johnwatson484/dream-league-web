@@ -18,6 +18,7 @@ async function createServer () {
   })
 
   server.validator(Joi)
+  await server.register(require('./plugins/user-agent-protection'))
   await server.register(require('@hapi/scooter'))
   await server.register(require('@hapi/inert'))
   await server.register(require('hapi-auth-jwt2'))
