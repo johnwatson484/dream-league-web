@@ -13,7 +13,7 @@
       {% for concede in conceded %}
         <tr>
           <td>{{ concede.gameweekId }}</td>
-          <td>{{ concede.team.name }}</td>
+          <td><a href="/league/team/detail?teamId={{ concede.team.teamId }}">{{ concede.team.name }}</a></td>
           <td>
             {% if auth.isAdmin %}
             <a href="/concede/delete?concedeId={{ concede.concedeId }}">Delete</a>

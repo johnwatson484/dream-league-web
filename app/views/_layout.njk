@@ -31,6 +31,7 @@
     integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
     crossorigin="anonymous"></script>
     <script src="https://kit.fontawesome.com/c0892ebb28.js" crossorigin="anonymous"></script>
+    <script src="{{ assetPath }}/global-search.js"></script>
   </head>
 
   <body>
@@ -113,6 +114,9 @@
             <a class="nav-link text-light" href="/rules">Rules</a>
           </li>
         </ul>
+        <form class="form-inline my-2 my-lg-0 mr-3">
+          <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" id="global-search">
+        </form>
         {% include "_login.njk" %}
       </div>
     </nav>

@@ -6,9 +6,40 @@ const { GET, POST } = require('../../constants/verbs')
 module.exports = [{
   method: GET,
   path: '/league/teams',
+  options: {
+    validate: {
+      query: {
+        search: Joi.string().allow(''),
+        division: Joi.string().allow(''),
+      },
+      failAction: async (_request, h, error) => {
+        return h.view('404').code(404).takeover()
+      },
+    },
+  },
   handler: async (request, h) => {
-    const teams = await get('/league/teams', request.state.dl_token)
-    return h.view('league/teams', { teams })
+    const search = request.query.search || ''
+    const division = request.query.division || ''
+    const teams = await get(`/league/teams?search=${search}&division=${division}`, request.state.dl_token)
+    const divisions = await get('/league/divisions', request.state.dl_token)
+    return h.view('league/teams', { teams, divisions, currentDivision: division, currentSearch: search })
+  },
+}, {
+  method: GET,
+  path: '/league/team/detail',
+  options: {
+    validate: {
+      query: {
+        teamId: Joi.number().integer().required(),
+      },
+      failAction: async (_request, h, error) => {
+        return h.view('404').code(404).takeover()
+      },
+    },
+  },
+  handler: async (request, h) => {
+    const team = await get(`/league/team?teamId=${request.query.teamId}`, request.state.dl_token)
+    return h.view('league/team-detail', { team })
   },
 }, {
   method: GET,

@@ -1,6 +1,35 @@
 {% extends '_layout.njk' %}
 
 {% block content %}
+  <h2>Teams</h2>
+
+  <div class="row">
+    <div class="col-md-6">
+      <form method="GET" action="/league/teams">
+        <div class="input-group mb-3">
+          <input type="text" class="form-control" name="search" id="search" value="{{ currentSearch }}" placeholder="Search teams...">
+          <input type="hidden" name="division" value="{{ currentDivision }}">
+          <div class="input-group-append">
+            <button class="btn btn-outline-secondary" type="submit" id="button-addon2">Search</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  {% if divisions and divisions.length %}
+  <div class="row mb-3">
+    <div class="col-md-12">
+      <div class="btn-group" role="group" aria-label="Division filter">
+        <a href="/league/teams?search={{ currentSearch }}" class="btn btn-sm {% if not currentDivision %}btn-primary{% else %}btn-outline-primary{% endif %}">All</a>
+        {% for division in divisions %}
+        <a href="/league/teams?search={{ currentSearch }}&division={{ division.name }}" class="btn btn-sm {% if currentDivision == division.name %}btn-primary{% else %}btn-outline-primary{% endif %}">{{ division.name }}</a>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+  {% endif %}
+
   {% if auth.isAdmin %}
   <a href="/league/team/create">Create team</a>
   {% endif %}
@@ -14,7 +43,7 @@
       </tr>
       {% for team in teams %}
         <tr>
-          <td>{{ team.name }}</td>
+          <td><a href="/league/team/detail?teamId={{ team.teamId }}">{{ team.name }}</a></td>
           <td>{{ team.division.name }}</td>
           <td>
             {% if auth.isAdmin %}

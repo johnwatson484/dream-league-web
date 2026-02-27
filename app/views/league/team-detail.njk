@@ -1,0 +1,67 @@
+{% extends '_layout.njk' %}
+
+{% block content %}
+  <h2>{{ team.name }}</h2>
+
+  <div class="card border-dark">
+    <div class="card-header bg-dark text-light">
+      Team Information
+    </div>
+    <div class="card-body small">
+      <dl class="row">
+        <dt class="col-sm-3">Division</dt>
+        <dd class="col-sm-9">{{ team.division.name }}</dd>
+
+        <dt class="col-sm-3">Alias</dt>
+        <dd class="col-sm-9">{{ team.alias }}</dd>
+      </dl>
+    </div>
+  </div>
+
+  {% if team.players and team.players.length > 0 %}
+  <div class="card border-dark mt-3">
+    <div class="card-header bg-dark text-light">
+      Players
+    </div>
+    <div class="card-body small">
+      <table class="table table-sm table-hover">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Position</th>
+            <th>Manager</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for player in team.players %}
+          <tr>
+            <td>
+              <a href="/league/player/detail?playerId={{ player.playerId }}">
+                {{ player.firstName }} {{ player.lastName }}
+              </a>
+            </td>
+            <td>{{ player.position }}</td>
+            <td>
+              {% if player.managers and player.managers.length > 0 %}
+                {% for manager in player.managers %}
+                  <a href="/manager?managerId={{ manager.managerId }}">{{ manager.name }}</a>
+                  {% if not loop.last %}, {% endif %}
+                {% endfor %}
+              {% endif %}
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+  {% endif %}
+
+  <div class="mt-3">
+    <a href="/league/teams">← Back to Teams</a>
+    {% if auth.isAdmin %}
+      | <a href="/league/team/edit?teamId={{ team.teamId }}">Edit</a>
+      | <a href="/league/team/delete?teamId={{ team.teamId }}">Delete</a>
+    {% endif %}
+  </div>
+{% endblock %}

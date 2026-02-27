@@ -12,6 +12,7 @@ module.exports = [{
     validate: {
       query: {
         search: Joi.string().allow(''),
+        position: Joi.string().allow(''),
       },
       failAction: async (_request, h, error) => {
         return h.view('404').code(404).takeover()
@@ -19,8 +20,32 @@ module.exports = [{
     },
   },
   handler: async (request, h) => {
-    const players = await get(`/league/players?search=${request.query.search}`, request.state.dl_token)
-    return h.view('league/players', { players })
+    const search = request.query.search || ''
+    const position = request.query.position || ''
+    const players = await get(`/league/players?search=${search}&position=${position}`, request.state.dl_token)
+    return h.view('league/players', { players, positions, currentPosition: position, currentSearch: search })
+  },
+}, {
+  method: GET,
+  path: '/league/player/detail',
+  options: {
+    validate: {
+      query: {
+        playerId: Joi.number().integer().required(),
+      },
+      failAction: async (_request, h, error) => {
+        return h.view('404').code(404).takeover()
+      },
+    },
+  },
+  handler: async (request, h) => {
+    const player = await get(`/league/player?playerId=${request.query.playerId}`, request.state.dl_token)
+    
+    // Compute goal counts
+    const leagueGoals = player.goals ? player.goals.filter(g => !g.cup).length : 0
+    const cupGoals = player.goals ? player.goals.filter(g => g.cup).length : 0
+    
+    return h.view('league/player-detail', { player, leagueGoals, cupGoals })
   },
 }, {
   method: GET,

@@ -19,6 +19,7 @@ module.exports = {
     styleSrc: ['self', 'unsafe-inline', 'fonts.googleapis.com', '*.bootstrapcdn.com', 'cdnjs.cloudflare.com', 'code.jquery.com'],
     connectSrc: [
       'self',
+      '*.bootstrapcdn.com',
       '*.fontawesome.com',
       '*.google-analytics.com',
       '*.analytics.google.com',

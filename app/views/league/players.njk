@@ -7,12 +7,24 @@
     <div class="col-md-6">
       <form method="GET" action="/league/players">
         <div class="input-group mb-3">
-          <input type="text" class="form-control" name="search" id="search">
+          <input type="text" class="form-control" name="search" id="search" value="{{ currentSearch }}">
+          <input type="hidden" name="position" value="{{ currentPosition }}">
           <div class="input-group-append">
             <button class="btn btn-outline-secondary" type="submit" id="button-addon2">Search</button>
           </div>
         </div>
       </form>
+    </div>
+  </div>
+
+  <div class="row mb-3">
+    <div class="col-md-12">
+      <div class="btn-group" role="group" aria-label="Position filter">
+        <a href="/league/players?search={{ currentSearch }}" class="btn btn-sm {% if not currentPosition %}btn-primary{% else %}btn-outline-primary{% endif %}">All</a>
+        <a href="/league/players?search={{ currentSearch }}&position=Defender" class="btn btn-sm {% if currentPosition == 'Defender' %}btn-primary{% else %}btn-outline-primary{% endif %}">Defenders</a>
+        <a href="/league/players?search={{ currentSearch }}&position=Midfielder" class="btn btn-sm {% if currentPosition == 'Midfielder' %}btn-primary{% else %}btn-outline-primary{% endif %}">Midfielders</a>
+        <a href="/league/players?search={{ currentSearch }}&position=Forward" class="btn btn-sm {% if currentPosition == 'Forward' %}btn-primary{% else %}btn-outline-primary{% endif %}">Forwards</a>
+      </div>
     </div>
   </div>
 
@@ -31,9 +43,9 @@
       </tr>
       {% for player in players %}
         <tr>
-          <td>{{ player.lastNameFirstName }}</td>
+          <td><a href="/league/player/detail?playerId={{ player.playerId }}">{{ player.lastNameFirstName }}</a></td>
           <td>{{ player.position }}</td>
-          <td>{{ player.team.name }}</td>
+          <td><a href="/league/team/detail?teamId={{ player.team.teamId }}">{{ player.team.name }}</a></td>
           <td>
             {% if player.managers.length %}
               <a href="/manager?managerId={{ player.managers[0].managerId }}">{{ player.managers[0].name }}</a>
