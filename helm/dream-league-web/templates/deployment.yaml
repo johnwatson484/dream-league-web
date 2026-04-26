@@ -1,3 +1,0 @@
-{{- include "helm-library.deployment" (list . "dream-league-web.deployment") -}}
-{{- define "dream-league-web.deployment" -}}
-{{- end -}}
