@@ -18,7 +18,7 @@ export default {
         prepare: (options, next) => {
           options.compileOptions.environment = nunjucks.configure(path.join(options.relativeTo || process.cwd(), options.path), {
             autoescape: true,
-            watch: config.isDev,
+            watch: false,
           })
 
           return next()
