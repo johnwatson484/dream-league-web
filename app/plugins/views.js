@@ -1,9 +1,10 @@
-const path = require('path')
-const nunjucks = require('nunjucks')
-const config = require('../config')
+import path from 'path'
+import nunjucks from 'nunjucks'
+import vision from '@hapi/vision'
+import config from '../config.js'
 
-module.exports = {
-  plugin: require('@hapi/vision'),
+export default {
+  plugin: vision,
   options: {
     engines: {
       njk: {
@@ -25,7 +26,7 @@ module.exports = {
       },
     },
     path: '../views',
-    relativeTo: __dirname,
+    relativeTo: import.meta.dirname,
     isCached: !config.isDev,
     context: {
       assetPath: '/assets',

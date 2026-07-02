@@ -1,4 +1,4 @@
-const { createDefaultPolicy } = require('./create-default-policy')
+import { createDefaultPolicy } from './create-default-policy.js'
 
 const getCurrentPolicy = (request, h) => {
   let cookiesPolicy = request.state.cookies_policy
@@ -8,6 +8,4 @@ const getCurrentPolicy = (request, h) => {
   return cookiesPolicy
 }
 
-module.exports = {
-  getCurrentPolicy,
-}
+export { getCurrentPolicy }

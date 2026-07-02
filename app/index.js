@@ -1,8 +1,4 @@
-const { createServer } = require('./server')
+import { createServer } from './server.js'
 
-createServer()
-  .then(server => server.start())
-  .catch(err => {
-    console.log(err)
-    process.exit(1)
-  })
+const server = await createServer()
+await server.start()

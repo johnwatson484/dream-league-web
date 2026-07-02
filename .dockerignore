@@ -11,3 +11,10 @@ azure-pipelines.yaml
 jsconfig.json
 helm/
 .vscode/
+.env
+coverage/
+**/*.test.js
+.vscode/
+.nvmrc
+.npmrc
+.env.example

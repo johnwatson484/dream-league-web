@@ -1,5 +1,3 @@
-module.exports = {
-  DEFENDER: 'Defender',
-  MIDFIELDER: 'Midfielder',
-  FORWARD: 'Forward',
-}
+export const DEFENDER = 'Defender'
+export const MIDFIELDER = 'Midfielder'
+export const FORWARD = 'Forward'

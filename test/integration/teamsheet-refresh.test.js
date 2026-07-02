@@ -1,15 +1,18 @@
-const api = require('../../app/api')
-jest.mock('../../app/api')
-const fs = require('fs')
-const path = require('path')
-const { refreshTeamsheet } = require('../../app/refresh')
+import { vi, describe, beforeEach, test, expect } from 'vitest'
+import fs from 'fs'
+import { resolve } from 'path'
 
-const BASE_TEST_FILE = path.resolve(__dirname, '../files/teamsheet.xlsx')
-const TEST_FILE = path.resolve(__dirname, '../files/teamsheet-tmp.xlsx')
+const { mockPost } = vi.hoisted(() => ({ mockPost: vi.fn() }))
+vi.mock('../../app/api/index.js', () => ({ default: { post: mockPost }, post: mockPost }))
+
+import { refreshTeamsheet } from '../../app/refresh/index.js'
+
+const BASE_TEST_FILE = resolve(import.meta.dirname, '../files/teamsheet.xlsx')
+const TEST_FILE = resolve(import.meta.dirname, '../files/teamsheet-tmp.xlsx')
 
 describe('refreshing teamsheet', () => {
   beforeEach(() => {
-    jest.clearAllMocks()
+    vi.clearAllMocks()
     if (fs.existsSync(TEST_FILE)) {
       fs.unlinkSync(TEST_FILE)
     }
@@ -17,69 +20,69 @@ describe('refreshing teamsheet', () => {
   })
 
   test('should return success if list valid', async () => {
-    api.post.mockResolvedValue({ success: true })
+    mockPost.mockResolvedValue({ success: true })
 
     const result = await refreshTeamsheet(TEST_FILE)
 
     expect(result.success).toBeTruthy()
-    expect(api.post.mock.calls.length).toBe(1)
+    expect(mockPost.mock.calls.length).toBe(1)
   })
 
   test('should return failure if list invalid', async () => {
-    api.post.mockResolvedValue({ success: false })
+    mockPost.mockResolvedValue({ success: false })
 
     const result = await refreshTeamsheet(TEST_FILE)
 
     expect(result.success).toBeFalsy()
-    expect(api.post.mock.calls.length).toBe(1)
+    expect(mockPost.mock.calls.length).toBe(1)
   })
 
   test('request should be made to refresh endpoint', async () => {
-    api.post.mockResolvedValue({ success: true })
+    mockPost.mockResolvedValue({ success: true })
 
     await refreshTeamsheet(TEST_FILE)
 
-    expect(api.post.mock.calls[0][0]).toBe('/teamsheet/refresh')
+    expect(mockPost.mock.calls[0][0]).toBe('/teamsheet/refresh')
   })
 
   test('request should include all teams', async () => {
-    api.post.mockResolvedValue({ success: true })
+    mockPost.mockResolvedValue({ success: true })
 
     await refreshTeamsheet(TEST_FILE)
 
-    expect(api.post.mock.calls[0][1].teams.length).toBe(13)
-    expect(api.post.mock.calls[0][1].teams.filter(x => x.manager === 'John').length).toBe(1)
-    expect(api.post.mock.calls[0][1].teams.filter(x => x.manager === 'Lee').length).toBe(1)
-    expect(api.post.mock.calls[0][1].teams.filter(x => x.manager === 'Scott').length).toBe(1)
-    expect(api.post.mock.calls[0][1].teams.filter(x => x.manager === 'David').length).toBe(1)
-    expect(api.post.mock.calls[0][1].teams.filter(x => x.manager === 'Billy').length).toBe(1)
-    expect(api.post.mock.calls[0][1].teams.filter(x => x.manager === 'Bob').length).toBe(1)
-    expect(api.post.mock.calls[0][1].teams.filter(x => x.manager === 'Conor').length).toBe(1)
-    expect(api.post.mock.calls[0][1].teams.filter(x => x.manager === 'Daz').length).toBe(1)
-    expect(api.post.mock.calls[0][1].teams.filter(x => x.manager === 'Rob').length).toBe(1)
-    expect(api.post.mock.calls[0][1].teams.filter(x => x.manager === 'Tucker').length).toBe(1)
-    expect(api.post.mock.calls[0][1].teams.filter(x => x.manager === 'Tommy/Pete').length).toBe(1)
-    expect(api.post.mock.calls[0][1].teams.filter(x => x.manager === 'Michael').length).toBe(1)
-    expect(api.post.mock.calls[0][1].teams.filter(x => x.manager === 'Ben').length).toBe(1)
+    expect(mockPost.mock.calls[0][1].teams.length).toBe(13)
+    expect(mockPost.mock.calls[0][1].teams.filter(x => x.manager === 'John').length).toBe(1)
+    expect(mockPost.mock.calls[0][1].teams.filter(x => x.manager === 'Lee').length).toBe(1)
+    expect(mockPost.mock.calls[0][1].teams.filter(x => x.manager === 'Scott').length).toBe(1)
+    expect(mockPost.mock.calls[0][1].teams.filter(x => x.manager === 'David').length).toBe(1)
+    expect(mockPost.mock.calls[0][1].teams.filter(x => x.manager === 'Billy').length).toBe(1)
+    expect(mockPost.mock.calls[0][1].teams.filter(x => x.manager === 'Bob').length).toBe(1)
+    expect(mockPost.mock.calls[0][1].teams.filter(x => x.manager === 'Conor').length).toBe(1)
+    expect(mockPost.mock.calls[0][1].teams.filter(x => x.manager === 'Daz').length).toBe(1)
+    expect(mockPost.mock.calls[0][1].teams.filter(x => x.manager === 'Rob').length).toBe(1)
+    expect(mockPost.mock.calls[0][1].teams.filter(x => x.manager === 'Tucker').length).toBe(1)
+    expect(mockPost.mock.calls[0][1].teams.filter(x => x.manager === 'Tommy/Pete').length).toBe(1)
+    expect(mockPost.mock.calls[0][1].teams.filter(x => x.manager === 'Michael').length).toBe(1)
+    expect(mockPost.mock.calls[0][1].teams.filter(x => x.manager === 'Ben').length).toBe(1)
   })
 
   test('request should include all players', async () => {
-    api.post.mockResolvedValue({ success: true })
+    mockPost.mockResolvedValue({ success: true })
 
     await refreshTeamsheet(TEST_FILE)
 
-    expect(api.post.mock.calls[0][1].teams[0].players.length).toBe(15)
-    expect(api.post.mock.calls[0][1].teams[1].players.length).toBe(15)
-    expect(api.post.mock.calls[0][1].teams[2].players.length).toBe(15)
-    expect(api.post.mock.calls[0][1].teams[3].players.length).toBe(15)
-    expect(api.post.mock.calls[0][1].teams[4].players.length).toBe(15)
-    expect(api.post.mock.calls[0][1].teams[5].players.length).toBe(15)
-    expect(api.post.mock.calls[0][1].teams[6].players.length).toBe(15)
-    expect(api.post.mock.calls[0][1].teams[7].players.length).toBe(15)
-    expect(api.post.mock.calls[0][1].teams[8].players.length).toBe(15)
-    expect(api.post.mock.calls[0][1].teams[9].players.length).toBe(15)
-    expect(api.post.mock.calls[0][1].teams[10].players.length).toBe(15)
-    expect(api.post.mock.calls[0][1].teams[11].players.length).toBe(15)
-    expect(api.post.mock.calls[0][1].teams[12].players.length).toBe(15)
+    expect(mockPost.mock.calls[0][1].teams[0].players.length).toBe(15)
+    expect(mockPost.mock.calls[0][1].teams[1].players.length).toBe(15)
+    expect(mockPost.mock.calls[0][1].teams[2].players.length).toBe(15)
+    expect(mockPost.mock.calls[0][1].teams[3].players.length).toBe(15)
+    expect(mockPost.mock.calls[0][1].teams[4].players.length).toBe(15)
+    expect(mockPost.mock.calls[0][1].teams[5].players.length).toBe(15)
+    expect(mockPost.mock.calls[0][1].teams[6].players.length).toBe(15)
+    expect(mockPost.mock.calls[0][1].teams[7].players.length).toBe(15)
+    expect(mockPost.mock.calls[0][1].teams[8].players.length).toBe(15)
+    expect(mockPost.mock.calls[0][1].teams[9].players.length).toBe(15)
+    expect(mockPost.mock.calls[0][1].teams[10].players.length).toBe(15)
+    expect(mockPost.mock.calls[0][1].teams[11].players.length).toBe(15)
+    expect(mockPost.mock.calls[0][1].teams[12].players.length).toBe(15)
   })
 })

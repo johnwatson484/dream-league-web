@@ -1,4 +1,4 @@
-const { isInRole } = require('./is-in-role')
+import { isInRole } from './is-in-role.js'
 
 const mapAuth = (request) => {
   return {
@@ -9,6 +9,4 @@ const mapAuth = (request) => {
   }
 }
 
-module.exports = {
-  mapAuth,
-}
+export { mapAuth }

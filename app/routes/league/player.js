@@ -1,11 +1,11 @@
-const Joi = require('joi')
-const boom = require('@hapi/boom')
-const { get, post } = require('../../api')
-const { GET, POST } = require('../../constants/verbs')
-const { DEFENDER, MIDFIELDER, FORWARD } = require('../../constants/positions')
+import Joi from 'joi'
+import boom from '@hapi/boom'
+import { get, post } from '../../api/index.js'
+import { GET, POST } from '../../constants/verbs.js'
+import { DEFENDER, MIDFIELDER, FORWARD } from '../../constants/positions.js'
 const positions = [DEFENDER, MIDFIELDER, FORWARD]
 
-module.exports = [{
+export default [{
   method: GET,
   path: '/league/players',
   options: {
@@ -40,11 +40,11 @@ module.exports = [{
   },
   handler: async (request, h) => {
     const player = await get(`/league/player?playerId=${request.query.playerId}`, request.state.dl_token)
-    
+
     // Compute goal counts
     const leagueGoals = player.goals ? player.goals.filter(g => !g.cup).length : 0
     const cupGoals = player.goals ? player.goals.filter(g => g.cup).length : 0
-    
+
     return h.view('league/player-detail', { player, leagueGoals, cupGoals })
   },
 }, {

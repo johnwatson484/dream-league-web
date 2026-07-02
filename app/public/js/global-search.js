@@ -34,7 +34,7 @@ $(function () {
         case 'division':
           url = `/league/teams?division=${encodeURIComponent(ui.item.data.name)}`
           break
-        case 'page':
+        case 'page': {
           const pageMap = {
             players: '/league/players',
             teams: '/league/teams',
@@ -50,6 +50,7 @@ $(function () {
           }
           url = pageMap[ui.item.data.page] || '/'
           break
+        }
       }
       window.location.href = url
       return false

@@ -1,3 +1,0 @@
-services:
-  dream-league-web:
-    command: npm run test:watch

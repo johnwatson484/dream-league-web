@@ -1,7 +1,8 @@
-const { cookieOptions } = require('../config')
+import crumb from '@hapi/crumb'
+import { cookieOptions } from '../config.js'
 
-module.exports = {
-  plugin: require('@hapi/crumb'),
+export default {
+  plugin: crumb,
   options: {
     cookieOptions,
   },

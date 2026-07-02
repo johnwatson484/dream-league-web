@@ -1,147 +1,56 @@
 {
-  // Use IntelliSense to learn about possible attributes.
-  // Hover to view descriptions of existing attributes.
-  // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "Docker: Attach",
+      "name": "Dev: run server",
       "type": "node",
-      "request": "attach",
-      "restart": true,
-      "port": 9229,
-      "remoteRoot": "/home/node",
-      "skipFiles": [
-        "<node_internals>/**",
-        "**/node_modules/**"
-      ]
-    },
-    {
-      "name": "Docker: Attach Launch",
-      "type": "node",
-      "request": "attach",
-      "remoteRoot": "/home/node",
-      "restart": true,
-      "port": 9229,
-      "skipFiles": [
-        "<node_internals>/**",
-        "**/node_modules/**"
+      "request": "launch",
+      "runtimeArgs": [
+        "--env-file-if-exists=.env",
+        "--watch",
+        "--watch-path=./app",
+        "--inspect"
       ],
-      "preLaunchTask": "compose-debug-up",
-      "postDebugTask": "compose-debug-down"
-    },
-    {
-      "name": "Docker: Jest Attach",
-      "type": "node",
-      "request": "attach",
-      "port": 9229,
-      "restart": true,
-      "timeout": 10000,
-      "remoteRoot": "/home/node",
-      "disableOptimisticBPs": true,
-      "continueOnAttach": true,
-      "skipFiles": [
-        "<node_internals>/**",
-        "**/node_modules/**"
-      ]
-    },
-    {
-      "name": "Docker: Jest Attach Launch",
-      "type": "node",
-      "request": "attach",
-      "port": 9229,
-      "remoteRoot": "/home/node",
-      "skipFiles": [
-        "<node_internals>/**",
-        "**/node_modules/**"
-      ],
-      "internalConsoleOptions": "neverOpen",
-      "disableOptimisticBPs": true,
-      "windows": {
-        "program": "${workspaceFolder}/node_modules/jest/bin/jest",
+      "env": {
+        "NODE_ENV": "development"
       },
-      "preLaunchTask": "compose-test-debug-up",
-      "postDebugTask": "compose-test-debug-down"
-    },
-    {
-      "name": "Node: Launch",
-      "program": "${workspaceFolder}/app",
-      "request": "launch",
+      "program": "${workspaceFolder}/app/index.js",
+      "restart": true,
       "skipFiles": [
-        "<node_internals>/**",
-        "**/node_modules/**"
-      ],
-      "type": "pwa-node",
-      "serverReadyAction": {
-        "pattern": "Server running on",
-        "uriFormat": "http://localhost:3000",
-        "action": "debugWithChrome"
-      }
+        "<node_internals>/**"
+      ]
     },
     {
-      "name": "Node: Server",
-      "program": "${workspaceFolder}/app",
-      "request": "launch",
-      "skipFiles": [
-        "<node_internals>/**",
-        "**/node_modules/**"
-      ],
-      "type": "pwa-node"
-    },
-    {
-      "name": "Node: Client",
-      "type": "pwa-chrome",
-      "request": "launch",
-      "url": "http://localhost:3000",
-      "webRoot": "${workspaceFolder}"
-    },
-    {
-      "name": "Node: Jest",
+      "name": "Debug current test",
       "type": "node",
       "request": "launch",
-      "program": "${workspaceFolder}/node_modules/.bin/jest",
-      "args": [
-        "--runInBand"
+      "runtimeExecutable": "${workspaceFolder}/node_modules/.bin/vitest",
+      "runtimeArgs": [
+        "run",
+        "--inspect",
+        "--no-file-parallelism",
+        "${relativeFile}"
       ],
+      "env": {
+        "TZ": "UTC",
+        "NODE_ENV": "test"
+      },
       "skipFiles": [
-        "<node_internals>/**",
-        "**/node_modules/**"
+        "<node_internals>/**"
       ],
-      "console": "integratedTerminal",
-      "internalConsoleOptions": "neverOpen",
-      "disableOptimisticBPs": true,
-      "windows": {
-        "program": "${workspaceFolder}/node_modules/jest/bin/jest",
-      }
+      "smartStep": true
     },
     {
-      "name": "Node: Jest Current File",
+      "name": "Docker: Attach to App (together)",
       "type": "node",
-      "request": "launch",
-      "program": "${workspaceFolder}/node_modules/.bin/jest",
-      "args": [
-        "${fileBasenameNoExtension}",
-        "--config",
-        "jest.config.js"
-      ],
+      "request": "attach",
+      "address": "localhost",
+      "port": 9229,
+      "localRoot": "${workspaceFolder}",
+      "remoteRoot": "/home/node",
+      "restart": true,
       "skipFiles": [
-        "<node_internals>/**",
-        "**/node_modules/**"
-      ],
-      "console": "integratedTerminal",
-      "internalConsoleOptions": "neverOpen",
-      "disableOptimisticBPs": true,
-      "windows": {
-        "program": "${workspaceFolder}/node_modules/jest/bin/jest",
-      }
-    }
-  ],
-  "compounds": [
-    {
-      "name": "Node: Client/Server",
-      "configurations": [
-        "Node: Server",
-        "Node: Client"
+        "<node_internals>/**"
       ]
     }
   ]

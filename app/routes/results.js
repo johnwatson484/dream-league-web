@@ -1,10 +1,10 @@
-const Joi = require('joi')
-const boom = require('@hapi/boom')
-const { get, post, deleteRequest } = require('../api')
-const { sortArray } = require('../utils/sort-array')
-const { GET, POST, DELETE } = require('../constants/verbs')
+import Joi from 'joi'
+import boom from '@hapi/boom'
+import { get, post, deleteRequest } from '../api/index.js'
+import { sortArray } from '../utils/sort-array.js'
+import { GET, POST, DELETE } from '../constants/verbs.js'
 
-module.exports = [{
+export default [{
   method: GET,
   path: '/results',
   options: {

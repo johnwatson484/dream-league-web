@@ -1,8 +1,8 @@
-const Joi = require('joi')
-const { post } = require('../../api')
-const { GET, POST } = require('../../constants/verbs')
+import Joi from 'joi'
+import { post } from '../../api/index.js'
+import { GET, POST } from '../../constants/verbs.js'
 
-module.exports = [{
+export default [{
   method: GET,
   path: '/forgot-password',
   handler: (_request, h) => {

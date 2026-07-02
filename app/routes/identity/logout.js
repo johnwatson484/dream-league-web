@@ -1,7 +1,7 @@
-const config = require('../../config')
-const { POST } = require('../../constants/verbs')
+import config from '../../config.js'
+import { POST } from '../../constants/verbs.js'
 
-module.exports = [{
+export default [{
   method: POST,
   path: '/logout',
   handler: async (_request, h) => {

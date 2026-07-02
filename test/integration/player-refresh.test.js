@@ -1,15 +1,18 @@
-const api = require('../../app/api')
-jest.mock('../../app/api')
-const fs = require('fs')
-const path = require('path')
-const { refreshPlayers } = require('../../app/refresh')
+import { vi, describe, beforeEach, test, expect } from 'vitest'
+import fs from 'fs'
+import { resolve } from 'path'
 
-const BASE_TEST_FILE = path.resolve(__dirname, '../files/player-list.xlsx')
-const TEST_FILE = path.resolve(__dirname, '../files/player-list-tmp.xlsx')
+const { mockPost } = vi.hoisted(() => ({ mockPost: vi.fn() }))
+vi.mock('../../app/api/index.js', () => ({ default: { post: mockPost }, post: mockPost }))
+
+import { refreshPlayers } from '../../app/refresh/index.js'
+
+const BASE_TEST_FILE = resolve(import.meta.dirname, '../files/player-list.xlsx')
+const TEST_FILE = resolve(import.meta.dirname, '../files/player-list-tmp.xlsx')
 
 describe('refreshing player list', () => {
   beforeEach(() => {
-    jest.clearAllMocks()
+    vi.clearAllMocks()
     if (fs.existsSync(TEST_FILE)) {
       fs.unlinkSync(TEST_FILE)
     }
@@ -17,49 +20,49 @@ describe('refreshing player list', () => {
   })
 
   test('should return success if list valid', async () => {
-    api.post.mockResolvedValue({ success: true })
+    mockPost.mockResolvedValue({ success: true })
 
     const result = await refreshPlayers(TEST_FILE)
 
     expect(result.success).toBeTruthy()
-    expect(api.post.mock.calls.length).toBe(1)
+    expect(mockPost.mock.calls.length).toBe(1)
   })
 
   test('should return failure if list invalid', async () => {
-    api.post.mockResolvedValue({ success: false })
+    mockPost.mockResolvedValue({ success: false })
 
     const result = await refreshPlayers(TEST_FILE)
 
     expect(result.success).toBeFalsy()
-    expect(api.post.mock.calls.length).toBe(1)
+    expect(mockPost.mock.calls.length).toBe(1)
   })
 
   test('request should be made to refresh endpoint', async () => {
-    api.post.mockResolvedValue({ success: true })
+    mockPost.mockResolvedValue({ success: true })
 
     await refreshPlayers(TEST_FILE)
 
-    expect(api.post.mock.calls[0][0]).toBe('/league/players/refresh')
+    expect(mockPost.mock.calls[0][0]).toBe('/league/players/refresh')
   })
 
   test('request should include all players', async () => {
-    api.post.mockResolvedValue({ success: true })
+    mockPost.mockResolvedValue({ success: true })
 
     await refreshPlayers(TEST_FILE)
 
-    expect(api.post.mock.calls[0][1].players.length).toBe(2176)
+    expect(mockPost.mock.calls[0][1].players.length).toBe(2176)
   })
 
   test('request should include example player', async () => {
-    api.post.mockResolvedValue({ success: true })
+    mockPost.mockResolvedValue({ success: true })
 
     await refreshPlayers(TEST_FILE)
 
-    expect(api.post.mock.calls[0][1].players).toContainEqual({ firstName: 'Ian', lastName: 'Henderson', position: 'FWD', team: 'Rochdale' })
+    expect(mockPost.mock.calls[0][1].players).toContainEqual({ firstName: 'Ian', lastName: 'Henderson', position: 'FWD', team: 'Rochdale' })
   })
 
   test('should return failure should include unmapped players', async () => {
-    api.post.mockResolvedValue({ success: false, unmappedPlayers: [{ firstName: 'Adebayo', lastName: 'Akinfenwa', position: 'FWD', team: 'Wycombe' }] })
+    mockPost.mockResolvedValue({ success: false, unmappedPlayers: [{ firstName: 'Adebayo', lastName: 'Akinfenwa', position: 'FWD', team: 'Wycombe' }] })
 
     const result = await refreshPlayers(TEST_FILE)
 

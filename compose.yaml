@@ -1,8 +1,24 @@
 services:
   dream-league-web:
-    build: .
-    image: dream-league-web
-    container_name: dream-league-web
+    profiles:
+      - app
+    build:
+      context: .
+      target: development
+    ports:
+      - '3000:3000'
+      - '9229:9229'
+    volumes:
+      - ./app:/home/node/app
+      - ./package.json:/home/node/package.json
+    env_file:
+      - .env
     environment:
-      JWT_SECRET: secret
       API_HOST: http://dream-league-api:3001
+    networks:
+      - dream-league
+
+networks:
+  dream-league:
+    driver: bridge
+    name: dream-league

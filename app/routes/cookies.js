@@ -1,8 +1,8 @@
-const Joi = require('joi')
-const { updatePolicy } = require('../cookies')
-const { GET, POST } = require('../constants/verbs')
+import Joi from 'joi'
+import { updatePolicy } from '../cookies/index.js'
+import { GET, POST } from '../constants/verbs.js'
 
-module.exports = [{
+export default [{
   method: GET,
   path: '/cookies',
   options: {

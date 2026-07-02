@@ -1,9 +1,5 @@
-const { get } = require('./get')
-const { post } = require('./post')
-const { deleteRequest } = require('./delete')
+import { get } from './get.js'
+import { post } from './post.js'
+import { deleteRequest } from './delete.js'
 
-module.exports = {
-  get,
-  post,
-  deleteRequest,
-}
+export { get, post, deleteRequest }

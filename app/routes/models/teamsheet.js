@@ -19,4 +19,4 @@ const mapTeam = (team) => {
   }
 }
 
-module.exports = ViewModel
+export default ViewModel

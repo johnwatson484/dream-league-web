@@ -1,5 +1,3 @@
-module.exports = {
-  GET: 'GET',
-  POST: 'POST',
-  DELETE: 'DELETE',
-}
+export const GET = 'GET'
+export const POST = 'POST'
+export const DELETE = 'DELETE'

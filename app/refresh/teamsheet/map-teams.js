@@ -1,5 +1,5 @@
-const XLSX = require('xlsx')
-const { mapTeam } = require('./map-team')
+import XLSX from 'xlsx'
+import { mapTeam } from './map-team.js'
 
 const mapTeams = (worksheet) => {
   const teams = []
@@ -25,6 +25,4 @@ const mapTeams = (worksheet) => {
   return teams
 }
 
-module.exports = {
-  mapTeams,
-}
+export { mapTeams }

@@ -1,4 +1,4 @@
-const { post } = require('../api')
+import { post } from '../api/index.js'
 
 const validate = async (decoded, _request, _h) => {
   return post('/validate', {
@@ -6,6 +6,4 @@ const validate = async (decoded, _request, _h) => {
   })
 }
 
-module.exports = {
-  validate,
-}
+export { validate }

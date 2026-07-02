@@ -1,4 +1,4 @@
-module.exports = {
+export default {
   plugin: {
     name: 'error-pages',
     register: (server, _options) => {

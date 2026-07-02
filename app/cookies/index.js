@@ -1,7 +1,4 @@
-const { getCurrentPolicy } = require('./get-current-policy')
-const { updatePolicy } = require('./update-policy')
+import { getCurrentPolicy } from './get-current-policy.js'
+import { updatePolicy } from './update-policy.js'
 
-module.exports = {
-  getCurrentPolicy,
-  updatePolicy,
-}
+export { getCurrentPolicy, updatePolicy }

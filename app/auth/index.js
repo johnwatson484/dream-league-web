@@ -1,9 +1,5 @@
-const { validate } = require('./validate')
-const { mapAuth } = require('./map-auth')
-const { isInRole } = require('./is-in-role')
+import { validate } from './validate.js'
+import { mapAuth } from './map-auth.js'
+import { isInRole } from './is-in-role.js'
 
-module.exports = {
-  validate,
-  mapAuth,
-  isInRole,
-}
+export { validate, mapAuth, isInRole }

@@ -1,4 +1,4 @@
-module.exports = {
+export default {
   plugin: {
     name: 'headers',
     register: (server, _options) => {

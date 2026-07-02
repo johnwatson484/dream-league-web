@@ -1,5 +1,5 @@
-const config = require('../config').cookieOptions
-const { createDefaultPolicy } = require('./create-default-policy')
+import { cookieOptions as config } from '../config.js'
+import { createDefaultPolicy } from './create-default-policy.js'
 
 const updatePolicy = (request, h, analytics) => {
   let cookiesPolicy = request.state.cookies_policy
@@ -13,6 +13,4 @@ const updatePolicy = (request, h, analytics) => {
   h.state('cookies_policy', cookiesPolicy, config)
 }
 
-module.exports = {
-  updatePolicy,
-}
+export { updatePolicy }

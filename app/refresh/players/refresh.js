@@ -1,10 +1,11 @@
-const XLSX = require('xlsx')
-const { post } = require('../../api')
-const { deleteFile } = require('../delete-file')
-const { mapPlayer } = require('./map-player')
+import { readFileSync } from 'fs'
+import XLSX from 'xlsx'
+import { post } from '../../api/index.js'
+import { deleteFile } from '../delete-file.js'
+import { mapPlayer } from './map-player.js'
 
 const refresh = async (path, token) => {
-  const workbook = XLSX.readFile(path)
+  const workbook = XLSX.read(readFileSync(path))
   const worksheet = workbook.Sheets.ALL
 
   if (!worksheet) {
@@ -17,6 +18,4 @@ const refresh = async (path, token) => {
   return post('/league/players/refresh', { players: mappedPlayers }, token)
 }
 
-module.exports = {
-  refresh,
-}
+export { refresh }

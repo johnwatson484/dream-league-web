@@ -1,6 +1,4 @@
-module.exports = {
-  GK: 'GK',
-  DEF: 'DEF',
-  MID: 'MID',
-  FWD: 'FWD',
-}
+export const GK = 'GK'
+export const DEF = 'DEF'
+export const MID = 'MID'
+export const FWD = 'FWD'

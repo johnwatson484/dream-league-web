@@ -1,9 +1,9 @@
-const Joi = require('joi')
-const config = require('../../config')
-const { post } = require('../../api')
-const { GET, POST } = require('../../constants/verbs')
+import Joi from 'joi'
+import config from '../../config.js'
+import { post } from '../../api/index.js'
+import { GET, POST } from '../../constants/verbs.js'
 
-module.exports = [{
+export default [{
   method: GET,
   path: '/register',
   handler: (_request, h) => {

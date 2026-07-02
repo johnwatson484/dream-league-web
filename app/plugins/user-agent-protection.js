@@ -6,7 +6,7 @@
 
 const MAX_USER_AGENT_LENGTH = 150
 
-module.exports = {
+export default {
   name: 'userAgentProtection',
   version: '1.0.0',
   register: async function (server, _options) {

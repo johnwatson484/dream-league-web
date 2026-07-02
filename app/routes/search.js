@@ -1,9 +1,9 @@
-const Joi = require('joi')
-const boom = require('@hapi/boom')
-const { post } = require('../api')
-const { POST } = require('../constants/verbs')
+import Joi from 'joi'
+import boom from '@hapi/boom'
+import { post } from '../api/index.js'
+import { POST } from '../constants/verbs.js'
 
-module.exports = [{
+export default [{
   method: POST,
   path: '/search/autocomplete',
   options: {

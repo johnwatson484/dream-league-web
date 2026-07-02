@@ -1,6 +1,6 @@
-const Qs = require('qs')
+import Qs from 'qs'
 
-module.exports = {
+export default {
   plugin: {
     name: 'qs',
     register: (server, _options) => {

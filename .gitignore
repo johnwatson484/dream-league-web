@@ -109,4 +109,6 @@ test-output
 
 production-values.yaml
 
-.vscode
+.vscode/*
+!.vscode/launch.json
+!.vscode/tasks.json

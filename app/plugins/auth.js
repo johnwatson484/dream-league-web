@@ -1,7 +1,7 @@
-const { jwtConfig } = require('../config')
-const { validate } = require('../auth')
+import { jwtConfig } from '../config.js'
+import { validate } from '../auth/index.js'
 
-module.exports = {
+export default {
   plugin: {
     name: 'auth',
     register: (server, _options) => {

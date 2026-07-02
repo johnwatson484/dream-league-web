@@ -1,6 +1,6 @@
-const Blankie = require('blankie')
+import Blankie from 'blankie'
 
-module.exports = {
+export default {
   plugin: Blankie,
   options: {
     fontSrc: ['self', 'fonts.gstatic.com', '*.cloudflare.com', '*.fontawesome.com'],

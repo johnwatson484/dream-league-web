@@ -1,6 +1,6 @@
-const Wreck = require('@hapi/wreck')
-const config = require('../config')
-const { getConfiguration } = require('./get-configuration')
+import Wreck from '@hapi/wreck'
+import config from '../config.js'
+import { getConfiguration } from './get-configuration.js'
 
 const post = async (url, data, token) => {
   const { payload } = await Wreck.post(`${config.apiHost}${url}`, {
@@ -10,6 +10,4 @@ const post = async (url, data, token) => {
   return payload
 }
 
-module.exports = {
-  post,
-}
+export { post }

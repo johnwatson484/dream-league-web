@@ -1,6 +1,6 @@
-const { mapPlayer } = require('./map-player')
-const { mapPosition } = require('./map-position')
-const { mapSubstitute } = require('./map-substitute')
+import { mapPlayer } from './map-player.js'
+import { mapPosition } from './map-position.js'
+import { mapSubstitute } from './map-substitute.js'
 
 const mapTeam = (worksheet, manager, cellAddress) => {
   const margin = 3
@@ -27,6 +27,4 @@ const mapTeam = (worksheet, manager, cellAddress) => {
   }
 }
 
-module.exports = {
-  mapTeam,
-}
+export { mapTeam }

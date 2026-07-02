@@ -1,7 +1,7 @@
-const { get } = require('../../api')
-const { GET } = require('../../constants/verbs')
+import { get } from '../../api/index.js'
+import { GET } from '../../constants/verbs.js'
 
-module.exports = [{
+export default [{
   method: GET,
   path: '/api/v1/manager/teams',
   options: {

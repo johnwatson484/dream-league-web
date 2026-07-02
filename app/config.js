@@ -1,4 +1,4 @@
-const Joi = require('joi')
+import Joi from 'joi'
 const envs = ['development', 'test', 'production']
 
 const schema = Joi.object().keys({
@@ -52,4 +52,4 @@ if (error) {
   throw new Error(`The server config is invalid. ${error.message}`)
 }
 
-module.exports = value
+export default value

@@ -5,6 +5,4 @@ const isInRole = (credentials, role) => {
   return credentials.scope.includes(role)
 }
 
-module.exports = {
-  isInRole,
-}
+export { isInRole }

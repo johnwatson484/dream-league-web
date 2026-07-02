@@ -1,7 +1,4 @@
-const { refresh: refreshPlayers } = require('./players/refresh')
-const { refresh: refreshTeamsheet } = require('./teamsheet/refresh')
+import { refresh as refreshPlayers } from './players/refresh.js'
+import { refresh as refreshTeamsheet } from './teamsheet/refresh.js'
 
-module.exports = {
-  refreshPlayers,
-  refreshTeamsheet,
-}
+export { refreshPlayers, refreshTeamsheet }

@@ -1,12 +1,12 @@
-const joi = require('joi')
-const boom = require('@hapi/boom')
-const { refreshTeamsheet } = require('../refresh')
-const { get, post } = require('../api')
-const ViewModel = require('./models/teamsheet')
-const { GET, POST } = require('../constants/verbs')
-const Joi = require('joi')
+import joi from 'joi'
+import boom from '@hapi/boom'
+import { refreshTeamsheet } from '../refresh/index.js'
+import { get, post } from '../api/index.js'
+import ViewModel from './models/teamsheet.js'
+import { GET, POST } from '../constants/verbs.js'
+import Joi from 'joi'
 
-module.exports = [{
+export default [{
   method: GET,
   path: '/teamsheet',
   handler: async (request, h) => {

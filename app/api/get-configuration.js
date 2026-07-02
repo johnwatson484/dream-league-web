@@ -7,6 +7,4 @@ const getConfiguration = (token = '') => {
   }
 }
 
-module.exports = {
-  getConfiguration,
-}
+export { getConfiguration }

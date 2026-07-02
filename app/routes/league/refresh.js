@@ -1,8 +1,8 @@
-const Joi = require('joi')
-const { refreshPlayers } = require('../../refresh')
-const { GET, POST } = require('../../constants/verbs')
+import Joi from 'joi'
+import { refreshPlayers } from '../../refresh/index.js'
+import { GET, POST } from '../../constants/verbs.js'
 
-module.exports = [{
+export default [{
   method: GET,
   path: '/league/refresh',
   options: { auth: { strategy: 'jwt', scope: ['admin'] } },

@@ -1,8 +1,8 @@
-const cookieOptions = require('../config').cookieOptions
-const { getCurrentPolicy } = require('../cookies')
-const { mapAuth } = require('../auth')
+import { cookieOptions } from '../config.js'
+import { getCurrentPolicy } from '../cookies/index.js'
+import { mapAuth } from '../auth/index.js'
 
-module.exports = {
+export default {
   plugin: {
     name: 'view-context',
     register: (server, _options) => {

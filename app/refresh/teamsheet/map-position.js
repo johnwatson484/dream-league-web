@@ -1,4 +1,4 @@
-const { GK, DEF, MID, FWD } = require('../../constants/position-codes')
+import { GK, DEF, MID, FWD } from '../../constants/position-codes.js'
 
 const mapPosition = (index) => {
   if (index <= 1) {
@@ -13,6 +13,4 @@ const mapPosition = (index) => {
   return FWD
 }
 
-module.exports = {
-  mapPosition,
-}
+export { mapPosition }

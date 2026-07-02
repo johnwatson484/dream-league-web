@@ -1,6 +1,6 @@
-const { GET } = require('../constants/verbs')
+import { GET } from '../constants/verbs.js'
 
-module.exports = [{
+export default [{
   method: GET,
   path: '/assets/{path*}',
   handler: {
