@@ -1,4 +1,4 @@
-import { jwtConfig } from '../config.js'
+import config from '../config.js'
 import { validate } from '../auth/index.js'
 
 export default {
@@ -6,7 +6,7 @@ export default {
     name: 'auth',
     register: (server, _options) => {
       server.auth.strategy('jwt', 'jwt', {
-        key: jwtConfig.secret,
+        key: config.jwtConfig.secret,
         validate,
         cookieKey: 'dl_token',
       })

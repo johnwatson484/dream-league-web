@@ -1,4 +1,4 @@
-import { cookieOptions } from '../config.js'
+import config from '../config.js'
 import { getCurrentPolicy } from '../cookies/index.js'
 import { mapAuth } from '../auth/index.js'
 
@@ -6,7 +6,7 @@ export default {
   plugin: {
     name: 'view-context',
     register: (server, _options) => {
-      server.state('cookies_policy', cookieOptions)
+      server.state('cookies_policy', config.cookieOptions)
 
       server.ext('onPreResponse', (request, h) => {
         const statusCode = request.response.statusCode

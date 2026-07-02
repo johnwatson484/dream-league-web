@@ -1,4 +1,4 @@
-import { cookieOptions as config } from '../config.js'
+import config from '../config.js'
 import { createDefaultPolicy } from './create-default-policy.js'
 
 const updatePolicy = (request, h, analytics) => {
@@ -10,7 +10,7 @@ const updatePolicy = (request, h, analytics) => {
   cookiesPolicy.analytics = analytics
   cookiesPolicy.confirmed = true
 
-  h.state('cookies_policy', cookiesPolicy, config)
+  h.state('cookies_policy', cookiesPolicy, config.cookieOptions)
 }
 
 export { updatePolicy }
