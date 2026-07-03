@@ -48,12 +48,6 @@ value.cookieOptionsIdentity = {
   encoding: 'none',
 }
 
-value.cookieOptionsRefresh = {
-  ...value.cookieOptions,
-  ttl: 1000 * 60 * 60 * 24 * 30, // 30 days (refresh token lifetime)
-  encoding: 'base64json',
-}
-
 if (error) {
   throw new Error(`The server config is invalid. ${error.message}`)
 }

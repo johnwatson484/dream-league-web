@@ -28,6 +28,7 @@ export default [{
   path: '/teamsheet/edit/player',
   options: {
     auth: { strategy: 'jwt', scope: ['admin'] },
+    plugins: { crumb: false },
     validate: {
       payload: {
         managerId: joi.number().integer(),
@@ -47,6 +48,7 @@ export default [{
   path: '/teamsheet/edit/keeper',
   options: {
     auth: { strategy: 'jwt', scope: ['admin'] },
+    plugins: { crumb: false },
     validate: {
       payload: {
         managerId: joi.number().integer(),

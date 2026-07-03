@@ -30,7 +30,6 @@ export default [{
         const response = await post('/login', request.payload)
         return h.redirect('/')
           .state('dl_token', response.token, config.cookieOptionsIdentity)
-          .state('dl_refresh', { userId: response.userId, refreshToken: response.refreshToken }, config.cookieOptionsRefresh)
       } catch {
         return h.view('identity/login', {
           message: 'Invalid credentials',

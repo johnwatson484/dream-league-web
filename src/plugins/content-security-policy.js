@@ -3,7 +3,7 @@ import Blankie from 'blankie'
 export default {
   plugin: Blankie,
   options: {
-    fontSrc: ['self', 'fonts.gstatic.com'],
+    fontSrc: ['self', 'fonts.gstatic.com', '*.cloudflare.com', '*.fontawesome.com'],
     imgSrc: ['self', '*.google.com', '*.google-analytics.com', '*.gstatic.com'],
     scriptSrc: [
       'self',
@@ -13,11 +13,14 @@ export default {
       '*.googletagmanager.com',
       '*.google.com',
       '*.google-analytics.com',
+      '*.fontawesome.com',
     ],
     styleSrc: ['self', 'unsafe-inline', 'fonts.googleapis.com', '*.bootstrapcdn.com', 'cdnjs.cloudflare.com', 'code.jquery.com'],
     connectSrc: [
       'self',
       '*.bootstrapcdn.com',
+      'cdnjs.cloudflare.com',
+      '*.fontawesome.com',
       '*.google-analytics.com',
       '*.analytics.google.com',
       '*.googletagmanager.com',

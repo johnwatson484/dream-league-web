@@ -3,6 +3,7 @@ import path from 'node:path'
 import nunjucks from 'nunjucks'
 import vision from '@hapi/vision'
 import config from '../config.js'
+import { mapAuth } from '../auth/map-auth.js'
 
 const manifestPath = path.resolve(import.meta.dirname, '../../.public/assets-manifest.json')
 
@@ -29,6 +30,19 @@ function assetCss (logicalPath) {
   return entry.css.map(f => `/assets/${f}`)
 }
 
+function context (request) {
+  const ctx = request.response.source?.context || {}
+  return {
+    ...ctx,
+    asset,
+    assetCss,
+    appName: config.appName,
+    currentYear: new Date().getUTCFullYear(),
+    auth: mapAuth(request),
+    cookiesPolicy: request.state?.cookies_policy || { confirmed: false, essential: true, analytics: false },
+  }
+}
+
 export default {
   plugin: vision,
   options: {
@@ -36,17 +50,13 @@ export default {
       njk: {
         compile: (src, options) => {
           const template = nunjucks.compile(src, options.environment)
-
-          return (context) => {
-            return template.render(context)
-          }
+          return (ctx) => template.render(ctx)
         },
         prepare: (options, next) => {
           options.compileOptions.environment = nunjucks.configure(path.join(options.relativeTo || process.cwd(), options.path), {
             autoescape: true,
             watch: false,
           })
-
           return next()
         },
       },
@@ -54,10 +64,6 @@ export default {
     path: '../views',
     relativeTo: import.meta.dirname,
     isCached: !config.isDev,
-    context: {
-      asset,
-      assetCss,
-      appName: config.appName,
-    },
+    context,
   },
 }
