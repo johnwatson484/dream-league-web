@@ -6,9 +6,9 @@ export default [{
   handler: {
     directory: {
       path: [
-        'app/public/css',
-        'app/public/js',
-        'app/public/assets',
+        'src/public/css',
+        'src/public/js',
+        'src/public/assets',
       ],
     },
   },
