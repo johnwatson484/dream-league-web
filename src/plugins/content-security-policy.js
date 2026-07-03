@@ -3,7 +3,7 @@ import Blankie from 'blankie'
 export default {
   plugin: Blankie,
   options: {
-    fontSrc: ['self', 'fonts.gstatic.com'],
+    fontSrc: ['self', 'fonts.gstatic.com', '*.cloudflare.com', '*.fontawesome.com'],
     imgSrc: ['self', '*.google.com', '*.google-analytics.com', '*.gstatic.com'],
     scriptSrc: [
       'self',
