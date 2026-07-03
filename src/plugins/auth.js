@@ -9,6 +9,7 @@ export default {
         key: config.jwtConfig.secret,
         validate,
         cookieKey: 'dl_token',
+        verifyOptions: { algorithms: ['HS256'] },
       })
       server.auth.default({ strategy: 'jwt', mode: 'try' })
     },

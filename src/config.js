@@ -6,7 +6,7 @@ const schema = Joi.object().keys({
   env: Joi.string().valid(...envs).default(envs[0]),
   appName: Joi.string().default('Dream League'),
   jwtConfig: Joi.object({
-    secret: Joi.string(),
+    secret: Joi.string().min(32).required(),
   }),
   apiHost: Joi.string().default('http://localhost:3001'),
   cookieOptions: Joi.object({
@@ -44,8 +44,14 @@ const { error, value } = schema.validate(config)
 value.isDev = value.env === 'development'
 value.cookieOptionsIdentity = {
   ...value.cookieOptions,
-  ttl: 1000 * 60 * 60 * 24 * 30, // 30 days
+  ttl: 1000 * 60 * 60, // 1 hour (access token lifetime)
   encoding: 'none',
+}
+
+value.cookieOptionsRefresh = {
+  ...value.cookieOptions,
+  ttl: 1000 * 60 * 60 * 24 * 30, // 30 days (refresh token lifetime)
+  encoding: 'base64json',
 }
 
 if (error) {

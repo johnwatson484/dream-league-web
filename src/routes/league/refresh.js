@@ -15,7 +15,7 @@ export default [{
   options: {
     auth: { strategy: 'jwt', scope: ['admin'] },
     payload: {
-      maxBytes: 209715200,
+      maxBytes: 10485760,
       output: 'file',
       parse: true,
       allow: 'multipart/form-data',

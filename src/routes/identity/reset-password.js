@@ -4,16 +4,16 @@ import { GET, POST } from '../../constants/verbs.js'
 
 export default [{
   method: GET,
-  path: '/reset-password',
+  path: '/reset-password/{token}/{userId}',
   options: {
     validate: {
-      query: {
+      params: Joi.object({
         token: Joi.string().required(),
         userId: Joi.number().integer().required(),
-      },
+      }),
     },
     handler: (request, h) => {
-      const { userId, token } = request.query
+      const { userId, token } = request.params
       return h.view('identity/reset-password', { userId, token })
     },
   },

@@ -1,7 +1,7 @@
 {% extends '_layout.njk' %}
 
 {% block content %}
-  <h2>{{ manager.name }}</h2>
+  <h2 id="manager-heading" data-manager="{{ manager | dump | e }}">{{ manager.name }}</h2>
 
   <div class="row" style="padding-bottom: 20px;">
     <div class="col-lg-6">
@@ -61,8 +61,5 @@
 {% endblock %}
 
 {% block bodyEnd %}
-  <script>
-    const manager = {{ manager | dump | safe }} // eslint-disable-line
-  </script>
   <script src="{{ asset('javascripts/manager.js') }}"></script>
 {% endblock %}

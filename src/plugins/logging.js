@@ -3,7 +3,7 @@ import hapiPino from 'hapi-pino'
 export default {
   plugin: hapiPino,
   options: {
-    logPayload: true,
+    logPayload: false,
     level: 'warn',
   },
 }

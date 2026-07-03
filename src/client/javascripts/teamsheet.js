@@ -37,6 +37,7 @@ $('.player-id').change(function () {
   $.ajax({
     type: 'POST',
     url: '/teamsheet/edit/player',
+    headers: { 'x-csrf-token': $('#crumb').val() },
     data: { managerId, playerIds, playerSubs },
     traditional: true,
     success: function () {
@@ -95,6 +96,7 @@ $('.team-id').change(function () {
   $.ajax({
     type: 'POST',
     url: '/teamsheet/edit/keeper',
+    headers: { 'x-csrf-token': $('#crumb').val() },
     data: { managerId, teamIds, teamSubs },
     traditional: true,
     success: function () {

@@ -32,13 +32,15 @@ ENV NODE_ENV=production
 USER root
 RUN apk add --no-cache curl
 
+WORKDIR /home/node/app
+
 COPY --from=production_build --chown=root:root /home/node/package*.json ./
 COPY --from=production_build --chown=root:root /home/node/src ./src/
 COPY --from=production_build --chown=root:root /home/node/.public ./.public/
 
 RUN npm ci --omit=dev
 
-RUN chmod -R a-w /home/node
+RUN chmod -R a-w /home/node/app
 
 USER node
 

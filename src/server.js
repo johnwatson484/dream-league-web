@@ -15,6 +15,8 @@ import headers from './plugins/headers.js'
 import crumb from './plugins/crumb.js'
 import viewContext from './plugins/view-context.js'
 import logging from './plugins/logging.js'
+import tokenRefresh from './plugins/token-refresh.js'
+import rateLimiting from './plugins/rate-limiting.js'
 
 async function createServer () {
   const server = Hapi.server({
@@ -39,6 +41,8 @@ async function createServer () {
   await server.register(views)
   await server.register(contentSecurityPolicy)
   await server.register(auth)
+  await server.register(tokenRefresh)
+  await server.register(rateLimiting)
   await server.register(qs)
   await server.register(router)
   await server.register(errors)

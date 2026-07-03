@@ -5,5 +5,6 @@ export default {
   plugin: crumb,
   options: {
     cookieOptions: config.cookieOptions,
+    headerName: 'x-csrf-token',
   },
 }

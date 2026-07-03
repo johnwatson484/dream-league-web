@@ -3,8 +3,9 @@ $('#gameweekId').change(function () {
   $('.manager-cup-input-container').hide()
 
   const gameweekId = Number($(this).val())
+  const cupWeeks = JSON.parse(document.getElementById('frm-results').dataset.cupWeeks)
 
-  cupWeeks.forEach(cupWeek => { // eslint-disable-line
+  cupWeeks.forEach(cupWeek => {
     if (cupWeek.gameweekId === gameweekId) {
       $('.manager-cup-input-container').show()
       $('.manager-cup-' + cupWeek.managerId).show()

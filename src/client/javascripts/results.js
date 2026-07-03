@@ -27,8 +27,8 @@ $('#delete').click(function () {
   $.ajax({
     type: 'DELETE',
     url: '/results',
+    headers: { 'x-csrf-token': $('#crumb').val() },
     data: {
-      crumb: $('#crumb').val(),
       gameweekId: $('#gameweekId').val(),
     },
     traditional: true,

@@ -34,8 +34,8 @@ export default [{
           })
         }
         return h.redirect('/')
-          .header('Authorization', response.token)
           .state('dl_token', response.token, config.cookieOptionsIdentity)
+          .state('dl_refresh', { userId: response.userId, refreshToken: response.refreshToken }, config.cookieOptionsRefresh)
       } catch {
         return h.view('identity/register', {
           message: 'Invalid credentials',
