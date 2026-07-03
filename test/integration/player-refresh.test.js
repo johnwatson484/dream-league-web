@@ -1,6 +1,6 @@
 import { vi, describe, beforeEach, test, expect } from 'vitest'
-import fs from 'fs'
-import { resolve } from 'path'
+import fs from 'node:fs'
+import { resolve } from 'node:path'
 
 const { mockPost } = vi.hoisted(() => ({ mockPost: vi.fn() }))
 vi.mock('../../src/api/index.js', () => ({ default: { post: mockPost }, post: mockPost }))

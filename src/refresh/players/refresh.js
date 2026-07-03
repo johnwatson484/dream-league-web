@@ -1,4 +1,4 @@
-import { readFileSync } from 'fs'
+import { readFileSync } from 'node:fs'
 import XLSX from 'xlsx'
 import { post } from '../../api/index.js'
 import { deleteFile } from '../delete-file.js'
