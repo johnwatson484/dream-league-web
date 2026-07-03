@@ -1,0 +1,115 @@
+import Joi from 'joi'
+import { get, post } from '../api/index.js'
+import { GET, POST } from '../constants/verbs.js'
+
+export default [{
+  method: GET,
+  path: '/cups',
+  handler: async (request, h) => {
+    const cups = await get('/cups', request.state.dl_token)
+    return h.view('cups', { cups })
+  },
+}, {
+  method: GET,
+  path: '/cup/create',
+  options: { auth: { strategy: 'jwt', scope: ['admin'] } },
+  handler: async (_request, h) => {
+    return h.view('create-cup')
+  },
+}, {
+  method: POST,
+  path: '/cup/create',
+  options: {
+    auth: { strategy: 'jwt', scope: ['admin'] },
+    validate: {
+      payload: {
+        name: Joi.string(),
+        hasGroupStage: Joi.boolean().default(false),
+        knockoutLegs: Joi.number().integer().default(1),
+      },
+      failAction: async (request, h, error) => {
+        return h.view('create-cup', { error, cup: request.payload }).code(400).takeover()
+      },
+    },
+    handler: async (request, h) => {
+      await post('/cup/create', request.payload, request.state.dl_token)
+      return h.redirect('/cups')
+    },
+  },
+}, {
+  method: GET,
+  path: '/cup/edit',
+  options: {
+    auth: { strategy: 'jwt', scope: ['admin'] },
+    validate: {
+      query: {
+        cupId: Joi.number().integer().required(),
+      },
+      failAction: async (request, h, error) => {
+        return h.view('404').code(404).takeover()
+      },
+    },
+  },
+  handler: async (request, h) => {
+    const cup = await get(`/cup/?cupId=${request.query.cupId}`, request.state.dl_token)
+    return h.view('edit-cup', { cup })
+  },
+}, {
+  method: POST,
+  path: '/cup/edit',
+  options: {
+    auth: { strategy: 'jwt', scope: ['admin'] },
+    validate: {
+      payload: {
+        cupId: Joi.number().integer().required(),
+        name: Joi.string(),
+        hasGroupStage: Joi.boolean().required(),
+        knockoutLegs: Joi.number().integer().required(),
+      },
+      failAction: async (request, h, error) => {
+        return h.view('edit-cup', { cup: request.payload, error }).code(400).takeover()
+      },
+    },
+    handler: async (request, h) => {
+      await post('/cup/edit', request.payload, request.state.dl_token)
+      return h.redirect('/cups')
+    },
+  },
+}, {
+  method: GET,
+  path: '/cup/delete',
+  options: {
+    auth: { strategy: 'jwt', scope: ['admin'] },
+    validate: {
+      query: {
+        cupId: Joi.number().integer().required(),
+      },
+      failAction: async (request, h, error) => {
+        return h.view('404').code(404).takeover()
+      },
+    },
+  },
+  handler: async (request, h) => {
+    const cup = await get(`/cup/?cupId=${request.query.cupId}`, request.state.dl_token)
+    return h.view('delete-cup', { cup })
+  },
+}, {
+  method: POST,
+  path: '/cup/delete',
+  options: {
+    auth: { strategy: 'jwt', scope: ['admin'] },
+    validate: {
+      payload: {
+        cupId: Joi.number().integer().required(),
+      },
+      failAction: async (request, h, error) => {
+        const cup = await get(`/cup/?cupId=${request.query.cupId}`, request.state.dl_token)
+        return h.view('delete-cup', { cup, error }).code(400).takeover()
+      },
+    },
+    handler: async (request, h) => {
+      await post('/cup/delete', request.payload, request.state.dl_token)
+      return h.redirect('/cups')
+    },
+  },
+}]

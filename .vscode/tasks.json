@@ -1,27 +1,40 @@
 {
-  // See https://go.microsoft.com/fwlink/?LinkId=733558
-  // for the documentation about the tasks.json format
   "version": "2.0.0",
   "tasks": [
     {
-      "label": "compose-debug-up",
-      "type": "shell",
-      "command": "compose -f compose.yaml -f compose.override.yaml -f compose.debug.yaml up -d"
+      "label": "Dev",
+      "detail": "Run app locally with hot reload",
+      "type": "npm",
+      "script": "dev",
+      "isBackground": true,
+      "problemMatcher": []
     },
     {
-      "label": "compose-debug-down",
-      "type": "shell",
-      "command": "compose -f compose.yaml -f compose.override.yaml -f compose.debug.yaml down"
+      "label": "Test",
+      "detail": "Run all tests once with coverage",
+      "type": "npm",
+      "script": "test",
+      "group": {
+        "kind": "test",
+        "isDefault": true
+      },
+      "problemMatcher": []
     },
     {
-      "label": "compose-test-debug-up",
-      "type": "shell",
-      "command": "compose -f compose.yaml -f compose.test.yaml -f compose.test.debug.yaml up -d"
+      "label": "Test (watch)",
+      "detail": "Run tests in watch mode",
+      "type": "npm",
+      "script": "test:watch",
+      "isBackground": true,
+      "problemMatcher": []
     },
     {
-      "label": "compose-test-debug-down",
-      "type": "shell",
-      "command": "compose -f compose.yaml -f compose.test.yaml -f compose.test.debug.yaml down"
+      "label": "Docker: Dev (together)",
+      "detail": "Build and run in Docker",
+      "type": "npm",
+      "script": "docker:dev",
+      "isBackground": true,
+      "problemMatcher": []
     }
   ]
 }

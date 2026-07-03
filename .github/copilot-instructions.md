@@ -6,96 +6,98 @@ This is a **Hapi.js** web frontend that communicates with a separate REST API ba
 
 **Key components:**
 - **Frontend server**: Renders Nunjucks templates, handles auth via JWT cookies
-- **Backend API**: Separate service at `http://dream-league-api:3001` (Docker) or configurable via `API_HOST` env var
+- **Backend API**: Separate service at `http://localhost:3001` (configurable via `API_HOST` env var)
 - **No database**: This service is purely presentational - all data lives in the API
+
+## Module System
+
+This project uses **ESM** (`"type": "module"` in package.json). All imports use `import`/`export` syntax with explicit `.js` extensions.
 
 ## Critical Development Patterns
 
 ### 1. Route Structure Convention
-Routes follow a strict pattern - see [app/routes/home.js](app/routes/home.js):
+Routes follow a strict pattern - see [app/routes/home.js](../app/routes/home.js):
 ```javascript
-module.exports = [{
-  method: GET,  // imported from constants/verbs
+import { GET } from '../constants/verbs.js'
+import { get } from '../api/index.js'
+
+export default [{
+  method: GET,
   path: '/',
-  config: {},  // auth options go here
+  config: {},
   handler: async (request, h) => {
     const data = await get('/endpoint', request.state.dl_token)
     return h.view('template', { data })
   }
 }]
 ```
-- Route modules **export arrays** of route objects
-- Use verb constants from [app/constants/verbs.js](app/constants/verbs.js)
+- Route modules **export default arrays** of route objects
+- Use verb constants from [app/constants/verbs.js](../app/constants/verbs.js)
 - JWT token accessed via `request.state.dl_token` cookie
-- All routes registered in [app/plugins/router.js](app/plugins/router.js)
+- All routes registered in [app/plugins/router.js](../app/plugins/router.js)
 
 ### 2. API Communication
-All backend calls use wrappers from [app/api/](app/api/):
+All backend calls use wrappers from [app/api/](../app/api/):
 - `get(url, token)` - GET requests
-- `post(url, payload, token)` - POST requests  
+- `post(url, payload, token)` - POST requests
 - `del(url, payload, token)` - DELETE requests
 
 **Never** call `@hapi/wreck` directly. Token authentication is handled automatically.
 
 ### 3. Authentication & Authorization
-- JWT strategy configured in [app/plugins/auth.js](app/plugins/auth.js)
+- JWT strategy configured in [app/plugins/auth.js](../app/plugins/auth.js)
 - Default auth mode is `try` (optional auth for most routes)
 - Admin routes require: `options: { auth: { strategy: 'jwt', scope: ['admin'] } }`
-- Token validation proxied to API via [app/auth/validate.js](app/auth/validate.js)
+- Token validation proxied to API via [app/auth/validate.js](../app/auth/validate.js)
 
 ### 4. Excel File Handling
 Teamsheet and player data can be bulk-uploaded via Excel files:
-- Uses `xlsx` library (see [app/refresh/teamsheet/](app/refresh/teamsheet/))
-- File upload routes need special payload config (see [app/routes/teamsheet.js](app/routes/teamsheet.js#L72-L80))
+- Uses `xlsx` library (see [app/refresh/teamsheet/](../app/refresh/teamsheet/))
+- File upload routes need special payload config (see [app/routes/teamsheet.js](../app/routes/teamsheet.js))
 - Mapping functions transform spreadsheet data to API format
-- Test files in [test/files/](test/files/)
+- Test files in [test/files/](../test/files/)
 
 ### 5. View Models
-Transform API responses before rendering - see [app/routes/models/teamsheet.js](app/routes/models/teamsheet.js):
+Transform API responses before rendering - see [app/routes/models/teamsheet.js](../app/routes/models/teamsheet.js):
 - Ensure fixed array sizes for frontend rendering
 - Fill missing entries with default objects (`{ playerId: 0 }`)
 - Keep view logic out of Nunjucks templates
 
-## Development Workflow
+## Developer Workflows
 
-### Running Locally (Dockerized)
+### Local Development (host-native)
 ```bash
-# Start both web and API services (requires dream-league-api repo)
-docker compose up
+nvm use && npm install && cp .env.example .env
+npm run local          # starts dev server with --watch
+npm run dev:debug      # debug mode (port 9229)
+```
 
-# Debug mode (port 9229 exposed)
-docker compose -f compose.yaml -f compose.override.yaml -f compose.debug.yaml up -d
+Requires [dream-league-api](https://github.com/johnwatson484/dream-league-api) running on `API_HOST` (default `http://localhost:3001`).
 
-# Or use VS Code tasks: compose-debug-up / compose-debug-down
+### Docker (full containerised mode)
+```bash
+docker compose --profile app up   # starts web app in container (needs API on dream-league network)
 ```
 
 ### Testing
 ```bash
-# Run all tests in container
-./scripts/test
-
-# Watch mode
-./scripts/test -w
-
-# Inside container or local dev
-npm test                # all tests
-npm run test:integration
-npm run test:unit
-npm run test:watch
-npm run test:debug      # debug on 0.0.0.0:9229
+npm test               # all tests with coverage
+npm run test:unit      # unit tests only
+npm run test:integration  # integration tests
+npm run test:watch     # watch mode
+npm run test:lint      # ESLint
 ```
 
 **Test patterns:**
-- Mock API calls with `jest.mock('../../app/api')` - see [test/integration/teamsheet-refresh.test.js](test/integration/teamsheet-refresh.test.js)
+- Mock API calls with `vi.mock('../../app/api/index.js')` — see tests in `test/integration/`
 - Integration tests verify route behavior and API contract
-- Use `runInBand` and `forceExit` flags (required for Hapi server cleanup)
+- Uses **Vitest** with `vi` for mocking
 
-### Linting
-Uses **neostandard** (modern ESLint config):
+### Code Quality
+Uses **neostandard** ESLint config with Vitest globals:
 ```bash
 npm run test:lint
 ```
-Globals defined in [eslint.config.js](eslint.config.js) include Jest (`describe`, `test`, `expect`) and browser (`$`, `dataLayer`).
 
 ## Environment Variables
 
@@ -107,12 +109,12 @@ Globals defined in [eslint.config.js](eslint.config.js) include Jest (`describe`
 - `PORT` - server port (default: 3000)
 - `NODE_ENV` - `development` | `test` | `production`
 - `APP_NAME` - display name (default: "Dream League")
-- Cookie settings: `COOKIE_TTL`, `COOKIE_SAME_SITE`, etc. (see [app/config.js](app/config.js))
+- Cookie settings: `COOKIE_TTL`, `COOKIE_SAME_SITE`, etc. (see [app/config.js](../app/config.js))
 
-All config validated with Joi schema in [app/config.js](app/config.js).
+All config validated with Joi schema in [app/config.js](../app/config.js).
 
 ## Plugin Registration Order Matters
-Server initialization in [app/server.js](app/server.js) registers plugins in **specific order**:
+Server initialization in [app/server.js](../app/server.js) registers plugins in **specific order**:
 1. User agent protection
 2. `@hapi/scooter` (device detection)
 3. `@hapi/inert` (static files)
@@ -129,7 +131,7 @@ Don't reorder without testing - auth and routing dependencies exist.
 ## Common Gotchas
 
 1. **CSRF tokens**: Most forms need crumb enabled. Disable explicitly for AJAX: `plugins: { crumb: false }`
-2. **Joi validation**: Use `failAction` handlers to customize error responses - see [app/routes/teamsheet.js](app/routes/teamsheet.js#L33-L36)
+2. **Joi validation**: Use `failAction` handlers to customize error responses
 3. **Alternatives validation**: For optional arrays, use `joi.alternatives().try(joi.array().items(...), joi.number())`
-4. **File uploads**: Set `payload.output: 'file'` and `payload.parse: true` - example in [app/routes/teamsheet.js](app/routes/teamsheet.js#L72)
+4. **File uploads**: Set `payload.output: 'file'` and `payload.parse: true`
 5. **API dependency**: This service cannot function without dream-league-api running. Both must be in same Docker network or API_HOST must be accessible.

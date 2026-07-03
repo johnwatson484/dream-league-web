@@ -1,48 +1,46 @@
 [![Build Status](https://github.com/johnwatson484/dream-league-web/actions/workflows/build.yaml/badge.svg)](https://github.com/johnwatson484/dream-league-web/actions/workflows/build.yaml)
+
 # Dream League Web
-Dream League website
 
-# Prerequisites
-- Docker
-- Docker Compose
+Dream League website (server-rendered Nunjucks frontend).
 
-Optional:
-- Kubernetes
-- Helm
+## Prerequisites
 
-## Running the application
-The application is designed to run in containerised environments, using Docker Compose in development and Kubernetes in production.
+- Node.js >= 24 (see `.nvmrc`)
 
-- A Helm chart is provided for production deployments to Kubernetes.
+## Local development
 
-## Run production application in container with Docker
-
-```
-docker compose build
-docker compose up
+```bash
+nvm use
+npm install
+cp .env.example .env   # set API_HOST if API is not on localhost:3001
+npm run local          # starts dev server with --watch
 ```
 
-## Develop application in container
+**Note:** Requires [dream-league-api](https://github.com/johnwatson484/dream-league-api) to be running (default: `http://localhost:3001`).
 
-This service is dependent on the availability of [Dream League API](https://github.com/johnwatson484/dream-league-api) running in the same Docker network.
+### Debug mode
 
-Running `docker compose up` in each repository will start the services in the same network.
-
-### Running tests
-
-A convenience script is provided to run automated tests in a containerised
-environment. This will rebuild images before running tests via docker-compose,
-using a combination of `compose.yaml` and `compose.test.yaml`.
-The command given to `docker compose run` may be customised by passing
-arguments to the test script.
-
-Examples:
-
-```
-# Run all tests
-scripts/test
-
-# Run tests with file watch
-scripts/test -w
+```bash
+npm run dev:debug      # same as dev but with --inspect (port 9229)
 ```
 
+## Testing
+
+```bash
+npm test               # all tests with coverage
+npm run test:unit      # unit tests only
+npm run test:integration  # integration tests only
+npm run test:watch     # watch mode
+npm run test:lint      # ESLint
+```
+
+## Docker (full containerised mode)
+
+```bash
+docker compose --profile app up    # starts web app in container (needs API network)
+```
+
+## Multi-service development
+
+For running the full stack (API + Web), see the [dream-league-core](https://github.com/johnwatson484/dream-league-core) orchestration repo.

@@ -1,0 +1,11 @@
+import { createDefaultPolicy } from './create-default-policy.js'
+
+const getCurrentPolicy = (request, h) => {
+  let cookiesPolicy = request.state.cookies_policy
+  if (!cookiesPolicy) {
+    cookiesPolicy = createDefaultPolicy(h)
+  }
+  return cookiesPolicy
+}
+
+export { getCurrentPolicy }
