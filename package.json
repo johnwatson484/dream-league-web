@@ -43,7 +43,6 @@
   },
   "devDependencies": {
     "@vitest/coverage-v8": "4.1.9",
-    "blipp": "4.0.2",
     "cross-env": "10.1.0",
     "eslint": "9.7.0",
     "neostandard": "0.11.1",

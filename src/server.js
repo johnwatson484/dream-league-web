@@ -3,7 +3,6 @@ import Joi from 'joi'
 import scooter from '@hapi/scooter'
 import inert from '@hapi/inert'
 import hapiAuthJwt2 from 'hapi-auth-jwt2'
-import blipp from 'blipp'
 import config from './config.js'
 import userAgentProtection from './plugins/user-agent-protection.js'
 import views from './plugins/views.js'
@@ -47,10 +46,6 @@ async function createServer () {
   await server.register(crumb)
   await server.register(viewContext)
   await server.register(logging)
-  if (config.isDev) {
-    await server.register(blipp)
-  }
-
   return server
 }
 
