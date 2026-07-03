@@ -1,6 +1,6 @@
 import { GK, DEF, MID, FWD } from '../../constants/position-codes.js'
 
-const mapPosition = (index) => {
+export function mapPosition (index) {
   if (index <= 1) {
     return GK
   }
@@ -12,5 +12,3 @@ const mapPosition = (index) => {
   }
   return FWD
 }
-
-export { mapPosition }

@@ -1,4 +1,4 @@
-import { get } from '../../api/index.js'
+import { get } from '../../api/get.js'
 import { GET } from '../../constants/verbs.js'
 
 export default [{

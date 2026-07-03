@@ -1,4 +1,4 @@
-import { get } from '../../api/index.js'
+import { get } from '../../api/get.js'
 import { GET } from '../../constants/verbs.js'
 
 export default [{
@@ -21,7 +21,7 @@ export default [{
   },
 }]
 
-const formatTeamsheet = (teamsheet) => {
+function formatTeamsheet (teamsheet) {
   const players = []
   const goalkeepers = []
   for (const team of teamsheet) {

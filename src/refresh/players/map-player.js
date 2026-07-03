@@ -1,4 +1,4 @@
-const mapPlayer = (player) => {
+export function mapPlayer (player) {
   return {
     firstName: player['First Name'] ? player['First Name'].trim() : undefined,
     lastName: player.Surname ? player.Surname.trim() : undefined,
@@ -6,5 +6,3 @@ const mapPlayer = (player) => {
     team: player.Club ? player.Club.trim() : undefined,
   }
 }
-
-export { mapPlayer }

@@ -2,7 +2,7 @@ import { mapPlayer } from './map-player.js'
 import { mapPosition } from './map-position.js'
 import { mapSubstitute } from './map-substitute.js'
 
-const mapTeam = (worksheet, manager, cellAddress) => {
+export function mapTeam (worksheet, manager, cellAddress) {
   const margin = 3
   const increment = 2
   const totalPlayers = 15
@@ -26,5 +26,3 @@ const mapTeam = (worksheet, manager, cellAddress) => {
     players,
   }
 }
-
-export { mapTeam }

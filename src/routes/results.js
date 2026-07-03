@@ -1,6 +1,8 @@
 import Joi from 'joi'
 import boom from '@hapi/boom'
-import { get, post, deleteRequest } from '../api/index.js'
+import { get } from '../api/get.js'
+import { post } from '../api/post.js'
+import { deleteRequest } from '../api/delete.js'
 import { sortArray } from '../utils/sort-array.js'
 import { GET, POST, DELETE } from '../constants/verbs.js'
 

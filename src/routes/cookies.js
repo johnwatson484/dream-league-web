@@ -1,5 +1,5 @@
 import Joi from 'joi'
-import { updatePolicy } from '../cookies/index.js'
+import { updatePolicy } from '../cookies/update-policy.js'
 import { GET, POST } from '../constants/verbs.js'
 
 export default [{

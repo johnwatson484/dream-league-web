@@ -1,5 +1,5 @@
 import Joi from 'joi'
-import { post } from '../../api/index.js'
+import { post } from '../../api/post.js'
 import { GET, POST } from '../../constants/verbs.js'
 
 export default [{

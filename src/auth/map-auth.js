@@ -1,6 +1,6 @@
 import { isInRole } from './is-in-role.js'
 
-const mapAuth = (request) => {
+export function mapAuth (request) {
   return {
     isAuthenticated: request.auth.isAuthenticated,
     isAnonymous: !request.auth.isAuthenticated,
@@ -8,5 +8,3 @@ const mapAuth = (request) => {
     isAdmin: request.auth.isAuthenticated && isInRole(request.auth.credentials, 'admin'),
   }
 }
-
-export { mapAuth }

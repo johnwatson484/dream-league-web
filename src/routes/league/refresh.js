@@ -1,5 +1,5 @@
 import Joi from 'joi'
-import { refreshPlayers } from '../../refresh/index.js'
+import { refreshPlayers } from '../../refresh/players/refresh.js'
 import { GET, POST } from '../../constants/verbs.js'
 
 export default [{
