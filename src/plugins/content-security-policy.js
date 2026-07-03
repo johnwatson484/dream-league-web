@@ -4,7 +4,7 @@ export default {
   plugin: Blankie,
   options: {
     fontSrc: ['self', 'fonts.gstatic.com'],
-    imgSrc: ['self', '*.google.com', '*.google-analytics.com', '*.gstatic.com'],
+    imgSrc: ['self', 'data:', '*.google.com', '*.google-analytics.com', '*.gstatic.com'],
     scriptSrc: [
       'self',
       'code.jquery.com',
@@ -24,6 +24,6 @@ export default {
     ],
     frameAncestors: ['self'],
     formAction: ['self'],
-    generateNonces: false,
+    generateNonces: 'script',
   },
 }

@@ -1,3 +1,5 @@
+$(document).on('click', '.js-select-on-click', function () { this.select() })
+
 $(function () {
   $('.player-input').autocomplete({
     source: function (request, response) {
@@ -37,8 +39,7 @@ $('.player-id').change(function () {
   $.ajax({
     type: 'POST',
     url: '/teamsheet/edit/player',
-    headers: { 'x-csrf-token': $('#crumb').val() },
-    data: { managerId, playerIds, playerSubs },
+    data: { crumb: $('#crumb').val(), managerId, playerIds, playerSubs },
     traditional: true,
     success: function () {
       $('#save-confirmation').fadeIn(2000)
@@ -96,8 +97,7 @@ $('.team-id').change(function () {
   $.ajax({
     type: 'POST',
     url: '/teamsheet/edit/keeper',
-    headers: { 'x-csrf-token': $('#crumb').val() },
-    data: { managerId, teamIds, teamSubs },
+    data: { crumb: $('#crumb').val(), managerId, teamIds, teamSubs },
     traditional: true,
     success: function () {
       $('#save-confirmation').fadeIn(2000)

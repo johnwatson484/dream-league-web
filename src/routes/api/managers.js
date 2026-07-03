@@ -11,14 +11,6 @@ export default [{
       return h.response(formattedTeamsheet)
     },
   },
-}, {
-  method: GET,
-  path: '/api/data/manager/teams',
-  options: {
-    handler: async (_request, h) => {
-      return h.redirect('/api/v1/manager/teams')
-    },
-  },
 }]
 
 function formatTeamsheet (teamsheet) {

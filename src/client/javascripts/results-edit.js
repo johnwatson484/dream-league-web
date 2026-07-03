@@ -1,3 +1,5 @@
+$(document).on('click', '.js-select-on-click', function () { this.select() })
+
 $('#gameweekId').change(function () {
   $('.manager-cup-input').hide()
   $('.manager-cup-input-container').hide()
