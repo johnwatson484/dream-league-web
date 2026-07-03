@@ -4,7 +4,7 @@
   <h2>Results sheet</h2>
 
   {%if resultsInput.keepers.length %}
-    <form method="POST" action="/results/edit">
+    <form id="frm-results" method="POST" action="/results/edit" data-cup-weeks="{{ resultsInput.cupWeeks | dump | safe }}">
       <input type="hidden" name="crumb" value="{{crumb}}"/>
 
       <div class="row">
@@ -154,8 +154,5 @@
 {% endblock %}
 
 {% block bodyEnd %}
-  <script>
-    const cupWeeks = {{ resultsInput.cupWeeks | dump | safe }} // eslint-disable-line
-  </script>
   <script src="{{ asset('javascripts/results-edit.js') }}"></script>
 {% endblock %}
