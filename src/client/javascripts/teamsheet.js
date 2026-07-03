@@ -39,7 +39,7 @@ $('.player-id').change(function () {
   $.ajax({
     type: 'POST',
     url: '/teamsheet/edit/player',
-    data: { crumb: $('#crumb').val(), managerId, playerIds, playerSubs },
+    data: { managerId, playerIds, playerSubs },
     traditional: true,
     success: function () {
       $('#save-confirmation').fadeIn(2000)
@@ -97,7 +97,7 @@ $('.team-id').change(function () {
   $.ajax({
     type: 'POST',
     url: '/teamsheet/edit/keeper',
-    data: { crumb: $('#crumb').val(), managerId, teamIds, teamSubs },
+    data: { managerId, teamIds, teamSubs },
     traditional: true,
     success: function () {
       $('#save-confirmation').fadeIn(2000)
