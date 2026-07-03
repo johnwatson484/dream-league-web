@@ -16,6 +16,7 @@ const coverageConfig = {
     ...configDefaults.exclude,
     '**/test/**',
     'coverage',
+    'src/client/**',
   ],
 }
 

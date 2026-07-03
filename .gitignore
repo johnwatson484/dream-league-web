@@ -13,3 +13,4 @@ coverage
 tsconfig.tsbuildinfo
 .env
 .sonarlint/
+.public/

@@ -17,6 +17,12 @@ COPY --chown=node:node . .
 
 CMD ["node", "src"]
 
+# Production build
+FROM development AS production_build
+
+ENV NODE_ENV=production
+RUN npm run build:frontend
+
 # Production
 FROM node:24-alpine AS production
 
@@ -26,8 +32,9 @@ ENV NODE_ENV=production
 USER root
 RUN apk add --no-cache curl
 
-COPY --from=development --chown=root:root /home/node/package*.json ./
-COPY --from=development --chown=root:root /home/node/src ./src/
+COPY --from=production_build --chown=root:root /home/node/package*.json ./
+COPY --from=production_build --chown=root:root /home/node/src ./src/
+COPY --from=production_build --chown=root:root /home/node/.public ./.public/
 
 RUN npm ci --omit=dev
 

@@ -5,11 +5,7 @@ export default [{
   path: '/assets/{path*}',
   handler: {
     directory: {
-      path: [
-        'src/public/css',
-        'src/public/js',
-        'src/public/assets',
-      ],
+      path: '.public',
     },
   },
 }]
