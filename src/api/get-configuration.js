@@ -1,4 +1,4 @@
-const getConfiguration = (token = '') => {
+export function getConfiguration (token = '') {
   return {
     headers: {
       Authorization: token,
@@ -6,5 +6,3 @@ const getConfiguration = (token = '') => {
     json: true,
   }
 }
-
-export { getConfiguration }

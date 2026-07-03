@@ -1,7 +1,5 @@
 import { promises as fs } from 'node:fs'
 
-const deleteFile = async (path) => {
+export async function deleteFile (path) {
   await fs.unlink(path)
 }
-
-export { deleteFile }

@@ -1,6 +1,6 @@
 import config from '../config.js'
-import { getCurrentPolicy } from '../cookies/index.js'
-import { mapAuth } from '../auth/index.js'
+import { getCurrentPolicy } from '../cookies/get-current-policy.js'
+import { mapAuth } from '../auth/map-auth.js'
 
 export default {
   plugin: {

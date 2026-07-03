@@ -1,10 +1,10 @@
 import { readFileSync } from 'node:fs'
 import XLSX from 'xlsx'
-import { post } from '../../api/index.js'
+import { post } from '../../api/post.js'
 import { deleteFile } from '../delete-file.js'
 import { mapPlayer } from './map-player.js'
 
-const refresh = async (path, token) => {
+export async function refreshPlayers (path, token) {
   const workbook = XLSX.read(readFileSync(path))
   const worksheet = workbook.Sheets.ALL
 
@@ -17,5 +17,3 @@ const refresh = async (path, token) => {
   const mappedPlayers = players.map(mapPlayer)
   return post('/league/players/refresh', { players: mappedPlayers }, token)
 }
-
-export { refresh }

@@ -1,6 +1,7 @@
 import Joi from 'joi'
 import boom from '@hapi/boom'
-import { get, post } from '../../api/index.js'
+import { get } from '../../api/get.js'
+import { post } from '../../api/post.js'
 import { GET, POST } from '../../constants/verbs.js'
 
 export default [{

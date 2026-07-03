@@ -1,6 +1,4 @@
-const sortArray = (a, b) => {
+export function sortArray (a, b) {
   const order = a < b ? -1 : 1
   return a === b ? 0 : order
 }
-
-export { sortArray }

@@ -1,5 +1,5 @@
 import config from '../config.js'
-import { validate } from '../auth/index.js'
+import { validate } from '../auth/validate.js'
 
 export default {
   plugin: {

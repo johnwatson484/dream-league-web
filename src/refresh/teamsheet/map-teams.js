@@ -1,7 +1,7 @@
 import XLSX from 'xlsx'
 import { mapTeam } from './map-team.js'
 
-const mapTeams = (worksheet) => {
+export function mapTeams (worksheet) {
   const teams = []
   const range = XLSX.utils.decode_range(worksheet['!ref'])
 
@@ -24,5 +24,3 @@ const mapTeams = (worksheet) => {
 
   return teams
 }
-
-export { mapTeams }
