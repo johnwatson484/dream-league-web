@@ -16,7 +16,7 @@ This project uses **ESM** (`"type": "module"` in package.json). All imports use 
 ## Critical Development Patterns
 
 ### 1. Route Structure Convention
-Routes follow a strict pattern - see [app/routes/home.js](../app/routes/home.js):
+Routes follow a strict pattern - see [src/routes/home.js](../src/routes/home.js):
 ```javascript
 import { GET } from '../constants/verbs.js'
 import { get } from '../api/index.js'
@@ -32,12 +32,12 @@ export default [{
 }]
 ```
 - Route modules **export default arrays** of route objects
-- Use verb constants from [app/constants/verbs.js](../app/constants/verbs.js)
+- Use verb constants from [src/constants/verbs.js](../src/constants/verbs.js)
 - JWT token accessed via `request.state.dl_token` cookie
-- All routes registered in [app/plugins/router.js](../app/plugins/router.js)
+- All routes registered in [src/plugins/router.js](../src/plugins/router.js)
 
 ### 2. API Communication
-All backend calls use wrappers from [app/api/](../app/api/):
+All backend calls use wrappers from [src/api/](../src/api/):
 - `get(url, token)` - GET requests
 - `post(url, payload, token)` - POST requests
 - `del(url, payload, token)` - DELETE requests
@@ -45,20 +45,20 @@ All backend calls use wrappers from [app/api/](../app/api/):
 **Never** call `@hapi/wreck` directly. Token authentication is handled automatically.
 
 ### 3. Authentication & Authorization
-- JWT strategy configured in [app/plugins/auth.js](../app/plugins/auth.js)
+- JWT strategy configured in [src/plugins/auth.js](../src/plugins/auth.js)
 - Default auth mode is `try` (optional auth for most routes)
 - Admin routes require: `options: { auth: { strategy: 'jwt', scope: ['admin'] } }`
-- Token validation proxied to API via [app/auth/validate.js](../app/auth/validate.js)
+- Token validation proxied to API via [src/auth/validate.js](../src/auth/validate.js)
 
 ### 4. Excel File Handling
 Teamsheet and player data can be bulk-uploaded via Excel files:
-- Uses `xlsx` library (see [app/refresh/teamsheet/](../app/refresh/teamsheet/))
-- File upload routes need special payload config (see [app/routes/teamsheet.js](../app/routes/teamsheet.js))
+- Uses `xlsx` library (see [src/refresh/teamsheet/](../src/refresh/teamsheet/))
+- File upload routes need special payload config (see [src/routes/teamsheet.js](../src/routes/teamsheet.js))
 - Mapping functions transform spreadsheet data to API format
 - Test files in [test/files/](../test/files/)
 
 ### 5. View Models
-Transform API responses before rendering - see [app/routes/models/teamsheet.js](../app/routes/models/teamsheet.js):
+Transform API responses before rendering - see [src/routes/models/teamsheet.js](../src/routes/models/teamsheet.js):
 - Ensure fixed array sizes for frontend rendering
 - Fill missing entries with default objects (`{ playerId: 0 }`)
 - Keep view logic out of Nunjucks templates
@@ -89,7 +89,7 @@ npm run test:lint      # ESLint
 ```
 
 **Test patterns:**
-- Mock API calls with `vi.mock('../../app/api/index.js')` — see tests in `test/integration/`
+- Mock API calls with `vi.mock('../../src/api/index.js')` — see tests in `test/integration/`
 - Integration tests verify route behavior and API contract
 - Uses **Vitest** with `vi` for mocking
 
@@ -109,12 +109,12 @@ npm run test:lint
 - `PORT` - server port (default: 3000)
 - `NODE_ENV` - `development` | `test` | `production`
 - `APP_NAME` - display name (default: "Dream League")
-- Cookie settings: `COOKIE_TTL`, `COOKIE_SAME_SITE`, etc. (see [app/config.js](../app/config.js))
+- Cookie settings: `COOKIE_TTL`, `COOKIE_SAME_SITE`, etc. (see [src/config.js](../src/config.js))
 
-All config validated with Joi schema in [app/config.js](../app/config.js).
+All config validated with Joi schema in [src/config.js](../src/config.js).
 
 ## Plugin Registration Order Matters
-Server initialization in [app/server.js](../app/server.js) registers plugins in **specific order**:
+Server initialization in [src/server.js](../src/server.js) registers plugins in **specific order**:
 1. User agent protection
 2. `@hapi/scooter` (device detection)
 3. `@hapi/inert` (static files)
