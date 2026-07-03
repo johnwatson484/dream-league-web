@@ -10,8 +10,11 @@
   "scripts": {
     "start": "NODE_ENV=production node src/index.js",
     "build:frontend": "vite build",
-    "dev": "npm-run-all2 build:frontend && NODE_ENV=development node --env-file-if-exists=.env --watch --watch-path=./src src/index.js",
-    "dev:debug": "npm-run-all2 build:frontend && NODE_ENV=development node --env-file-if-exists=.env --watch --watch-path=./src --inspect src/index.js",
+    "dev": "vite build --mode development && npm-run-all2 --parallel frontend:watch server:watch",
+    "dev:debug": "vite build --mode development && npm-run-all2 --parallel frontend:watch server:debug",
+    "frontend:watch": "vite build --mode development --watch",
+    "server:watch": "NODE_ENV=development node --env-file-if-exists=.env --watch --watch-path=./src --watch-path=./.public/assets-manifest.json src/index.js",
+    "server:debug": "NODE_ENV=development node --env-file-if-exists=.env --watch --watch-path=./src --watch-path=./.public/assets-manifest.json --inspect src/index.js",
     "local": "npm run dev",
     "docker:build": "docker compose --profile app build",
     "docker:dev": "docker compose --profile app up",
