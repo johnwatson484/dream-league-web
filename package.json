@@ -19,7 +19,8 @@
     "test:integration": "cross-env TZ=UTC vitest run --coverage --project integration",
     "test:watch": "cross-env TZ=UTC vitest",
     "test:debug": "cross-env TZ=UTC vitest --inspect --no-file-parallelism",
-    "test:lint": "eslint"
+    "test:lint": "eslint",
+    "test:lint:fix": "eslint --fix"
   },
   "author": "John Watson",
   "license": "MIT",
