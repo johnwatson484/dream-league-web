@@ -1,5 +1,5 @@
 import config from '../../config.js'
-import { GET, POST } from '../../constants/verbs.js'
+import { POST } from '../../constants/verbs.js'
 
 export default [{
   method: POST,
