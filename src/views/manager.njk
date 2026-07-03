@@ -64,5 +64,5 @@
   <script>
     const manager = {{ manager | dump | safe }} // eslint-disable-line
   </script>
-  <script src="{{ assetPath }}/manager.js"></script>
+  <script src="{{ asset('javascripts/manager.js') }}"></script>
 {% endblock %}

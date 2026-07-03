@@ -12,7 +12,7 @@ acceptButton.addEventListener('click', function (event) {
   gtmScript.setAttribute('src', 'https://www.googletagmanager.com/gtag/js?id=G-C35GGT2X1B')
   document.body.appendChild(gtmScript)
   const gaScript = document.createElement('script')
-  gaScript.setAttribute('src', '/assets/google-analytics.js')
+  gaScript.setAttribute('src', cookieContainer.dataset.gaUrl)
   document.body.appendChild(gaScript)
 })
 

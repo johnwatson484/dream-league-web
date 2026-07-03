@@ -1,6 +1,6 @@
 {
   "name": "dream-league-web",
-  "version": "2.0.1",
+  "version": "2.1.0",
   "description": "Dream League web frontend",
   "type": "module",
   "main": "src/index.js",
@@ -9,14 +9,15 @@
   },
   "scripts": {
     "start": "NODE_ENV=production node src/index.js",
-    "dev": "NODE_ENV=development node --env-file-if-exists=.env --watch --watch-path=./src src/index.js",
-    "dev:debug": "NODE_ENV=development node --env-file-if-exists=.env --watch --watch-path=./src --inspect src/index.js",
+    "build:frontend": "vite build",
+    "dev": "npm-run-all2 build:frontend && NODE_ENV=development node --env-file-if-exists=.env --watch --watch-path=./src src/index.js",
+    "dev:debug": "npm-run-all2 build:frontend && NODE_ENV=development node --env-file-if-exists=.env --watch --watch-path=./src --inspect src/index.js",
     "local": "npm run dev",
     "docker:build": "docker compose --profile app build",
     "docker:dev": "docker compose --profile app up",
-    "test": "cross-env TZ=UTC vitest run --coverage",
-    "test:unit": "cross-env TZ=UTC vitest run --coverage --project unit",
-    "test:integration": "cross-env TZ=UTC vitest run --coverage --project integration",
+    "test": "npm run build:frontend && cross-env TZ=UTC vitest run --coverage",
+    "test:unit": "npm run build:frontend && cross-env TZ=UTC vitest run --coverage --project unit",
+    "test:integration": "npm run build:frontend && cross-env TZ=UTC vitest run --coverage --project integration",
     "test:watch": "cross-env TZ=UTC vitest",
     "test:debug": "cross-env TZ=UTC vitest --inspect --no-file-parallelism",
     "test:lint": "eslint",
@@ -46,6 +47,9 @@
     "cross-env": "10.1.0",
     "eslint": "9.7.0",
     "neostandard": "0.11.1",
+    "npm-run-all2": "8.0.4",
+    "sass": "1.101.0",
+    "vite": "8.1.0",
     "vitest": "4.1.9"
   },
   "overrides": {

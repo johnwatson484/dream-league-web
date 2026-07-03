@@ -7,7 +7,6 @@ body {
   font-family: 'Mukta', sans-serif;
 }
 
-/* Set padding to keep content from hitting the edges */
 .body-content {
   padding-left: 15px;
   padding-right: 15px;
@@ -22,14 +21,10 @@ h6 {
   font-family: 'Mukta', sans-serif;
 }
 
-/* Override the default bootstrap behavior where horizontal description lists 
-   will truncate terms that are too long to fit in the left column 
-*/
 .dl-horizontal dt {
   white-space: normal;
 }
 
-/* Set width on the form input elements since they're 100% wide by default */
 input,
 select,
 textarea {
@@ -45,7 +40,6 @@ textarea {
   padding: 1px 5px;
   font-size: 13px;
   line-height: 1.5;
-  /* If Placeholder of the input is moved up, rem/modify this. */
   border-radius: 3px;
 }
 
@@ -70,7 +64,7 @@ th.numeric {
 }
 
 .jumbotron {
-  background-image: url("../assets/football-pitch.jpg");
+  background-image: url("../images/football-pitch.jpg");
   background-size: cover;
   color: white;
   text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
@@ -80,7 +74,7 @@ th.numeric {
   display: none;
 }
 
-@media(max-width:650px) {
+@media (max-width: 650px) {
   .no-mobile {
     display: none;
   }
