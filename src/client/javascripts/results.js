@@ -28,7 +28,6 @@ $('#delete').click(function () {
     type: 'DELETE',
     url: '/results',
     data: {
-      crumb: $('#crumb').val(),
       gameweekId: $('#gameweekId').val(),
     },
     traditional: true,
