@@ -11,7 +11,7 @@ const coverageConfig = {
   reportsDirectory: './coverage',
   clean: false,
   reporter: ['text', 'lcov'],
-  include: ['app/**/*.js'],
+  include: ['src/**/*.js'],
   exclude: [
     ...configDefaults.exclude,
     '**/test/**',

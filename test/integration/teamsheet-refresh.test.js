@@ -3,9 +3,9 @@ import fs from 'fs'
 import { resolve } from 'path'
 
 const { mockPost } = vi.hoisted(() => ({ mockPost: vi.fn() }))
-vi.mock('../../app/api/index.js', () => ({ default: { post: mockPost }, post: mockPost }))
+vi.mock('../../src/api/index.js', () => ({ default: { post: mockPost }, post: mockPost }))
 
-import { refreshTeamsheet } from '../../app/refresh/index.js'
+import { refreshTeamsheet } from '../../src/refresh/index.js'
 
 const BASE_TEST_FILE = resolve(import.meta.dirname, '../files/teamsheet.xlsx')
 const TEST_FILE = resolve(import.meta.dirname, '../files/teamsheet-tmp.xlsx')
