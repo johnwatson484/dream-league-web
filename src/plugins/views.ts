@@ -15,7 +15,7 @@ try {
 }
 
 function asset (logicalPath) {
-  const entry = manifest[logicalPath]
+  const entry = manifest[logicalPath] || manifest[logicalPath.replace(/\.js$/, '.ts')]
   if (!entry) {
     throw new Error(`Asset not found in Vite manifest: ${logicalPath}`)
   }
@@ -23,7 +23,7 @@ function asset (logicalPath) {
 }
 
 function assetCss (logicalPath) {
-  const entry = manifest[logicalPath]
+  const entry = manifest[logicalPath] || manifest[logicalPath.replace(/\.js$/, '.ts')]
   if (!entry || !entry.css) {
     return []
   }
