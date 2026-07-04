@@ -2,10 +2,10 @@ import { createClient } from 'redis'
 
 const client = createClient({
   socket: {
-    host: process.env.SESSION_REDIS_HOST || 'localhost',
-    port: parseInt(process.env.SESSION_REDIS_PORT || '6380', 10),
+    host: process.env.REDIS_HOST || 'localhost',
+    port: parseInt(process.env.REDIS_PORT || '6380', 10),
   },
-  password: process.env.SESSION_REDIS_PASSWORD || undefined,
+  password: process.env.REDIS_PASSWORD || undefined,
 })
 
 client.on('error', (err) => {

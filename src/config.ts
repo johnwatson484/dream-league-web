@@ -28,9 +28,9 @@ const config = {
   appName: process.env.APP_NAME,
   apiHost: process.env.API_HOST,
   session: {
-    cookieName: process.env.SESSION_COOKIE_NAME,
-    cookiePassword: process.env.SESSION_COOKIE_PASSWORD,
-    ttl: process.env.SESSION_TTL,
+    cookieName: process.env.COOKIE_NAME,
+    cookiePassword: process.env.COOKIE_PASSWORD,
+    ttl: process.env.COOKIE_TTL,
   },
   cookieOptions: {
     ttl: process.env.COOKIE_TTL,

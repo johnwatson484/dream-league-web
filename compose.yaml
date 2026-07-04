@@ -15,8 +15,8 @@ services:
       - .env
     environment:
       API_HOST: http://dream-league-api:3001
-      SESSION_REDIS_HOST: dream-league-web-redis
-      SESSION_REDIS_PORT: 6379
+      REDIS_HOST: dream-league-web-redis
+      REDIS_PORT: 6379
     depends_on:
       dream-league-web-redis:
         condition: service_healthy
@@ -30,11 +30,11 @@ services:
       - '6380:6379'
     volumes:
       - redis_data:/data
-    command: redis-server --dir /data --save 5 1 --requirepass ${SESSION_REDIS_PASSWORD}
+    command: redis-server --dir /data --save 5 1 --requirepass ${REDIS_PASSWORD}
     networks:
       - dream-league
     healthcheck:
-      test: ['CMD', 'redis-cli', '-a', '${SESSION_REDIS_PASSWORD}', 'ping']
+      test: ['CMD', 'redis-cli', '-a', '${REDIS_PASSWORD}', 'ping']
       interval: 10s
       timeout: 3s
       retries: 5
