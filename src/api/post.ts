@@ -2,10 +2,10 @@ import Wreck from '@hapi/wreck'
 import config from '../config.ts'
 import { getConfiguration } from './get-configuration.ts'
 
-export async function post (url, data, token?) {
+export async function post (url, data, request?) {
   const { payload } = await Wreck.post(`${config.apiHost}${url}`, {
     payload: data,
-    ...getConfiguration(token),
+    ...getConfiguration(request),
   })
   return payload
 }

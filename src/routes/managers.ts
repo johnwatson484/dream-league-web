@@ -7,7 +7,7 @@ export default [{
   method: GET,
   path: '/managers',
   handler: async (request, h) => {
-    const managers = await get('/managers', request.state.dl_token)
+    const managers = await get('/managers', request)
     return h.view('managers', { managers })
   },
 }, {
@@ -24,13 +24,13 @@ export default [{
     },
   },
   handler: async (request, h) => {
-    const manager = await get(`/manager/detail/?managerId=${request.query.managerId}`, request.state.dl_token)
+    const manager = await get(`/manager/detail/?managerId=${request.query.managerId}`, request)
     return h.view('manager', manager)
   },
 }, {
   method: GET,
   path: '/manager/create',
-  options: { auth: { strategy: 'jwt', scope: ['admin'] } },
+  options: { auth: { strategy: 'session', scope: ['admin'] } },
   handler: async (_request, h) => {
     return h.view('create-manager')
   },
@@ -38,7 +38,7 @@ export default [{
   method: POST,
   path: '/manager/create',
   options: {
-    auth: { strategy: 'jwt', scope: ['admin'] },
+    auth: { strategy: 'session', scope: ['admin'] },
     validate: {
       payload: {
         name: Joi.string(),
@@ -50,7 +50,7 @@ export default [{
       },
     },
     handler: async (request, h) => {
-      await post('/manager/create', request.payload, request.state.dl_token)
+      await post('/manager/create', request.payload, request)
       return h.redirect('/managers')
     },
   },
@@ -58,7 +58,7 @@ export default [{
   method: GET,
   path: '/manager/edit',
   options: {
-    auth: { strategy: 'jwt', scope: ['admin'] },
+    auth: { strategy: 'session', scope: ['admin'] },
     validate: {
       query: {
         managerId: Joi.number().integer().required(),
@@ -69,14 +69,14 @@ export default [{
     },
   },
   handler: async (request, h) => {
-    const manager = await get(`/manager/?managerId=${request.query.managerId}`, request.state.dl_token)
+    const manager = await get(`/manager/?managerId=${request.query.managerId}`, request)
     return h.view('edit-manager', { manager })
   },
 }, {
   method: POST,
   path: '/manager/edit',
   options: {
-    auth: { strategy: 'jwt', scope: ['admin'] },
+    auth: { strategy: 'session', scope: ['admin'] },
     validate: {
       payload: Joi.object({
         managerId: Joi.number().integer().required(),
@@ -89,7 +89,7 @@ export default [{
       },
     },
     handler: async (request, h) => {
-      await post('/manager/edit', request.payload, request.state.dl_token)
+      await post('/manager/edit', request.payload, request)
       return h.redirect('/managers')
     },
   },
@@ -97,7 +97,7 @@ export default [{
   method: GET,
   path: '/manager/delete',
   options: {
-    auth: { strategy: 'jwt', scope: ['admin'] },
+    auth: { strategy: 'session', scope: ['admin'] },
     validate: {
       query: {
         managerId: Joi.number().integer().required(),
@@ -108,25 +108,25 @@ export default [{
     },
   },
   handler: async (request, h) => {
-    const manager = await get(`/manager/?managerId=${request.query.managerId}`, request.state.dl_token)
+    const manager = await get(`/manager/?managerId=${request.query.managerId}`, request)
     return h.view('delete-manager', { manager })
   },
 }, {
   method: POST,
   path: '/manager/delete',
   options: {
-    auth: { strategy: 'jwt', scope: ['admin'] },
+    auth: { strategy: 'session', scope: ['admin'] },
     validate: {
       payload: {
         managerId: Joi.number().integer().required(),
       },
       failAction: async (request, h, error) => {
-        const manager = await get(`/manager/?managerId=${request.query.managerId}`, request.state.dl_token)
+        const manager = await get(`/manager/?managerId=${request.query.managerId}`, request)
         return h.view('delete-manager', { manager, error }).code(400).takeover()
       },
     },
     handler: async (request, h) => {
-      await post('/manager/delete', request.payload, request.state.dl_token)
+      await post('/manager/delete', request.payload, request)
       return h.redirect('/managers')
     },
   },

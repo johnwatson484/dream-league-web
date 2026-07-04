@@ -1,5 +1,5 @@
 declare module 'blankie'
-declare module 'hapi-auth-jwt2'
+declare module '@hapi/cookie'
 declare module 'xlsx'
 
 declare module '@hapi/wreck' {

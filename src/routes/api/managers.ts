@@ -6,7 +6,7 @@ export default [{
   path: '/api/v1/manager/teams',
   options: {
     handler: async (request, h) => {
-      const teamsheet = await get('/teamsheet', request.state.dl_token)
+      const teamsheet = await get('/teamsheet', request)
       const formattedTeamsheet = formatTeamsheet(teamsheet)
       return h.response(formattedTeamsheet)
     },

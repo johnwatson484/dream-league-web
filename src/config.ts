@@ -5,10 +5,12 @@ const schema = Joi.object().keys({
   port: Joi.number().integer().default(3000),
   env: Joi.string().valid(...envs).default(envs[0]),
   appName: Joi.string().default('Dream League'),
-  jwtConfig: Joi.object({
-    secret: Joi.string().min(32).required(),
-  }),
   apiHost: Joi.string().default('http://localhost:3001'),
+  session: Joi.object({
+    cookieName: Joi.string().default('dl_session'),
+    cookiePassword: Joi.string().min(32).required(),
+    ttl: Joi.number().integer().default(1000 * 60 * 60 * 24 * 7), // 7 days
+  }),
   cookieOptions: Joi.object({
     ttl: Joi.number().integer().default(1000 * 60 * 60 * 24 * 365), // 1 year
     encoding: Joi.string().valid('base64json').default('base64json'),
@@ -24,10 +26,12 @@ const config = {
   port: process.env.PORT,
   env: process.env.NODE_ENV,
   appName: process.env.APP_NAME,
-  jwtConfig: {
-    secret: process.env.JWT_SECRET,
-  },
   apiHost: process.env.API_HOST,
+  session: {
+    cookieName: process.env.SESSION_COOKIE_NAME,
+    cookiePassword: process.env.SESSION_COOKIE_PASSWORD,
+    ttl: process.env.SESSION_TTL,
+  },
   cookieOptions: {
     ttl: process.env.COOKIE_TTL,
     encoding: process.env.COOKIE_ENCODING,
@@ -42,11 +46,6 @@ const config = {
 const { error, value } = schema.validate(config)
 
 value.isDev = value.env === 'development'
-value.cookieOptionsIdentity = {
-  ...value.cookieOptions,
-  ttl: 1000 * 60 * 60, // 1 hour (access token lifetime)
-  encoding: 'none',
-}
 
 if (error) {
   throw new Error(`The server config is invalid. ${error.message}`)

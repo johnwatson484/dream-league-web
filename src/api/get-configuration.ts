@@ -1,7 +1,13 @@
-export function getConfiguration (token = '') {
+export function getConfiguration (request?) {
+  let token = ''
+
+  if (request?.app?.session?.accessToken) {
+    token = request.app.session.accessToken
+  }
+
   return {
     headers: {
-      Authorization: token,
+      ...(token ? { Authorization: `Bearer ${token}` } : {}),
     },
     json: true,
   }
