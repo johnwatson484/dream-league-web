@@ -15,7 +15,7 @@ COPY --chown=node:node package*.json ./
 RUN npm ci
 COPY --chown=node:node . .
 
-CMD ["node", "src"]
+CMD ["node", "src/index.ts"]
 
 # Production build
 FROM development AS production_build
@@ -48,4 +48,4 @@ ARG PORT=3000
 ENV PORT=${PORT}
 EXPOSE ${PORT}
 
-CMD ["node", "src"]
+CMD ["node", "src/index.ts"]
