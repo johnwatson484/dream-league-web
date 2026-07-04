@@ -4,12 +4,15 @@ const client = createClient({
   socket: {
     host: process.env.REDIS_HOST || 'localhost',
     port: parseInt(process.env.REDIS_PORT || '6380', 10),
+    reconnectStrategy: (retries) => Math.min(retries * 100, 3000),
   },
   password: process.env.REDIS_PASSWORD || undefined,
 })
 
 client.on('error', (err) => {
-  console.error('Session Redis error:', err.message)
+  if (!err.message.includes('ECONNREFUSED')) {
+    console.error('Session Redis error:', err.message)
+  }
 })
 
 export async function connect () {

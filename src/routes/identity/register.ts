@@ -37,8 +37,8 @@ export default [{
         const sessionId = await createSession({
           accessToken: response.accessToken,
           refreshToken: response.refreshToken,
-          userId: response.userId || 0,
-          roles: [],
+          userId: response.userId,
+          roles: response.roles || [],
           accessTokenExpiresAt: Date.now() + 15 * 60 * 1000,
         })
         return h.redirect('/')
