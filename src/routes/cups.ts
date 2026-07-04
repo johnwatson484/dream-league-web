@@ -7,13 +7,13 @@ export default [{
   method: GET,
   path: '/cups',
   handler: async (request, h) => {
-    const cups = await get('/cups', request.state.dl_token)
+    const cups = await get('/cups', request)
     return h.view('cups', { cups })
   },
 }, {
   method: GET,
   path: '/cup/create',
-  options: { auth: { strategy: 'jwt', scope: ['admin'] } },
+  options: { auth: { strategy: 'session', scope: ['admin'] } },
   handler: async (_request, h) => {
     return h.view('create-cup')
   },
@@ -21,7 +21,7 @@ export default [{
   method: POST,
   path: '/cup/create',
   options: {
-    auth: { strategy: 'jwt', scope: ['admin'] },
+    auth: { strategy: 'session', scope: ['admin'] },
     validate: {
       payload: {
         name: Joi.string(),
@@ -33,7 +33,7 @@ export default [{
       },
     },
     handler: async (request, h) => {
-      await post('/cup/create', request.payload, request.state.dl_token)
+      await post('/cup/create', request.payload, request)
       return h.redirect('/cups')
     },
   },
@@ -41,7 +41,7 @@ export default [{
   method: GET,
   path: '/cup/edit',
   options: {
-    auth: { strategy: 'jwt', scope: ['admin'] },
+    auth: { strategy: 'session', scope: ['admin'] },
     validate: {
       query: {
         cupId: Joi.number().integer().required(),
@@ -52,14 +52,14 @@ export default [{
     },
   },
   handler: async (request, h) => {
-    const cup = await get(`/cup/?cupId=${request.query.cupId}`, request.state.dl_token)
+    const cup = await get(`/cup/?cupId=${request.query.cupId}`, request)
     return h.view('edit-cup', { cup })
   },
 }, {
   method: POST,
   path: '/cup/edit',
   options: {
-    auth: { strategy: 'jwt', scope: ['admin'] },
+    auth: { strategy: 'session', scope: ['admin'] },
     validate: {
       payload: {
         cupId: Joi.number().integer().required(),
@@ -72,7 +72,7 @@ export default [{
       },
     },
     handler: async (request, h) => {
-      await post('/cup/edit', request.payload, request.state.dl_token)
+      await post('/cup/edit', request.payload, request)
       return h.redirect('/cups')
     },
   },
@@ -80,7 +80,7 @@ export default [{
   method: GET,
   path: '/cup/delete',
   options: {
-    auth: { strategy: 'jwt', scope: ['admin'] },
+    auth: { strategy: 'session', scope: ['admin'] },
     validate: {
       query: {
         cupId: Joi.number().integer().required(),
@@ -91,25 +91,25 @@ export default [{
     },
   },
   handler: async (request, h) => {
-    const cup = await get(`/cup/?cupId=${request.query.cupId}`, request.state.dl_token)
+    const cup = await get(`/cup/?cupId=${request.query.cupId}`, request)
     return h.view('delete-cup', { cup })
   },
 }, {
   method: POST,
   path: '/cup/delete',
   options: {
-    auth: { strategy: 'jwt', scope: ['admin'] },
+    auth: { strategy: 'session', scope: ['admin'] },
     validate: {
       payload: {
         cupId: Joi.number().integer().required(),
       },
       failAction: async (request, h, error) => {
-        const cup = await get(`/cup/?cupId=${request.query.cupId}`, request.state.dl_token)
+        const cup = await get(`/cup/?cupId=${request.query.cupId}`, request)
         return h.view('delete-cup', { cup, error }).code(400).takeover()
       },
     },
     handler: async (request, h) => {
-      await post('/cup/delete', request.payload, request.state.dl_token)
+      await post('/cup/delete', request.payload, request)
       return h.redirect('/cups')
     },
   },

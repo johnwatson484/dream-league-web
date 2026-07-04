@@ -6,7 +6,7 @@ export default [{
   path: '/api/v1/meetings',
   options: {
     handler: async (request, h) => {
-      const meetings = await get('/meetings', request.state.dl_token)
+      const meetings = await get('/meetings', request)
       return h.response(meetings)
     },
   },

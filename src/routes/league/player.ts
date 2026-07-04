@@ -23,7 +23,7 @@ export default [{
   handler: async (request, h) => {
     const search = request.query.search || ''
     const position = request.query.position || ''
-    const players = await get(`/league/players?search=${search}&position=${position}`, request.state.dl_token)
+    const players = await get(`/league/players?search=${search}&position=${position}`, request)
     return h.view('league/players', { players, positions, currentPosition: position, currentSearch: search })
   },
 }, {
@@ -40,7 +40,7 @@ export default [{
     },
   },
   handler: async (request, h) => {
-    const player = await get(`/league/player?playerId=${request.query.playerId}`, request.state.dl_token)
+    const player = await get(`/league/player?playerId=${request.query.playerId}`, request)
 
     // Compute goal counts
     const leagueGoals = player.goals ? player.goals.filter(g => !g.cup).length : 0
@@ -51,16 +51,16 @@ export default [{
 }, {
   method: GET,
   path: '/league/player/create',
-  options: { auth: { strategy: 'jwt', scope: ['admin'] } },
+  options: { auth: { strategy: 'session', scope: ['admin'] } },
   handler: async (request, h) => {
-    const teams = await get('/league/teams', request.state.dl_token)
+    const teams = await get('/league/teams', request)
     return h.view('league/create-player', { teams, positions })
   },
 }, {
   method: POST,
   path: '/league/player/create',
   options: {
-    auth: { strategy: 'jwt', scope: ['admin'] },
+    auth: { strategy: 'session', scope: ['admin'] },
     validate: {
       payload: {
         firstName: Joi.string().allow(''),
@@ -69,12 +69,12 @@ export default [{
         teamId: Joi.number().integer().required(),
       },
       failAction: async (request, h, error) => {
-        const teams = await get('/league/teams', request.state.dl_token)
+        const teams = await get('/league/teams', request)
         return h.view('league/create-player', { teams, positions, error, player: request.payload }).code(400).takeover()
       },
     },
     handler: async (request, h) => {
-      await post('/league/player/create', request.payload, request.state.dl_token)
+      await post('/league/player/create', request.payload, request)
       return h.redirect('/league/players')
     },
   },
@@ -82,7 +82,7 @@ export default [{
   method: GET,
   path: '/league/player/edit',
   options: {
-    auth: { strategy: 'jwt', scope: ['admin'] },
+    auth: { strategy: 'session', scope: ['admin'] },
     validate: {
       query: {
         playerId: Joi.number().integer().required(),
@@ -93,15 +93,15 @@ export default [{
     },
   },
   handler: async (request, h) => {
-    const player = await get(`/league/player/?playerId=${request.query.playerId}`, request.state.dl_token)
-    const teams = await get('/league/teams', request.state.dl_token)
+    const player = await get(`/league/player/?playerId=${request.query.playerId}`, request)
+    const teams = await get('/league/teams', request)
     return h.view('league/edit-player', { player, teams, positions })
   },
 }, {
   method: POST,
   path: '/league/player/edit',
   options: {
-    auth: { strategy: 'jwt', scope: ['admin'] },
+    auth: { strategy: 'session', scope: ['admin'] },
     validate: {
       payload: {
         playerId: Joi.number().integer().required(),
@@ -111,12 +111,12 @@ export default [{
         teamId: Joi.number().integer().required(),
       },
       failAction: async (request, h, error) => {
-        const teams = await get('/league/teams', request.state.dl_token)
+        const teams = await get('/league/teams', request)
         return h.view('league/edit-player', { player: request.payload, teams, positions, error }).code(400).takeover()
       },
     },
     handler: async (request, h) => {
-      await post('/league/player/edit', request.payload, request.state.dl_token)
+      await post('/league/player/edit', request.payload, request)
       return h.redirect('/league/players')
     },
   },
@@ -124,7 +124,7 @@ export default [{
   method: GET,
   path: '/league/player/delete',
   options: {
-    auth: { strategy: 'jwt', scope: ['admin'] },
+    auth: { strategy: 'session', scope: ['admin'] },
     validate: {
       query: {
         playerId: Joi.number().integer().required(),
@@ -135,25 +135,25 @@ export default [{
     },
   },
   handler: async (request, h) => {
-    const player = await get(`/league/player/?playerId=${request.query.playerId}`, request.state.dl_token)
+    const player = await get(`/league/player/?playerId=${request.query.playerId}`, request)
     return h.view('league/delete-player', { player })
   },
 }, {
   method: POST,
   path: '/league/player/delete',
   options: {
-    auth: { strategy: 'jwt', scope: ['admin'] },
+    auth: { strategy: 'session', scope: ['admin'] },
     validate: {
       payload: {
         playerId: Joi.number().integer().required(),
       },
       failAction: async (request, h, error) => {
-        const player = await get(`/league/player/?playerId=${request.query.playerId}`, request.state.dl_token)
+        const player = await get(`/league/player/?playerId=${request.query.playerId}`, request)
         return h.view('league/delete-player', { player, error }).code(400).takeover()
       },
     },
     handler: async (request, h) => {
-      await post('/league/player/delete', request.payload, request.state.dl_token)
+      await post('/league/player/delete', request.payload, request)
       return h.redirect('/league/players')
     },
   },
@@ -173,7 +173,7 @@ export default [{
       },
     },
     handler: async (request, _h) => {
-      const players = await post('/league/players/autocomplete', request.payload, request.state.dl_token)
+      const players = await post('/league/players/autocomplete', request.payload, request)
       return players.map(function (player) {
         return {
           label: `${player.lastNameFirstName} - ${player.team.name} - ${player.position}`,

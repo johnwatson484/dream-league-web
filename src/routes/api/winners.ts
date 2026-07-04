@@ -6,7 +6,7 @@ export default [{
   path: '/api/v1/winners',
   options: {
     handler: async (request, h) => {
-      const winners = await get('/winners', request.state.dl_token)
+      const winners = await get('/winners', request)
       return h.response(winners)
     },
   },

@@ -1,6 +1,7 @@
 import Joi from 'joi'
 import config from '../../config.ts'
 import { post } from '../../api/post.ts'
+import { createSession } from '../../session/session-manager.ts'
 import { GET, POST } from '../../constants/verbs.ts'
 
 export default [{
@@ -33,9 +34,15 @@ export default [{
             message: 'Email already registered or not a league member',
           })
         }
+        const sessionId = await createSession({
+          accessToken: response.accessToken,
+          refreshToken: response.refreshToken,
+          userId: response.userId,
+          roles: response.roles || [],
+          accessTokenExpiresAt: Date.now() + 15 * 60 * 1000,
+        })
         return h.redirect('/')
-          .state('dl_token', response.token, config.cookieOptionsIdentity)
-          .state('dl_refresh', { userId: response.userId, refreshToken: response.refreshToken }, config.cookieOptionsRefresh)
+          .state(config.session.cookieName, { sessionId })
       } catch {
         return h.view('identity/register', {
           message: 'Invalid credentials',

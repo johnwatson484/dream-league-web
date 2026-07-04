@@ -7,12 +7,12 @@ export default [{
   method: GET,
   path: '/history',
   handler: async (request, h) => {
-    const history = await get('/history', request.state.dl_token)
+    const history = await get('/history', request)
     return h.view('history', { history })
   },
 }, {
   method: GET,
-  options: { auth: { strategy: 'jwt', scope: ['admin'] } },
+  options: { auth: { strategy: 'session', scope: ['admin'] } },
   path: '/history/create',
   handler: async (_request, h) => {
     return h.view('create-history')
@@ -21,7 +21,7 @@ export default [{
   method: POST,
   path: '/history/create',
   options: {
-    auth: { strategy: 'jwt', scope: ['admin'] },
+    auth: { strategy: 'session', scope: ['admin'] },
     validate: {
       payload: {
         year: Joi.number().integer().required(),
@@ -37,7 +37,7 @@ export default [{
       },
     },
     handler: async (request, h) => {
-      await post('/history/create', request.payload, request.state.dl_token)
+      await post('/history/create', request.payload, request)
       return h.redirect('/history')
     },
   },
@@ -45,7 +45,7 @@ export default [{
   method: GET,
   path: '/history/edit',
   options: {
-    auth: { strategy: 'jwt', scope: ['admin'] },
+    auth: { strategy: 'session', scope: ['admin'] },
     validate: {
       query: {
         historyId: Joi.number().required(),
@@ -56,14 +56,14 @@ export default [{
     },
   },
   handler: async (request, h) => {
-    const history = await get(`/history/?historyId=${request.query.historyId}`, request.state.dl_token)
+    const history = await get(`/history/?historyId=${request.query.historyId}`, request)
     return h.view('edit-history', { history })
   },
 }, {
   method: POST,
   path: '/history/edit',
   options: {
-    auth: { strategy: 'jwt', scope: ['admin'] },
+    auth: { strategy: 'session', scope: ['admin'] },
     validate: {
       payload: {
         historyId: Joi.number().integer().required(),
@@ -80,7 +80,7 @@ export default [{
       },
     },
     handler: async (request, h) => {
-      await post('/history/edit', request.payload, request.state.dl_token)
+      await post('/history/edit', request.payload, request)
       return h.redirect('/history')
     },
   },
@@ -88,7 +88,7 @@ export default [{
   method: GET,
   path: '/history/delete',
   options: {
-    auth: { strategy: 'jwt', scope: ['admin'] },
+    auth: { strategy: 'session', scope: ['admin'] },
     validate: {
       query: {
         historyId: Joi.number().integer().required(),
@@ -99,25 +99,25 @@ export default [{
     },
   },
   handler: async (request, h) => {
-    const history = await get(`/history/?historyId=${request.query.historyId}`, request.state.dl_token)
+    const history = await get(`/history/?historyId=${request.query.historyId}`, request)
     return h.view('delete-history', { history })
   },
 }, {
   method: POST,
   path: '/history/delete',
   options: {
-    auth: { strategy: 'jwt', scope: ['admin'] },
+    auth: { strategy: 'session', scope: ['admin'] },
     validate: {
       payload: {
         historyId: Joi.number().integer().required(),
       },
       failAction: async (request, h, error) => {
-        const history = await get(`/history/?historyId=${request.query.historyId}`, request.state.dl_token)
+        const history = await get(`/history/?historyId=${request.query.historyId}`, request)
         return h.view('delete-history', { history, error }).code(400).takeover()
       },
     },
     handler: async (request, h) => {
-      await post('/history/delete', request.payload, request.state.dl_token)
+      await post('/history/delete', request.payload, request)
       return h.redirect('/history')
     },
   },

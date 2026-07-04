@@ -8,24 +8,24 @@ export default [{
   path: '/groups',
   options: {
     handler: async (request, h) => {
-      const groups = await get('/groups', request.state.dl_token)
+      const groups = await get('/groups', request)
       return h.view('groups', { groups })
     },
   },
 }, {
   method: GET,
   path: '/group/create',
-  options: { auth: { strategy: 'jwt', scope: ['admin'] } },
+  options: { auth: { strategy: 'session', scope: ['admin'] } },
   handler: async (request, h) => {
-    const cups = await get('/cups', request.state.dl_token)
-    const managers = await get('/managers', request.state.dl_token)
+    const cups = await get('/cups', request)
+    const managers = await get('/managers', request)
     return h.view('create-group', { cups, managers })
   },
 }, {
   method: POST,
   path: '/group/create',
   options: {
-    auth: { strategy: 'jwt', scope: ['admin'] },
+    auth: { strategy: 'session', scope: ['admin'] },
     validate: {
       payload: {
         cupId: Joi.number().integer().required(),
@@ -35,13 +35,13 @@ export default [{
         managers: Joi.array().items(Joi.number().integer()).single(),
       },
       failAction: async (request, h, error) => {
-        const cups = await get('/cups', request.state.dl_token)
-        const managers = await get('/managers', request.state.dl_token)
+        const cups = await get('/cups', request)
+        const managers = await get('/managers', request)
         return h.view('create-group', { error, group: request.payload, cups, managers }).code(400).takeover()
       },
     },
     handler: async (request, h) => {
-      await post('/group/create', request.payload, request.state.dl_token)
+      await post('/group/create', request.payload, request)
       return h.redirect('/groups')
     },
   },
@@ -49,7 +49,7 @@ export default [{
   method: GET,
   path: '/group/edit',
   options: {
-    auth: { strategy: 'jwt', scope: ['admin'] },
+    auth: { strategy: 'session', scope: ['admin'] },
     validate: {
       query: {
         groupId: Joi.number().integer().required(),
@@ -60,16 +60,16 @@ export default [{
     },
   },
   handler: async (request, h) => {
-    const group = await get(`/group/?groupId=${request.query.groupId}`, request.state.dl_token)
-    const cups = await get('/cups', request.state.dl_token)
-    const managers = await get('/managers', request.state.dl_token)
+    const group = await get(`/group/?groupId=${request.query.groupId}`, request)
+    const cups = await get('/cups', request)
+    const managers = await get('/managers', request)
     return h.view('edit-group', { group, cups, managers })
   },
 }, {
   method: POST,
   path: '/group/edit',
   options: {
-    auth: { strategy: 'jwt', scope: ['admin'] },
+    auth: { strategy: 'session', scope: ['admin'] },
     validate: {
       payload: {
         groupId: Joi.number().integer().required(),
@@ -80,13 +80,13 @@ export default [{
         managers: Joi.array().items(Joi.number().integer()).single(),
       },
       failAction: async (request, h, error) => {
-        const cups = await get('/cups', request.state.dl_token)
-        const managers = await get('/managers', request.state.dl_token)
+        const cups = await get('/cups', request)
+        const managers = await get('/managers', request)
         return h.view('edit-group', { group: request.payload, error, cups, managers }).code(400).takeover()
       },
     },
     handler: async (request, h) => {
-      await post('/group/edit', request.payload, request.state.dl_token)
+      await post('/group/edit', request.payload, request)
       return h.redirect('/groups')
     },
   },
@@ -94,7 +94,7 @@ export default [{
   method: GET,
   path: '/group/delete',
   options: {
-    auth: { strategy: 'jwt', scope: ['admin'] },
+    auth: { strategy: 'session', scope: ['admin'] },
     validate: {
       query: {
         groupId: Joi.number().integer().required(),
@@ -105,25 +105,25 @@ export default [{
     },
   },
   handler: async (request, h) => {
-    const group = await get(`/group/?groupId=${request.query.groupId}`, request.state.dl_token)
+    const group = await get(`/group/?groupId=${request.query.groupId}`, request)
     return h.view('delete-group', { group })
   },
 }, {
   method: POST,
   path: '/group/delete',
   options: {
-    auth: { strategy: 'jwt', scope: ['admin'] },
+    auth: { strategy: 'session', scope: ['admin'] },
     validate: {
       payload: {
         groupId: Joi.number().integer().required(),
       },
       failAction: async (request, h, error) => {
-        const group = await get(`/group/?groupId=${request.query.groupId}`, request.state.dl_token)
+        const group = await get(`/group/?groupId=${request.query.groupId}`, request)
         return h.view('delete-group', { group, error }).code(400).takeover()
       },
     },
     handler: async (request, h) => {
-      await post('/group/delete', request.payload, request.state.dl_token)
+      await post('/group/delete', request.payload, request)
       return h.redirect('/groups')
     },
   },

@@ -5,7 +5,7 @@ import { GET, POST } from '../../constants/verbs.ts'
 export default [{
   method: GET,
   path: '/league/refresh',
-  options: { auth: { strategy: 'jwt', scope: ['admin'] } },
+  options: { auth: { strategy: 'session', scope: ['admin'] } },
   handler: (_request, h) => {
     return h.view('league/refresh')
   },
@@ -13,7 +13,7 @@ export default [{
   method: POST,
   path: '/league/refresh/players',
   options: {
-    auth: { strategy: 'jwt', scope: ['admin'] },
+    auth: { strategy: 'session', scope: ['admin'] },
     payload: {
       maxBytes: 10485760,
       output: 'file',
@@ -41,7 +41,7 @@ export default [{
       },
     },
     handler: async (request, h) => {
-      const response = await refreshPlayers(request.payload.playerFile.path, request.state.dl_token)
+      const response = await refreshPlayers(request.payload.playerFile.path, request)
       if (response.success) {
         return h.redirect('/league/players')
       }

@@ -11,15 +11,15 @@ export default [{
   method: GET,
   path: '/teamsheet',
   handler: async (request, h) => {
-    const teamsheet = await get('/teamsheet', request.state.dl_token)
+    const teamsheet = await get('/teamsheet', request)
     return h.view('teamsheet', { teamsheet })
   },
 }, {
   method: GET,
   path: '/teamsheet/edit',
-  options: { auth: { strategy: 'jwt', scope: ['admin'] } },
+  options: { auth: { strategy: 'session', scope: ['admin'] } },
   handler: async (request, h) => {
-    const teamsheet = await get('/teamsheet', request.state.dl_token)
+    const teamsheet = await get('/teamsheet', request)
     const teamsheetViewModel = ViewModel(teamsheet)
     return h.view('teamsheet-edit', { teamsheet: teamsheetViewModel })
   },
@@ -27,7 +27,7 @@ export default [{
   method: POST,
   path: '/teamsheet/edit/player',
   options: {
-    auth: { strategy: 'jwt', scope: ['admin'] },
+    auth: { strategy: 'session', scope: ['admin'] },
     plugins: { crumb: false },
     validate: {
       payload: {
@@ -40,14 +40,14 @@ export default [{
       },
     },
     handler: async (request, _h) => {
-      return post('/teamsheet/edit/player', request.payload, request.state.dl_token)
+      return post('/teamsheet/edit/player', request.payload, request)
     },
   },
 }, {
   method: POST,
   path: '/teamsheet/edit/keeper',
   options: {
-    auth: { strategy: 'jwt', scope: ['admin'] },
+    auth: { strategy: 'session', scope: ['admin'] },
     plugins: { crumb: false },
     validate: {
       payload: {
@@ -60,14 +60,14 @@ export default [{
       },
     },
     handler: async (request, _h) => {
-      return post('/teamsheet/edit/keeper', request.payload, request.state.dl_token)
+      return post('/teamsheet/edit/keeper', request.payload, request)
     },
   },
 }, {
   method: POST,
   path: '/teamsheet/refresh',
   options: {
-    auth: { strategy: 'jwt', scope: ['admin'] },
+    auth: { strategy: 'session', scope: ['admin'] },
     payload: {
       maxBytes: 209715200,
       output: 'file',
@@ -95,7 +95,7 @@ export default [{
       },
     },
     handler: async (request, h) => {
-      const response = await refreshTeamsheet(request.payload.teamFile.path, request.state.dl_token)
+      const response = await refreshTeamsheet(request.payload.teamFile.path, request)
       if (response.success) {
         return h.redirect('/teamsheet/edit')
       }

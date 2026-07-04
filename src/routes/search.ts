@@ -19,7 +19,7 @@ export default [{
       },
     },
     handler: async (request, h) => {
-      const results = await post('/search/autocomplete', request.payload, request.state.dl_token)
+      const results = await post('/search/autocomplete', request.payload, request)
       return h.response(results)
     },
   },

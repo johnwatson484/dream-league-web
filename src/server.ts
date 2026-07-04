@@ -2,12 +2,13 @@ import Hapi from '@hapi/hapi'
 import Joi from 'joi'
 import scooter from '@hapi/scooter'
 import inert from '@hapi/inert'
-import hapiAuthJwt2 from 'hapi-auth-jwt2'
 import config from './config.ts'
+import { connect as connectRedis } from './session/redis-client.ts'
 import userAgentProtection from './plugins/user-agent-protection.ts'
 import views from './plugins/views.ts'
 import contentSecurityPolicy from './plugins/content-security-policy.ts'
 import auth from './plugins/auth.ts'
+import sessionLifecycle from './plugins/session-lifecycle.ts'
 import qs from './plugins/qs.ts'
 import router from './plugins/router.ts'
 import errors from './plugins/errors.ts'
@@ -16,6 +17,8 @@ import crumb from './plugins/crumb.ts'
 import logging from './plugins/logging.ts'
 
 async function createServer () {
+  await connectRedis()
+
   const server = Hapi.server({
     port: config.port,
     routes: {
@@ -36,7 +39,6 @@ async function createServer () {
   await server.register(userAgentProtection)
   await server.register(scooter)
   await server.register(inert)
-  await server.register(hapiAuthJwt2)
   await server.register(views)
 
   server.ext('onPreResponse', (request, h) => {
@@ -48,6 +50,7 @@ async function createServer () {
 
   await server.register(contentSecurityPolicy)
   await server.register(auth)
+  await server.register(sessionLifecycle)
   await server.register(qs)
   await server.register(router)
   await server.register(errors)
