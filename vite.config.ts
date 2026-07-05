@@ -34,12 +34,13 @@ export default defineConfig(({ mode }) => ({
           : 'javascripts/[name].js',
         assetFileNames: ({ names }) => {
           const name = names[0] ?? ''
-          if (/\.css$/.test(name)) {
+          if (name.endsWith('.css')) {
             return mode === 'production'
               ? 'stylesheets/[name].[hash:7].min.css'
               : 'stylesheets/[name].css'
           }
-          if (/\.(woff2?|eot|ttf|otf)$/.test(name)) {
+          const fontExtensions = ['.woff2', '.woff', '.eot', '.ttf', '.otf']
+          if (fontExtensions.some(ext => name.endsWith(ext))) {
             return 'assets/fonts/[name][extname]'
           }
           return 'images/[name][extname]'

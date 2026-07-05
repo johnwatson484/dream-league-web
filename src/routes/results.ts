@@ -30,8 +30,8 @@ const routes: ServerRoute[] = [{
   path: '/results/edit',
   handler: async (request, h) => {
     const resultsInput = await get('/results-edit', request) as { keepers: { division: string; team: string }[]; players: { division: string; team: string; lastName: string; firstName: string }[] }
-    resultsInput.keepers = resultsInput.keepers.sort((a, b) => { return compare(a.division, b.division) || compare(a.team, b.team) })
-    resultsInput.players = resultsInput.players.sort((a, b) => { return compare(a.division, b.division) || compare(a.team, b.team) || compare(a.lastName, b.lastName) || compare(a.firstName, b.firstName) })
+    resultsInput.keepers = resultsInput.keepers.toSorted((a, b) => { return compare(a.division, b.division) || compare(a.team, b.team) })
+    resultsInput.players = resultsInput.players.toSorted((a, b) => { return compare(a.division, b.division) || compare(a.team, b.team) || compare(a.lastName, b.lastName) || compare(a.firstName, b.firstName) })
     return h.view('results-edit', { resultsInput })
   },
 }, {

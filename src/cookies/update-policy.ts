@@ -4,10 +4,7 @@ import { getCookieOptions } from './get-cookie-options.ts'
 import { createDefaultPolicy } from './create-default-policy.ts'
 
 export function updatePolicy (request: Request, h: ResponseToolkit, analytics: boolean): void {
-  let cookiesPolicy = request.state.cookies_policy as CookiesPolicy | undefined
-  if (!cookiesPolicy) {
-    cookiesPolicy = createDefaultPolicy(h)
-  }
+  const cookiesPolicy = (request.state.cookies_policy as CookiesPolicy | undefined) ?? createDefaultPolicy(h)
 
   cookiesPolicy.analytics = analytics
   cookiesPolicy.confirmed = true
