@@ -78,13 +78,13 @@ const config = convict({
     },
     encoding: {
       doc: 'Cookie encoding format.',
-      format: String,
+      format: ['none', 'base64', 'base64json', 'iron'],
       default: 'base64json',
       env: 'COOKIE_ENCODING',
     },
     isSameSite: {
       doc: 'Cookie SameSite attribute.',
-      format: String,
+      format: ['Lax', 'Strict', 'None'],
       default: 'Lax',
       env: 'COOKIE_SAME_SITE',
     },
