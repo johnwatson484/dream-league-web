@@ -1,7 +1,7 @@
-import config from '../config.ts'
+import { getCookieOptions } from './get-cookie-options.ts'
 
 export function createDefaultPolicy (h) {
   const cookiesPolicy = { confirmed: false, essential: true, analytics: false }
-  h.state('cookies_policy', cookiesPolicy, config.cookieOptions)
+  h.state('cookies_policy', cookiesPolicy, getCookieOptions())
   return cookiesPolicy
 }

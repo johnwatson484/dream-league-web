@@ -7,7 +7,8 @@ export default {
     name: 'session-lifecycle',
     register: (server, _options) => {
       server.ext('onPreAuth', async (request, h) => {
-        const sessionCookie = request.state?.[config.session.cookieName]
+        const cookieName = config.get('session.cookieName')
+        const sessionCookie = request.state?.[cookieName]
         if (!sessionCookie?.sessionId) {
           request.app.session = null
           return h.continue
@@ -15,7 +16,7 @@ export default {
 
         const session = await loadSession(sessionCookie.sessionId)
         if (!session) {
-          h.unstate(config.session.cookieName)
+          h.unstate(cookieName)
           request.app.session = null
           return h.continue
         }
@@ -30,7 +31,7 @@ export default {
             await updateSession(sessionCookie.sessionId, session)
           } catch {
             await destroySession(sessionCookie.sessionId)
-            h.unstate(config.session.cookieName)
+            h.unstate(cookieName)
             request.app.session = null
             return h.continue
           }

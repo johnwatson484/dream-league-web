@@ -37,7 +37,7 @@ export default [{
           accessTokenExpiresAt: Date.now() + 15 * 60 * 1000,
         })
         return h.redirect('/')
-          .state(config.session.cookieName, { sessionId })
+          .state(config.get('session.cookieName'), { sessionId })
       } catch {
         return h.view('identity/login', {
           message: 'Invalid credentials',

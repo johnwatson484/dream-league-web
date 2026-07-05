@@ -1,12 +1,13 @@
 import { createClient } from 'redis'
+import config from '../config.ts'
 
 const client = createClient({
   socket: {
-    host: process.env.REDIS_HOST || 'localhost',
-    port: parseInt(process.env.REDIS_PORT || '6380', 10),
+    host: config.get('redis.host'),
+    port: config.get('redis.port'),
     reconnectStrategy: (retries) => Math.min(retries * 100, 3000),
   },
-  password: process.env.REDIS_PASSWORD || undefined,
+  password: config.get('redis.password') || undefined,
 })
 
 client.on('error', (err) => {

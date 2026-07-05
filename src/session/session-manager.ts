@@ -2,7 +2,7 @@ import { randomBytes } from 'node:crypto'
 import config from '../config.ts'
 import { getSession, setSession, deleteSession } from './redis-client.ts'
 
-const SESSION_TTL_SECONDS = Math.floor(config.session.ttl / 1000)
+const SESSION_TTL_SECONDS = Math.floor(config.get('session.ttl') / 1000)
 
 export interface SessionData {
   accessToken: string

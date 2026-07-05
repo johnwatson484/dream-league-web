@@ -2,8 +2,8 @@ import { defineConfig, configDefaults } from 'vitest/config'
 
 const sharedEnv = {
   NODE_ENV: 'test',
-  JWT_SECRET: 'test-secret-at-least-32-characters!!',
   API_HOST: 'http://localhost:3001',
+  COOKIE_PASSWORD: 'test-cookie-password-at-least-32-characters!!',
 }
 
 const coverageConfig = {
