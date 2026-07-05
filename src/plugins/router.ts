@@ -1,3 +1,4 @@
+import type { Plugin, ServerOptions, ServerRoute } from '@hapi/hapi'
 import home from '../routes/home.ts'
 import cookies from '../routes/cookies.ts'
 import register from '../routes/identity/register.ts'
@@ -24,7 +25,7 @@ import apiMeetings from '../routes/api/meetings.ts'
 import apiManagers from '../routes/api/managers.ts'
 import publicRoutes from '../routes/public.ts'
 
-const routes = [
+const routes: ServerRoute[] = [
   ...home,
   ...cookies,
   ...register,
@@ -52,11 +53,11 @@ const routes = [
   ...publicRoutes,
 ]
 
-export default {
-  plugin: {
-    name: 'router',
-    register: (server, _options) => {
-      server.route(routes)
-    },
+const plugin: Plugin<ServerOptions> = {
+  name: 'router',
+  register: (server) => {
+    server.route(routes)
   },
 }
+
+export default { plugin }

@@ -1,8 +1,9 @@
+import type { ServerRoute } from '@hapi/hapi'
 import Joi from 'joi'
 import { post } from '../../api/post.ts'
 import { GET, POST } from '../../constants/verbs.ts'
 
-export default [{
+const routes: ServerRoute[] = [{
   method: GET,
   path: '/forgot-password',
   handler: (_request, h) => {
@@ -29,3 +30,5 @@ export default [{
     },
   },
 }]
+
+export default routes

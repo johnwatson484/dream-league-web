@@ -1,3 +1,4 @@
+import type { ServerRoute } from '@hapi/hapi'
 import Joi from 'joi'
 import boom from '@hapi/boom'
 import { get } from '../../api/get.ts'
@@ -6,7 +7,7 @@ import { GET, POST } from '../../constants/verbs.ts'
 import { DEFENDER, MIDFIELDER, FORWARD } from '../../constants/positions.ts'
 const positions = [DEFENDER, MIDFIELDER, FORWARD]
 
-export default [{
+const routes: ServerRoute[] = [{
   method: GET,
   path: '/league/players',
   options: {
@@ -15,14 +16,15 @@ export default [{
         search: Joi.string().allow(''),
         position: Joi.string().allow(''),
       },
-      failAction: async (_request, h, error) => {
+      failAction: async (_request, h, _error) => {
         return h.view('404').code(404).takeover()
       },
     },
   },
   handler: async (request, h) => {
-    const search = request.query.search || ''
-    const position = request.query.position || ''
+    const query = request.query as Record<string, string>
+    const search = query.search || ''
+    const position = query.position || ''
     const players = await get(`/league/players?search=${search}&position=${position}`, request)
     return h.view('league/players', { players, positions, currentPosition: position, currentSearch: search })
   },
@@ -34,15 +36,14 @@ export default [{
       query: {
         playerId: Joi.number().integer().required(),
       },
-      failAction: async (_request, h, error) => {
+      failAction: async (_request, h, _error) => {
         return h.view('404').code(404).takeover()
       },
     },
   },
   handler: async (request, h) => {
-    const player = await get(`/league/player?playerId=${request.query.playerId}`, request)
+    const player = await get(`/league/player?playerId=${(request.query as Record<string, unknown>).playerId}`, request) as { goals?: { cup: boolean }[] }
 
-    // Compute goal counts
     const leagueGoals = player.goals ? player.goals.filter(g => !g.cup).length : 0
     const cupGoals = player.goals ? player.goals.filter(g => g.cup).length : 0
 
@@ -87,13 +88,13 @@ export default [{
       query: {
         playerId: Joi.number().integer().required(),
       },
-      failAction: async (_request, h, error) => {
+      failAction: async (_request, h, _error) => {
         return h.view('404').code(404).takeover()
       },
     },
   },
   handler: async (request, h) => {
-    const player = await get(`/league/player/?playerId=${request.query.playerId}`, request)
+    const player = await get(`/league/player/?playerId=${(request.query as Record<string, unknown>).playerId}`, request)
     const teams = await get('/league/teams', request)
     return h.view('league/edit-player', { player, teams, positions })
   },
@@ -129,13 +130,13 @@ export default [{
       query: {
         playerId: Joi.number().integer().required(),
       },
-      failAction: async (_request, h, error) => {
+      failAction: async (_request, h, _error) => {
         return h.view('404').code(404).takeover()
       },
     },
   },
   handler: async (request, h) => {
-    const player = await get(`/league/player/?playerId=${request.query.playerId}`, request)
+    const player = await get(`/league/player/?playerId=${(request.query as Record<string, unknown>).playerId}`, request)
     return h.view('league/delete-player', { player })
   },
 }, {
@@ -148,7 +149,7 @@ export default [{
         playerId: Joi.number().integer().required(),
       },
       failAction: async (request, h, error) => {
-        const player = await get(`/league/player/?playerId=${request.query.playerId}`, request)
+        const player = await get(`/league/player/?playerId=${(request.query as Record<string, unknown>).playerId}`, request)
         return h.view('league/delete-player', { player, error }).code(400).takeover()
       },
     },
@@ -169,11 +170,11 @@ export default [{
         prefix: Joi.string(),
       },
       failAction: async (_request, _h, error) => {
-        return boom.badRequest(error)
+        return boom.badRequest(error?.message)
       },
     },
     handler: async (request, _h) => {
-      const players = await post('/league/players/autocomplete', request.payload, request)
+      const players = await post('/league/players/autocomplete', request.payload, request) as { lastNameFirstName: string; team: { name: string }; position: string; playerId: number }[]
       return players.map(function (player) {
         return {
           label: `${player.lastNameFirstName} - ${player.team.name} - ${player.position}`,
@@ -183,3 +184,5 @@ export default [{
     },
   },
 }]
+
+export default routes

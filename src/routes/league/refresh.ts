@@ -1,8 +1,9 @@
+import type { ServerRoute } from '@hapi/hapi'
 import Joi from 'joi'
 import { refreshPlayers } from '../../refresh/players/refresh.ts'
 import { GET, POST } from '../../constants/verbs.ts'
 
-export default [{
+const routes: ServerRoute[] = [{
   method: GET,
   path: '/league/refresh',
   options: { auth: { strategy: 'session', scope: ['admin'] } },
@@ -36,12 +37,13 @@ export default [{
           }),
         }).unknown(),
       },
-      failAction: async (_request, h, error) => {
+      failAction: async (_request, h, _error) => {
         return h.view('league/refresh', { message: 'Only .xlsx files are permitted' }).code(400).takeover()
       },
     },
     handler: async (request, h) => {
-      const response = await refreshPlayers(request.payload.playerFile.path, request)
+      const payload = request.payload as { playerFile: { path: string } }
+      const response = await refreshPlayers(payload.playerFile.path, request) as { success: boolean; unmappedPlayers?: unknown[] }
       if (response.success) {
         return h.redirect('/league/players')
       }
@@ -57,3 +59,5 @@ export default [{
     },
   },
 }]
+
+export default routes

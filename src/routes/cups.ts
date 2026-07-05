@@ -1,9 +1,10 @@
+import type { ServerRoute } from '@hapi/hapi'
 import Joi from 'joi'
 import { get } from '../api/get.ts'
 import { post } from '../api/post.ts'
 import { GET, POST } from '../constants/verbs.ts'
 
-export default [{
+const routes: ServerRoute[] = [{
   method: GET,
   path: '/cups',
   handler: async (request, h) => {
@@ -46,13 +47,13 @@ export default [{
       query: {
         cupId: Joi.number().integer().required(),
       },
-      failAction: async (request, h, error) => {
+      failAction: async (_request, h, _error) => {
         return h.view('404').code(404).takeover()
       },
     },
   },
   handler: async (request, h) => {
-    const cup = await get(`/cup/?cupId=${request.query.cupId}`, request)
+    const cup = await get(`/cup/?cupId=${(request.query as Record<string, unknown>).cupId}`, request)
     return h.view('edit-cup', { cup })
   },
 }, {
@@ -67,8 +68,8 @@ export default [{
         hasGroupStage: Joi.boolean().required(),
         knockoutLegs: Joi.number().integer().required(),
       },
-      failAction: async (request, h, error) => {
-        return h.view('edit-cup', { cup: request.payload, error }).code(400).takeover()
+      failAction: async (request, h, _error) => {
+        return h.view('edit-cup', { cup: request.payload, error: _error }).code(400).takeover()
       },
     },
     handler: async (request, h) => {
@@ -85,13 +86,13 @@ export default [{
       query: {
         cupId: Joi.number().integer().required(),
       },
-      failAction: async (request, h, error) => {
+      failAction: async (_request, h, _error) => {
         return h.view('404').code(404).takeover()
       },
     },
   },
   handler: async (request, h) => {
-    const cup = await get(`/cup/?cupId=${request.query.cupId}`, request)
+    const cup = await get(`/cup/?cupId=${(request.query as Record<string, unknown>).cupId}`, request)
     return h.view('delete-cup', { cup })
   },
 }, {
@@ -103,9 +104,9 @@ export default [{
       payload: {
         cupId: Joi.number().integer().required(),
       },
-      failAction: async (request, h, error) => {
-        const cup = await get(`/cup/?cupId=${request.query.cupId}`, request)
-        return h.view('delete-cup', { cup, error }).code(400).takeover()
+      failAction: async (request, h, _error) => {
+        const cup = await get(`/cup/?cupId=${(request.query as Record<string, unknown>).cupId}`, request)
+        return h.view('delete-cup', { cup, error: _error }).code(400).takeover()
       },
     },
     handler: async (request, h) => {
@@ -114,3 +115,5 @@ export default [{
     },
   },
 }]
+
+export default routes

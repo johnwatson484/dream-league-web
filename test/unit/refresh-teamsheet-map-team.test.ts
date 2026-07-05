@@ -52,7 +52,7 @@ describe('teamsheet team extraction from worksheet', () => {
     const result = mapTeam({}, 'Alice', { c: 0, r: 0 })
 
     expect(result.players).toHaveLength(1)
-    expect(result.players[0].player).toBe('Player 1')
+    expect(result.players[0]!.player).toBe('Player 1')
   })
 
   test('passes the correct position and substitute flag for each player index', () => {

@@ -1,9 +1,10 @@
+import type { ServerRoute } from '@hapi/hapi'
 import Joi from 'joi'
 import { get } from '../api/get.ts'
 import { post } from '../api/post.ts'
 import { GET, POST } from '../constants/verbs.ts'
 
-export default [{
+const routes: ServerRoute[] = [{
   method: GET,
   path: '/goals',
   handler: async (request, h) => {
@@ -18,14 +19,14 @@ export default [{
       query: {
         goalId: Joi.number().integer().required(),
       },
-      failAction: async (_request, h, error) => {
+      failAction: async (_request, h, _error) => {
         return h.view('404').code(400).takeover()
       },
     },
   },
   handler: async (request, h) => {
-    const goal = await get(`/goal/detail/?goalId=${request.query.goalId}`, request)
-    return h.view('goal', goal)
+    const goal = await get(`/goal/detail/?goalId=${(request.query as Record<string, unknown>).goalId}`, request)
+    return h.view('goal', goal as Record<string, unknown>)
   },
 }, {
   method: GET,
@@ -36,13 +37,13 @@ export default [{
       query: {
         goalId: Joi.number().integer().required(),
       },
-      failAction: async (_request, h, error) => {
+      failAction: async (_request, h, _error) => {
         return h.view('404').code(400).takeover()
       },
     },
   },
   handler: async (request, h) => {
-    const goal = await get(`/goal/?goalId=${request.query.goalId}`, request)
+    const goal = await get(`/goal/?goalId=${(request.query as Record<string, unknown>).goalId}`, request)
     return h.view('delete-goal', { goal })
   },
 }, {
@@ -55,7 +56,7 @@ export default [{
         goalId: Joi.number().integer().required(),
       },
       failAction: async (request, h, error) => {
-        const goal = await get(`/goal/?goalId=${request.query.goalId}`, request)
+        const goal = await get(`/goal/?goalId=${(request.query as Record<string, unknown>).goalId}`, request)
         return h.view('delete-goal', { goal, error }).code(400).takeover()
       },
     },
@@ -65,3 +66,5 @@ export default [{
     },
   },
 }]
+
+export default routes

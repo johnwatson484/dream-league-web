@@ -1,9 +1,10 @@
+import type { ServerRoute } from '@hapi/hapi'
 import Joi from 'joi'
 import { get } from '../api/get.ts'
 import { post } from '../api/post.ts'
 import { GET, POST } from '../constants/verbs.ts'
 
-export default [{
+const routes: ServerRoute[] = [{
   method: GET,
   path: '/meetings',
   handler: async (request, h) => {
@@ -44,13 +45,13 @@ export default [{
       query: {
         meetingId: Joi.number().integer().required(),
       },
-      failAction: async (request, h, error) => {
+      failAction: async (_request, h, _error) => {
         return h.view('404').code(404).takeover()
       },
     },
   },
   handler: async (request, h) => {
-    const meeting = await get(`/meeting/?meetingId=${request.query.meetingId}`, request)
+    const meeting = await get(`/meeting/?meetingId=${(request.query as Record<string, unknown>).meetingId}`, request)
     return h.view('edit-meeting', { meeting })
   },
 }, {
@@ -77,7 +78,7 @@ export default [{
   path: '/meeting/delete',
   options: { auth: { strategy: 'session', scope: ['admin'] } },
   handler: async (request, h) => {
-    const meeting = await get(`/meeting/?meetingId=${request.query.meetingId}`, request)
+    const meeting = await get(`/meeting/?meetingId=${(request.query as Record<string, unknown>).meetingId}`, request)
     return h.view('delete-meeting', { meeting })
   },
 }, {
@@ -90,7 +91,7 @@ export default [{
         meetingId: Joi.number().integer().required(),
       },
       failAction: async (request, h, error) => {
-        const meeting = await get(`/meeting/?meetingId=${request.query.meetingId}`, request)
+        const meeting = await get(`/meeting/?meetingId=${(request.query as Record<string, unknown>).meetingId}`, request)
         return h.view('delete-meeting', { meeting, error }).code(400).takeover()
       },
     },
@@ -100,3 +101,5 @@ export default [{
     },
   },
 }]
+
+export default routes

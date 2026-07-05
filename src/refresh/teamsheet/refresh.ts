@@ -1,10 +1,11 @@
+import type { Request } from '@hapi/hapi'
 import { readFileSync } from 'node:fs'
 import XLSX from 'xlsx'
 import { post } from '../../api/post.ts'
 import { deleteFile } from '../delete-file.ts'
 import { mapTeams } from './map-teams.ts'
 
-export async function refreshTeamsheet (path, token?) {
+export async function refreshTeamsheet (path: string, token?: Request): Promise<unknown> {
   const workbook = XLSX.read(readFileSync(path))
   const worksheet = workbook.Sheets['DL Teams']
 

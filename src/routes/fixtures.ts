@@ -1,9 +1,10 @@
+import type { ServerRoute } from '@hapi/hapi'
 import Joi from 'joi'
 import { get } from '../api/get.ts'
 import { post } from '../api/post.ts'
 import { GET, POST } from '../constants/verbs.ts'
 
-export default [{
+const routes: ServerRoute[] = [{
   method: GET,
   path: '/fixtures',
   handler: async (request, h) => {
@@ -54,13 +55,13 @@ export default [{
       query: {
         fixtureId: Joi.number().integer().required(),
       },
-      failAction: async (_request, h, error) => {
+      failAction: async (_request, h, _error) => {
         return h.view('404').code(404).takeover()
       },
     },
   },
   handler: async (request, h) => {
-    const fixture = await get(`/fixture/?fixtureId=${request.query.fixtureId}`, request)
+    const fixture = await get(`/fixture/?fixtureId=${(request.query as Record<string, unknown>).fixtureId}`, request)
     const gameweeks = await get('/gameweeks', request)
     const cups = await get('/cups', request)
     const managers = await get('/managers', request)
@@ -101,13 +102,13 @@ export default [{
       query: {
         fixtureId: Joi.number().integer().required(),
       },
-      failAction: async (_request, h, error) => {
+      failAction: async (_request, h, _error) => {
         return h.view('404').code(400).takeover()
       },
     },
   },
   handler: async (request, h) => {
-    const fixture = await get(`/fixture/?fixtureId=${request.query.fixtureId}`, request)
+    const fixture = await get(`/fixture/?fixtureId=${(request.query as Record<string, unknown>).fixtureId}`, request)
     return h.view('delete-fixture', { fixture })
   },
 }, {
@@ -120,7 +121,7 @@ export default [{
         fixtureId: Joi.number().integer().required(),
       },
       failAction: async (request, h, error) => {
-        const fixture = await get(`/fixture/?fixtureId=${request.query.fixtureId}`, request)
+        const fixture = await get(`/fixture/?fixtureId=${(request.query as Record<string, unknown>).fixtureId}`, request)
         return h.view('delete-fixture', { fixture, error }).code(400).takeover()
       },
     },
@@ -130,3 +131,5 @@ export default [{
     },
   },
 }]
+
+export default routes

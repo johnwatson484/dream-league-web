@@ -1,4 +1,4 @@
-export function isInRole (credentials, role) {
+export function isInRole (credentials: { scope?: string[] } | null | undefined, role: string): boolean {
   if (!credentials?.scope) {
     return false
   }

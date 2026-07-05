@@ -1,3 +1,4 @@
+import type { ServerRegisterPluginObject } from '@hapi/hapi'
 import hapiPino from 'hapi-pino'
 
 export default {
@@ -6,4 +7,4 @@ export default {
     logPayload: false,
     level: 'warn',
   },
-}
+} as unknown as ServerRegisterPluginObject<unknown>

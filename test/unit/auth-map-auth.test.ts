@@ -1,3 +1,4 @@
+import type { Request } from '@hapi/hapi'
 import { mapAuth } from '../../src/auth/map-auth.ts'
 
 describe('authentication state mapping', () => {
@@ -7,7 +8,7 @@ describe('authentication state mapping', () => {
         isAuthenticated: true,
         credentials: { scope: ['user', 'admin'] },
       },
-    }
+    } as unknown as Request
 
     const result = mapAuth(request)
 
@@ -25,7 +26,7 @@ describe('authentication state mapping', () => {
         isAuthenticated: true,
         credentials: { scope: ['user'] },
       },
-    }
+    } as unknown as Request
 
     const result = mapAuth(request)
 
@@ -39,7 +40,7 @@ describe('authentication state mapping', () => {
         isAuthenticated: false,
         credentials: null,
       },
-    }
+    } as unknown as Request
 
     const result = mapAuth(request)
 

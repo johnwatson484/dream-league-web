@@ -1,4 +1,6 @@
-export function getConfiguration (request?) {
+import type { Request } from '@hapi/hapi'
+
+export function getConfiguration (request?: Request): { headers: Record<string, string>; json: boolean } {
   let token = ''
 
   if (request?.app?.session?.accessToken) {

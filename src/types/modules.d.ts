@@ -1,0 +1,6 @@
+declare module 'blankie'
+declare module '@hapi/cookie'
+declare module '@hapi/crumb'
+declare module '@hapi/vision'
+declare module 'nunjucks'
+declare module 'qs'

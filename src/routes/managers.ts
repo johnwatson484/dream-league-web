@@ -1,9 +1,10 @@
+import type { ServerRoute } from '@hapi/hapi'
 import Joi from 'joi'
 import { get } from '../api/get.ts'
 import { post } from '../api/post.ts'
 import { GET, POST } from '../constants/verbs.ts'
 
-export default [{
+const routes: ServerRoute[] = [{
   method: GET,
   path: '/managers',
   handler: async (request, h) => {
@@ -18,14 +19,14 @@ export default [{
       query: {
         managerId: Joi.number().integer().required(),
       },
-      failAction: async (request, h, error) => {
+      failAction: async (_request, h, _error) => {
         return h.view('404').code(400).takeover()
       },
     },
   },
   handler: async (request, h) => {
-    const manager = await get(`/manager/detail/?managerId=${request.query.managerId}`, request)
-    return h.view('manager', manager)
+    const manager = await get(`/manager/detail/?managerId=${(request.query as Record<string, unknown>).managerId}`, request)
+    return h.view('manager', manager as Record<string, unknown>)
   },
 }, {
   method: GET,
@@ -63,13 +64,13 @@ export default [{
       query: {
         managerId: Joi.number().integer().required(),
       },
-      failAction: async (request, h, error) => {
+      failAction: async (_request, h, _error) => {
         return h.view('404').code(400).takeover()
       },
     },
   },
   handler: async (request, h) => {
-    const manager = await get(`/manager/?managerId=${request.query.managerId}`, request)
+    const manager = await get(`/manager/?managerId=${(request.query as Record<string, unknown>).managerId}`, request)
     return h.view('edit-manager', { manager })
   },
 }, {
@@ -102,13 +103,13 @@ export default [{
       query: {
         managerId: Joi.number().integer().required(),
       },
-      failAction: async (request, h, error) => {
+      failAction: async (_request, h, _error) => {
         return h.view('404').code(404).takeover()
       },
     },
   },
   handler: async (request, h) => {
-    const manager = await get(`/manager/?managerId=${request.query.managerId}`, request)
+    const manager = await get(`/manager/?managerId=${(request.query as Record<string, unknown>).managerId}`, request)
     return h.view('delete-manager', { manager })
   },
 }, {
@@ -121,7 +122,7 @@ export default [{
         managerId: Joi.number().integer().required(),
       },
       failAction: async (request, h, error) => {
-        const manager = await get(`/manager/?managerId=${request.query.managerId}`, request)
+        const manager = await get(`/manager/?managerId=${(request.query as Record<string, unknown>).managerId}`, request)
         return h.view('delete-manager', { manager, error }).code(400).takeover()
       },
     },
@@ -131,3 +132,5 @@ export default [{
     },
   },
 }]
+
+export default routes

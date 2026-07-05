@@ -1,17 +1,13 @@
-/**
- * User-Agent protection plugin to mitigate ReDoS attacks
- * Protects against GHSA-mgfv-m47x-4wqp vulnerability in useragent package
- * Truncates User-Agent headers to prevent malicious payloads
- */
+import type { Plugin, ServerOptions } from '@hapi/hapi'
 
 const MAX_USER_AGENT_LENGTH = 150
 
-export default {
+const plugin: Plugin<ServerOptions> = {
   name: 'userAgentProtection',
   version: '1.0.0',
-  register: async function (server, _options) {
+  register: async function (server) {
     server.ext('onRequest', (request, h) => {
-      const userAgent = request.headers['user-agent']
+      const userAgent = request.headers['user-agent'] as string | undefined
 
       if (userAgent && userAgent.length > MAX_USER_AGENT_LENGTH) {
         // Truncate the User-Agent header to prevent ReDoS attacks
@@ -23,3 +19,5 @@ export default {
     })
   },
 }
+
+export default plugin

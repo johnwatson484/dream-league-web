@@ -1,4 +1,4 @@
-import Hapi from '@hapi/hapi'
+import Hapi, { type Server } from '@hapi/hapi'
 import Joi from 'joi'
 import scooter from '@hapi/scooter'
 import inert from '@hapi/inert'
@@ -17,7 +17,7 @@ import headers from './plugins/headers.ts'
 import crumb from './plugins/crumb.ts'
 import logging from './plugins/logging.ts'
 
-async function createServer () {
+async function createServer (): Promise<Server> {
   await connectRedis()
 
   const server = Hapi.server({
