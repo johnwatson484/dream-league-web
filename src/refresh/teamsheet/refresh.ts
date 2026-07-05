@@ -1,8 +1,8 @@
 import type { Request } from '@hapi/hapi'
 import { readFileSync } from 'node:fs'
+import { unlink } from 'node:fs/promises'
 import XLSX from 'xlsx'
 import { post } from '../../api/post.ts'
-import { deleteFile } from '../delete-file.ts'
 import { mapTeams } from './map-teams.ts'
 
 export async function refreshTeamsheet (path: string, token?: Request): Promise<unknown> {
@@ -14,6 +14,6 @@ export async function refreshTeamsheet (path: string, token?: Request): Promise<
   }
 
   const teams = mapTeams(worksheet)
-  await deleteFile(path)
+  await unlink(path)
   return post('/teamsheet/refresh', { teams }, token)
 }

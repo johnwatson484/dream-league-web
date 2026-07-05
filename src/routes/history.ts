@@ -2,24 +2,23 @@ import type { ServerRoute } from '@hapi/hapi'
 import Joi from 'joi'
 import { get } from '../api/get.ts'
 import { post } from '../api/post.ts'
-import { GET, POST } from '../constants/verbs.ts'
 
 const routes: ServerRoute[] = [{
-  method: GET,
+  method: 'GET',
   path: '/history',
   handler: async (request, h) => {
     const history = await get('/history', request)
     return h.view('history', { history })
   },
 }, {
-  method: GET,
+  method: 'GET',
   options: { auth: { strategy: 'session', scope: ['admin'] } },
   path: '/history/create',
   handler: async (_request, h) => {
     return h.view('create-history')
   },
 }, {
-  method: POST,
+  method: 'POST',
   path: '/history/create',
   options: {
     auth: { strategy: 'session', scope: ['admin'] },
@@ -43,7 +42,7 @@ const routes: ServerRoute[] = [{
     },
   },
 }, {
-  method: GET,
+  method: 'GET',
   path: '/history/edit',
   options: {
     auth: { strategy: 'session', scope: ['admin'] },
@@ -61,7 +60,7 @@ const routes: ServerRoute[] = [{
     return h.view('edit-history', { history })
   },
 }, {
-  method: POST,
+  method: 'POST',
   path: '/history/edit',
   options: {
     auth: { strategy: 'session', scope: ['admin'] },
@@ -86,7 +85,7 @@ const routes: ServerRoute[] = [{
     },
   },
 }, {
-  method: GET,
+  method: 'GET',
   path: '/history/delete',
   options: {
     auth: { strategy: 'session', scope: ['admin'] },
@@ -104,7 +103,7 @@ const routes: ServerRoute[] = [{
     return h.view('delete-history', { history })
   },
 }, {
-  method: POST,
+  method: 'POST',
   path: '/history/delete',
   options: {
     auth: { strategy: 'session', scope: ['admin'] },

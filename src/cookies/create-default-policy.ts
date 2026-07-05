@@ -1,11 +1,6 @@
 import type { ResponseToolkit } from '@hapi/hapi'
+import type { CookiesPolicy } from './types.ts'
 import { getCookieOptions } from './get-cookie-options.ts'
-
-interface CookiesPolicy {
-  confirmed: boolean
-  essential: boolean
-  analytics: boolean
-}
 
 export function createDefaultPolicy (h: ResponseToolkit): CookiesPolicy {
   const cookiesPolicy: CookiesPolicy = { confirmed: false, essential: true, analytics: false }

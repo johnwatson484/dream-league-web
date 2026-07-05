@@ -1,17 +1,16 @@
 import type { ServerRoute } from '@hapi/hapi'
 import Joi from 'joi'
 import { refreshPlayers } from '../../refresh/players/refresh.ts'
-import { GET, POST } from '../../constants/verbs.ts'
 
 const routes: ServerRoute[] = [{
-  method: GET,
+  method: 'GET',
   path: '/league/refresh',
   options: { auth: { strategy: 'session', scope: ['admin'] } },
   handler: (_request, h) => {
     return h.view('league/refresh')
   },
 }, {
-  method: POST,
+  method: 'POST',
   path: '/league/refresh/players',
   options: {
     auth: { strategy: 'session', scope: ['admin'] },

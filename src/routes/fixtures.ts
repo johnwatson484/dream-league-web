@@ -2,17 +2,16 @@ import type { ServerRoute } from '@hapi/hapi'
 import Joi from 'joi'
 import { get } from '../api/get.ts'
 import { post } from '../api/post.ts'
-import { GET, POST } from '../constants/verbs.ts'
 
 const routes: ServerRoute[] = [{
-  method: GET,
+  method: 'GET',
   path: '/fixtures',
   handler: async (request, h) => {
     const fixtures = await get('/fixtures', request)
     return h.view('fixtures', { fixtures })
   },
 }, {
-  method: GET,
+  method: 'GET',
   path: '/fixture/create',
   options: { auth: { strategy: 'session', scope: ['admin'] } },
   handler: async (request, h) => {
@@ -22,7 +21,7 @@ const routes: ServerRoute[] = [{
     return h.view('create-fixture', { gameweeks, cups, managers })
   },
 }, {
-  method: POST,
+  method: 'POST',
   path: '/fixture/create',
   options: {
     auth: { strategy: 'session', scope: ['admin'] },
@@ -47,7 +46,7 @@ const routes: ServerRoute[] = [{
     },
   },
 }, {
-  method: GET,
+  method: 'GET',
   path: '/fixture/edit',
   options: {
     auth: { strategy: 'session', scope: ['admin'] },
@@ -68,7 +67,7 @@ const routes: ServerRoute[] = [{
     return h.view('edit-fixture', { fixture, gameweeks, cups, managers })
   },
 }, {
-  method: POST,
+  method: 'POST',
   path: '/fixture/edit',
   options: {
     auth: { strategy: 'session', scope: ['admin'] },
@@ -94,7 +93,7 @@ const routes: ServerRoute[] = [{
     },
   },
 }, {
-  method: GET,
+  method: 'GET',
   path: '/fixture/delete',
   options: {
     auth: { strategy: 'session', scope: ['admin'] },
@@ -112,7 +111,7 @@ const routes: ServerRoute[] = [{
     return h.view('delete-fixture', { fixture })
   },
 }, {
-  method: POST,
+  method: 'POST',
   path: '/fixture/delete',
   options: {
     auth: { strategy: 'session', scope: ['admin'] },

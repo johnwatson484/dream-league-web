@@ -2,10 +2,9 @@ import type { ServerRoute } from '@hapi/hapi'
 import Joi from 'joi'
 import boom from '@hapi/boom'
 import { post } from '../api/post.ts'
-import { POST } from '../constants/verbs.ts'
 
 const routes: ServerRoute[] = [{
-  method: POST,
+  method: 'POST',
   path: '/search/autocomplete',
   options: {
     plugins: {

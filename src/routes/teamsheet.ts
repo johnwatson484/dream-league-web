@@ -1,22 +1,20 @@
 import type { ServerRoute } from '@hapi/hapi'
-import joi from 'joi'
+import Joi from 'joi'
 import boom from '@hapi/boom'
 import { refreshTeamsheet } from '../refresh/teamsheet/refresh.ts'
 import { get } from '../api/get.ts'
 import { post } from '../api/post.ts'
 import ViewModel from './models/teamsheet.ts'
-import { GET, POST } from '../constants/verbs.ts'
-import Joi from 'joi'
 
 const routes: ServerRoute[] = [{
-  method: GET,
+  method: 'GET',
   path: '/teamsheet',
   handler: async (request, h) => {
     const teamsheet = await get('/teamsheet', request)
     return h.view('teamsheet', { teamsheet })
   },
 }, {
-  method: GET,
+  method: 'GET',
   path: '/teamsheet/edit',
   options: { auth: { strategy: 'session', scope: ['admin'] } },
   handler: async (request, h) => {
@@ -25,16 +23,16 @@ const routes: ServerRoute[] = [{
     return h.view('teamsheet-edit', { teamsheet: teamsheetViewModel })
   },
 }, {
-  method: POST,
+  method: 'POST',
   path: '/teamsheet/edit/player',
   options: {
     auth: { strategy: 'session', scope: ['admin'] },
     plugins: { crumb: false },
     validate: {
       payload: {
-        managerId: joi.number().integer(),
-        playerIds: joi.alternatives().try(joi.array().items(joi.number().integer()), joi.number().integer()),
-        playerSubs: joi.alternatives().try(joi.array().items(joi.number().integer()), joi.number().integer()),
+        managerId: Joi.number().integer(),
+        playerIds: Joi.alternatives().try(Joi.array().items(Joi.number().integer()), Joi.number().integer()),
+        playerSubs: Joi.alternatives().try(Joi.array().items(Joi.number().integer()), Joi.number().integer()),
       },
       failAction: async (_request, _h, error) => {
         return boom.badRequest(error?.message)
@@ -45,16 +43,16 @@ const routes: ServerRoute[] = [{
     },
   },
 }, {
-  method: POST,
+  method: 'POST',
   path: '/teamsheet/edit/keeper',
   options: {
     auth: { strategy: 'session', scope: ['admin'] },
     plugins: { crumb: false },
     validate: {
       payload: {
-        managerId: joi.number().integer(),
-        teamIds: joi.alternatives().try(joi.array().items(joi.string()), joi.string()),
-        teamSubs: joi.alternatives().try(joi.array().items(joi.string()), joi.string()),
+        managerId: Joi.number().integer(),
+        teamIds: Joi.alternatives().try(Joi.array().items(Joi.string()), Joi.string()),
+        teamSubs: Joi.alternatives().try(Joi.array().items(Joi.string()), Joi.string()),
       },
       failAction: async (_request, _h, error) => {
         return boom.badRequest(error?.message)
@@ -65,7 +63,7 @@ const routes: ServerRoute[] = [{
     },
   },
 }, {
-  method: POST,
+  method: 'POST',
   path: '/teamsheet/refresh',
   options: {
     auth: { strategy: 'session', scope: ['admin'] },

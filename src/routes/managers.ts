@@ -2,17 +2,16 @@ import type { ServerRoute } from '@hapi/hapi'
 import Joi from 'joi'
 import { get } from '../api/get.ts'
 import { post } from '../api/post.ts'
-import { GET, POST } from '../constants/verbs.ts'
 
 const routes: ServerRoute[] = [{
-  method: GET,
+  method: 'GET',
   path: '/managers',
   handler: async (request, h) => {
     const managers = await get('/managers', request)
     return h.view('managers', { managers })
   },
 }, {
-  method: GET,
+  method: 'GET',
   path: '/manager',
   options: {
     validate: {
@@ -29,14 +28,14 @@ const routes: ServerRoute[] = [{
     return h.view('manager', manager as Record<string, unknown>)
   },
 }, {
-  method: GET,
+  method: 'GET',
   path: '/manager/create',
   options: { auth: { strategy: 'session', scope: ['admin'] } },
   handler: async (_request, h) => {
     return h.view('create-manager')
   },
 }, {
-  method: POST,
+  method: 'POST',
   path: '/manager/create',
   options: {
     auth: { strategy: 'session', scope: ['admin'] },
@@ -56,7 +55,7 @@ const routes: ServerRoute[] = [{
     },
   },
 }, {
-  method: GET,
+  method: 'GET',
   path: '/manager/edit',
   options: {
     auth: { strategy: 'session', scope: ['admin'] },
@@ -74,7 +73,7 @@ const routes: ServerRoute[] = [{
     return h.view('edit-manager', { manager })
   },
 }, {
-  method: POST,
+  method: 'POST',
   path: '/manager/edit',
   options: {
     auth: { strategy: 'session', scope: ['admin'] },
@@ -95,7 +94,7 @@ const routes: ServerRoute[] = [{
     },
   },
 }, {
-  method: GET,
+  method: 'GET',
   path: '/manager/delete',
   options: {
     auth: { strategy: 'session', scope: ['admin'] },
@@ -113,7 +112,7 @@ const routes: ServerRoute[] = [{
     return h.view('delete-manager', { manager })
   },
 }, {
-  method: POST,
+  method: 'POST',
   path: '/manager/delete',
   options: {
     auth: { strategy: 'session', scope: ['admin'] },

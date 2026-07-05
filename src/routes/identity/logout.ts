@@ -2,10 +2,9 @@ import type { ServerRoute } from '@hapi/hapi'
 import config from '../../config.ts'
 import { post } from '../../api/post.ts'
 import { destroySession } from '../../session/session-manager.ts'
-import { POST } from '../../constants/verbs.ts'
 
 const routes: ServerRoute[] = [{
-  method: POST,
+  method: 'POST',
   path: '/logout',
   handler: async (request, h) => {
     const sessionCookie = (request.state as Record<string, { sessionId?: string } | undefined>)?.[config.get('session.cookieName')]

@@ -1,10 +1,9 @@
 import type { ServerRoute } from '@hapi/hapi'
 import Joi from 'joi'
 import { post } from '../../api/post.ts'
-import { GET, POST } from '../../constants/verbs.ts'
 
 const routes: ServerRoute[] = [{
-  method: GET,
+  method: 'GET',
   path: '/reset-password/{token}/{userId}',
   options: {
     validate: {
@@ -20,7 +19,7 @@ const routes: ServerRoute[] = [{
   },
 },
 {
-  method: POST,
+  method: 'POST',
   path: '/reset-password',
   options: {
     validate: {

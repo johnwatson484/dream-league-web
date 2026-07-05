@@ -2,10 +2,9 @@ import type { ServerRoute } from '@hapi/hapi'
 import Joi from 'joi'
 import { get } from '../api/get.ts'
 import { post } from '../api/post.ts'
-import { GET, POST } from '../constants/verbs.ts'
 
 const routes: ServerRoute[] = [{
-  method: GET,
+  method: 'GET',
   path: '/groups',
   options: {
     handler: async (request, h) => {
@@ -14,7 +13,7 @@ const routes: ServerRoute[] = [{
     },
   },
 }, {
-  method: GET,
+  method: 'GET',
   path: '/group/create',
   options: { auth: { strategy: 'session', scope: ['admin'] } },
   handler: async (request, h) => {
@@ -23,7 +22,7 @@ const routes: ServerRoute[] = [{
     return h.view('create-group', { cups, managers })
   },
 }, {
-  method: POST,
+  method: 'POST',
   path: '/group/create',
   options: {
     auth: { strategy: 'session', scope: ['admin'] },
@@ -47,7 +46,7 @@ const routes: ServerRoute[] = [{
     },
   },
 }, {
-  method: GET,
+  method: 'GET',
   path: '/group/edit',
   options: {
     auth: { strategy: 'session', scope: ['admin'] },
@@ -67,7 +66,7 @@ const routes: ServerRoute[] = [{
     return h.view('edit-group', { group, cups, managers })
   },
 }, {
-  method: POST,
+  method: 'POST',
   path: '/group/edit',
   options: {
     auth: { strategy: 'session', scope: ['admin'] },
@@ -92,7 +91,7 @@ const routes: ServerRoute[] = [{
     },
   },
 }, {
-  method: GET,
+  method: 'GET',
   path: '/group/delete',
   options: {
     auth: { strategy: 'session', scope: ['admin'] },
@@ -110,7 +109,7 @@ const routes: ServerRoute[] = [{
     return h.view('delete-group', { group })
   },
 }, {
-  method: POST,
+  method: 'POST',
   path: '/group/delete',
   options: {
     auth: { strategy: 'session', scope: ['admin'] },
