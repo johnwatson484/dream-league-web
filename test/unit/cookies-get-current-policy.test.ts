@@ -1,3 +1,5 @@
+import type { Request, ResponseToolkit } from '@hapi/hapi'
+
 const { mockCreateDefaultPolicy } = vi.hoisted(() => ({
   mockCreateDefaultPolicy: vi.fn(),
 }))
@@ -11,8 +13,8 @@ import { getCurrentPolicy } from '../../src/cookies/get-current-policy.ts'
 describe('current cookie policy retrieval', () => {
   test('returns the existing cookie policy when one is set', () => {
     const existingPolicy = { confirmed: true, essential: true, analytics: true }
-    const request = { state: { cookies_policy: existingPolicy } }
-    const h = {}
+    const request = { state: { cookies_policy: existingPolicy } } as unknown as Request
+    const h = {} as unknown as ResponseToolkit
 
     const result = getCurrentPolicy(request, h)
 
@@ -23,8 +25,8 @@ describe('current cookie policy retrieval', () => {
   test('creates a new default policy when no cookie exists', () => {
     const defaultPolicy = { confirmed: false, essential: true, analytics: false }
     mockCreateDefaultPolicy.mockReturnValue(defaultPolicy)
-    const request = { state: {} }
-    const h = {}
+    const request = { state: {} } as unknown as Request
+    const h = {} as unknown as ResponseToolkit
 
     const result = getCurrentPolicy(request, h)
 
@@ -35,8 +37,8 @@ describe('current cookie policy retrieval', () => {
   test('creates a new default policy when cookie state is undefined', () => {
     const defaultPolicy = { confirmed: false, essential: true, analytics: false }
     mockCreateDefaultPolicy.mockReturnValue(defaultPolicy)
-    const request = { state: { cookies_policy: undefined } }
-    const h = {}
+    const request = { state: { cookies_policy: undefined } } as unknown as Request
+    const h = {} as unknown as ResponseToolkit
 
     const result = getCurrentPolicy(request, h)
 

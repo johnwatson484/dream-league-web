@@ -10,6 +10,10 @@ import { refreshTeamsheet } from '../../src/refresh/teamsheet/refresh.ts'
 const BASE_TEST_FILE = resolve(import.meta.dirname, '../files/teamsheet.xlsx')
 const TEST_FILE = resolve(import.meta.dirname, '../files/teamsheet-tmp.xlsx')
 
+interface TeamPayload {
+  teams: { manager: string; players: unknown[] }[]
+}
+
 describe('refreshing teamsheet', () => {
   beforeEach(() => {
     vi.clearAllMocks()
@@ -22,7 +26,7 @@ describe('refreshing teamsheet', () => {
   test('should return success if list valid', async () => {
     mockPost.mockResolvedValue({ success: true })
 
-    const result = await refreshTeamsheet(TEST_FILE)
+    const result = await refreshTeamsheet(TEST_FILE) as { success: boolean }
 
     expect(result.success).toBeTruthy()
     expect(mockPost.mock.calls.length).toBe(1)
@@ -31,7 +35,7 @@ describe('refreshing teamsheet', () => {
   test('should return failure if list invalid', async () => {
     mockPost.mockResolvedValue({ success: false })
 
-    const result = await refreshTeamsheet(TEST_FILE)
+    const result = await refreshTeamsheet(TEST_FILE) as { success: boolean }
 
     expect(result.success).toBeFalsy()
     expect(mockPost.mock.calls.length).toBe(1)
@@ -42,7 +46,7 @@ describe('refreshing teamsheet', () => {
 
     await refreshTeamsheet(TEST_FILE)
 
-    expect(mockPost.mock.calls[0][0]).toBe('/teamsheet/refresh')
+    expect(mockPost.mock.calls[0]![0]).toBe('/teamsheet/refresh')
   })
 
   test('request should include all teams', async () => {
@@ -50,20 +54,21 @@ describe('refreshing teamsheet', () => {
 
     await refreshTeamsheet(TEST_FILE)
 
-    expect(mockPost.mock.calls[0][1].teams.length).toBe(13)
-    expect(mockPost.mock.calls[0][1].teams.filter(x => x.manager === 'John').length).toBe(1)
-    expect(mockPost.mock.calls[0][1].teams.filter(x => x.manager === 'Lee').length).toBe(1)
-    expect(mockPost.mock.calls[0][1].teams.filter(x => x.manager === 'Scott').length).toBe(1)
-    expect(mockPost.mock.calls[0][1].teams.filter(x => x.manager === 'David').length).toBe(1)
-    expect(mockPost.mock.calls[0][1].teams.filter(x => x.manager === 'Billy').length).toBe(1)
-    expect(mockPost.mock.calls[0][1].teams.filter(x => x.manager === 'Bob').length).toBe(1)
-    expect(mockPost.mock.calls[0][1].teams.filter(x => x.manager === 'Conor').length).toBe(1)
-    expect(mockPost.mock.calls[0][1].teams.filter(x => x.manager === 'Daz').length).toBe(1)
-    expect(mockPost.mock.calls[0][1].teams.filter(x => x.manager === 'Rob').length).toBe(1)
-    expect(mockPost.mock.calls[0][1].teams.filter(x => x.manager === 'Tucker').length).toBe(1)
-    expect(mockPost.mock.calls[0][1].teams.filter(x => x.manager === 'Tommy/Pete').length).toBe(1)
-    expect(mockPost.mock.calls[0][1].teams.filter(x => x.manager === 'Michael').length).toBe(1)
-    expect(mockPost.mock.calls[0][1].teams.filter(x => x.manager === 'Ben').length).toBe(1)
+    const payload = mockPost.mock.calls[0]![1] as TeamPayload
+    expect(payload.teams.length).toBe(13)
+    expect(payload.teams.filter((x: { manager: string }) => x.manager === 'John').length).toBe(1)
+    expect(payload.teams.filter((x: { manager: string }) => x.manager === 'Lee').length).toBe(1)
+    expect(payload.teams.filter((x: { manager: string }) => x.manager === 'Scott').length).toBe(1)
+    expect(payload.teams.filter((x: { manager: string }) => x.manager === 'David').length).toBe(1)
+    expect(payload.teams.filter((x: { manager: string }) => x.manager === 'Billy').length).toBe(1)
+    expect(payload.teams.filter((x: { manager: string }) => x.manager === 'Bob').length).toBe(1)
+    expect(payload.teams.filter((x: { manager: string }) => x.manager === 'Conor').length).toBe(1)
+    expect(payload.teams.filter((x: { manager: string }) => x.manager === 'Daz').length).toBe(1)
+    expect(payload.teams.filter((x: { manager: string }) => x.manager === 'Rob').length).toBe(1)
+    expect(payload.teams.filter((x: { manager: string }) => x.manager === 'Tucker').length).toBe(1)
+    expect(payload.teams.filter((x: { manager: string }) => x.manager === 'Tommy/Pete').length).toBe(1)
+    expect(payload.teams.filter((x: { manager: string }) => x.manager === 'Michael').length).toBe(1)
+    expect(payload.teams.filter((x: { manager: string }) => x.manager === 'Ben').length).toBe(1)
   })
 
   test('request should include all players', async () => {
@@ -71,18 +76,19 @@ describe('refreshing teamsheet', () => {
 
     await refreshTeamsheet(TEST_FILE)
 
-    expect(mockPost.mock.calls[0][1].teams[0].players.length).toBe(15)
-    expect(mockPost.mock.calls[0][1].teams[1].players.length).toBe(15)
-    expect(mockPost.mock.calls[0][1].teams[2].players.length).toBe(15)
-    expect(mockPost.mock.calls[0][1].teams[3].players.length).toBe(15)
-    expect(mockPost.mock.calls[0][1].teams[4].players.length).toBe(15)
-    expect(mockPost.mock.calls[0][1].teams[5].players.length).toBe(15)
-    expect(mockPost.mock.calls[0][1].teams[6].players.length).toBe(15)
-    expect(mockPost.mock.calls[0][1].teams[7].players.length).toBe(15)
-    expect(mockPost.mock.calls[0][1].teams[8].players.length).toBe(15)
-    expect(mockPost.mock.calls[0][1].teams[9].players.length).toBe(15)
-    expect(mockPost.mock.calls[0][1].teams[10].players.length).toBe(15)
-    expect(mockPost.mock.calls[0][1].teams[11].players.length).toBe(15)
-    expect(mockPost.mock.calls[0][1].teams[12].players.length).toBe(15)
+    const payload = mockPost.mock.calls[0]![1] as TeamPayload
+    expect(payload.teams[0]!.players.length).toBe(15)
+    expect(payload.teams[1]!.players.length).toBe(15)
+    expect(payload.teams[2]!.players.length).toBe(15)
+    expect(payload.teams[3]!.players.length).toBe(15)
+    expect(payload.teams[4]!.players.length).toBe(15)
+    expect(payload.teams[5]!.players.length).toBe(15)
+    expect(payload.teams[6]!.players.length).toBe(15)
+    expect(payload.teams[7]!.players.length).toBe(15)
+    expect(payload.teams[8]!.players.length).toBe(15)
+    expect(payload.teams[9]!.players.length).toBe(15)
+    expect(payload.teams[10]!.players.length).toBe(15)
+    expect(payload.teams[11]!.players.length).toBe(15)
+    expect(payload.teams[12]!.players.length).toBe(15)
   })
 })

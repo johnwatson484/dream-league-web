@@ -1,10 +1,11 @@
+import type { ServerRoute } from '@hapi/hapi'
 import Joi from 'joi'
 import boom from '@hapi/boom'
 import { get } from '../../api/get.ts'
 import { post } from '../../api/post.ts'
 import { GET, POST } from '../../constants/verbs.ts'
 
-export default [{
+const routes: ServerRoute[] = [{
   method: GET,
   path: '/league/teams',
   options: {
@@ -13,14 +14,15 @@ export default [{
         search: Joi.string().allow(''),
         division: Joi.string().allow(''),
       },
-      failAction: async (_request, h, error) => {
+      failAction: async (_request, h, _error) => {
         return h.view('404').code(404).takeover()
       },
     },
   },
   handler: async (request, h) => {
-    const search = request.query.search || ''
-    const division = request.query.division || ''
+    const query = request.query as Record<string, string>
+    const search = query.search || ''
+    const division = query.division || ''
     const teams = await get(`/league/teams?search=${search}&division=${division}`, request)
     const divisions = await get('/league/divisions', request)
     return h.view('league/teams', { teams, divisions, currentDivision: division, currentSearch: search })
@@ -33,13 +35,13 @@ export default [{
       query: {
         teamId: Joi.number().integer().required(),
       },
-      failAction: async (_request, h, error) => {
+      failAction: async (_request, h, _error) => {
         return h.view('404').code(404).takeover()
       },
     },
   },
   handler: async (request, h) => {
-    const team = await get(`/league/team?teamId=${request.query.teamId}`, request)
+    const team = await get(`/league/team?teamId=${(request.query as Record<string, unknown>).teamId}`, request)
     return h.view('league/team-detail', { team })
   },
 }, {
@@ -80,13 +82,13 @@ export default [{
       query: {
         teamId: Joi.number().integer().required(),
       },
-      failAction: async (request, h, error) => {
+      failAction: async (_request, h, _error) => {
         return h.view('404').code(404).takeover()
       },
     },
   },
   handler: async (request, h) => {
-    const team = await get(`/league/team/?teamId=${request.query.teamId}`, request)
+    const team = await get(`/league/team/?teamId=${(request.query as Record<string, unknown>).teamId}`, request)
     const divisions = await get('/league/divisions', request)
     return h.view('league/edit-team', { team, divisions })
   },
@@ -121,13 +123,13 @@ export default [{
       query: {
         teamId: Joi.number().integer().required(),
       },
-      failAction: async (request, h, error) => {
+      failAction: async (_request, h, _error) => {
         return h.view('404').code(404).takeover()
       },
     },
   },
   handler: async (request, h) => {
-    const team = await get(`/league/team/?teamId=${request.query.teamId}`, request)
+    const team = await get(`/league/team/?teamId=${(request.query as Record<string, unknown>).teamId}`, request)
     return h.view('league/delete-team', { team })
   },
 }, {
@@ -140,7 +142,7 @@ export default [{
         teamId: Joi.number().integer().required(),
       },
       failAction: async (request, h, error) => {
-        const team = await get(`/league/player/?playerId=${request.query.teamId}`, request)
+        const team = await get(`/league/player/?playerId=${(request.query as Record<string, unknown>).teamId}`, request)
         return h.view('league/delete-team', { team, error }).code(400).takeover()
       },
     },
@@ -161,11 +163,11 @@ export default [{
         prefix: Joi.string(),
       },
       failAction: async (_request, _h, error) => {
-        return boom.badRequest(error)
+        return boom.badRequest(error?.message)
       },
     },
     handler: async (request, _h) => {
-      const teams = await post('/league/teams/autocomplete', request.payload, request)
+      const teams = await post('/league/teams/autocomplete', request.payload, request) as { name: string; teamId: number }[]
       return teams.map(function (team) {
         return {
           label: team.name,
@@ -175,3 +177,5 @@ export default [{
     },
   },
 }]
+
+export default routes

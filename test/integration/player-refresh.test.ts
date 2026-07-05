@@ -22,7 +22,7 @@ describe('refreshing player list', () => {
   test('should return success if list valid', async () => {
     mockPost.mockResolvedValue({ success: true })
 
-    const result = await refreshPlayers(TEST_FILE)
+    const result = await refreshPlayers(TEST_FILE) as { success: boolean }
 
     expect(result.success).toBeTruthy()
     expect(mockPost.mock.calls.length).toBe(1)
@@ -31,7 +31,7 @@ describe('refreshing player list', () => {
   test('should return failure if list invalid', async () => {
     mockPost.mockResolvedValue({ success: false })
 
-    const result = await refreshPlayers(TEST_FILE)
+    const result = await refreshPlayers(TEST_FILE) as { success: boolean }
 
     expect(result.success).toBeFalsy()
     expect(mockPost.mock.calls.length).toBe(1)
@@ -42,7 +42,7 @@ describe('refreshing player list', () => {
 
     await refreshPlayers(TEST_FILE)
 
-    expect(mockPost.mock.calls[0][0]).toBe('/league/players/refresh')
+    expect(mockPost.mock.calls[0]![0]).toBe('/league/players/refresh')
   })
 
   test('request should include all players', async () => {
@@ -50,7 +50,7 @@ describe('refreshing player list', () => {
 
     await refreshPlayers(TEST_FILE)
 
-    expect(mockPost.mock.calls[0][1].players.length).toBe(2176)
+    expect(mockPost.mock.calls[0]![1].players.length).toBe(2176)
   })
 
   test('request should include example player', async () => {
@@ -58,13 +58,13 @@ describe('refreshing player list', () => {
 
     await refreshPlayers(TEST_FILE)
 
-    expect(mockPost.mock.calls[0][1].players).toContainEqual({ firstName: 'Ian', lastName: 'Henderson', position: 'FWD', team: 'Rochdale' })
+    expect(mockPost.mock.calls[0]![1].players).toContainEqual({ firstName: 'Ian', lastName: 'Henderson', position: 'FWD', team: 'Rochdale' })
   })
 
   test('should return failure should include unmapped players', async () => {
     mockPost.mockResolvedValue({ success: false, unmappedPlayers: [{ firstName: 'Adebayo', lastName: 'Akinfenwa', position: 'FWD', team: 'Wycombe' }] })
 
-    const result = await refreshPlayers(TEST_FILE)
+    const result = await refreshPlayers(TEST_FILE) as { success: boolean; unmappedPlayers: unknown[] }
 
     expect(result.success).toBeFalsy()
     expect(result.unmappedPlayers.length).toBe(1)

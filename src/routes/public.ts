@@ -1,6 +1,7 @@
+import type { ServerRoute } from '@hapi/hapi'
 import { GET } from '../constants/verbs.ts'
 
-export default [{
+const routes: ServerRoute[] = [{
   method: GET,
   path: '/assets/{path*}',
   handler: {
@@ -9,3 +10,5 @@ export default [{
     },
   },
 }]
+
+export default routes

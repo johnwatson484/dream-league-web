@@ -1,11 +1,10 @@
+import type { ServerRoute } from '@hapi/hapi'
 import { get } from '../api/get.ts'
 import { GET } from '../constants/verbs.ts'
 
-export default [{
+const routes: ServerRoute[] = [{
   method: GET,
   path: '/',
-  config: {
-  },
   handler: async (request, h) => {
     const results = await get('/results', request)
     const topScorers = await get('/statistics/top-scorers', request)
@@ -17,9 +16,9 @@ export default [{
 }, {
   method: GET,
   path: '/rules',
-  config: {
-  },
   handler: async (_request, h) => {
     return h.view('rules')
   },
 }]
+
+export default routes

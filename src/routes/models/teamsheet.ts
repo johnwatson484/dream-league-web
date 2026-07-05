@@ -1,15 +1,37 @@
-function ViewModel (teamsheet) {
+interface Keeper {
+  teamId: number
+}
+
+interface Player {
+  playerId: number
+}
+
+interface Team {
+  managerId: number
+  name: string
+  keepers: Keeper[]
+  players: Player[]
+}
+
+interface ViewModelTeam {
+  managerId: number
+  name: string
+  keepers: Keeper[]
+  players: Player[]
+}
+
+function ViewModel (teamsheet: Team[]): ViewModelTeam[] {
   return teamsheet.map(mapTeam)
 }
 
-function mapTeam (team) {
-  const keepers = []
-  const players = []
+function mapTeam (team: Team): ViewModelTeam {
+  const keepers: Keeper[] = []
+  const players: Player[] = []
   for (let i = 0; i < 2; i++) {
-    keepers[i] = team.keepers[i] ? team.keepers[i] : { teamId: 0 }
+    keepers[i] = team.keepers[i] ?? { teamId: 0 }
   }
   for (let i = 0; i < 13; i++) {
-    players[i] = team.players[i] ? team.players[i] : { playerId: 0 }
+    players[i] = team.players[i] ?? { playerId: 0 }
   }
   return {
     managerId: team.managerId,

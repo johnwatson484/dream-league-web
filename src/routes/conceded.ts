@@ -1,9 +1,10 @@
+import type { ServerRoute } from '@hapi/hapi'
 import Joi from 'joi'
 import { get } from '../api/get.ts'
 import { post } from '../api/post.ts'
 import { GET, POST } from '../constants/verbs.ts'
 
-export default [{
+const routes: ServerRoute[] = [{
   method: GET,
   path: '/conceded',
   handler: async (request, h) => {
@@ -18,14 +19,14 @@ export default [{
       query: {
         concedeId: Joi.number().integer().required(),
       },
-      failAction: async (request, h, error) => {
+      failAction: async (_request, h, _error) => {
         return h.view('404').code(400).takeover()
       },
     },
   },
   handler: async (request, h) => {
-    const concede = await get(`/concede/detail/?concedeId=${request.query.concedeId}`, request)
-    return h.view('concede', concede)
+    const concede = await get(`/concede/detail/?concedeId=${(request.query as Record<string, unknown>).concedeId}`, request)
+    return h.view('concede', concede as Record<string, unknown>)
   },
 }, {
   method: GET,
@@ -36,13 +37,13 @@ export default [{
       query: {
         concedeId: Joi.number().integer().required(),
       },
-      failAction: async (_request, h, error) => {
+      failAction: async (_request, h, _error) => {
         return h.view('404').code(404).takeover()
       },
     },
   },
   handler: async (request, h) => {
-    const concede = await get(`/concede/?concedeId=${request.query.concedeId}`, request)
+    const concede = await get(`/concede/?concedeId=${(request.query as Record<string, unknown>).concedeId}`, request)
     return h.view('delete-concede', { concede })
   },
 }, {
@@ -55,7 +56,7 @@ export default [{
         concedeId: Joi.number().integer().required(),
       },
       failAction: async (request, h, error) => {
-        const concede = await get(`/concede/?concedeId=${request.query.concedeId}`, request)
+        const concede = await get(`/concede/?concedeId=${(request.query as Record<string, unknown>).concedeId}`, request)
         return h.view('delete-concede', { concede, error }).code(400).takeover()
       },
     },
@@ -65,3 +66,5 @@ export default [{
     },
   },
 }]
+
+export default routes

@@ -1,19 +1,12 @@
-declare module 'blankie'
-declare module '@hapi/cookie'
-declare module 'xlsx'
+import type { SessionData } from '../session/session-manager.ts'
+import type { ResponseObject } from '@hapi/hapi'
 
-declare module '@hapi/wreck' {
-  const Wreck: {
-    get(uri: string, options?: any): Promise<any>
-    post(uri: string, options?: any): Promise<any>
-    put(uri: string, options?: any): Promise<any>
-    delete(uri: string, options?: any): Promise<any>
-    [key: string]: any
+declare module '@hapi/hapi' {
+  interface ResponseToolkit {
+    view(template: string, context?: Record<string, unknown>): ResponseObject
   }
-  export default Wreck
-}
 
-declare module 'hapi-pino' {
-  const plugin: any
-  export default plugin
+  interface RequestApplicationState {
+    session: SessionData | null
+  }
 }

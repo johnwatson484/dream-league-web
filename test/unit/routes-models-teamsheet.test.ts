@@ -11,9 +11,9 @@ describe('teamsheet view model', () => {
 
     const result = ViewModel(teamsheet)
 
-    expect(result[0].keepers).toHaveLength(2)
-    expect(result[0].keepers[0]).toEqual({ teamId: 10 })
-    expect(result[0].keepers[1]).toEqual({ teamId: 0 })
+    expect(result[0]!.keepers).toHaveLength(2)
+    expect(result[0]!.keepers[0]).toEqual({ teamId: 10 })
+    expect(result[0]!.keepers[1]).toEqual({ teamId: 0 })
   })
 
   test('pads players array to 13 slots with placeholder objects', () => {
@@ -26,10 +26,10 @@ describe('teamsheet view model', () => {
 
     const result = ViewModel(teamsheet)
 
-    expect(result[0].players).toHaveLength(13)
-    expect(result[0].players[0]).toEqual({ playerId: 5 })
-    expect(result[0].players[1]).toEqual({ playerId: 6 })
-    expect(result[0].players[2]).toEqual({ playerId: 0 })
+    expect(result[0]!.players).toHaveLength(13)
+    expect(result[0]!.players[0]).toEqual({ playerId: 5 })
+    expect(result[0]!.players[1]).toEqual({ playerId: 6 })
+    expect(result[0]!.players[2]).toEqual({ playerId: 0 })
   })
 
   test('preserves manager ID and name for each team', () => {
@@ -42,8 +42,8 @@ describe('teamsheet view model', () => {
 
     const result = ViewModel(teamsheet)
 
-    expect(result[0].managerId).toBe(7)
-    expect(result[0].name).toBe('Bob')
+    expect(result[0]!.managerId).toBe(7)
+    expect(result[0]!.name).toBe('Bob')
   })
 
   test('handles a full roster without adding placeholders', () => {
@@ -53,9 +53,9 @@ describe('teamsheet view model', () => {
 
     const result = ViewModel(teamsheet)
 
-    expect(result[0].keepers).toHaveLength(2)
-    expect(result[0].players).toHaveLength(13)
-    expect(result[0].keepers[0]).toEqual({ teamId: 1 })
-    expect(result[0].players[12]).toEqual({ playerId: 13 })
+    expect(result[0]!.keepers).toHaveLength(2)
+    expect(result[0]!.players).toHaveLength(13)
+    expect(result[0]!.keepers[0]).toEqual({ teamId: 1 })
+    expect(result[0]!.players[12]).toEqual({ playerId: 13 })
   })
 })

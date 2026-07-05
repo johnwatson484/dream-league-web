@@ -1,3 +1,4 @@
+import type { ServerRoute } from '@hapi/hapi'
 import Joi from 'joi'
 import boom from '@hapi/boom'
 import { get } from '../api/get.ts'
@@ -6,7 +7,7 @@ import { deleteRequest } from '../api/delete.ts'
 import { sortArray } from '../utils/sort-array.ts'
 import { GET, POST, DELETE } from '../constants/verbs.ts'
 
-export default [{
+const routes: ServerRoute[] = [{
   method: GET,
   path: '/results',
   options: {
@@ -15,11 +16,11 @@ export default [{
         gameweekId: Joi.number().integer().optional(),
       }),
       failAction: async (_request, _h, error) => {
-        return boom.badRequest(error)
+        return boom.badRequest(error?.message)
       },
     },
     handler: async (request, h) => {
-      const gameweekId = request.query?.gameweekId || 0
+      const gameweekId = (request.query as Record<string, unknown>)?.gameweekId || 0
       const results = await get(`/results?gameweekId=${gameweekId}`, request)
       const gameweeks = await get('/gameweeks?completed=true', request)
       return h.view('results', { results, gameweeks })
@@ -29,7 +30,7 @@ export default [{
   method: GET,
   path: '/results/edit',
   handler: async (request, h) => {
-    const resultsInput = await get('/results-edit', request)
+    const resultsInput = await get('/results-edit', request) as { keepers: { division: string; team: string }[]; players: { division: string; team: string; lastName: string; firstName: string }[] }
     resultsInput.keepers = resultsInput.keepers.sort((a, b) => { return sortArray(a.division, b.division) || sortArray(a.team, b.team) })
     resultsInput.players = resultsInput.players.sort((a, b) => { return sortArray(a.division, b.division) || sortArray(a.team, b.team) || sortArray(a.lastName, b.lastName) || sortArray(a.firstName, b.firstName) })
     return h.view('results-edit', { resultsInput })
@@ -48,12 +49,12 @@ export default [{
         goalsCup: Joi.array().items(Joi.object({ playerId: Joi.number().integer(), goals: Joi.number().integer() })).single(),
       },
       failAction: async (_request, _h, error) => {
-        return boom.badRequest(error)
+        return boom.badRequest(error?.message)
       },
     },
     handler: async (request, h) => {
       await post('/results-edit', request.payload, request)
-      return h.redirect(`/results?gameweekId=${request.payload.gameweekId}`)
+      return h.redirect(`/results?gameweekId=${(request.payload as Record<string, unknown>).gameweekId}`)
     },
   },
 }, {
@@ -66,7 +67,7 @@ export default [{
         gameweekId: Joi.number().integer().required(),
       },
       failAction: async (_request, _h, error) => {
-        return boom.badRequest(error)
+        return boom.badRequest(error?.message)
       },
     },
     handler: async (request, h) => {
@@ -85,7 +86,7 @@ export default [{
         gameweekId: Joi.number().integer().required(),
       },
       failAction: async (_request, _h, error) => {
-        return boom.badRequest(error)
+        return boom.badRequest(error?.message)
       },
     },
     handler: async (request, h) => {
@@ -94,3 +95,5 @@ export default [{
     },
   },
 }]
+
+export default routes

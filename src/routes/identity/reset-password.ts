@@ -1,8 +1,9 @@
+import type { ServerRoute } from '@hapi/hapi'
 import Joi from 'joi'
 import { post } from '../../api/post.ts'
 import { GET, POST } from '../../constants/verbs.ts'
 
-export default [{
+const routes: ServerRoute[] = [{
   method: GET,
   path: '/reset-password/{token}/{userId}',
   options: {
@@ -13,7 +14,7 @@ export default [{
       }),
     },
     handler: (request, h) => {
-      const { userId, token } = request.params
+      const { userId, token } = request.params as unknown as { userId: number; token: string }
       return h.view('identity/reset-password', { userId, token })
     },
   },
@@ -31,22 +32,26 @@ export default [{
       },
       failAction: async (request, h, _error) => {
         return h.view('identity/reset-password', {
-          message: 'Passwords must match', ...request.payload,
+          message: 'Passwords must match', ...(request.payload as Record<string, unknown>),
         }).takeover()
       },
     },
     handler: async (request, h) => {
       try {
-        const { userId, password, token } = request.payload
+        const payload = request.payload as { userId: number; password: string; token: string }
+        const { userId, password, token } = payload
         await post('/reset-password', { userId, password, token })
         return h.redirect('/login')
       } catch {
+        const payload = request.payload as { userId: number; token: string }
         return h.view('identity/reset-password', {
           message: 'Link expired',
-          userId: request.payload.userId,
-          token: request.payload.token,
+          userId: payload.userId,
+          token: payload.token,
         })
       }
     },
   },
 }]
+
+export default routes

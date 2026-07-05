@@ -1,3 +1,4 @@
+import type { ServerRoute } from '@hapi/hapi'
 import joi from 'joi'
 import boom from '@hapi/boom'
 import { refreshTeamsheet } from '../refresh/teamsheet/refresh.ts'
@@ -7,7 +8,7 @@ import ViewModel from './models/teamsheet.ts'
 import { GET, POST } from '../constants/verbs.ts'
 import Joi from 'joi'
 
-export default [{
+const routes: ServerRoute[] = [{
   method: GET,
   path: '/teamsheet',
   handler: async (request, h) => {
@@ -19,7 +20,7 @@ export default [{
   path: '/teamsheet/edit',
   options: { auth: { strategy: 'session', scope: ['admin'] } },
   handler: async (request, h) => {
-    const teamsheet = await get('/teamsheet', request)
+    const teamsheet = await get('/teamsheet', request) as { managerId: number; name: string; keepers: { teamId: number }[]; players: { playerId: number }[] }[]
     const teamsheetViewModel = ViewModel(teamsheet)
     return h.view('teamsheet-edit', { teamsheet: teamsheetViewModel })
   },
@@ -36,7 +37,7 @@ export default [{
         playerSubs: joi.alternatives().try(joi.array().items(joi.number().integer()), joi.number().integer()),
       },
       failAction: async (_request, _h, error) => {
-        return boom.badRequest(error)
+        return boom.badRequest(error?.message)
       },
     },
     handler: async (request, _h) => {
@@ -56,7 +57,7 @@ export default [{
         teamSubs: joi.alternatives().try(joi.array().items(joi.string()), joi.string()),
       },
       failAction: async (_request, _h, error) => {
-        return boom.badRequest(error)
+        return boom.badRequest(error?.message)
       },
     },
     handler: async (request, _h) => {
@@ -90,12 +91,13 @@ export default [{
           }),
         }).unknown(),
       },
-      failAction: async (_request, h, error) => {
+      failAction: async (_request, h, _error) => {
         return h.view('teamsheet-edit', { message: 'Only .xlsx files are permitted' }).code(400).takeover()
       },
     },
     handler: async (request, h) => {
-      const response = await refreshTeamsheet(request.payload.teamFile.path, request)
+      const payload = request.payload as { teamFile: { path: string } }
+      const response = await refreshTeamsheet(payload.teamFile.path, request) as { success: boolean }
       if (response.success) {
         return h.redirect('/teamsheet/edit')
       }
@@ -105,3 +107,5 @@ export default [{
     },
   },
 }]
+
+export default routes
