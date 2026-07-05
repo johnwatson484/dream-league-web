@@ -15,7 +15,9 @@
     "frontend:watch": "vite build --mode development --watch",
     "server:watch": "NODE_ENV=development node --env-file-if-exists=.env --watch --watch-path=./src --watch-path=./.public/assets-manifest.json src/index.ts",
     "server:debug": "NODE_ENV=development node --env-file-if-exists=.env --watch --watch-path=./src --watch-path=./.public/assets-manifest.json --inspect src/index.ts",
-    "local": "npm run dev",
+    "local": "npm run services:up && npm run dev",
+    "services:up": "docker compose up -d",
+    "services:down": "docker compose down",
     "docker:build": "docker compose --profile app build",
     "docker:dev": "docker compose --profile app up",
     "typecheck": "tsc",
@@ -40,6 +42,8 @@
     "@hapi/vision": "7.0.0",
     "@hapi/wreck": "18.1.2",
     "blankie": "5.0.0",
+    "convict": "6.2.5",
+    "convict-format-with-validator": "6.2.0",
     "hapi-pino": "10.1.0",
     "joi": "17.13.4",
     "nunjucks": "3.2.4",
@@ -49,6 +53,8 @@
     "xlsx": "0.18.5"
   },
   "devDependencies": {
+    "@types/convict": "6.1.6",
+    "@types/convict-format-with-validator": "6.0.6",
     "@types/node": "26.0.1",
     "@vitest/coverage-v8": "4.1.9",
     "cross-env": "10.1.0",

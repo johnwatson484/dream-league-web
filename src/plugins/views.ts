@@ -36,7 +36,7 @@ function context (request) {
     ...ctx,
     asset,
     assetCss,
-    appName: config.appName,
+    appName: config.get('appName'),
     currentYear: new Date().getUTCFullYear(),
     auth: mapAuth(request),
     cookiesPolicy: request.state?.cookies_policy || { confirmed: false, essential: true, analytics: false },
@@ -63,7 +63,7 @@ export default {
     },
     path: '../views',
     relativeTo: import.meta.dirname,
-    isCached: !config.isDev,
+    isCached: !config.get('isDev'),
     context,
   },
 }

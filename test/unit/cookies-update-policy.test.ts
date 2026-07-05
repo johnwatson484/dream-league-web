@@ -2,8 +2,8 @@ const { mockCreateDefaultPolicy } = vi.hoisted(() => ({
   mockCreateDefaultPolicy: vi.fn(),
 }))
 
-vi.mock('../../src/config.ts', () => ({
-  default: { cookieOptions: { path: '/', isSecure: true } },
+vi.mock('../../src/cookies/get-cookie-options.ts', () => ({
+  getCookieOptions: () => ({ path: '/', isSecure: true }),
 }))
 
 vi.mock('../../src/cookies/create-default-policy.ts', () => ({

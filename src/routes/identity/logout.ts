@@ -7,7 +7,7 @@ export default [{
   method: POST,
   path: '/logout',
   handler: async (request, h) => {
-    const sessionCookie = request.state?.[config.session.cookieName]
+    const sessionCookie = request.state?.[config.get('session.cookieName')]
     if (sessionCookie?.sessionId && request.app.session) {
       try {
         await post('/logout', { refreshToken: request.app.session.refreshToken }, request)
@@ -17,6 +17,6 @@ export default [{
       await destroySession(sessionCookie.sessionId)
     }
     return h.redirect('/')
-      .unstate(config.session.cookieName)
+      .unstate(config.get('session.cookieName'))
   },
 }]

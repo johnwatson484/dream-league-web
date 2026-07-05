@@ -3,6 +3,7 @@ import Joi from 'joi'
 import scooter from '@hapi/scooter'
 import inert from '@hapi/inert'
 import config from './config.ts'
+import { getCookieOptions } from './cookies/get-cookie-options.ts'
 import { connect as connectRedis } from './session/redis-client.ts'
 import userAgentProtection from './plugins/user-agent-protection.ts'
 import views from './plugins/views.ts'
@@ -20,7 +21,7 @@ async function createServer () {
   await connectRedis()
 
   const server = Hapi.server({
-    port: config.port,
+    port: config.get('port'),
     routes: {
       validate: {
         options: {
@@ -34,7 +35,7 @@ async function createServer () {
   })
 
   server.validator(Joi)
-  server.state('cookies_policy', config.cookieOptions)
+  server.state('cookies_policy', getCookieOptions())
 
   await server.register(userAgentProtection)
   await server.register(scooter)
@@ -43,7 +44,7 @@ async function createServer () {
 
   server.ext('onPreResponse', (request, h) => {
     if (!request.state?.cookies_policy && (request.response as any).variety === 'view') {
-      h.state('cookies_policy', { confirmed: false, essential: true, analytics: false }, config.cookieOptions)
+      h.state('cookies_policy', { confirmed: false, essential: true, analytics: false }, getCookieOptions())
     }
     return h.continue
   })

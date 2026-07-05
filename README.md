@@ -2,7 +2,7 @@
 
 # Dream League Web
 
-Dream League website (server-rendered Nunjucks frontend).
+Dream League website.
 
 ## Prerequisites
 
@@ -44,3 +44,26 @@ docker compose --profile app up    # starts web app in container (needs API netw
 ## Multi-service development
 
 For running the full stack (API + Web), see the [dream-league-core](https://github.com/johnwatson484/dream-league-core) orchestration repo.
+
+## Environment variables
+
+| Variable | Description | Default | Required |
+|----------|-------------|---------|----------|
+| `NODE_ENV` | Application environment (`development`, `test`, `production`) | `development` | No |
+| `PORT` | Server port | `3000` | No |
+| `APP_NAME` | Application display name | `Dream League` | No |
+| `API_HOST` | Backend API base URL | `http://localhost:3001` | No |
+| `COOKIE_NAME` | Session cookie name | `dl_session` | No |
+| `COOKIE_PASSWORD` | Session cookie encryption key (min 32 chars) | — | **Yes** |
+| `SESSION_TTL` | Session TTL in milliseconds | `604800000` (7 days) | No |
+| `COOKIE_TTL` | Cookie consent TTL in milliseconds | `31536000000` (1 year) | No |
+| `COOKIE_ENCODING` | Cookie encoding format | `base64json` | No |
+| `COOKIE_SAME_SITE` | Cookie SameSite attribute | `Lax` | No |
+| `COOKIE_HTTP_ONLY` | Cookie HttpOnly flag | `true` | No |
+| `COOKIE_CLEAR_INVALID` | Clear invalid cookies | `false` | No |
+| `COOKIE_STRICT_HEADER` | Strict cookie header enforcement | `true` | No |
+| `REDIS_HOST` | Redis host for session storage | `localhost` | No |
+| `REDIS_PORT` | Redis port | `6380` | No |
+| `REDIS_PASSWORD` | Redis password | `''` | No |
+
+Cookie `isSecure` is automatically set to `true` in production and `false` in development/test.

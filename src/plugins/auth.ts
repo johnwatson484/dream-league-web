@@ -10,10 +10,10 @@ export default {
 
       server.auth.strategy('session', 'cookie', {
         cookie: {
-          name: config.session.cookieName,
-          password: config.session.cookiePassword,
-          ttl: config.session.ttl,
-          isSecure: !config.isDev,
+          name: config.get('session.cookieName'),
+          password: config.get('session.cookiePassword'),
+          ttl: config.get('session.ttl'),
+          isSecure: !config.get('isDev'),
           isHttpOnly: true,
           isSameSite: 'Lax',
           clearInvalid: true,

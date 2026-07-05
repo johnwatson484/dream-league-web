@@ -1,9 +1,9 @@
 import crumb from '@hapi/crumb'
-import config from '../config.ts'
+import { getCookieOptions } from '../cookies/get-cookie-options.ts'
 
 export default {
   plugin: crumb,
   options: {
-    cookieOptions: config.cookieOptions,
+    cookieOptions: getCookieOptions(),
   },
 }
