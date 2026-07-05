@@ -1,18 +1,8 @@
 import type XLSX from 'xlsx'
+import type { CellAddress, TeamsheetPlayer } from './types.ts'
 import { mapPlayer } from './map-player.ts'
 import { mapPosition } from './map-position.ts'
 import { mapSubstitute } from './map-substitute.ts'
-
-interface CellAddress {
-  c: number
-  r: number
-}
-
-interface TeamsheetPlayer {
-  player: string
-  position: string
-  substitute: boolean
-}
 
 interface Team {
   manager: string

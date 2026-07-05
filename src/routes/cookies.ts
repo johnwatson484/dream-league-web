@@ -1,10 +1,9 @@
 import type { ServerRoute } from '@hapi/hapi'
 import Joi from 'joi'
 import { updatePolicy } from '../cookies/update-policy.ts'
-import { GET, POST } from '../constants/verbs.ts'
 
 const routes: ServerRoute[] = [{
-  method: GET,
+  method: 'GET',
   path: '/cookies',
   options: {
     validate: {
@@ -17,7 +16,7 @@ const routes: ServerRoute[] = [{
     return h.view('cookies/cookie-policy', { cookiesPolicy: request.state.cookies_policy, updated: (request.query as Record<string, unknown>).updated })
   },
 }, {
-  method: POST,
+  method: 'POST',
   path: '/cookies',
   options: {
     validate: {

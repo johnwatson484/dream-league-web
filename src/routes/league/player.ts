@@ -3,12 +3,11 @@ import Joi from 'joi'
 import boom from '@hapi/boom'
 import { get } from '../../api/get.ts'
 import { post } from '../../api/post.ts'
-import { GET, POST } from '../../constants/verbs.ts'
 import { DEFENDER, MIDFIELDER, FORWARD } from '../../constants/positions.ts'
 const positions = [DEFENDER, MIDFIELDER, FORWARD]
 
 const routes: ServerRoute[] = [{
-  method: GET,
+  method: 'GET',
   path: '/league/players',
   options: {
     validate: {
@@ -29,7 +28,7 @@ const routes: ServerRoute[] = [{
     return h.view('league/players', { players, positions, currentPosition: position, currentSearch: search })
   },
 }, {
-  method: GET,
+  method: 'GET',
   path: '/league/player/detail',
   options: {
     validate: {
@@ -50,7 +49,7 @@ const routes: ServerRoute[] = [{
     return h.view('league/player-detail', { player, leagueGoals, cupGoals })
   },
 }, {
-  method: GET,
+  method: 'GET',
   path: '/league/player/create',
   options: { auth: { strategy: 'session', scope: ['admin'] } },
   handler: async (request, h) => {
@@ -58,7 +57,7 @@ const routes: ServerRoute[] = [{
     return h.view('league/create-player', { teams, positions })
   },
 }, {
-  method: POST,
+  method: 'POST',
   path: '/league/player/create',
   options: {
     auth: { strategy: 'session', scope: ['admin'] },
@@ -80,7 +79,7 @@ const routes: ServerRoute[] = [{
     },
   },
 }, {
-  method: GET,
+  method: 'GET',
   path: '/league/player/edit',
   options: {
     auth: { strategy: 'session', scope: ['admin'] },
@@ -99,7 +98,7 @@ const routes: ServerRoute[] = [{
     return h.view('league/edit-player', { player, teams, positions })
   },
 }, {
-  method: POST,
+  method: 'POST',
   path: '/league/player/edit',
   options: {
     auth: { strategy: 'session', scope: ['admin'] },
@@ -122,7 +121,7 @@ const routes: ServerRoute[] = [{
     },
   },
 }, {
-  method: GET,
+  method: 'GET',
   path: '/league/player/delete',
   options: {
     auth: { strategy: 'session', scope: ['admin'] },
@@ -140,7 +139,7 @@ const routes: ServerRoute[] = [{
     return h.view('league/delete-player', { player })
   },
 }, {
-  method: POST,
+  method: 'POST',
   path: '/league/player/delete',
   options: {
     auth: { strategy: 'session', scope: ['admin'] },
@@ -159,7 +158,7 @@ const routes: ServerRoute[] = [{
     },
   },
 }, {
-  method: POST,
+  method: 'POST',
   path: '/league/players/autocomplete',
   options: {
     plugins: {

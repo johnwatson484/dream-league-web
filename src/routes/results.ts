@@ -4,11 +4,10 @@ import boom from '@hapi/boom'
 import { get } from '../api/get.ts'
 import { post } from '../api/post.ts'
 import { deleteRequest } from '../api/delete.ts'
-import { sortArray } from '../utils/sort-array.ts'
-import { GET, POST, DELETE } from '../constants/verbs.ts'
+import { compare } from '../utils/compare.ts'
 
 const routes: ServerRoute[] = [{
-  method: GET,
+  method: 'GET',
   path: '/results',
   options: {
     validate: {
@@ -27,16 +26,16 @@ const routes: ServerRoute[] = [{
     },
   },
 }, {
-  method: GET,
+  method: 'GET',
   path: '/results/edit',
   handler: async (request, h) => {
     const resultsInput = await get('/results-edit', request) as { keepers: { division: string; team: string }[]; players: { division: string; team: string; lastName: string; firstName: string }[] }
-    resultsInput.keepers = resultsInput.keepers.sort((a, b) => { return sortArray(a.division, b.division) || sortArray(a.team, b.team) })
-    resultsInput.players = resultsInput.players.sort((a, b) => { return sortArray(a.division, b.division) || sortArray(a.team, b.team) || sortArray(a.lastName, b.lastName) || sortArray(a.firstName, b.firstName) })
+    resultsInput.keepers = resultsInput.keepers.toSorted((a, b) => { return compare(a.division, b.division) || compare(a.team, b.team) })
+    resultsInput.players = resultsInput.players.toSorted((a, b) => { return compare(a.division, b.division) || compare(a.team, b.team) || compare(a.lastName, b.lastName) || compare(a.firstName, b.firstName) })
     return h.view('results-edit', { resultsInput })
   },
 }, {
-  method: POST,
+  method: 'POST',
   path: '/results/edit',
   options: {
     auth: { strategy: 'session', scope: ['admin'] },
@@ -58,7 +57,7 @@ const routes: ServerRoute[] = [{
     },
   },
 }, {
-  method: POST,
+  method: 'POST',
   path: '/results/send',
   options: {
     auth: { strategy: 'session', scope: ['admin'] },
@@ -76,7 +75,7 @@ const routes: ServerRoute[] = [{
     },
   },
 }, {
-  method: DELETE,
+  method: 'DELETE',
   path: '/results',
   options: {
     auth: { strategy: 'session', scope: ['admin'] },

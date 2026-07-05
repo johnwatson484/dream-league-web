@@ -1,6 +1,5 @@
 import type { ServerRoute } from '@hapi/hapi'
 import { get } from '../../api/get.ts'
-import { GET } from '../../constants/verbs.ts'
 
 interface TeamsheetTeam {
   name: string
@@ -41,7 +40,7 @@ function formatTeamsheet (teamsheet: TeamsheetTeam[]): { data: { players: unknow
 }
 
 const routes: ServerRoute[] = [{
-  method: GET,
+  method: 'GET',
   path: '/api/v1/manager/teams',
   options: {
     handler: async (request, h) => {

@@ -1,8 +1,7 @@
 import type { ServerRoute } from '@hapi/hapi'
-import { GET } from '../constants/verbs.ts'
 
 const routes: ServerRoute[] = [{
-  method: GET,
+  method: 'GET',
   path: '/assets/{path*}',
   handler: {
     directory: {

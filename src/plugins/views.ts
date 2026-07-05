@@ -30,7 +30,7 @@ function asset (logicalPath: string): string {
 
 function assetCss (logicalPath: string): string[] {
   const entry = manifest[logicalPath] || manifest[logicalPath.replace(/\.js$/, '.ts')]
-  if (!entry || !entry.css) {
+  if (!entry?.css) {
     return []
   }
   return entry.css.map((f: string) => `/assets/${f}`)

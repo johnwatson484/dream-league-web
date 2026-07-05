@@ -26,14 +26,14 @@ $('#submit').click(function () {
 $('.plus').click(function (e) {
   e.preventDefault()
   const input = $(this).closest('td').find('.result-input')
-  const value = input.val() === '' ? 0 : parseInt(input.val())
+  const value = input.val() === '' ? 0 : Number.parseInt(input.val())
   input.val(value + 1)
 })
 
 $('.minus').click(function (e) {
   e.preventDefault()
   const input = $(this).closest('td').find('.result-input')
-  const value = parseInt(input.val())
+  const value = Number.parseInt(input.val())
   if (value > 0) {
     input.val(value - 1)
   }

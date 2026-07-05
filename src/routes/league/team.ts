@@ -3,10 +3,9 @@ import Joi from 'joi'
 import boom from '@hapi/boom'
 import { get } from '../../api/get.ts'
 import { post } from '../../api/post.ts'
-import { GET, POST } from '../../constants/verbs.ts'
 
 const routes: ServerRoute[] = [{
-  method: GET,
+  method: 'GET',
   path: '/league/teams',
   options: {
     validate: {
@@ -28,7 +27,7 @@ const routes: ServerRoute[] = [{
     return h.view('league/teams', { teams, divisions, currentDivision: division, currentSearch: search })
   },
 }, {
-  method: GET,
+  method: 'GET',
   path: '/league/team/detail',
   options: {
     validate: {
@@ -45,7 +44,7 @@ const routes: ServerRoute[] = [{
     return h.view('league/team-detail', { team })
   },
 }, {
-  method: GET,
+  method: 'GET',
   path: '/league/team/create',
   options: { auth: { strategy: 'session', scope: ['admin'] } },
   handler: async (request, h) => {
@@ -53,7 +52,7 @@ const routes: ServerRoute[] = [{
     return h.view('league/create-team', { divisions })
   },
 }, {
-  method: POST,
+  method: 'POST',
   path: '/league/team/create',
   options: {
     auth: { strategy: 'session', scope: ['admin'] },
@@ -74,7 +73,7 @@ const routes: ServerRoute[] = [{
     },
   },
 }, {
-  method: GET,
+  method: 'GET',
   path: '/league/team/edit',
   options: {
     auth: { strategy: 'session', scope: ['admin'] },
@@ -93,7 +92,7 @@ const routes: ServerRoute[] = [{
     return h.view('league/edit-team', { team, divisions })
   },
 }, {
-  method: POST,
+  method: 'POST',
   path: '/league/team/edit',
   options: {
     auth: { strategy: 'session', scope: ['admin'] },
@@ -115,7 +114,7 @@ const routes: ServerRoute[] = [{
     },
   },
 }, {
-  method: GET,
+  method: 'GET',
   path: '/league/team/delete',
   options: {
     auth: { strategy: 'session', scope: ['admin'] },
@@ -133,7 +132,7 @@ const routes: ServerRoute[] = [{
     return h.view('league/delete-team', { team })
   },
 }, {
-  method: POST,
+  method: 'POST',
   path: '/league/team/delete',
   options: {
     auth: { strategy: 'session', scope: ['admin'] },
@@ -152,7 +151,7 @@ const routes: ServerRoute[] = [{
     },
   },
 }, {
-  method: POST,
+  method: 'POST',
   path: '/league/teams/autocomplete',
   options: {
     plugins: {

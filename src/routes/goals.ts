@@ -2,17 +2,16 @@ import type { ServerRoute } from '@hapi/hapi'
 import Joi from 'joi'
 import { get } from '../api/get.ts'
 import { post } from '../api/post.ts'
-import { GET, POST } from '../constants/verbs.ts'
 
 const routes: ServerRoute[] = [{
-  method: GET,
+  method: 'GET',
   path: '/goals',
   handler: async (request, h) => {
     const goals = await get('/goals', request)
     return h.view('goals', { goals })
   },
 }, {
-  method: GET,
+  method: 'GET',
   path: '/goal',
   options: {
     validate: {
@@ -29,7 +28,7 @@ const routes: ServerRoute[] = [{
     return h.view('goal', goal as Record<string, unknown>)
   },
 }, {
-  method: GET,
+  method: 'GET',
   path: '/goal/delete',
   options: {
     auth: { strategy: 'session', scope: ['admin'] },
@@ -47,7 +46,7 @@ const routes: ServerRoute[] = [{
     return h.view('delete-goal', { goal })
   },
 }, {
-  method: POST,
+  method: 'POST',
   path: '/goal/delete',
   options: {
     auth: { strategy: 'session', scope: ['admin'] },

@@ -1,9 +1,8 @@
 import type { ServerRoute } from '@hapi/hapi'
 import { get } from '../../api/get.ts'
-import { GET } from '../../constants/verbs.ts'
 
 const routes: ServerRoute[] = [{
-  method: GET,
+  method: 'GET',
   path: '/api/v1/winners',
   options: {
     handler: async (request, h) => {

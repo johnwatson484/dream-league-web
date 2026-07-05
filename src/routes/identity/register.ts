@@ -3,17 +3,16 @@ import Joi from 'joi'
 import config from '../../config.ts'
 import { post } from '../../api/post.ts'
 import { createSession } from '../../session/session-manager.ts'
-import { GET, POST } from '../../constants/verbs.ts'
 
 const routes: ServerRoute[] = [{
-  method: GET,
+  method: 'GET',
   path: '/register',
   handler: (_request, h) => {
     return h.view('identity/register')
   },
 },
 {
-  method: POST,
+  method: 'POST',
   path: '/register',
   options: {
     validate: {

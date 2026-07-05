@@ -2,17 +2,16 @@ import type { ServerRoute } from '@hapi/hapi'
 import Joi from 'joi'
 import { get } from '../api/get.ts'
 import { post } from '../api/post.ts'
-import { GET, POST } from '../constants/verbs.ts'
 
 const routes: ServerRoute[] = [{
-  method: GET,
+  method: 'GET',
   path: '/conceded',
   handler: async (request, h) => {
     const conceded = await get('/conceded', request)
     return h.view('conceded', { conceded })
   },
 }, {
-  method: GET,
+  method: 'GET',
   path: '/concede',
   options: {
     validate: {
@@ -29,7 +28,7 @@ const routes: ServerRoute[] = [{
     return h.view('concede', concede as Record<string, unknown>)
   },
 }, {
-  method: GET,
+  method: 'GET',
   path: '/concede/delete',
   options: {
     auth: { strategy: 'session', scope: ['admin'] },
@@ -47,7 +46,7 @@ const routes: ServerRoute[] = [{
     return h.view('delete-concede', { concede })
   },
 }, {
-  method: POST,
+  method: 'POST',
   path: '/concede/delete',
   options: {
     auth: { strategy: 'session', scope: ['admin'] },
