@@ -1,10 +1,12 @@
 import type { ServerRoute } from '@hapi/hapi'
 import Joi from 'joi'
 import boom from '@hapi/boom'
+import Wreck from '@hapi/wreck'
 import { get } from '../api/get.ts'
 import { post } from '../api/post.ts'
 import { deleteRequest } from '../api/delete.ts'
 import { compare } from '../utils/compare.ts'
+import config from '../config.ts'
 
 const routes: ServerRoute[] = [{
   method: 'GET',
@@ -72,6 +74,60 @@ const routes: ServerRoute[] = [{
     handler: async (request, h) => {
       await post('/results-send', request.payload, request)
       return h.response()
+    },
+  },
+}, {
+  method: 'GET',
+  path: '/results/existing',
+  options: {
+    auth: { strategy: 'session', scope: ['admin'] },
+    validate: {
+      query: Joi.object({
+        gameweekId: Joi.number().integer().required(),
+      }),
+      failAction: async (_request, _h, error) => {
+        return boom.badRequest(error?.message)
+      },
+    },
+    handler: async (request, h) => {
+      const gameweekId = (request.query as Record<string, unknown>).gameweekId
+      const existing = await get(`/results-edit/existing?gameweekId=${gameweekId}`, request)
+      return h.response(existing as object)
+    },
+  },
+}, {
+  method: 'GET',
+  path: '/results/assisted',
+  options: {
+    auth: { strategy: 'session', scope: ['admin'] },
+    validate: {
+      query: Joi.object({
+        gameweekId: Joi.number().integer().required(),
+      }),
+      failAction: async (_request, _h, error) => {
+        return boom.badRequest(error?.message)
+      },
+    },
+    handler: async (request, h) => {
+      const gameweekId = Number((request.query as Record<string, unknown>).gameweekId)
+      const gameweeks = await get('/gameweeks', request) as any[]
+      const gameweek = gameweeks.find((gw: any) => gw.gameweekId === gameweekId)
+      if (!gameweek) {
+        return boom.notFound('Gameweek not found')
+      }
+
+      const startDate = new Date(gameweek.startDate)
+      const endDate = new Date(startDate)
+      endDate.setDate(endDate.getDate() + 6)
+      endDate.setHours(23, 59, 59, 999)
+
+      const videprinterUrl = `${config.get('videprinterHost')}/videprinter/summary?from=${startDate.toISOString()}&to=${endDate.toISOString()}`
+      try {
+        const { payload } = await Wreck.get(videprinterUrl, { json: true })
+        return h.response(payload as object)
+      } catch {
+        return boom.badGateway('Unable to reach videprinter service')
+      }
     },
   },
 }, {

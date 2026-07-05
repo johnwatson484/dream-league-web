@@ -8,13 +8,23 @@
       <input type="hidden" name="crumb" value="{{crumb}}"/>
 
       <div class="row">
-        <div class="col-md-8">
+        <div class="col-md-5">
           <div class="form-group">
             <select class="form-control" id="gameweekId" name="gameweekId">
             {% for gameweek in resultsInput.gameweeks %}
-              <option value="{{ gameweek.gameweekId }}" {% if gameweek.isActive %}selected{% endif %}>Gameweek {{ gameweek.gameweekId }} - {{ gameweek.shortDate }}</option>
+              <option value="{{ gameweek.gameweekId }}" data-start-date="{{ gameweek.startDate }}" {% if gameweek.isActive %}selected{% endif %}>Gameweek {{ gameweek.gameweekId }} - {{ gameweek.shortDate }}</option>
             {% endfor %}
-            </select> 
+            </select>
+          </div>
+        </div>
+
+        <div class="col-md-3">
+          <div class="form-group">
+            <button type="button" id="results-assistant" class="btn btn-outline-primary"
+              data-toggle="tooltip" data-placement="bottom"
+              title="Applies goal and concede data gathered from the live videprinter for this gameweek. Review and adjust before submitting.">
+              <i class="fa-solid fa-wand-magic-sparkles"></i> Results Assistant
+            </button>
           </div>
         </div>
 
@@ -24,6 +34,8 @@
           </div>
         </div>
       </div>
+
+      <div id="assistant-alerts" class="mb-3"></div>
 
       <h4>Goalkeepers</h4>
 
