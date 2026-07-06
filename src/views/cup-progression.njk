@@ -68,6 +68,15 @@
                 <input type="hidden" name="fixtureId" value="{{ fixture.fixtureId }}"/>
                 <button type="submit" class="btn btn-sm btn-outline-primary">Resolve</button>
               </form>
+              <form method="POST" action="/cup/{{ cup.cupId }}/resolve" class="d-inline ml-1">
+                <input type="hidden" name="crumb" value="{{crumb}}"/>
+                <input type="hidden" name="fixtureId" value="{{ fixture.fixtureId }}"/>
+                <select class="form-control form-control-sm d-inline-block" name="winnerManagerId" style="width: auto;">
+                  <option value="{{ fixture.homeManager.managerId }}">{{ fixture.homeManager.name }}</option>
+                  <option value="{{ fixture.awayManager.managerId }}">{{ fixture.awayManager.name }}</option>
+                </select>
+                <button type="submit" class="btn btn-sm btn-outline-warning">Award (lots)</button>
+              </form>
             {% endif %}
           </td>
           {% endif %}
