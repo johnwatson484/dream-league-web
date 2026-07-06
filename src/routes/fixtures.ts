@@ -163,15 +163,25 @@ const routes: ServerRoute[] = [{
     },
     handler: async (request, h) => {
       const payload = request.payload as { cupId: number; gameweekIds: number[] }
-      const generated = await post('/fixtures/generate', payload, request) as any[]
-      const managers = await get('/managers', request) as any[]
-      const managerMap = new Map(managers.map((m: any) => [m.managerId, m.name]))
-      const enriched = generated.map((f: any) => ({
-        ...f,
-        homeManagerName: managerMap.get(f.homeManagerId) || f.homeManagerId,
-        awayManagerName: managerMap.get(f.awayManagerId) || f.awayManagerId,
-      }))
-      return h.view('fixtures-generate', { generated: enriched })
+      try {
+        const generated = await post('/fixtures/generate', payload, request) as any[]
+        const managers = await get('/managers', request) as any[]
+        const managerMap = new Map(managers.map((m: any) => [m.managerId, m.name]))
+        const enriched = generated.map((f: any) => ({
+          ...f,
+          homeManagerName: managerMap.get(f.homeManagerId) || f.homeManagerId,
+          awayManagerName: managerMap.get(f.awayManagerId) || f.awayManagerId,
+        }))
+        return h.view('fixtures-generate', { generated: enriched })
+      } catch (err: any) {
+        const errorPayload = err?.data?.payload ? JSON.parse(err.data.payload.toString()) : null
+        const message = errorPayload?.message || err?.message || 'Failed to generate fixtures'
+        const cups = await get('/cups', request) as any[]
+        const groupCups = cups.filter((c: any) => c.hasGroupStage)
+        const groups = await get('/groups', request)
+        const gameweeks = await get('/gameweeks', request)
+        return h.view('fixtures-generate', { cups: groupCups, groups, gameweeks, error: message })
+      }
     },
   },
 }, {
