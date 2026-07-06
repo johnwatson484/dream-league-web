@@ -45,16 +45,16 @@
 </div>
 {% endif %}
 
-{% if results.groups %}
+{% if results.groups.length %}
 <div class="row">
-  {% for group in results.group %}
+  {% for group in results.groups %}
   <div class="col-md-6" style="padding-bottom: 20px;">
     <div class="card border-dark">
       <div class="card-header bg-dark text-light">
         Group {{ loop.index }}
       </div>
       <div class="card-body">
-        {% include "./_table.njk" %}
+        {% include "./_group.njk" %}
       </div>
     </div>
   </div>

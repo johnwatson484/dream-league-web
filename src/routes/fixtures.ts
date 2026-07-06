@@ -213,13 +213,16 @@ const routes: ServerRoute[] = [{
     const cupId = request.params.cupId
     const cup = await get(`/cup?cupId=${cupId}`, request)
     const progression = await get(`/cups/${cupId}/progression`, request) as any[]
+    const qualifiers = await get(`/cups/${cupId}/qualifiers`, request) as any[]
+    const managers = await get('/managers', request)
+    const gameweeks = await get('/gameweeks', request)
     const rounds: Record<number, any[]> = {}
     for (const fixture of progression) {
       const round = fixture.round
       if (!rounds[round]) { rounds[round] = [] }
       rounds[round].push(fixture)
     }
-    return h.view('cup-progression', { cup, rounds })
+    return h.view('cup-progression', { cup, rounds, qualifiers, managers, gameweeks })
   },
 }, {
   method: 'POST',
@@ -238,6 +241,29 @@ const routes: ServerRoute[] = [{
     handler: async (request, h) => {
       const cupId = request.params.cupId
       await post(`/cups/${cupId}/resolve`, request.payload, request)
+      return h.redirect(`/cup/${cupId}/progression`)
+    },
+  },
+}, {
+  method: 'POST',
+  path: '/cup/{cupId}/create-fixture',
+  options: {
+    auth: { strategy: 'session', scope: ['admin'] },
+    validate: {
+      payload: Joi.object({
+        homeManagerId: Joi.number().integer().required(),
+        awayManagerId: Joi.number().integer().required(),
+        gameweekId: Joi.number().integer().required(),
+        round: Joi.number().integer().required(),
+      }),
+      failAction: async (_request, _h, error) => {
+        return boom.badRequest(error?.message)
+      },
+    },
+    handler: async (request, h) => {
+      const cupId = request.params.cupId
+      const payload = { ...(request.payload as object), cupId: Number(cupId) }
+      await post('/fixture/create', payload, request)
       return h.redirect(`/cup/${cupId}/progression`)
     },
   },

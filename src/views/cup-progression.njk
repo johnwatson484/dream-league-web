@@ -3,6 +3,26 @@
 {% block content %}
   <h2>{{ cup.name }} - Progression</h2>
 
+  {% if qualifiers.length %}
+  <div class="card border-success mb-4">
+    <div class="card-header bg-success text-light">Qualified from Group Stage</div>
+    <div class="card-body">
+      <div class="row">
+        {% for group in qualifiers %}
+        <div class="col-md-4 mb-2">
+          <strong>{{ group.groupName }}</strong>
+          <ul class="list-unstyled mb-0 mt-1">
+            {% for manager in group.qualifiers %}
+            <li><i class="fa-solid fa-check text-success mr-1"></i> {{ manager.name }}</li>
+            {% endfor %}
+          </ul>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+  {% endif %}
+
   {% for round, fixtures in rounds %}
     <h4>Round {{ round }}</h4>
     <table class="table table-sm table-hover small">
@@ -56,5 +76,36 @@
     </table>
   {% endfor %}
 
-  <a href="/fixtures" class="btn btn-secondary">Back to fixtures</a>
+  {% if auth.isAdmin %}
+  <div class="card border-dark mt-4">
+    <div class="card-header bg-dark text-light">Create Knockout Fixture</div>
+    <div class="card-body">
+      <form method="POST" action="/cup/{{ cup.cupId }}/create-fixture" class="form-inline">
+        <input type="hidden" name="crumb" value="{{crumb}}"/>
+        <select class="form-control form-control-sm mr-2" name="homeManagerId">
+          <option value="">Home</option>
+          {% for manager in managers %}
+          <option value="{{ manager.managerId }}">{{ manager.name }}</option>
+          {% endfor %}
+        </select>
+        <span class="mr-2">v</span>
+        <select class="form-control form-control-sm mr-2" name="awayManagerId">
+          <option value="">Away</option>
+          {% for manager in managers %}
+          <option value="{{ manager.managerId }}">{{ manager.name }}</option>
+          {% endfor %}
+        </select>
+        <select class="form-control form-control-sm mr-2" name="gameweekId">
+          {% for gameweek in gameweeks %}
+          <option value="{{ gameweek.gameweekId }}">GW{{ gameweek.gameweekId }} - {{ gameweek.shortDate }}</option>
+          {% endfor %}
+        </select>
+        <input type="number" class="form-control form-control-sm mr-2" name="round" placeholder="Round" min="2" value="2" style="width: 80px;">
+        <button type="submit" class="btn btn-sm btn-primary">Create</button>
+      </form>
+    </div>
+  </div>
+  {% endif %}
+
+  <a href="/fixtures" class="btn btn-secondary mt-3">Back to fixtures</a>
 {% endblock %}
