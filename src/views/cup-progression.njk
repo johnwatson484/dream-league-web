@@ -1,0 +1,60 @@
+{% extends '_layout.njk' %}
+
+{% block content %}
+  <h2>{{ cup.name }} - Progression</h2>
+
+  {% for round, fixtures in rounds %}
+    <h4>Round {{ round }}</h4>
+    <table class="table table-sm table-hover small">
+      <tr>
+        <th>Gameweek</th>
+        <th>Home</th>
+        <th class="text-center">Margin</th>
+        <th>Away</th>
+        <th class="text-center">Margin</th>
+        <th>Result</th>
+        {% if auth.isAdmin %}<th></th>{% endif %}
+      </tr>
+      {% for fixture in fixtures %}
+        <tr>
+          <td>{{ fixture.gameweek.gameweekId }}</td>
+          <td>{{ fixture.homeManager.name }}</td>
+          <td class="text-center">{{ fixture.result.homeAggregate if fixture.result else '-' }}</td>
+          <td>{{ fixture.awayManager.name }}</td>
+          <td class="text-center">{{ fixture.result.awayAggregate if fixture.result else '-' }}</td>
+          <td>
+            {% if fixture.result and fixture.result.winnerManagerId %}
+              <span class="badge badge-success">
+                {% if fixture.result.winnerManagerId == fixture.homeManager.managerId %}
+                  {{ fixture.homeManager.name }}
+                {% else %}
+                  {{ fixture.awayManager.name }}
+                {% endif %}
+                ({{ fixture.result.decidedBy }})
+              </span>
+            {% elif fixture.result and fixture.result.status == 'needs_third_leg' %}
+              <span class="badge badge-warning">Needs 3rd leg</span>
+            {% elif fixture.result and fixture.result.status == 'needs_manual_resolution' %}
+              <span class="badge badge-danger">Needs resolution</span>
+            {% else %}
+              <span class="badge badge-secondary">Pending</span>
+            {% endif %}
+          </td>
+          {% if auth.isAdmin %}
+          <td>
+            {% if not fixture.result or not fixture.result.winnerManagerId %}
+              <form method="POST" action="/cup/{{ cup.cupId }}/resolve" class="d-inline">
+                <input type="hidden" name="crumb" value="{{crumb}}"/>
+                <input type="hidden" name="fixtureId" value="{{ fixture.fixtureId }}"/>
+                <button type="submit" class="btn btn-sm btn-outline-primary">Resolve</button>
+              </form>
+            {% endif %}
+          </td>
+          {% endif %}
+        </tr>
+      {% endfor %}
+    </table>
+  {% endfor %}
+
+  <a href="/fixtures" class="btn btn-secondary">Back to fixtures</a>
+{% endblock %}
