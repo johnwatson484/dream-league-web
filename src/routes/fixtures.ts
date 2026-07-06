@@ -174,8 +174,8 @@ const routes: ServerRoute[] = [{
         }))
         return h.view('fixtures-generate', { generated: enriched })
       } catch (err: any) {
-        const errorPayload = err?.data?.payload ? JSON.parse(err.data.payload.toString()) : null
-        const message = errorPayload?.message || err?.message || 'Failed to generate fixtures'
+        const errorPayload = err?.data?.payload
+        const message = (typeof errorPayload === 'object' ? errorPayload?.message : null) || err?.message || 'Failed to generate fixtures'
         const cups = await get('/cups', request) as any[]
         const groupCups = cups.filter((c: any) => c.hasGroupStage)
         const groups = await get('/groups', request)
