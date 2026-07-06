@@ -99,7 +99,8 @@ function loadExistingResults (gameweekId) {
 }
 
 function applyAssistedResults (data) {
-  let changedCount = 0
+  const appliedGoals: string[] = []
+  const appliedConceded: string[] = []
 
   if (data.goals) {
     data.goals.forEach(g => {
@@ -107,7 +108,7 @@ function applyAssistedResults (data) {
       const input = hidden.closest('td').find('.result-input')
       if (input.length && Number(input.val()) !== g.goals) {
         input.val(g.goals).addClass('table-warning')
-        changedCount++
+        appliedGoals.push(g.player + ' (' + g.team + ') x' + g.goals)
       }
     })
   }
@@ -117,23 +118,31 @@ function applyAssistedResults (data) {
       const input = hidden.closest('td').find('.result-input')
       if (input.length && Number(input.val()) !== c.conceded) {
         input.val(c.conceded).addClass('table-warning')
-        changedCount++
+        appliedConceded.push(c.team + ' x' + c.conceded)
       }
     })
   }
 
   let alertHtml = '<div class="alert alert-success alert-dismissible fade show" role="alert">' +
-    '<strong>Results Assistant:</strong> Updated ' + changedCount + ' field(s) from videprinter data.' +
-    '<button type="button" class="close" data-dismiss="alert"><span>&times;</span></button></div>'
+    '<strong>Results Assistant</strong>' +
+    '<button type="button" class="close" data-dismiss="alert"><span>&times;</span></button>'
 
-  if (data.unmatched && data.unmatched.length > 0) {
-    alertHtml += '<div class="alert alert-warning alert-dismissible fade show" role="alert">' +
-      '<strong>Unmatched goals (' + data.unmatched.length + '):</strong><ul class="mb-0 mt-1">'
-    data.unmatched.forEach(u => {
-      alertHtml += '<li>' + u.scorer + ' (' + u.team + ', ' + u.minute + '\') - ' + u.competition + '</li>'
-    })
-    alertHtml += '</ul><button type="button" class="close" data-dismiss="alert"><span>&times;</span></button></div>'
+  if (appliedGoals.length) {
+    alertHtml += '<div class="mt-2"><strong>Goals:</strong><ul class="mb-1">'
+    appliedGoals.forEach(g => { alertHtml += '<li>' + g + '</li>' })
+    alertHtml += '</ul></div>'
   }
 
+  if (appliedConceded.length) {
+    alertHtml += '<div><strong>Conceded:</strong><ul class="mb-0">'
+    appliedConceded.forEach(c => { alertHtml += '<li>' + c + '</li>' })
+    alertHtml += '</ul></div>'
+  }
+
+  if (!appliedGoals.length && !appliedConceded.length) {
+    alertHtml += '<p class="mb-0 mt-2">No changes to apply.</p>'
+  }
+
+  alertHtml += '</div>'
   $('#assistant-alerts').html(alertHtml)
 }
