@@ -73,6 +73,21 @@
         <button type="submit" class="btn btn-primary" {% if not groups.length %}disabled{% endif %}>Generate Fixtures</button>
         <a href="/fixtures" class="btn btn-secondary ml-2">Cancel</a>
       </form>
+
+      <hr>
+      <h5>Clear Generated Fixtures</h5>
+      <p class="text-muted small">Remove all generated fixtures for a cup. Useful for testing or re-generating.</p>
+      <form method="POST" action="/fixtures/clear" onsubmit="return confirm('Are you sure you want to delete all fixtures for this cup?')">
+        <input type="hidden" name="crumb" value="{{crumb}}"/>
+        <div class="form-group">
+          <select class="form-control" name="cupId">
+            {% for cup in cups %}
+              <option value="{{ cup.cupId }}">{{ cup.name }}</option>
+            {% endfor %}
+          </select>
+        </div>
+        <button type="submit" class="btn btn-danger">Clear Fixtures</button>
+      </form>
     </div>
   {% endif %}
 {% endblock %}

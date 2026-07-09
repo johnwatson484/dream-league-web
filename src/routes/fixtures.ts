@@ -52,20 +52,22 @@ const routes: ServerRoute[] = [{
   options: {
     auth: { strategy: 'session', scope: ['admin'] },
     validate: {
-      query: {
+      query: Joi.object({
         fixtureId: Joi.number().integer().required(),
-      },
+        returnTo: Joi.string().optional(),
+      }),
       failAction: async (_request, h, _error) => {
         return h.view('404').code(404).takeover()
       },
     },
   },
   handler: async (request, h) => {
-    const fixture = await get(`/fixture/?fixtureId=${(request.query as Record<string, unknown>).fixtureId}`, request)
+    const query = request.query as Record<string, unknown>
+    const fixture = await get(`/fixture/?fixtureId=${query.fixtureId}`, request)
     const gameweeks = await get('/gameweeks', request)
     const cups = await get('/cups', request)
     const managers = await get('/managers', request)
-    return h.view('edit-fixture', { fixture, gameweeks, cups, managers })
+    return h.view('edit-fixture', { fixture, gameweeks, cups, managers, returnTo: query.returnTo })
   },
 }, {
   method: 'POST',
@@ -73,14 +75,15 @@ const routes: ServerRoute[] = [{
   options: {
     auth: { strategy: 'session', scope: ['admin'] },
     validate: {
-      payload: {
+      payload: Joi.object({
         fixtureId: Joi.number().integer().required(),
         cupId: Joi.number().integer().required(),
         gameweekId: Joi.number().integer().required(),
         homeManagerId: Joi.number().integer().required(),
         awayManagerId: Joi.number().integer().required(),
         round: Joi.number().integer().required(),
-      },
+        returnTo: Joi.string().optional().allow(''),
+      }),
       failAction: async (request, h, error) => {
         const gameweeks = await get('/gameweeks', request)
         const cups = await get('/cups', request)
@@ -89,8 +92,11 @@ const routes: ServerRoute[] = [{
       },
     },
     handler: async (request, h) => {
-      await post('/fixture/edit', request.payload, request)
-      return h.redirect('/fixtures')
+      const payload = request.payload as Record<string, unknown>
+      const returnTo = payload.returnTo as string || '/fixtures'
+      const { returnTo: _, ...fixturePayload } = payload
+      await post('/fixture/edit', fixturePayload, request)
+      return h.redirect(returnTo)
     },
   },
 }, {
@@ -99,17 +105,19 @@ const routes: ServerRoute[] = [{
   options: {
     auth: { strategy: 'session', scope: ['admin'] },
     validate: {
-      query: {
+      query: Joi.object({
         fixtureId: Joi.number().integer().required(),
-      },
+        returnTo: Joi.string().optional(),
+      }),
       failAction: async (_request, h, _error) => {
         return h.view('404').code(400).takeover()
       },
     },
   },
   handler: async (request, h) => {
-    const fixture = await get(`/fixture/?fixtureId=${(request.query as Record<string, unknown>).fixtureId}`, request)
-    return h.view('delete-fixture', { fixture })
+    const query = request.query as Record<string, unknown>
+    const fixture = await get(`/fixture/?fixtureId=${query.fixtureId}`, request)
+    return h.view('delete-fixture', { fixture, returnTo: query.returnTo })
   },
 }, {
   method: 'POST',
@@ -117,17 +125,21 @@ const routes: ServerRoute[] = [{
   options: {
     auth: { strategy: 'session', scope: ['admin'] },
     validate: {
-      payload: {
+      payload: Joi.object({
         fixtureId: Joi.number().integer().required(),
-      },
+        returnTo: Joi.string().optional().allow(''),
+      }),
       failAction: async (request, h, error) => {
         const fixture = await get(`/fixture/?fixtureId=${(request.query as Record<string, unknown>).fixtureId}`, request)
         return h.view('delete-fixture', { fixture, error }).code(400).takeover()
       },
     },
     handler: async (request, h) => {
-      await post('/fixture/delete', request.payload, request)
-      return h.redirect('/fixtures')
+      const payload = request.payload as Record<string, unknown>
+      const returnTo = payload.returnTo as string || '/fixtures'
+      const { returnTo: _, ...fixturePayload } = payload
+      await post('/fixture/delete', fixturePayload, request)
+      return h.redirect(returnTo)
     },
   },
 }, {
@@ -185,6 +197,24 @@ const routes: ServerRoute[] = [{
     },
   },
 }, {
+  method: 'POST',
+  path: '/fixtures/clear',
+  options: {
+    auth: { strategy: 'session', scope: ['admin'] },
+    validate: {
+      payload: Joi.object({
+        cupId: Joi.number().integer().required(),
+      }),
+      failAction: async (_request, _h, error) => {
+        return boom.badRequest(error?.message)
+      },
+    },
+    handler: async (request, h) => {
+      await post('/fixtures/clear', request.payload, request)
+      return h.redirect('/fixtures/generate')
+    },
+  },
+}, {
   method: 'GET',
   path: '/fixtures/reschedule',
   options: {
@@ -218,21 +248,38 @@ const routes: ServerRoute[] = [{
   },
 }, {
   method: 'GET',
-  path: '/cup/{cupId}/progression',
+  path: '/cup/{cupId}',
   handler: async (request, h) => {
     const cupId = request.params.cupId
-    const cup = await get(`/cup?cupId=${cupId}`, request)
+    const cup = await get(`/cup?cupId=${cupId}`, request) as any
     const progression = await get(`/cups/${cupId}/progression`, request) as any[]
-    const qualifiers = await get(`/cups/${cupId}/qualifiers`, request) as any[]
-    const managers = await get('/managers', request)
-    const gameweeks = await get('/gameweeks', request)
+
+    let standings: any[] = []
+    if (cup.hasGroupStage) {
+      standings = await get(`/cups/${cupId}/standings`, request) as any[]
+    }
+
+    let managers: any[] = []
+    let gameweeks: any[] = []
+    if (request.auth.isAuthenticated && request.auth.credentials?.scope?.includes('admin')) {
+      managers = await get('/managers', request) as any[]
+      gameweeks = await get('/gameweeks', request) as any[]
+    }
+
     const rounds: Record<number, any[]> = {}
     for (const fixture of progression) {
       const round = fixture.round
       if (!rounds[round]) { rounds[round] = [] }
       rounds[round].push(fixture)
     }
-    return h.view('cup-progression', { cup, rounds, qualifiers, managers, gameweeks })
+
+    return h.view('cup-page', { cup, standings, rounds, managers, gameweeks })
+  },
+}, {
+  method: 'GET',
+  path: '/cup/{cupId}/progression',
+  handler: async (request, h) => {
+    return h.redirect(`/cup/${request.params.cupId}`).permanent()
   },
 }, {
   method: 'POST',
@@ -251,7 +298,26 @@ const routes: ServerRoute[] = [{
     handler: async (request, h) => {
       const cupId = request.params.cupId
       await post(`/cups/${cupId}/resolve`, request.payload, request)
-      return h.redirect(`/cup/${cupId}/progression`)
+      return h.redirect(`/cup/${cupId}`)
+    },
+  },
+}, {
+  method: 'POST',
+  path: '/cup/{cupId}/unresolve',
+  options: {
+    auth: { strategy: 'session', scope: ['admin'] },
+    validate: {
+      payload: Joi.object({
+        fixtureId: Joi.number().integer().required(),
+      }),
+      failAction: async (_request, _h, error) => {
+        return boom.badRequest(error?.message)
+      },
+    },
+    handler: async (request, h) => {
+      const cupId = request.params.cupId
+      await post(`/cups/${cupId}/unresolve`, request.payload, request)
+      return h.redirect(`/cup/${cupId}`)
     },
   },
 }, {
@@ -274,7 +340,7 @@ const routes: ServerRoute[] = [{
       const cupId = request.params.cupId
       const payload = { ...(request.payload as object), cupId: Number(cupId) }
       await post('/fixture/create', payload, request)
-      return h.redirect(`/cup/${cupId}/progression`)
+      return h.redirect(`/cup/${cupId}`)
     },
   },
 }]

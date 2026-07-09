@@ -11,9 +11,10 @@
     <p>Are you sure wish to delete {{ fixture.homeManagerName }} v {{ fixture.awayManagerName}}?</p>
     <form method="POST" action="/fixture/delete">
       <input type="hidden" name="crumb" value="{{crumb}}"/>
-      <input type="hidden" id="fixtureId" name="fixtureId" value="{{ fixture.fixtureId }}"> 
+      <input type="hidden" id="fixtureId" name="fixtureId" value="{{ fixture.fixtureId }}">
+      {% if returnTo %}<input type="hidden" name="returnTo" value="{{ returnTo }}"/>{% endif %}
       <button type="submit" class="btn btn-primary">Confirm</button>
-      <a href="/fixtures">Cancel</a>
+      <a href="{{ returnTo or '/fixtures' }}">Cancel</a>
     </form>
   </div>
 {% endblock %}

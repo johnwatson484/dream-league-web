@@ -4,7 +4,7 @@
   <h2>Results sheet</h2>
 
   {%if resultsInput.keepers.length %}
-    <form id="frm-results" method="POST" action="/results/edit" data-cup-weeks="{{ resultsInput.cupWeeks | dump | safe }}">
+    <form id="frm-results" method="POST" action="/results/edit" data-cup-weeks="{{ resultsInput.cupWeeks | dump }}">
       <input type="hidden" name="crumb" value="{{crumb}}"/>
 
       <div class="row">
