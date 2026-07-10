@@ -101,6 +101,8 @@ function loadExistingResults (gameweekId) {
 function applyAssistedResults (data) {
   const appliedGoals: string[] = []
   const appliedConceded: string[] = []
+  const appliedGoalsCup: string[] = []
+  const appliedConcededCup: string[] = []
 
   if (data.goals) {
     data.goals.forEach(g => {
@@ -122,6 +124,26 @@ function applyAssistedResults (data) {
       }
     })
   }
+  if (data.goalsCup) {
+    data.goalsCup.forEach(g => {
+      const hidden = $('input[name^="goalsCup"][name$="[playerId]"][value="' + g.playerId + '"]')
+      const input = hidden.closest('td').find('.result-input')
+      if (input.length && Number(input.val()) !== g.goals) {
+        input.val(g.goals).addClass('table-warning')
+        appliedGoalsCup.push(g.player + ' (' + g.team + ') x' + g.goals)
+      }
+    })
+  }
+  if (data.concededCup) {
+    data.concededCup.forEach(c => {
+      const hidden = $('input[name^="concededCup"][name$="[teamId]"][value="' + c.teamId + '"]')
+      const input = hidden.closest('td').find('.result-input')
+      if (input.length && Number(input.val()) !== c.conceded) {
+        input.val(c.conceded).addClass('table-warning')
+        appliedConcededCup.push(c.team + ' x' + c.conceded)
+      }
+    })
+  }
 
   let alertHtml = '<div class="alert alert-success alert-dismissible fade show" role="alert">' +
     '<strong>Results Assistant</strong>' +
@@ -134,12 +156,24 @@ function applyAssistedResults (data) {
   }
 
   if (appliedConceded.length) {
-    alertHtml += '<div><strong>Conceded:</strong><ul class="mb-0">'
+    alertHtml += '<div><strong>Conceded:</strong><ul class="mb-1">'
     appliedConceded.forEach(c => { alertHtml += '<li>' + c + '</li>' })
     alertHtml += '</ul></div>'
   }
 
-  if (!appliedGoals.length && !appliedConceded.length) {
+  if (appliedGoalsCup.length) {
+    alertHtml += '<div><strong>Cup Goals (first match only):</strong><ul class="mb-1">'
+    appliedGoalsCup.forEach(g => { alertHtml += '<li>' + g + '</li>' })
+    alertHtml += '</ul></div>'
+  }
+
+  if (appliedConcededCup.length) {
+    alertHtml += '<div><strong>Cup Conceded (first match only):</strong><ul class="mb-1">'
+    appliedConcededCup.forEach(c => { alertHtml += '<li>' + c + '</li>' })
+    alertHtml += '</ul></div>'
+  }
+
+  if (!appliedGoals.length && !appliedConceded.length && !appliedGoalsCup.length && !appliedConcededCup.length) {
     alertHtml += '<p class="mb-0 mt-2">No changes to apply.</p>'
   }
 
