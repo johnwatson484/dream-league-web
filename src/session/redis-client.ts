@@ -29,7 +29,7 @@ export async function connect (): Promise<void> {
 
 export async function disconnect (): Promise<void> {
   if (client.isOpen) {
-    await client.disconnect()
+    await client.quit()
   }
 }
 

@@ -18,32 +18,32 @@ describe('parsing teamsheet', () => {
     const result = await parseTeamsheet(TEST_FILE)
 
     expect(result).not.toBeNull()
-    expect(result!.length).toBe(13)
+    expect(result!).toHaveLength(13)
   })
 
   test('should include all managers', async () => {
     const result = await parseTeamsheet(TEST_FILE) as { manager: string }[]
 
-    expect(result.filter(x => x.manager === 'John').length).toBe(1)
-    expect(result.filter(x => x.manager === 'Lee').length).toBe(1)
-    expect(result.filter(x => x.manager === 'Scott').length).toBe(1)
-    expect(result.filter(x => x.manager === 'David').length).toBe(1)
-    expect(result.filter(x => x.manager === 'Billy').length).toBe(1)
-    expect(result.filter(x => x.manager === 'Bob').length).toBe(1)
-    expect(result.filter(x => x.manager === 'Conor').length).toBe(1)
-    expect(result.filter(x => x.manager === 'Daz').length).toBe(1)
-    expect(result.filter(x => x.manager === 'Rob').length).toBe(1)
-    expect(result.filter(x => x.manager === 'Tucker').length).toBe(1)
-    expect(result.filter(x => x.manager === 'Tommy/Pete').length).toBe(1)
-    expect(result.filter(x => x.manager === 'Michael').length).toBe(1)
-    expect(result.filter(x => x.manager === 'Ben').length).toBe(1)
+    expect(result.filter(x => x.manager === 'John')).toHaveLength(1)
+    expect(result.filter(x => x.manager === 'Lee')).toHaveLength(1)
+    expect(result.filter(x => x.manager === 'Scott')).toHaveLength(1)
+    expect(result.filter(x => x.manager === 'David')).toHaveLength(1)
+    expect(result.filter(x => x.manager === 'Billy')).toHaveLength(1)
+    expect(result.filter(x => x.manager === 'Bob')).toHaveLength(1)
+    expect(result.filter(x => x.manager === 'Conor')).toHaveLength(1)
+    expect(result.filter(x => x.manager === 'Daz')).toHaveLength(1)
+    expect(result.filter(x => x.manager === 'Rob')).toHaveLength(1)
+    expect(result.filter(x => x.manager === 'Tucker')).toHaveLength(1)
+    expect(result.filter(x => x.manager === 'Tommy/Pete')).toHaveLength(1)
+    expect(result.filter(x => x.manager === 'Michael')).toHaveLength(1)
+    expect(result.filter(x => x.manager === 'Ben')).toHaveLength(1)
   })
 
   test('should include 15 players per team', async () => {
     const result = await parseTeamsheet(TEST_FILE) as { players: unknown[] }[]
 
     for (const team of result) {
-      expect(team.players.length).toBe(15)
+      expect(team.players).toHaveLength(15)
     }
   })
 

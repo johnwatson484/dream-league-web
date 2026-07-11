@@ -25,7 +25,7 @@ describe('refreshing player list', () => {
     const result = await refreshPlayers(TEST_FILE) as { success: boolean }
 
     expect(result.success).toBeTruthy()
-    expect(mockPost.mock.calls.length).toBe(1)
+    expect(mockPost.mock.calls).toHaveLength(1)
   })
 
   test('should return failure if list invalid', async () => {
@@ -34,7 +34,7 @@ describe('refreshing player list', () => {
     const result = await refreshPlayers(TEST_FILE) as { success: boolean }
 
     expect(result.success).toBeFalsy()
-    expect(mockPost.mock.calls.length).toBe(1)
+    expect(mockPost.mock.calls).toHaveLength(1)
   })
 
   test('request should be made to refresh endpoint', async () => {
@@ -50,7 +50,7 @@ describe('refreshing player list', () => {
 
     await refreshPlayers(TEST_FILE)
 
-    expect(mockPost.mock.calls[0]![1].players.length).toBe(2176)
+    expect(mockPost.mock.calls[0]![1].players).toHaveLength(2176)
   })
 
   test('request should include example player', async () => {
@@ -67,7 +67,7 @@ describe('refreshing player list', () => {
     const result = await refreshPlayers(TEST_FILE) as { success: boolean; unmappedPlayers: unknown[] }
 
     expect(result.success).toBeFalsy()
-    expect(result.unmappedPlayers.length).toBe(1)
+    expect(result.unmappedPlayers).toHaveLength(1)
     expect(result.unmappedPlayers).toContainEqual({ firstName: 'Adebayo', lastName: 'Akinfenwa', position: 'FWD', team: 'Wycombe' })
   })
 })
