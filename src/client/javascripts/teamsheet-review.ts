@@ -10,32 +10,30 @@ interface MatchState {
 const STORAGE_KEY = 'teamsheet-review-state'
 const matchStates: Map<string, MatchState> = new Map()
 
+function resolveInitialState (match: any, saved: Record<string, MatchState> | null, key: string): MatchState {
+  const isKeeper = match.position === 'Goalkeeper'
+
+  if (saved?.[key]) {
+    return saved[key]
+  }
+  if (match.category === 'confident' && match.bestMatch) {
+    return {
+      resolved: true,
+      playerId: isKeeper ? null : match.bestMatch.playerId,
+      teamId: isKeeper ? match.bestMatch.teamId : null,
+      isKeeper,
+    }
+  }
+  return { resolved: false, playerId: null, teamId: null, isKeeper }
+}
+
 function initStates () {
   const saved = loadFromStorage()
 
   for (const team of previewData.teams) {
     for (let i = 0; i < team.matches.length; i++) {
-      const match = team.matches[i]
       const key = `${team.managerId}-${i}`
-      const isKeeper = match.position === 'Goalkeeper'
-
-      if (saved && saved[key]) {
-        matchStates.set(key, saved[key])
-      } else if (match.category === 'confident' && match.bestMatch) {
-        matchStates.set(key, {
-          resolved: true,
-          playerId: isKeeper ? null : match.bestMatch.playerId,
-          teamId: isKeeper ? match.bestMatch.teamId : null,
-          isKeeper,
-        })
-      } else {
-        matchStates.set(key, {
-          resolved: false,
-          playerId: null,
-          teamId: null,
-          isKeeper,
-        })
-      }
+      matchStates.set(key, resolveInitialState(team.matches[i], saved, key))
     }
   }
 
@@ -49,7 +47,7 @@ function saveToStorage () {
     const obj: Record<string, MatchState> = {}
     matchStates.forEach((state, key) => { obj[key] = state })
     sessionStorage.setItem(STORAGE_KEY, JSON.stringify(obj))
-  } catch (_) {}
+  } catch { /* expected: sessionStorage may be unavailable */ }
 }
 
 function loadFromStorage (): Record<string, MatchState> | null {
@@ -57,20 +55,20 @@ function loadFromStorage (): Record<string, MatchState> | null {
     const raw = sessionStorage.getItem(STORAGE_KEY)
     if (!raw) { return null }
     return JSON.parse(raw)
-  } catch (_) {
+  } catch { /* expected: sessionStorage may be unavailable */
     return null
   }
 }
 
 function clearStorage () {
-  try { sessionStorage.removeItem(STORAGE_KEY) } catch (_) {}
+  try { sessionStorage.removeItem(STORAGE_KEY) } catch { /* expected: sessionStorage may be unavailable */ }
 }
 
 function restoreResolvedRows () {
   $('.match-row').each(function () {
     const key = getMatchKey($(this))
     const state = matchStates.get(key)
-    if (state && state.resolved) {
+    if (state?.resolved) {
       markRowResolved($(this), 'Resolved')
     }
   })
@@ -257,7 +255,7 @@ $(function () {
       url: '/teamsheet/player/create',
       type: 'POST',
       contentType: 'application/json',
-      data: JSON.stringify({ firstName, lastName, position, teamId: parseInt(teamId) }),
+      data: JSON.stringify({ firstName, lastName, position, teamId: Number.parseInt(teamId) }),
       success (data: any) {
         const key = getMatchKey($row)
         const state = matchStates.get(key)
@@ -337,7 +335,7 @@ $(function () {
       url: '/teamsheet/player/transfer',
       type: 'POST',
       contentType: 'application/json',
-      data: JSON.stringify({ playerId, teamId: parseInt(teamId) }),
+      data: JSON.stringify({ playerId, teamId: Number.parseInt(teamId) }),
       success () {
         const key = getMatchKey($row)
         const state = matchStates.get(key)
@@ -401,7 +399,7 @@ $(function () {
         const key = `${team.managerId}-${i}`
         const state = matchStates.get(key)
 
-        if (!state || !state.resolved) { continue }
+        if (!state?.resolved) { continue }
 
         if (state.isKeeper && state.teamId) {
           keeperAssignments.push({
