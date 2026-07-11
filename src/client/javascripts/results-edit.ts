@@ -52,7 +52,7 @@ $('#results-assistant').click(async function () {
   try {
     const response = await $.get('/results/assisted?gameweekId=' + gameweekId)
     applyAssistedResults(response)
-  } catch (err) {
+  } catch {
     $('#assistant-alerts').html(
       '<div class="alert alert-danger alert-dismissible fade show" role="alert">' +
       'Failed to load assisted results. Is the videprinter running?' +

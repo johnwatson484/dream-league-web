@@ -269,7 +269,7 @@ const routes: ServerRoute[] = [{
     const rounds: Record<number, any[]> = {}
     for (const fixture of progression) {
       const round = fixture.round
-      if (!rounds[round]) { rounds[round] = [] }
+      rounds[round] ??= []
       rounds[round].push(fixture)
     }
 
