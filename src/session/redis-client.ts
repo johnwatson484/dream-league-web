@@ -2,6 +2,7 @@ import type { RedisClientType } from 'redis'
 import { createClient } from 'redis'
 import type { SessionData } from './session-manager.ts'
 import config from '../config.ts'
+import logger from '../logger.ts'
 
 const redisPassword = config.get('redis.password')
 
@@ -16,7 +17,7 @@ const client: RedisClientType = createClient({
 
 client.on('error', (err: Error) => {
   if (!err.message.includes('ECONNREFUSED')) {
-    console.error('Session Redis error:', err.message)
+    logger.error('Session Redis error: %s', err.message)
   }
 })
 

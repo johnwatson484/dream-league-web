@@ -113,6 +113,12 @@ const config = convict({
       env: 'COOKIE_STRICT_HEADER',
     },
   },
+  logLevel: {
+    doc: 'Pino log level.',
+    format: ['fatal', 'error', 'warn', 'info', 'debug', 'trace', 'silent'],
+    default: 'info',
+    env: 'LOG_LEVEL',
+  },
   redis: {
     host: {
       doc: 'Redis host for session storage.',
