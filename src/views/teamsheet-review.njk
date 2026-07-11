@@ -1,0 +1,114 @@
+{% extends '_layout.njk' %}
+{% from '_match-row.njk' import matchRow, createFormFields %}
+
+{% block content %}
+<h2>Teamsheet Review</h2>
+
+<div class="row mb-3">
+  <div class="col-12">
+    <div class="card">
+      <div class="card-body">
+        <div class="d-flex justify-content-between align-items-center">
+          <div>
+            <span class="badge badge-success mr-2">{{ preview.summary.confident }} confident</span>
+            <span class="badge badge-warning mr-2">{{ preview.summary.transfers }} transfers</span>
+            <span class="badge badge-info mr-2">{{ preview.summary.lowConfidence }} review</span>
+            <span class="badge badge-danger mr-2">{{ preview.summary.unrecognized }} unrecognized</span>
+            <span class="badge badge-secondary">{{ preview.summary.total }} total</span>
+          </div>
+          <button id="confirm-all-btn" class="btn btn-primary">Confirm All</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% set hasProblems = preview.summary.unrecognized > 0 or preview.summary.transfers > 0 or preview.summary.lowConfidence > 0 %}
+
+{% if hasProblems %}
+<div class="row mb-3">
+  <div class="col-12">
+    <h4>Needs Attention</h4>
+  </div>
+</div>
+
+{% for team in preview.teams %}
+  {% for match in team.matches %}
+    {% if match.category === 'unrecognized' %}
+      {{ matchRow(match, team, loop.index0) }}
+    {% endif %}
+  {% endfor %}
+{% endfor %}
+
+{% for team in preview.teams %}
+  {% for match in team.matches %}
+    {% if match.category === 'transfer' %}
+      {{ matchRow(match, team, loop.index0) }}
+    {% endif %}
+  {% endfor %}
+{% endfor %}
+
+{% for team in preview.teams %}
+  {% for match in team.matches %}
+    {% if match.category === 'low_confidence' %}
+      {{ matchRow(match, team, loop.index0) }}
+    {% endif %}
+  {% endfor %}
+{% endfor %}
+
+{% endif %}
+
+<div class="row mt-4">
+  <div class="col-12">
+    <h4>All Matches by Manager</h4>
+  </div>
+</div>
+
+{% for team in preview.teams %}
+<div class="row mb-2">
+  <div class="col-12">
+    <div class="card border-dark">
+      <div class="card-header bg-dark text-light py-1 d-flex justify-content-between" data-toggle="collapse" data-target="#manager-{{ team.managerId }}" style="cursor: pointer;">
+        <span>{{ team.managerName }}</span>
+        <small class="text-muted">Click to expand</small>
+      </div>
+      <div id="manager-{{ team.managerId }}" class="collapse">
+        <div class="card-body small p-2">
+          {% for match in team.matches %}
+          <div class="row py-1 {% if match.category === 'confident' %}bg-light{% elif match.category === 'transfer' %}bg-warning-light{% elif match.category === 'low_confidence' %}bg-info-light{% else %}bg-danger-light{% endif %}">
+            <div class="col-md-3">{{ match.sourceText }}</div>
+            <div class="col-md-1"><span class="badge badge-{% if match.category === 'confident' %}success{% elif match.category === 'transfer' %}warning{% elif match.category === 'low_confidence' %}info{% else %}danger{% endif %}">{{ match.category | replace("_", " ") }}</span></div>
+            <div class="col-md-4">
+              {% if match.bestMatch %}
+                {{ match.bestMatch.lastName }}{% if match.bestMatch.firstName %}, {{ match.bestMatch.firstName }}{% endif %} - {{ match.bestMatch.teamName }}
+              {% else %}
+                <em class="text-muted">No match</em>
+              {% endif %}
+            </div>
+            <div class="col-md-1">{{ match.position }}</div>
+            <div class="col-md-1">{% if match.substitute %}<span class="badge badge-secondary">Sub</span>{% endif %}</div>
+            <div class="col-md-2">{{ (match.confidence * 100) | round }}%</div>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endfor %}
+
+<div id="review-status" class="fixed-bottom p-3" style="display: none;">
+  <div class="alert alert-info mb-0">
+    <span id="status-message"></span>
+    <button type="button" class="close dismiss-status ml-2" style="display: none;" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+</div>
+
+{% endblock %}
+
+{% block bodyEnd %}
+<textarea id="preview-data" style="display:none;">{{ previewJson }}</textarea>
+<script src="{{ asset('javascripts/teamsheet-review.js') }}"></script>
+{% endblock %}

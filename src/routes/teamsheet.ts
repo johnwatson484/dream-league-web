@@ -1,7 +1,7 @@
 import type { ServerRoute } from '@hapi/hapi'
 import Joi from 'joi'
 import boom from '@hapi/boom'
-import { refreshTeamsheet } from '../refresh/teamsheet/refresh.ts'
+import { parseTeamsheet } from '../refresh/teamsheet/parse.ts'
 import { get } from '../api/get.ts'
 import { post } from '../api/post.ts'
 import ViewModel from './models/teamsheet.ts'
@@ -95,13 +95,96 @@ const routes: ServerRoute[] = [{
     },
     handler: async (request, h) => {
       const payload = request.payload as { teamFile: { path: string } }
-      const response = await refreshTeamsheet(payload.teamFile.path, request) as { success: boolean }
-      if (response.success) {
-        return h.redirect('/teamsheet/edit')
+      const teams = await parseTeamsheet(payload.teamFile.path)
+      if (!teams) {
+        return h.view('teamsheet-edit', { message: 'Could not read teamsheet. Ensure the file has a "DL Teams" worksheet.' }).code(400)
       }
-      return h.view('teamsheet', {
-        message: 'Some players could not be mapped',
-      })
+      const preview = await post('/teamsheet/match-preview', { teams }, request)
+      return h.view('teamsheet-review', { preview, previewJson: JSON.stringify(preview) })
+    },
+  },
+}, {
+  method: 'POST',
+  path: '/teamsheet/confirm',
+  options: {
+    auth: { strategy: 'session', scope: ['admin'] },
+    plugins: { crumb: false },
+    validate: {
+      payload: Joi.object({
+        assignments: Joi.array().items(Joi.object({
+          managerId: Joi.number().required(),
+          playerId: Joi.number().required(),
+          substitute: Joi.bool().required(),
+        })),
+        keeperAssignments: Joi.array().items(Joi.object({
+          managerId: Joi.number().required(),
+          teamId: Joi.number().required(),
+          substitute: Joi.bool().required(),
+        })),
+        teamsheetRecords: Joi.array().items(Joi.object({
+          managerId: Joi.number().required(),
+          player: Joi.string().required(),
+          position: Joi.string().allow('').required(),
+          substitute: Joi.bool().required(),
+          bestMatchId: Joi.number().required(),
+          distance: Joi.number().required(),
+          confidence: Joi.number().required(),
+          category: Joi.string().required(),
+          parsedName: Joi.string().allow('').required(),
+          parsedTeam: Joi.string().allow('').required(),
+        })),
+      }).unknown(),
+      failAction: async (_request, _h, error) => {
+        return boom.badRequest(error?.message)
+      },
+    },
+    handler: async (request, _h) => {
+      return post('/teamsheet/confirm', request.payload, request)
+    },
+  },
+}, {
+  method: 'POST',
+  path: '/teamsheet/player/transfer',
+  options: {
+    auth: { strategy: 'session', scope: ['admin'] },
+    plugins: { crumb: false },
+    validate: {
+      payload: Joi.object({
+        playerId: Joi.number().required(),
+        teamId: Joi.number().required(),
+      }),
+      failAction: async (_request, _h, error) => {
+        return boom.badRequest(error?.message)
+      },
+    },
+    handler: async (request, _h) => {
+      return post('/league/player/transfer', request.payload, request)
+    },
+  },
+}, {
+  method: 'POST',
+  path: '/teamsheet/player/create',
+  options: {
+    auth: { strategy: 'session', scope: ['admin'] },
+    plugins: { crumb: false },
+    validate: {
+      payload: Joi.object({
+        firstName: Joi.string().allow('').required(),
+        lastName: Joi.string().required(),
+        position: Joi.string().valid('Defender', 'Midfielder', 'Forward').required(),
+        teamId: Joi.number().required(),
+      }),
+      failAction: async (_request, _h, error) => {
+        return boom.badRequest(error?.message)
+      },
+    },
+    handler: async (request, h) => {
+      try {
+        return await post('/league/player/create', request.payload, request)
+      } catch (err: any) {
+        const message = err?.data?.payload?.message || err?.message || 'Failed to create player'
+        return h.response({ error: true, message }).code(err?.data?.res?.statusCode || 500)
+      }
     },
   },
 }]
