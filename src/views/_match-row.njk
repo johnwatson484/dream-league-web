@@ -84,7 +84,7 @@
         </div>
         {% elif match.category === 'unrecognized' %}
         <div class="mt-2 create-player-form">
-          {{ caller.createForm(match) if caller else createFormInline(match) }}
+          {{ createFormFields(match) }}
           <div class="mt-1">
             <small class="text-muted">Or search: </small>
             <input type="text" class="form-control form-control-sm d-inline-block manual-search-input" style="width: 300px;" placeholder="Search existing players...">
