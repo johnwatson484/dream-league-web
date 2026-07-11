@@ -1,4 +1,5 @@
 {% extends '_layout.njk' %}
+{% from '_match-row.njk' import matchRow, createFormFields %}
 
 {% block content %}
 <h2>Teamsheet Review</h2>
@@ -34,66 +35,7 @@
 {% for team in preview.teams %}
   {% for match in team.matches %}
     {% if match.category === 'unrecognized' %}
-    <div class="row mb-2 match-row" data-manager-id="{{ team.managerId }}" data-category="unrecognized" data-index="{{ loop.index0 }}" data-is-keeper="{{ 'true' if match.position === 'Goalkeeper' else 'false' }}">
-      <div class="col-12">
-        <div class="card border-danger">
-          <div class="card-body py-2">
-            <div class="d-flex justify-content-between align-items-center">
-              <div>
-                <span class="badge badge-danger mr-2">Unrecognized</span>
-                <strong>{{ match.sourceText }}</strong>
-                <span class="text-muted ml-2">({{ match.position }}, {{ team.managerName }})</span>
-              </div>
-            </div>
-            {% if match.position === 'Goalkeeper' %}
-            <div class="mt-2 keeper-search-form">
-              <div class="form-row align-items-end">
-                <div class="col-md-4">
-                  <label class="small mb-0">Search team (select from dropdown to assign)</label>
-                  <input type="text" class="form-control form-control-sm keeper-team-input" value="{{ match.parsedTeam or match.parsedName }}" placeholder="Search team...">
-                  <input type="hidden" class="keeper-teamId" value="">
-                </div>
-              </div>
-            </div>
-            {% else %}
-            <div class="mt-2 create-player-form">
-              <div class="form-row align-items-end">
-                <div class="col-md-2">
-                  <label class="small mb-0">First name</label>
-                  <input type="text" class="form-control form-control-sm create-firstName" value="" placeholder="Optional">
-                </div>
-                <div class="col-md-2">
-                  <label class="small mb-0">Last name</label>
-                  <input type="text" class="form-control form-control-sm create-lastName" value="{{ match.parsedName }}">
-                </div>
-                <div class="col-md-2">
-                  <label class="small mb-0">Team</label>
-                  <input type="text" class="form-control form-control-sm create-team-input" value="{{ match.parsedTeam }}" placeholder="Search team...">
-                  <input type="hidden" class="create-teamId" value="">
-                </div>
-                <div class="col-md-2">
-                  <label class="small mb-0">Position</label>
-                  <select class="form-control form-control-sm create-position">
-                    <option value="Defender" {% if match.position === 'Defender' %}selected{% endif %}>Defender</option>
-                    <option value="Midfielder" {% if match.position === 'Midfielder' %}selected{% endif %}>Midfielder</option>
-                    <option value="Forward" {% if match.position === 'Forward' %}selected{% endif %}>Forward</option>
-                  </select>
-                </div>
-                <div class="col-md-2">
-                  <button class="btn btn-sm btn-success create-player-btn">Create & Assign</button>
-                </div>
-              </div>
-              <div class="mt-1">
-                <small class="text-muted">Or search: </small>
-                <input type="text" class="form-control form-control-sm d-inline-block manual-search-input" style="width: 300px;" placeholder="Search existing players...">
-                <input type="hidden" class="manual-player-id" value="">
-              </div>
-            </div>
-            {% endif %}
-          </div>
-        </div>
-      </div>
-    </div>
+      {{ matchRow(match, team, loop.index0) }}
     {% endif %}
   {% endfor %}
 {% endfor %}
@@ -101,83 +43,7 @@
 {% for team in preview.teams %}
   {% for match in team.matches %}
     {% if match.category === 'transfer' %}
-    <div class="row mb-2 match-row" data-manager-id="{{ team.managerId }}" data-category="transfer" data-index="{{ loop.index0 }}" data-is-keeper="false">
-      <div class="col-12">
-        <div class="card border-warning">
-          <div class="card-body py-2">
-            <div>
-              <span class="badge badge-warning mr-2">Transfer</span>
-              <strong>{{ match.sourceText }}</strong>
-              <span class="text-muted ml-2">({{ match.position }}, {{ team.managerName }})</span>
-            </div>
-            <div class="mt-2">
-              <small class="text-muted">Best match:</small>
-              <strong>{{ match.bestMatch.lastName }}{% if match.bestMatch.firstName %}, {{ match.bestMatch.firstName }}{% endif %}</strong>
-              <span class="text-muted">(currently at {{ match.transferInfo.currentTeamName }}, spreadsheet says {{ match.transferInfo.spreadsheetTeamName }})</span>
-              <span class="small text-muted ml-1">{{ (match.confidence * 100) | round }}%</span>
-            </div>
-            <div class="mt-2">
-              <div class="form-row align-items-end">
-                <div class="col-auto">
-                  <label class="small mb-0">Transfer to team:</label>
-                  <input type="text" class="form-control form-control-sm transfer-team-input" value="{{ match.transferInfo.spreadsheetTeamName }}" placeholder="Search team..." style="width: 200px;">
-                  <input type="hidden" class="transfer-teamId" value="">
-                </div>
-                <div class="col-auto">
-                  <button class="btn btn-sm btn-warning confirm-transfer-btn" data-player-id="{{ match.bestMatch.playerId }}">Confirm Transfer</button>
-                </div>
-              </div>
-            </div>
-            {% if match.candidates | length > 1 %}
-            <div class="mt-2">
-              <small class="text-muted">Or pick a different player:</small>
-              {% for candidate in match.candidates %}
-              <button class="btn btn-sm btn-outline-primary accept-candidate-btn mr-1 mt-1"
-                data-player-id="{{ candidate.playerId }}"
-                data-team-id="{{ candidate.teamId }}">
-                {{ candidate.lastName }}{% if candidate.firstName %}, {{ candidate.firstName[0] }}{% endif %} - {{ candidate.teamName }} ({{ (candidate.confidence * 100) | round }}%)
-              </button>
-              {% endfor %}
-            </div>
-            {% endif %}
-            <div class="mt-2">
-              <small class="text-muted">Or search:</small>
-              <input type="text" class="form-control form-control-sm d-inline-block manual-search-input ml-1" style="width: 250px;" placeholder="Search players...">
-              <input type="hidden" class="manual-player-id" value="">
-              <button class="btn btn-sm btn-outline-secondary toggle-create-btn ml-2">Create New Player</button>
-            </div>
-            <div class="mt-2 inline-create-form" style="display: none;">
-              <div class="form-row align-items-end">
-                <div class="col-md-2">
-                  <label class="small mb-0">First name</label>
-                  <input type="text" class="form-control form-control-sm create-firstName" value="" placeholder="Optional">
-                </div>
-                <div class="col-md-2">
-                  <label class="small mb-0">Last name</label>
-                  <input type="text" class="form-control form-control-sm create-lastName" value="{{ match.parsedName }}">
-                </div>
-                <div class="col-md-2">
-                  <label class="small mb-0">Team</label>
-                  <input type="text" class="form-control form-control-sm create-team-input" value="{{ match.parsedTeam }}" placeholder="Search team...">
-                  <input type="hidden" class="create-teamId" value="">
-                </div>
-                <div class="col-md-2">
-                  <label class="small mb-0">Position</label>
-                  <select class="form-control form-control-sm create-position">
-                    <option value="Defender" {% if match.position === 'Defender' %}selected{% endif %}>Defender</option>
-                    <option value="Midfielder" {% if match.position === 'Midfielder' %}selected{% endif %}>Midfielder</option>
-                    <option value="Forward" {% if match.position === 'Forward' %}selected{% endif %}>Forward</option>
-                  </select>
-                </div>
-                <div class="col-md-2">
-                  <button class="btn btn-sm btn-success create-player-btn">Create & Assign</button>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+      {{ matchRow(match, team, loop.index0) }}
     {% endif %}
   {% endfor %}
 {% endfor %}
@@ -185,70 +51,7 @@
 {% for team in preview.teams %}
   {% for match in team.matches %}
     {% if match.category === 'low_confidence' %}
-    <div class="row mb-2 match-row" data-manager-id="{{ team.managerId }}" data-category="low_confidence" data-index="{{ loop.index0 }}" data-is-keeper="{{ 'true' if match.position === 'Goalkeeper' else 'false' }}">
-      <div class="col-12">
-        <div class="card border-info">
-          <div class="card-body py-2">
-            <div>
-              <span class="badge badge-info mr-2">Review</span>
-              <strong>{{ match.sourceText }}</strong>
-              <span class="text-muted ml-2">({{ match.position }}, {{ team.managerName }})</span>
-            </div>
-            <div class="mt-2 candidate-buttons">
-              {% for candidate in match.candidates %}
-              <button class="btn btn-sm btn-outline-primary accept-candidate-btn mr-1"
-                data-player-id="{{ candidate.playerId }}"
-                data-team-id="{{ candidate.teamId }}">
-                {% if match.position === 'Goalkeeper' %}
-                  {{ candidate.teamName }} ({{ (candidate.confidence * 100) | round }}%)
-                {% else %}
-                  {{ candidate.lastName }}{% if candidate.firstName %}, {{ candidate.firstName[0] }}{% endif %} - {{ candidate.teamName }} ({{ (candidate.confidence * 100) | round }}%)
-                {% endif %}
-              </button>
-              {% endfor %}
-            </div>
-            <div class="mt-2">
-              <small class="text-muted">Or search:</small>
-              <input type="text" class="form-control form-control-sm d-inline-block manual-search-input ml-1" style="width: 250px;" placeholder="Search {% if match.position === 'Goalkeeper' %}teams{% else %}players{% endif %}...">
-              <input type="hidden" class="manual-player-id" value="">
-              {% if match.position !== 'Goalkeeper' %}
-              <button class="btn btn-sm btn-outline-secondary toggle-create-btn ml-2">Create New</button>
-              {% endif %}
-            </div>
-            {% if match.position !== 'Goalkeeper' %}
-            <div class="mt-2 inline-create-form" style="display: none;">
-              <div class="form-row align-items-end">
-                <div class="col-md-2">
-                  <label class="small mb-0">First name</label>
-                  <input type="text" class="form-control form-control-sm create-firstName" value="" placeholder="Optional">
-                </div>
-                <div class="col-md-2">
-                  <label class="small mb-0">Last name</label>
-                  <input type="text" class="form-control form-control-sm create-lastName" value="{{ match.parsedName }}">
-                </div>
-                <div class="col-md-2">
-                  <label class="small mb-0">Team</label>
-                  <input type="text" class="form-control form-control-sm create-team-input" value="{{ match.parsedTeam }}" placeholder="Search team...">
-                  <input type="hidden" class="create-teamId" value="">
-                </div>
-                <div class="col-md-2">
-                  <label class="small mb-0">Position</label>
-                  <select class="form-control form-control-sm create-position">
-                    <option value="Defender" {% if match.position === 'Defender' %}selected{% endif %}>Defender</option>
-                    <option value="Midfielder" {% if match.position === 'Midfielder' %}selected{% endif %}>Midfielder</option>
-                    <option value="Forward" {% if match.position === 'Forward' %}selected{% endif %}>Forward</option>
-                  </select>
-                </div>
-                <div class="col-md-2">
-                  <button class="btn btn-sm btn-success create-player-btn">Create & Assign</button>
-                </div>
-              </div>
-            </div>
-            {% endif %}
-          </div>
-        </div>
-      </div>
-    </div>
+      {{ matchRow(match, team, loop.index0) }}
     {% endif %}
   {% endfor %}
 {% endfor %}
@@ -297,6 +100,9 @@
 <div id="review-status" class="fixed-bottom p-3" style="display: none;">
   <div class="alert alert-info mb-0">
     <span id="status-message"></span>
+    <button type="button" class="close dismiss-status ml-2" style="display: none;" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
   </div>
 </div>
 

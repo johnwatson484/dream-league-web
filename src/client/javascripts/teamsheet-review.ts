@@ -7,16 +7,21 @@ interface MatchState {
   isKeeper: boolean
 }
 
+const STORAGE_KEY = 'teamsheet-review-state'
 const matchStates: Map<string, MatchState> = new Map()
 
 function initStates () {
+  const saved = loadFromStorage()
+
   for (const team of previewData.teams) {
     for (let i = 0; i < team.matches.length; i++) {
       const match = team.matches[i]
       const key = `${team.managerId}-${i}`
       const isKeeper = match.position === 'Goalkeeper'
 
-      if (match.category === 'confident' && match.bestMatch) {
+      if (saved && saved[key]) {
+        matchStates.set(key, saved[key])
+      } else if (match.category === 'confident' && match.bestMatch) {
         matchStates.set(key, {
           resolved: true,
           playerId: isKeeper ? null : match.bestMatch.playerId,
@@ -33,6 +38,42 @@ function initStates () {
       }
     }
   }
+
+  if (saved) {
+    restoreResolvedRows()
+  }
+}
+
+function saveToStorage () {
+  try {
+    const obj: Record<string, MatchState> = {}
+    matchStates.forEach((state, key) => { obj[key] = state })
+    sessionStorage.setItem(STORAGE_KEY, JSON.stringify(obj))
+  } catch (_) {}
+}
+
+function loadFromStorage (): Record<string, MatchState> | null {
+  try {
+    const raw = sessionStorage.getItem(STORAGE_KEY)
+    if (!raw) { return null }
+    return JSON.parse(raw)
+  } catch (_) {
+    return null
+  }
+}
+
+function clearStorage () {
+  try { sessionStorage.removeItem(STORAGE_KEY) } catch (_) {}
+}
+
+function restoreResolvedRows () {
+  $('.match-row').each(function () {
+    const key = getMatchKey($(this))
+    const state = matchStates.get(key)
+    if (state && state.resolved) {
+      markRowResolved($(this), 'Resolved')
+    }
+  })
 }
 
 function showStatus (message: string, type: 'success' | 'error' = 'success') {
@@ -40,7 +81,15 @@ function showStatus (message: string, type: 'success' | 'error' = 'success') {
   $alert.removeClass('alert-info alert-success alert-danger')
   $alert.addClass(type === 'error' ? 'alert-danger' : 'alert-success')
   $('#status-message').text(message)
-  $('#review-status').fadeIn(300).delay(3000).fadeOut(300)
+
+  const $dismiss = $('#review-status .dismiss-status')
+  if (type === 'error') {
+    $dismiss.show()
+    $('#review-status').stop(true).fadeIn(300)
+  } else {
+    $dismiss.hide()
+    $('#review-status').stop(true).fadeIn(300).delay(3000).fadeOut(300)
+  }
 }
 
 function markRowResolved ($row: JQuery, label: string) {
@@ -76,6 +125,11 @@ function resolveTeamFromName (teamName: string): Promise<number | null> {
 
 $(function () {
   initStates()
+
+  // Dismiss error status
+  $(document).on('click', '.dismiss-status', function () {
+    $('#review-status').stop(true).fadeOut(300)
+  })
 
   // Resolve pre-filled team names to IDs on page load
   $('.create-team-input').each(function () {
@@ -130,6 +184,7 @@ $(function () {
         state.playerId = ui.item.val
       }
       markRowResolved($row, 'Resolved')
+      saveToStorage()
       showStatus(`Assigned: ${ui.item.label}`)
     },
   })
@@ -157,6 +212,7 @@ $(function () {
           state.teamId = ui.item.val
         }
         markRowResolved($row, 'Resolved')
+        saveToStorage()
         showStatus(`Assigned team: ${ui.item.label}`)
       }
       $(this).closest('.keeper-search-form, .form-row').find('.keeper-teamId').val(ui.item.val)
@@ -210,6 +266,7 @@ $(function () {
           state.playerId = data.playerId
         }
         markRowResolved($row, 'Created')
+        saveToStorage()
         showStatus(`Created: ${lastName}, ${firstName || ''} - ${position}`)
       },
       error (xhr: any) {
@@ -289,6 +346,7 @@ $(function () {
           state.playerId = playerId
         }
         markRowResolved($row, 'Transferred')
+        saveToStorage()
         showStatus('Transfer confirmed')
       },
       error () {
@@ -314,6 +372,7 @@ $(function () {
       }
     }
     markRowResolved($row, 'Accepted')
+    saveToStorage()
     showStatus(isKeeper ? 'Team accepted' : 'Player accepted')
   })
 
@@ -382,6 +441,7 @@ $(function () {
       contentType: 'application/json',
       data: JSON.stringify({ assignments, keeperAssignments, teamsheetRecords }),
       success () {
+        clearStorage()
         window.location.href = '/teamsheet/edit'
       },
       error () {
