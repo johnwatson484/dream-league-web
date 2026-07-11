@@ -16,6 +16,7 @@ import errors from './plugins/errors.ts'
 import headers from './plugins/headers.ts'
 import crumb from './plugins/crumb.ts'
 import logging from './plugins/logging.ts'
+import pulse from './plugins/pulse.ts'
 
 async function createServer (): Promise<Server> {
   await connectRedis()
@@ -58,6 +59,7 @@ async function createServer (): Promise<Server> {
   await server.register(headers)
   await server.register(crumb)
   await server.register(logging)
+  await server.register(pulse)
   return server
 }
 
