@@ -21,7 +21,7 @@ const routes: ServerRoute[] = [{
       },
     },
     handler: async (request, h) => {
-      const gameweekId = String((request.query as Record<string, unknown>)?.gameweekId || 0)
+      const gameweekId = Number((request.query as Record<string, unknown>)?.gameweekId) || 0
       const results = await get(`/results?gameweekId=${gameweekId}`, request)
       const gameweeks = await get('/gameweeks?completed=true', request)
       return h.view('results', { results, gameweeks })
