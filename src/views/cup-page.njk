@@ -1,0 +1,178 @@
+{% extends '_layout.njk' %}
+
+{% block content %}
+  <h2>{{ cup.name }}</h2>
+
+  {% if standings.length %}
+  <h4>Group Stage</h4>
+  <div class="row">
+    {% for standing in standings %}
+    <div class="col-md-6" style="padding-bottom: 20px;">
+      <div class="card border-dark">
+        <div class="card-header bg-dark text-light d-flex justify-content-between align-items-center">
+          <span>{{ standing.groupName }}</span>
+          {% if auth.isAdmin %}
+          <span>
+            <a href="/group/edit?groupId={{ standing.groupId }}" class="text-light mr-2"><i class="fa-solid fa-pen-to-square fa-sm"></i></a>
+            <a href="/group/delete?groupId={{ standing.groupId }}" class="text-light"><i class="fa-solid fa-trash fa-sm"></i></a>
+          </span>
+          {% endif %}
+        </div>
+        <div class="card-body">
+          {% set group = standing.table %}
+          {% set teamsAdvancing = standing.teamsAdvancing %}
+          {% include "./_cup-group.njk" %}
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+  {% endif %}
+
+  {% if rounds['1'] and cup.hasGroupStage %}
+  <h4>Group Fixtures</h4>
+  <table class="table table-sm table-hover small">
+    <tr>
+      <th>Gameweek</th>
+      <th>Home</th>
+      <th class="text-center no-mobile">Score</th>
+      <th class="no-mobile"> </th>
+      <th class="text-center no-mobile">Score</th>
+      <th>Away</th>
+      {% if auth.isAdmin %}<th></th>{% endif %}
+    </tr>
+    {% for fixture in rounds['1'] %}
+    <tr>
+      <td>{{ fixture.gameweek.gameweekId }}</td>
+      <td>{{ fixture.homeManager.name }}</td>
+      <td class="text-center no-mobile">{{ fixture.result.homeAggregate if fixture.result else '-' }}</td>
+      <td class="no-mobile text-center">v</td>
+      <td class="text-center no-mobile">{{ fixture.result.awayAggregate if fixture.result else '-' }}</td>
+      <td>{{ fixture.awayManager.name }}</td>
+      {% if auth.isAdmin %}
+      <td>
+        <a href="/fixture/edit?fixtureId={{ fixture.fixtureId }}&returnTo=/cup/{{ cup.cupId }}" class="text-muted mr-1"><i class="fa-solid fa-pen-to-square fa-sm"></i></a>
+        <a href="/fixture/delete?fixtureId={{ fixture.fixtureId }}&returnTo=/cup/{{ cup.cupId }}" class="text-muted"><i class="fa-solid fa-trash fa-sm"></i></a>
+      </td>
+      {% endif %}
+    </tr>
+    {% endfor %}
+  </table>
+  {% endif %}
+
+  {% for round, fixtures in rounds %}
+    {% if round != '1' or not cup.hasGroupStage %}
+    <h4>Round {{ round }}</h4>
+    <table class="table table-sm table-hover small">
+      <tr>
+        <th>Gameweek</th>
+        <th>Home</th>
+        <th class="text-center">Score</th>
+        <th>Away</th>
+        <th class="text-center">Score</th>
+        <th>Result</th>
+        {% if auth.isAdmin %}<th></th>{% endif %}
+      </tr>
+      {% for fixture in fixtures %}
+      <tr>
+        <td>{{ fixture.gameweek.gameweekId }}</td>
+        <td>{{ fixture.homeManager.name }}</td>
+        <td class="text-center">{{ fixture.result.homeAggregate if fixture.result else '-' }}</td>
+        <td>{{ fixture.awayManager.name }}</td>
+        <td class="text-center">{{ fixture.result.awayAggregate if fixture.result else '-' }}</td>
+        <td>
+          {% if fixture.result and fixture.result.winnerManagerId %}
+            <span class="badge badge-success">
+              {% if fixture.result.winnerManagerId == fixture.homeManager.managerId %}
+                {{ fixture.homeManager.name }}
+              {% else %}
+                {{ fixture.awayManager.name }}
+              {% endif %}
+              ({{ fixture.result.decidedBy }})
+            </span>
+          {% elif fixture.result and fixture.result.status == 'needs_third_leg' %}
+            <span class="badge badge-warning">Needs 3rd leg</span>
+          {% elif fixture.result and fixture.result.status == 'needs_manual_resolution' %}
+            <span class="badge badge-danger">Needs resolution</span>
+          {% else %}
+            <span class="badge badge-secondary">Pending</span>
+          {% endif %}
+        </td>
+        {% if auth.isAdmin %}
+        <td>
+          <a href="/fixture/edit?fixtureId={{ fixture.fixtureId }}&returnTo=/cup/{{ cup.cupId }}" class="text-muted mr-1"><i class="fa-solid fa-pen-to-square fa-sm"></i></a>
+          <a href="/fixture/delete?fixtureId={{ fixture.fixtureId }}&returnTo=/cup/{{ cup.cupId }}" class="text-muted mr-2"><i class="fa-solid fa-trash fa-sm"></i></a>
+          {% if fixture.result and fixture.result.winnerManagerId %}
+            <form method="POST" action="/cup/{{ cup.cupId }}/unresolve" class="d-inline">
+              <input type="hidden" name="crumb" value="{{crumb}}"/>
+              <input type="hidden" name="fixtureId" value="{{ fixture.fixtureId }}"/>
+              <button type="submit" class="btn btn-sm btn-outline-danger">Unresolve</button>
+            </form>
+          {% elif not fixture.result or not fixture.result.winnerManagerId %}
+            <form method="POST" action="/cup/{{ cup.cupId }}/resolve" class="d-inline">
+              <input type="hidden" name="crumb" value="{{crumb}}"/>
+              <input type="hidden" name="fixtureId" value="{{ fixture.fixtureId }}"/>
+              <button type="submit" class="btn btn-sm btn-outline-primary">Resolve</button>
+            </form>
+            <form method="POST" action="/cup/{{ cup.cupId }}/resolve" class="d-inline ml-1">
+              <input type="hidden" name="crumb" value="{{crumb}}"/>
+              <input type="hidden" name="fixtureId" value="{{ fixture.fixtureId }}"/>
+              <select class="form-control form-control-sm d-inline-block" name="winnerManagerId" style="width: auto;">
+                <option value="{{ fixture.homeManager.managerId }}">{{ fixture.homeManager.name }}</option>
+                <option value="{{ fixture.awayManager.managerId }}">{{ fixture.awayManager.name }}</option>
+              </select>
+              <button type="submit" class="btn btn-sm btn-outline-warning">Award (lots)</button>
+            </form>
+          {% endif %}
+        </td>
+        {% endif %}
+      </tr>
+      {% endfor %}
+    </table>
+    {% endif %}
+  {% endfor %}
+
+  {% if auth.isAdmin %}
+  <div class="card border-dark mt-5">
+    <div class="card-header bg-dark text-light">Admin</div>
+    <div class="card-body">
+      <div class="mb-3">
+        <a href="/fixtures/generate" class="btn btn-sm btn-outline-primary mr-2">Generate Group Fixtures</a>
+        <a href="/group/create" class="btn btn-sm btn-outline-secondary mr-2">Create Group</a>
+        <a href="/fixtures/reschedule" class="btn btn-sm btn-outline-secondary">Reschedule Fixtures</a>
+      </div>
+
+      <h6>Create Fixture</h6>
+      <form method="POST" action="/cup/{{ cup.cupId }}/create-fixture" class="form-inline">
+        <input type="hidden" name="crumb" value="{{crumb}}"/>
+        <select class="form-control form-control-sm mr-2" name="homeManagerId">
+          <option value="">Home</option>
+          {% for manager in managers %}
+          <option value="{{ manager.managerId }}">{{ manager.name }}</option>
+          {% endfor %}
+        </select>
+        <span class="mr-2">v</span>
+        <select class="form-control form-control-sm mr-2" name="awayManagerId">
+          <option value="">Away</option>
+          {% for manager in managers %}
+          <option value="{{ manager.managerId }}">{{ manager.name }}</option>
+          {% endfor %}
+        </select>
+        <select class="form-control form-control-sm mr-2" name="gameweekId">
+          {% for gameweek in gameweeks %}
+          <option value="{{ gameweek.gameweekId }}">GW{{ gameweek.gameweekId }} - {{ gameweek.shortDate }}</option>
+          {% endfor %}
+        </select>
+        <input type="number" class="form-control form-control-sm mr-2" name="round" placeholder="Round" min="1" value="1" style="width: 80px;">
+        <button type="submit" class="btn btn-sm btn-primary">Create</button>
+      </form>
+    </div>
+  </div>
+  {% endif %}
+
+  {% if not standings.length and not rounds | length %}
+  <div class="alert alert-info mt-5">
+    No fixtures scheduled yet.
+  </div>
+  {% endif %}
+{% endblock %}

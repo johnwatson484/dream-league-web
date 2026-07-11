@@ -15,7 +15,7 @@
       </tr>
       {% for cup in cups %}
         <tr>
-          <td>{{ cup.name }}</td>
+          <td><a href="/cup/{{ cup.cupId }}/progression">{{ cup.name }}</a></td>
           <td>
             {% if auth.isAdmin %}
             <a href="/cup/edit?cupId={{ cup.cupId }}">Edit</a> | <a href="/cup/delete?cupId={{ cup.cupId }}">Delete</a>

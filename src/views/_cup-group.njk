@@ -1,0 +1,28 @@
+<table class="table table-hover table-sm small">
+  <tr>
+    <th class="numeric">Pos</th>
+    <th>Manager</th>
+    <th class="numeric">P</th>
+    <th class="no-mobile numeric">W</th>
+    <th class="no-mobile numeric">D</th>
+    <th class="no-mobile numeric">L</th>
+    <th class="no-mobile numeric">GF</th>
+    <th class="no-mobile numeric">GA</th>
+    <th class="no-mobile numeric">GD</th>
+    <th class="numeric">Pts</th>
+  </tr>
+  {% for row in group %}
+    <tr{% if row.position <= teamsAdvancing %} class="table-success"{% endif %}>
+      <td class="numeric">{{ row.position }}</td>
+      <td><a href="/manager?managerId={{ row.managerId }}">{{ row.manager }}</a></td>
+      <td class="numeric">{{ row.played }}</td>
+      <td class="no-mobile numeric">{{ row.won }}</td>
+      <td class="no-mobile numeric">{{ row.drawn }}</td>
+      <td class="no-mobile numeric">{{ row.lost }}</td>
+      <td class="no-mobile numeric">{{ row.gf }}</td>
+      <td class="no-mobile numeric">{{ row.ga }}</td>
+      <td class="no-mobile numeric">{{ row.gd }}</td>
+      <td class="numeric">{{ row.points }}</td>
+    </tr>
+  {% endfor %}
+</table>

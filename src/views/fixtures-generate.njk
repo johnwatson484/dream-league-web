@@ -1,0 +1,93 @@
+{% extends '_layout.njk' %}
+
+{% block content %}
+  <h2>Generate Cup Fixtures</h2>
+
+  {% if error %}
+    <div class="alert alert-danger">{{ error }}</div>
+  {% endif %}
+
+  {% if generated %}
+    <div class="alert alert-success">
+      <strong>Generated {{ generated.length }} fixtures</strong>
+    </div>
+    <table class="table table-sm table-hover small">
+      <tr>
+        <th>Gameweek</th>
+        <th>Home</th>
+        <th>Away</th>
+      </tr>
+      {% for fixture in generated %}
+        <tr>
+          <td>{{ fixture.gameweekId }}</td>
+          <td>{{ fixture.homeManagerName }}</td>
+          <td>{{ fixture.awayManagerName }}</td>
+        </tr>
+      {% endfor %}
+    </table>
+    <a href="/fixtures" class="btn btn-primary">View all fixtures</a>
+  {% else %}
+    <div class="col-md-8">
+      <form method="POST" action="/fixtures/generate">
+        <input type="hidden" name="crumb" value="{{crumb}}"/>
+
+        <div class="form-group">
+          <label for="cupId">Cup</label>
+          <select class="form-control" id="cupId" name="cupId">
+            {% for cup in cups %}
+              <option value="{{ cup.cupId }}">{{ cup.name }}</option>
+            {% endfor %}
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Groups</label>
+          {% if groups.length %}
+            <ul class="list-group mb-3">
+              {% for group in groups %}
+                <li class="list-group-item">
+                  <strong>{{ group.name }}</strong>
+                  {% if group.managers %}
+                    <span class="text-muted ml-2">
+                      ({{ group.managers | join(', ', 'name') }})
+                    </span>
+                  {% endif %}
+                </li>
+              {% endfor %}
+            </ul>
+          {% else %}
+            <div class="alert alert-warning">No groups found. Create groups first.</div>
+          {% endif %}
+        </div>
+
+        <div class="form-group">
+          <label for="gameweekIds">Gameweeks to schedule across</label>
+          <select class="form-control" id="gameweekIds" name="gameweekIds" multiple size="10">
+            {% for gameweek in gameweeks %}
+              <option value="{{ gameweek.gameweekId }}">{{ gameweek.gameweekId }} - {{ gameweek.shortDate }}</option>
+            {% endfor %}
+          </select>
+          <small class="form-text text-muted">Hold Ctrl/Cmd to select multiple. Select in the order fixtures should be played.</small>
+        </div>
+
+        <button type="submit" class="btn btn-primary" {% if not groups.length %}disabled{% endif %}>Generate Fixtures</button>
+        <a href="/fixtures" class="btn btn-secondary ml-2">Cancel</a>
+      </form>
+
+      <hr>
+      <h5>Clear Generated Fixtures</h5>
+      <p class="text-muted small">Remove all generated fixtures for a cup. Useful for testing or re-generating.</p>
+      <form method="POST" action="/fixtures/clear" onsubmit="return confirm('Are you sure you want to delete all fixtures for this cup?')">
+        <input type="hidden" name="crumb" value="{{crumb}}"/>
+        <div class="form-group">
+          <select class="form-control" name="cupId">
+            {% for cup in cups %}
+              <option value="{{ cup.cupId }}">{{ cup.name }}</option>
+            {% endfor %}
+          </select>
+        </div>
+        <button type="submit" class="btn btn-danger">Clear Fixtures</button>
+      </form>
+    </div>
+  {% endif %}
+{% endblock %}

@@ -1,0 +1,46 @@
+{% extends '_layout.njk' %}
+
+{% block content %}
+  <h2>Reschedule Fixtures</h2>
+
+  {% if error %}
+    <div class="alert alert-danger">{{ error }}</div>
+  {% endif %}
+
+  {% if fixtures.length %}
+    <form method="POST" action="/fixtures/reschedule">
+      <input type="hidden" name="crumb" value="{{crumb}}"/>
+
+      <table class="table table-sm table-hover small">
+        <tr>
+          <th>Cup</th>
+          <th>Round</th>
+          <th>Fixture</th>
+          <th>Current Gameweek</th>
+          <th>Move to</th>
+        </tr>
+        {% for fixture in fixtures %}
+          <tr>
+            <td>{{ fixture.cupName }}</td>
+            <td>{{ fixture.round }}</td>
+            <td>{{ fixture.homeManagerName }} v {{ fixture.awayManagerName }}</td>
+            <td>{{ fixture.gameweekId }} - {{ fixture.date }}</td>
+            <td>
+              <input type="hidden" name="fixtures[{{ loop.index0 }}][fixtureId]" value="{{ fixture.fixtureId }}"/>
+              <select class="form-control form-control-sm" name="fixtures[{{ loop.index0 }}][gameweekId]">
+                {% for gameweek in gameweeks %}
+                  <option value="{{ gameweek.gameweekId }}" {% if gameweek.gameweekId == fixture.gameweekId %}selected{% endif %}>{{ gameweek.gameweekId }} - {{ gameweek.shortDate }}</option>
+                {% endfor %}
+              </select>
+            </td>
+          </tr>
+        {% endfor %}
+      </table>
+
+      <button type="submit" class="btn btn-primary">Save Changes</button>
+      <a href="/fixtures" class="btn btn-secondary ml-2">Cancel</a>
+    </form>
+  {% else %}
+    <div class="alert alert-info">No fixtures to reschedule.</div>
+  {% endif %}
+{% endblock %}

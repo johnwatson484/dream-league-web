@@ -1,0 +1,120 @@
+{% extends '_layout.njk' %}
+
+{% block content %}
+  <h2>{{ cup.name }} - Progression</h2>
+
+  {% if qualifiers.length %}
+  <div class="card border-success mb-4">
+    <div class="card-header bg-success text-light">Qualified from Group Stage</div>
+    <div class="card-body">
+      <div class="row">
+        {% for group in qualifiers %}
+        <div class="col-md-4 mb-2">
+          <strong>{{ group.groupName }}</strong>
+          <ul class="list-unstyled mb-0 mt-1">
+            {% for manager in group.qualifiers %}
+            <li><i class="fa-solid fa-check text-success mr-1"></i> {{ manager.name }}</li>
+            {% endfor %}
+          </ul>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+  {% endif %}
+
+  {% for round, fixtures in rounds %}
+    <h4>Round {{ round }}</h4>
+    <table class="table table-sm table-hover small">
+      <tr>
+        <th>Gameweek</th>
+        <th>Home</th>
+        <th class="text-center">Margin</th>
+        <th>Away</th>
+        <th class="text-center">Margin</th>
+        <th>Result</th>
+        {% if auth.isAdmin %}<th></th>{% endif %}
+      </tr>
+      {% for fixture in fixtures %}
+        <tr>
+          <td>{{ fixture.gameweek.gameweekId }}</td>
+          <td>{{ fixture.homeManager.name }}</td>
+          <td class="text-center">{{ fixture.result.homeAggregate if fixture.result else '-' }}</td>
+          <td>{{ fixture.awayManager.name }}</td>
+          <td class="text-center">{{ fixture.result.awayAggregate if fixture.result else '-' }}</td>
+          <td>
+            {% if fixture.result and fixture.result.winnerManagerId %}
+              <span class="badge badge-success">
+                {% if fixture.result.winnerManagerId == fixture.homeManager.managerId %}
+                  {{ fixture.homeManager.name }}
+                {% else %}
+                  {{ fixture.awayManager.name }}
+                {% endif %}
+                ({{ fixture.result.decidedBy }})
+              </span>
+            {% elif fixture.result and fixture.result.status == 'needs_third_leg' %}
+              <span class="badge badge-warning">Needs 3rd leg</span>
+            {% elif fixture.result and fixture.result.status == 'needs_manual_resolution' %}
+              <span class="badge badge-danger">Needs resolution</span>
+            {% else %}
+              <span class="badge badge-secondary">Pending</span>
+            {% endif %}
+          </td>
+          {% if auth.isAdmin %}
+          <td>
+            {% if not fixture.result or not fixture.result.winnerManagerId %}
+              <form method="POST" action="/cup/{{ cup.cupId }}/resolve" class="d-inline">
+                <input type="hidden" name="crumb" value="{{crumb}}"/>
+                <input type="hidden" name="fixtureId" value="{{ fixture.fixtureId }}"/>
+                <button type="submit" class="btn btn-sm btn-outline-primary">Resolve</button>
+              </form>
+              <form method="POST" action="/cup/{{ cup.cupId }}/resolve" class="d-inline ml-1">
+                <input type="hidden" name="crumb" value="{{crumb}}"/>
+                <input type="hidden" name="fixtureId" value="{{ fixture.fixtureId }}"/>
+                <select class="form-control form-control-sm d-inline-block" name="winnerManagerId" style="width: auto;">
+                  <option value="{{ fixture.homeManager.managerId }}">{{ fixture.homeManager.name }}</option>
+                  <option value="{{ fixture.awayManager.managerId }}">{{ fixture.awayManager.name }}</option>
+                </select>
+                <button type="submit" class="btn btn-sm btn-outline-warning">Award (lots)</button>
+              </form>
+            {% endif %}
+          </td>
+          {% endif %}
+        </tr>
+      {% endfor %}
+    </table>
+  {% endfor %}
+
+  {% if auth.isAdmin %}
+  <div class="card border-dark mt-4">
+    <div class="card-header bg-dark text-light">Create Knockout Fixture</div>
+    <div class="card-body">
+      <form method="POST" action="/cup/{{ cup.cupId }}/create-fixture" class="form-inline">
+        <input type="hidden" name="crumb" value="{{crumb}}"/>
+        <select class="form-control form-control-sm mr-2" name="homeManagerId">
+          <option value="">Home</option>
+          {% for manager in managers %}
+          <option value="{{ manager.managerId }}">{{ manager.name }}</option>
+          {% endfor %}
+        </select>
+        <span class="mr-2">v</span>
+        <select class="form-control form-control-sm mr-2" name="awayManagerId">
+          <option value="">Away</option>
+          {% for manager in managers %}
+          <option value="{{ manager.managerId }}">{{ manager.name }}</option>
+          {% endfor %}
+        </select>
+        <select class="form-control form-control-sm mr-2" name="gameweekId">
+          {% for gameweek in gameweeks %}
+          <option value="{{ gameweek.gameweekId }}">GW{{ gameweek.gameweekId }} - {{ gameweek.shortDate }}</option>
+          {% endfor %}
+        </select>
+        <input type="number" class="form-control form-control-sm mr-2" name="round" placeholder="Round" min="2" value="2" style="width: 80px;">
+        <button type="submit" class="btn btn-sm btn-primary">Create</button>
+      </form>
+    </div>
+  </div>
+  {% endif %}
+
+  <a href="/fixtures" class="btn btn-secondary mt-3">Back to fixtures</a>
+{% endblock %}

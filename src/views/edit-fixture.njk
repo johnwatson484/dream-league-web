@@ -9,7 +9,8 @@
     {% endif %}
     <form method="POST" action="/fixture/edit">
       <input type="hidden" name="crumb" value="{{crumb}}"/>
-      <input type="hidden" id="fixtureId" name="fixtureId" value="{{ fixture.fixtureId }}"> 
+      <input type="hidden" id="fixtureId" name="fixtureId" value="{{ fixture.fixtureId }}">
+      {% if returnTo %}<input type="hidden" name="returnTo" value="{{ returnTo }}"/>{% endif %} 
       <div class="form-group">
         <label for="cupId">Cup</label>
         <select class="form-control" id="cupId" name="cupId">

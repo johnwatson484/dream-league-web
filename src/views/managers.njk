@@ -15,7 +15,7 @@
       </tr>
       {% for manager in managers %}
         <tr>
-          <td>{{ manager.name }}</td>
+          <td><a href="/manager?managerId={{ manager.managerId }}">{{ manager.name }}</a></td>
           <td>
             {% if auth.isAdmin %}
             <a href="/manager/edit?managerId={{ manager.managerId }}">Edit</a> | <a href="/manager/delete?managerId={{ manager.managerId }}">Delete</a>

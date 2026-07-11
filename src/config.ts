@@ -48,6 +48,12 @@ const config = convict({
     default: 'http://localhost:3001',
     env: 'API_HOST',
   },
+  videprinterHost: {
+    doc: 'The videprinter service base URL.',
+    format: 'url',
+    default: 'http://localhost:3002',
+    env: 'VIDEPRINTER_HOST',
+  },
   session: {
     cookieName: {
       doc: 'The session cookie name.',

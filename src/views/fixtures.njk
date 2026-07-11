@@ -4,7 +4,9 @@
   <h2>Fixtures</h2>
 
   {% if auth.isAdmin %}
-  <a href="/fixture/create">Create fixture</a>
+  <a href="/fixture/create">Create fixture</a> |
+  <a href="/fixtures/generate">Generate group fixtures</a> |
+  <a href="/fixtures/reschedule">Reschedule</a>
   {% endif %}
 
   {%if fixtures.length %}
