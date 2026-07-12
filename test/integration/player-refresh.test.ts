@@ -19,34 +19,35 @@ describe('refreshing player list', () => {
     fs.copyFileSync(BASE_TEST_FILE, TEST_FILE)
   })
 
-  test('should return success if list valid', async () => {
-    mockPost.mockResolvedValue({ success: true })
+  test('should return preview response with mapped players', async () => {
+    mockPost.mockResolvedValue({ mappedPlayers: [{ firstName: 'Ian', lastName: 'Henderson', position: 'Forward', teamId: 1 }], unmappedTeams: [] })
 
-    const result = await refreshPlayers(TEST_FILE) as { success: boolean }
+    const result = await refreshPlayers(TEST_FILE) as { mappedPlayers: any[]; unmappedTeams: any[] }
 
-    expect(result.success).toBeTruthy()
+    expect(result.mappedPlayers).toHaveLength(1)
+    expect(result.unmappedTeams).toHaveLength(0)
     expect(mockPost.mock.calls).toHaveLength(1)
   })
 
-  test('should return failure if list invalid', async () => {
-    mockPost.mockResolvedValue({ success: false })
+  test('should return preview response with unmapped teams', async () => {
+    mockPost.mockResolvedValue({ mappedPlayers: [], unmappedTeams: [{ team: 'Wycombe', players: [{ firstName: 'Adebayo', lastName: 'Akinfenwa', position: 'FWD' }] }] })
 
-    const result = await refreshPlayers(TEST_FILE) as { success: boolean }
+    const result = await refreshPlayers(TEST_FILE) as { mappedPlayers: any[]; unmappedTeams: any[] }
 
-    expect(result.success).toBeFalsy()
-    expect(mockPost.mock.calls).toHaveLength(1)
+    expect(result.unmappedTeams).toHaveLength(1)
+    expect(result.unmappedTeams[0].team).toBe('Wycombe')
   })
 
-  test('request should be made to refresh endpoint', async () => {
-    mockPost.mockResolvedValue({ success: true })
+  test('request should be made to preview endpoint', async () => {
+    mockPost.mockResolvedValue({ mappedPlayers: [], unmappedTeams: [] })
 
     await refreshPlayers(TEST_FILE)
 
-    expect(mockPost.mock.calls[0]![0]).toBe('/league/players/refresh')
+    expect(mockPost.mock.calls[0]![0]).toBe('/league/players/refresh/preview')
   })
 
   test('request should include all players', async () => {
-    mockPost.mockResolvedValue({ success: true })
+    mockPost.mockResolvedValue({ mappedPlayers: [], unmappedTeams: [] })
 
     await refreshPlayers(TEST_FILE)
 
@@ -54,20 +55,10 @@ describe('refreshing player list', () => {
   })
 
   test('request should include example player', async () => {
-    mockPost.mockResolvedValue({ success: true })
+    mockPost.mockResolvedValue({ mappedPlayers: [], unmappedTeams: [] })
 
     await refreshPlayers(TEST_FILE)
 
     expect(mockPost.mock.calls[0]![1].players).toContainEqual({ firstName: 'Ian', lastName: 'Henderson', position: 'FWD', team: 'Rochdale' })
-  })
-
-  test('should return failure should include unmapped players', async () => {
-    mockPost.mockResolvedValue({ success: false, unmappedPlayers: [{ firstName: 'Adebayo', lastName: 'Akinfenwa', position: 'FWD', team: 'Wycombe' }] })
-
-    const result = await refreshPlayers(TEST_FILE) as { success: boolean; unmappedPlayers: unknown[] }
-
-    expect(result.success).toBeFalsy()
-    expect(result.unmappedPlayers).toHaveLength(1)
-    expect(result.unmappedPlayers).toContainEqual({ firstName: 'Adebayo', lastName: 'Akinfenwa', position: 'FWD', team: 'Wycombe' })
   })
 })

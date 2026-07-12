@@ -27,6 +27,7 @@ export default defineConfig(({ mode }) => ({
         'teamsheet-review': path.resolve(dirname, 'src/client/javascripts/teamsheet-review.ts'),
         'goal-report': path.resolve(dirname, 'src/client/javascripts/goal-report.ts'),
         live: path.resolve(dirname, 'src/client/javascripts/live.ts'),
+        'player-refresh-review': path.resolve(dirname, 'src/client/javascripts/player-refresh-review.ts'),
       },
       output: {
         entryFileNames: mode === 'production'
