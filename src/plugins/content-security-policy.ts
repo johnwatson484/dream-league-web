@@ -1,4 +1,5 @@
 import Blankie from 'blankie'
+import config from '../config.ts'
 
 export default {
   plugin: Blankie,
@@ -24,6 +25,7 @@ export default {
       '*.google-analytics.com',
       '*.analytics.google.com',
       '*.googletagmanager.com',
+      config.get('videprinterHost'),
     ],
     frameAncestors: ['self'],
     formAction: ['self'],
