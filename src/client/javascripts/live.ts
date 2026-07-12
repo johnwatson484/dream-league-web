@@ -1,7 +1,11 @@
-declare const videprinterStreamUrl: string
-declare const managerScores: Record<number, { goals: number; conceded: number }>
-
 $(function () {
+  const liveData = JSON.parse($('#live-data').text() || '{}')
+  const videprinterStreamUrl: string = liveData.videprinterStreamUrl || ''
+  const managerScores: Record<number, { goals: number; conceded: number }> = {}
+  for (const manager of liveData.managers || []) {
+    managerScores[manager.managerId] = { goals: 0, conceded: 0 }
+  }
+
   const $status = $('#connection-status')
   const $feed = $('#goal-feed')
 

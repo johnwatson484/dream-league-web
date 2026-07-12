@@ -1,6 +1,5 @@
-declare const managerPlayers: Record<string, { playerId: number; name: string }[]>
-
 $(function () {
+  const managerPlayers: Record<string, { playerId: number; name: string }[]> = JSON.parse($('#manager-players-data').text() || '{}')
   const $managerId = $('#managerId')
   const $playerId = $('#playerId')
   const $gameweekId = $('#gameweekId')

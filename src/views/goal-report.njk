@@ -63,15 +63,16 @@
   <button type="submit" class="btn btn-primary">Submit</button>
 </form>
 
-<script>
-  var managerPlayers = {};
-  {% for manager in formData.managers %}
-    managerPlayers[{{ manager.managerId }}] = [
-      {% for player in manager.players %}
-        { playerId: {{ player.playerId }}, name: "{{ player.firstName }} {{ player.lastName }} ({{ player.team.name }})" },
-      {% endfor %}
-    ];
-  {% endfor %}
+<script id="manager-players-data" type="application/json">
+  {
+    {% for manager in formData.managers %}
+      "{{ manager.managerId }}": [
+        {% for player in manager.players %}
+          { "playerId": {{ player.playerId }}, "name": "{{ player.firstName }} {{ player.lastName }} ({{ player.team.name }})" }{% if not loop.last %},{% endif %}
+        {% endfor %}
+      ]{% if not loop.last %},{% endif %}
+    {% endfor %}
+  }
 </script>
 <script src="{{ asset('javascripts/goal-report.js') }}"></script>
 {% endblock %}

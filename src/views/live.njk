@@ -59,20 +59,15 @@
   </div>
 </div>
 
-<script>
-  var videprinterStreamUrl = "{{ videprinterStreamUrl }}";
-  var managerScores = {};
-  {% for manager in managers %}
-    managerScores[{{ manager.managerId }}] = { goals: 0, conceded: 0 };
-  {% endfor %}
-
-  {% if liveSummary and liveSummary.goals %}
-    {% for goal in liveSummary.goals %}
-      {% if goal.playerId %}
-        // Find which manager owns this player from the teamsheet
-      {% endif %}
-    {% endfor %}
-  {% endif %}
+<script id="live-data" type="application/json">
+  {
+    "videprinterStreamUrl": "{{ videprinterStreamUrl }}",
+    "managers": [
+      {% for manager in managers %}
+        { "managerId": {{ manager.managerId }}, "name": "{{ manager.name }}" }{% if not loop.last %},{% endif %}
+      {% endfor %}
+    ]
+  }
 </script>
 <script src="{{ asset('javascripts/live.js') }}"></script>
 {% endif %}
