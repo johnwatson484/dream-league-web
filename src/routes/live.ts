@@ -8,19 +8,18 @@ const routes: ServerRoute[] = [{
   path: '/live',
   handler: async (request, h) => {
     const gameweeks = await get('/gameweeks', request) as any[]
-    const activeGameweek = gameweeks.find((gw: any) => gw.isActive)
+    const activeGameweeks = Array.isArray(gameweeks) ? gameweeks.filter((gw: any) => gw.isActive) : []
+    const activeGameweek = activeGameweeks.length > 0 ? activeGameweeks[activeGameweeks.length - 1] : null
 
     let liveSummary = null
-    let videprinterStreamUrl = ''
+    const videprinterHost = config.get('videprinterHost')
+    const videprinterStreamUrl = `${videprinterHost}/videprinter/stream`
 
     if (activeGameweek) {
       const startDate = new Date(activeGameweek.startDate)
       const endDate = new Date(startDate)
       endDate.setDate(endDate.getDate() + 6)
       endDate.setHours(23, 59, 59, 999)
-
-      const videprinterHost = config.get('videprinterHost')
-      videprinterStreamUrl = `${videprinterHost}/videprinter/stream`
 
       try {
         const summaryUrl = `${videprinterHost}/videprinter/summary?from=${startDate.toISOString()}&to=${endDate.toISOString()}`
@@ -31,14 +30,17 @@ const routes: ServerRoute[] = [{
       }
     }
 
-    const managers = await get('/managers', request) as any[]
-    const teamsheet = await get('/teamsheet', request) as any
+    let managers: any[] = []
+    try {
+      managers = await get('/managers', request) as any[]
+    } catch {
+      managers = []
+    }
 
     return h.view('live', {
       gameweek: activeGameweek,
       liveSummary,
       managers,
-      teamsheet,
       videprinterStreamUrl,
     })
   },
