@@ -11,8 +11,8 @@ const routes: ServerRoute[] = [{
     if (sessionCookie?.sessionId && request.app.session) {
       try {
         await post('/logout', { refreshToken: request.app.session.refreshToken }, request)
-      } catch {
-        // Best-effort revocation — continue with local cleanup
+      } catch (err: any) {
+        request.log(['warn', 'auth'], { msg: 'Remote token revocation failed', err: err?.message })
       }
       await destroySession(sessionCookie.sessionId)
     }

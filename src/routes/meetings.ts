@@ -1,7 +1,10 @@
+import { constants as httpConstants } from 'node:http2'
 import type { ServerRoute } from '@hapi/hapi'
 import Joi from 'joi'
 import { get } from '../api/get.ts'
 import { post } from '../api/post.ts'
+
+const { HTTP_STATUS_BAD_REQUEST, HTTP_STATUS_NOT_FOUND } = httpConstants
 
 const routes: ServerRoute[] = [{
   method: 'GET',
@@ -27,7 +30,7 @@ const routes: ServerRoute[] = [{
         date: Joi.date(),
       },
       failAction: async (request, h, error) => {
-        return h.view('create-meeting', { error, meeting: request.payload }).code(400).takeover()
+        return h.view('create-meeting', { error, meeting: request.payload }).code(HTTP_STATUS_BAD_REQUEST).takeover()
       },
     },
     handler: async (request, h) => {
@@ -45,7 +48,7 @@ const routes: ServerRoute[] = [{
         meetingId: Joi.number().integer().required(),
       },
       failAction: async (_request, h, _error) => {
-        return h.view('404').code(404).takeover()
+        return h.view('404').code(HTTP_STATUS_NOT_FOUND).takeover()
       },
     },
   },
@@ -64,7 +67,7 @@ const routes: ServerRoute[] = [{
         date: Joi.date(),
       },
       failAction: async (request, h, error) => {
-        return h.view('league/edit-meeting', { meeting: request.payload, error }).code(400).takeover()
+        return h.view('league/edit-meeting', { meeting: request.payload, error }).code(HTTP_STATUS_BAD_REQUEST).takeover()
       },
     },
     handler: async (request, h) => {
@@ -91,7 +94,7 @@ const routes: ServerRoute[] = [{
       },
       failAction: async (request, h, error) => {
         const meeting = await get(`/meeting/?meetingId=${(request.query as Record<string, unknown>).meetingId}`, request)
-        return h.view('delete-meeting', { meeting, error }).code(400).takeover()
+        return h.view('delete-meeting', { meeting, error }).code(HTTP_STATUS_BAD_REQUEST).takeover()
       },
     },
     handler: async (request, h) => {

@@ -1,6 +1,9 @@
+import { constants as httpConstants } from 'node:http2'
 import type { ServerRoute } from '@hapi/hapi'
 import Joi from 'joi'
 import { updatePolicy } from '../cookies/update-policy.ts'
+
+const { HTTP_STATUS_BAD_REQUEST } = httpConstants
 
 const routes: ServerRoute[] = [{
   method: 'GET',
@@ -25,7 +28,7 @@ const routes: ServerRoute[] = [{
         async: Joi.boolean().default(false),
       },
       failAction: async (_request, h, _error) => {
-        return h.view('cookies/cookie-policy', { cookiesPolicy: (_request as unknown as { state: Record<string, unknown> }).state.cookies_policy, updated: false }).code(400).takeover()
+        return h.view('cookies/cookie-policy', { cookiesPolicy: (_request as unknown as { state: Record<string, unknown> }).state.cookies_policy, updated: false }).code(HTTP_STATUS_BAD_REQUEST).takeover()
       },
     },
     handler: (request, h) => {

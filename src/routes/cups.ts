@@ -1,7 +1,10 @@
+import { constants as httpConstants } from 'node:http2'
 import type { ServerRoute } from '@hapi/hapi'
 import Joi from 'joi'
 import { get } from '../api/get.ts'
 import { post } from '../api/post.ts'
+
+const { HTTP_STATUS_BAD_REQUEST, HTTP_STATUS_NOT_FOUND } = httpConstants
 
 const routes: ServerRoute[] = [{
   method: 'GET',
@@ -29,7 +32,7 @@ const routes: ServerRoute[] = [{
         knockoutLegs: Joi.number().integer().default(1),
       },
       failAction: async (request, h, error) => {
-        return h.view('create-cup', { error, cup: request.payload }).code(400).takeover()
+        return h.view('create-cup', { error, cup: request.payload }).code(HTTP_STATUS_BAD_REQUEST).takeover()
       },
     },
     handler: async (request, h) => {
@@ -47,7 +50,7 @@ const routes: ServerRoute[] = [{
         cupId: Joi.number().integer().required(),
       },
       failAction: async (_request, h, _error) => {
-        return h.view('404').code(404).takeover()
+        return h.view('404').code(HTTP_STATUS_NOT_FOUND).takeover()
       },
     },
   },
@@ -68,7 +71,7 @@ const routes: ServerRoute[] = [{
         knockoutLegs: Joi.number().integer().required(),
       },
       failAction: async (request, h, _error) => {
-        return h.view('edit-cup', { cup: request.payload, error: _error }).code(400).takeover()
+        return h.view('edit-cup', { cup: request.payload, error: _error }).code(HTTP_STATUS_BAD_REQUEST).takeover()
       },
     },
     handler: async (request, h) => {
@@ -86,7 +89,7 @@ const routes: ServerRoute[] = [{
         cupId: Joi.number().integer().required(),
       },
       failAction: async (_request, h, _error) => {
-        return h.view('404').code(404).takeover()
+        return h.view('404').code(HTTP_STATUS_NOT_FOUND).takeover()
       },
     },
   },
@@ -105,7 +108,7 @@ const routes: ServerRoute[] = [{
       },
       failAction: async (request, h, _error) => {
         const cup = await get(`/cup/?cupId=${(request.query as Record<string, unknown>).cupId}`, request)
-        return h.view('delete-cup', { cup, error: _error }).code(400).takeover()
+        return h.view('delete-cup', { cup, error: _error }).code(HTTP_STATUS_BAD_REQUEST).takeover()
       },
     },
     handler: async (request, h) => {

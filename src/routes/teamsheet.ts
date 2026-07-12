@@ -1,3 +1,4 @@
+import { constants as httpConstants } from 'node:http2'
 import type { ServerRoute } from '@hapi/hapi'
 import Joi from 'joi'
 import boom from '@hapi/boom'
@@ -5,6 +6,8 @@ import { parseTeamsheet } from '../refresh/teamsheet/parse.ts'
 import { get } from '../api/get.ts'
 import { post } from '../api/post.ts'
 import ViewModel from './models/teamsheet.ts'
+
+const { HTTP_STATUS_BAD_REQUEST, HTTP_STATUS_INTERNAL_SERVER_ERROR } = httpConstants
 
 const routes: ServerRoute[] = [{
   method: 'GET',
@@ -90,14 +93,14 @@ const routes: ServerRoute[] = [{
         }).unknown(),
       },
       failAction: async (_request, h, _error) => {
-        return h.view('teamsheet-edit', { message: 'Only .xlsx files are permitted' }).code(400).takeover()
+        return h.view('teamsheet-edit', { message: 'Only .xlsx files are permitted' }).code(HTTP_STATUS_BAD_REQUEST).takeover()
       },
     },
     handler: async (request, h) => {
       const payload = request.payload as { teamFile: { path: string } }
       const teams = await parseTeamsheet(payload.teamFile.path)
       if (!teams) {
-        return h.view('teamsheet-edit', { message: 'Could not read teamsheet. Ensure the file has a "DL Teams" worksheet.' }).code(400)
+        return h.view('teamsheet-edit', { message: 'Could not read teamsheet. Ensure the file has a "DL Teams" worksheet.' }).code(HTTP_STATUS_BAD_REQUEST)
       }
       const preview = await post('/teamsheet/match-preview', { teams }, request)
       return h.view('teamsheet-review', { preview, previewJson: JSON.stringify(preview) })
@@ -183,7 +186,7 @@ const routes: ServerRoute[] = [{
         return await post('/league/player/create', request.payload, request)
       } catch (err: any) {
         const message = err?.data?.payload?.message || err?.message || 'Failed to create player'
-        return h.response({ error: true, message }).code(err?.data?.res?.statusCode || 500)
+        return h.response({ error: true, message }).code(err?.data?.res?.statusCode || HTTP_STATUS_INTERNAL_SERVER_ERROR)
       }
     },
   },

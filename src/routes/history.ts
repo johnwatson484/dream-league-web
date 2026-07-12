@@ -1,7 +1,10 @@
+import { constants as httpConstants } from 'node:http2'
 import type { ServerRoute } from '@hapi/hapi'
 import Joi from 'joi'
 import { get } from '../api/get.ts'
 import { post } from '../api/post.ts'
+
+const { HTTP_STATUS_BAD_REQUEST, HTTP_STATUS_NOT_FOUND } = httpConstants
 
 const routes: ServerRoute[] = [{
   method: 'GET',
@@ -33,7 +36,7 @@ const routes: ServerRoute[] = [{
         plate: Joi.string().allow(''),
       },
       failAction: async (request, h, error) => {
-        return h.view('create-history', { error, history: request.payload }).code(400).takeover()
+        return h.view('create-history', { error, history: request.payload }).code(HTTP_STATUS_BAD_REQUEST).takeover()
       },
     },
     handler: async (request, h) => {
@@ -51,7 +54,7 @@ const routes: ServerRoute[] = [{
         historyId: Joi.number().required(),
       },
       failAction: async (_request, h, _error) => {
-        return h.view('404').code(404).takeover()
+        return h.view('404').code(HTTP_STATUS_NOT_FOUND).takeover()
       },
     },
   },
@@ -76,7 +79,7 @@ const routes: ServerRoute[] = [{
         plate: Joi.string().allow(''),
       },
       failAction: async (request, h, error) => {
-        return h.view('league/edit-history', { history: request.payload, error }).code(400).takeover()
+        return h.view('league/edit-history', { history: request.payload, error }).code(HTTP_STATUS_BAD_REQUEST).takeover()
       },
     },
     handler: async (request, h) => {
@@ -94,7 +97,7 @@ const routes: ServerRoute[] = [{
         historyId: Joi.number().integer().required(),
       },
       failAction: async (_request, h, _error) => {
-        return h.view('404').code(404).takeover()
+        return h.view('404').code(HTTP_STATUS_NOT_FOUND).takeover()
       },
     },
   },
@@ -113,7 +116,7 @@ const routes: ServerRoute[] = [{
       },
       failAction: async (request, h, error) => {
         const history = await get(`/history/?historyId=${(request.query as Record<string, unknown>).historyId}`, request)
-        return h.view('delete-history', { history, error }).code(400).takeover()
+        return h.view('delete-history', { history, error }).code(HTTP_STATUS_BAD_REQUEST).takeover()
       },
     },
     handler: async (request, h) => {

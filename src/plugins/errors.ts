@@ -1,4 +1,7 @@
+import { constants as httpConstants } from 'node:http2'
 import type { Plugin, ServerOptions } from '@hapi/hapi'
+
+const { HTTP_STATUS_UNAUTHORIZED, HTTP_STATUS_FORBIDDEN, HTTP_STATUS_NOT_FOUND } = httpConstants
 
 const plugin: Plugin<ServerOptions> = {
   name: 'error-pages',
@@ -9,11 +12,11 @@ const plugin: Plugin<ServerOptions> = {
       if ('isBoom' in response && response.isBoom) {
         const statusCode = response.output.statusCode
 
-        if (statusCode === 401 || statusCode === 403) {
+        if (statusCode === HTTP_STATUS_UNAUTHORIZED || statusCode === HTTP_STATUS_FORBIDDEN) {
           return h.redirect('/login')
         }
 
-        if (statusCode === 404) {
+        if (statusCode === HTTP_STATUS_NOT_FOUND) {
           return h.view('404').code(statusCode)
         }
 

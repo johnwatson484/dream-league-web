@@ -1,8 +1,11 @@
+import { constants as httpConstants } from 'node:http2'
 import type { ServerRoute } from '@hapi/hapi'
 import Joi from 'joi'
 import boom from '@hapi/boom'
 import { get } from '../api/get.ts'
 import { post } from '../api/post.ts'
+
+const { HTTP_STATUS_BAD_REQUEST } = httpConstants
 
 const routes: ServerRoute[] = [{
   method: 'GET',
@@ -39,7 +42,7 @@ const routes: ServerRoute[] = [{
       }),
       failAction: async (request, h, _error) => {
         const formData = await get('/goal-reports/form-data', request)
-        return h.view('goal-report', { formData, error: 'Please check your input and try again.' }).code(400).takeover()
+        return h.view('goal-report', { formData, error: 'Please check your input and try again.' }).code(HTTP_STATUS_BAD_REQUEST).takeover()
       },
     },
     handler: async (request, h) => {

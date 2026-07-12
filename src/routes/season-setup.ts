@@ -1,7 +1,10 @@
+import { constants as httpConstants } from 'node:http2'
 import type { ServerRoute } from '@hapi/hapi'
 import Joi from 'joi'
 import { get } from '../api/get.ts'
 import { post } from '../api/post.ts'
+
+const { HTTP_STATUS_BAD_REQUEST } = httpConstants
 
 const routes: ServerRoute[] = [{
   method: 'GET',
@@ -75,7 +78,7 @@ const routes: ServerRoute[] = [{
           league1: teamsByDivision['League 1'] || [],
           league2: teamsByDivision['League 2'] || [],
           error: 'All fields are required. Please complete every section.',
-        }).code(400).takeover()
+        }).code(HTTP_STATUS_BAD_REQUEST).takeover()
       },
     },
     handler: async (request, h) => {

@@ -1,7 +1,10 @@
+import { constants as httpConstants } from 'node:http2'
 import type { ServerRoute } from '@hapi/hapi'
 import Joi from 'joi'
 import { get } from '../api/get.ts'
 import { post } from '../api/post.ts'
+
+const { HTTP_STATUS_BAD_REQUEST } = httpConstants
 
 const routes: ServerRoute[] = [{
   method: 'GET',
@@ -19,7 +22,7 @@ const routes: ServerRoute[] = [{
         goalId: Joi.number().integer().required(),
       },
       failAction: async (_request, h, _error) => {
-        return h.view('404').code(400).takeover()
+        return h.view('404').code(HTTP_STATUS_BAD_REQUEST).takeover()
       },
     },
   },
@@ -37,7 +40,7 @@ const routes: ServerRoute[] = [{
         goalId: Joi.number().integer().required(),
       },
       failAction: async (_request, h, _error) => {
-        return h.view('404').code(400).takeover()
+        return h.view('404').code(HTTP_STATUS_BAD_REQUEST).takeover()
       },
     },
   },
@@ -56,7 +59,7 @@ const routes: ServerRoute[] = [{
       },
       failAction: async (request, h, error) => {
         const goal = await get(`/goal/?goalId=${(request.query as Record<string, unknown>).goalId}`, request)
-        return h.view('delete-goal', { goal, error }).code(400).takeover()
+        return h.view('delete-goal', { goal, error }).code(HTTP_STATUS_BAD_REQUEST).takeover()
       },
     },
     handler: async (request, h) => {

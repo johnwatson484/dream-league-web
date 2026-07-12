@@ -1,9 +1,13 @@
+import { constants as httpConstants } from 'node:http2'
 import type { ServerRoute } from '@hapi/hapi'
 import Joi from 'joi'
 import boom from '@hapi/boom'
 import { get } from '../../api/get.ts'
 import { post } from '../../api/post.ts'
+import { buildUrl } from '../../api/build-url.ts'
 import { DEFENDER, MIDFIELDER, FORWARD } from '../../constants/positions.ts'
+
+const { HTTP_STATUS_BAD_REQUEST, HTTP_STATUS_NOT_FOUND } = httpConstants
 const positions = [DEFENDER, MIDFIELDER, FORWARD]
 
 const routes: ServerRoute[] = [{
@@ -16,7 +20,7 @@ const routes: ServerRoute[] = [{
         position: Joi.string().allow(''),
       },
       failAction: async (_request, h, _error) => {
-        return h.view('404').code(404).takeover()
+        return h.view('404').code(HTTP_STATUS_NOT_FOUND).takeover()
       },
     },
   },
@@ -24,7 +28,7 @@ const routes: ServerRoute[] = [{
     const query = request.query as Record<string, string>
     const search = query.search || ''
     const position = query.position || ''
-    const players = await get(`/league/players?search=${search}&position=${position}`, request)
+    const players = await get(buildUrl('/league/players', { search, position }), request)
     return h.view('league/players', { players, positions, currentPosition: position, currentSearch: search })
   },
 }, {
@@ -36,7 +40,7 @@ const routes: ServerRoute[] = [{
         playerId: Joi.number().integer().required(),
       },
       failAction: async (_request, h, _error) => {
-        return h.view('404').code(404).takeover()
+        return h.view('404').code(HTTP_STATUS_NOT_FOUND).takeover()
       },
     },
   },
@@ -70,7 +74,7 @@ const routes: ServerRoute[] = [{
       },
       failAction: async (request, h, error) => {
         const teams = await get('/league/teams', request)
-        return h.view('league/create-player', { teams, positions, error, player: request.payload }).code(400).takeover()
+        return h.view('league/create-player', { teams, positions, error, player: request.payload }).code(HTTP_STATUS_BAD_REQUEST).takeover()
       },
     },
     handler: async (request, h) => {
@@ -88,7 +92,7 @@ const routes: ServerRoute[] = [{
         playerId: Joi.number().integer().required(),
       },
       failAction: async (_request, h, _error) => {
-        return h.view('404').code(404).takeover()
+        return h.view('404').code(HTTP_STATUS_NOT_FOUND).takeover()
       },
     },
   },
@@ -112,7 +116,7 @@ const routes: ServerRoute[] = [{
       },
       failAction: async (request, h, error) => {
         const teams = await get('/league/teams', request)
-        return h.view('league/edit-player', { player: request.payload, teams, positions, error }).code(400).takeover()
+        return h.view('league/edit-player', { player: request.payload, teams, positions, error }).code(HTTP_STATUS_BAD_REQUEST).takeover()
       },
     },
     handler: async (request, h) => {
@@ -130,7 +134,7 @@ const routes: ServerRoute[] = [{
         playerId: Joi.number().integer().required(),
       },
       failAction: async (_request, h, _error) => {
-        return h.view('404').code(404).takeover()
+        return h.view('404').code(HTTP_STATUS_NOT_FOUND).takeover()
       },
     },
   },
@@ -149,7 +153,7 @@ const routes: ServerRoute[] = [{
       },
       failAction: async (request, h, error) => {
         const player = await get(`/league/player/?playerId=${(request.query as Record<string, unknown>).playerId}`, request)
-        return h.view('league/delete-player', { player, error }).code(400).takeover()
+        return h.view('league/delete-player', { player, error }).code(HTTP_STATUS_BAD_REQUEST).takeover()
       },
     },
     handler: async (request, h) => {
