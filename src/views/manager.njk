@@ -58,6 +58,76 @@
       </div>
     </div>
   </div>
+
+  {% if managerStats %}
+  <div class="row" style="padding-bottom: 20px;">
+    <div class="col-lg-12">
+      <div class="card border-dark">
+        <div class="card-header bg-dark text-light">
+          Season Statistics
+        </div>
+        <div class="card-body">
+          <div class="row">
+            <div class="col-lg-6">
+              <h6>Current Form</h6>
+              <div style="padding-bottom: 15px;">
+                {% for result in managerStats.form %}
+                  {% if result === 'W' %}
+                    <span class="badge badge-success">W</span>
+                  {% elif result === 'D' %}
+                    <span class="badge badge-warning">D</span>
+                  {% elif result === 'L' %}
+                    <span class="badge badge-danger">L</span>
+                  {% else %}
+                    <span class="badge badge-secondary">{{ result }}</span>
+                  {% endif %}
+                {% endfor %}
+              </div>
+
+              <h6>Current Streak</h6>
+              <p>
+                {% if managerStats.currentStreak.type === 'none' %}
+                  No current streak
+                {% else %}
+                  {{ managerStats.currentStreak.count }}
+                  {% if managerStats.currentStreak.type === 'W' %}win{% elif managerStats.currentStreak.type === 'D' %}draw{% else %}loss{% endif %}{% if managerStats.currentStreak.count > 1 %}{% if managerStats.currentStreak.type === 'L' %}es{% else %}s{% endif %}{% endif %}
+                {% endif %}
+              </p>
+            </div>
+
+            <div class="col-lg-6">
+              <h6>Season Stats</h6>
+              <table class="table table-sm">
+                <tbody>
+                  <tr>
+                    <td class="font-weight-bold">Total Goals</td>
+                    <td>{{ managerStats.totalGoals }}</td>
+                  </tr>
+                  <tr>
+                    <td class="font-weight-bold">Total Conceded</td>
+                    <td>{{ managerStats.totalConceded }}</td>
+                  </tr>
+                  {% if managerStats.bestWeek %}
+                  <tr>
+                    <td class="font-weight-bold">Best Week</td>
+                    <td>GW{{ managerStats.bestWeek.gameweekId }} ({{ managerStats.bestWeek.goals }}-{{ managerStats.bestWeek.conceded }})</td>
+                  </tr>
+                  {% endif %}
+                  {% if managerStats.worstWeek %}
+                  <tr>
+                    <td class="font-weight-bold">Worst Week</td>
+                    <td>GW{{ managerStats.worstWeek.gameweekId }} ({{ managerStats.worstWeek.goals }}-{{ managerStats.worstWeek.conceded }})</td>
+                  </tr>
+                  {% endif %}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  {% endif %}
 {% endblock %}
 
 {% block bodyEnd %}

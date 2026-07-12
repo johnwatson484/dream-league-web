@@ -1,0 +1,81 @@
+{% extends '_layout.njk' %}
+
+{% block content %}
+<h2>Live Match Day</h2>
+
+{% if not gameweek %}
+<div class="alert alert-info">No active gameweek.</div>
+{% else %}
+
+<p class="text-muted">Week {{ gameweek.gameweekId }} ({{ gameweek.shortDate }})</p>
+
+<div class="row mb-4">
+  <div class="col-12">
+    <div class="card border-dark">
+      <div class="card-header bg-dark text-light">
+        Manager Scores (Live)
+      </div>
+      <div class="card-body">
+        <div class="table-responsive">
+          <table class="table table-striped table-sm" id="live-scores-table">
+            <thead>
+              <tr>
+                <th>Manager</th>
+                <th>Goals</th>
+                <th>Conceded</th>
+                <th>Margin</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for manager in managers %}
+              <tr data-manager-id="{{ manager.managerId }}">
+                <td>{{ manager.name }}</td>
+                <td class="goals-for">0</td>
+                <td class="goals-against">0</td>
+                <td class="margin">0</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-8">
+    <div class="card border-dark">
+      <div class="card-header bg-dark text-light">
+        <span id="connection-status" class="badge badge-secondary mr-2">Connecting...</span>
+        Goal Feed
+      </div>
+      <div class="card-body">
+        <div id="goal-feed">
+          {% if not liveSummary %}
+          <p class="text-muted">No live data available. Goals will appear here during matches.</p>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  var videprinterStreamUrl = "{{ videprinterStreamUrl }}";
+  var managerScores = {};
+  {% for manager in managers %}
+    managerScores[{{ manager.managerId }}] = { goals: 0, conceded: 0 };
+  {% endfor %}
+
+  {% if liveSummary and liveSummary.goals %}
+    {% for goal in liveSummary.goals %}
+      {% if goal.playerId %}
+        // Find which manager owns this player from the teamsheet
+      {% endif %}
+    {% endfor %}
+  {% endif %}
+</script>
+<script src="{{ asset('javascripts/live.js') }}"></script>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,102 @@
+{% extends '_layout.njk' %}
+
+{% block content %}
+<h2>Reported goals</h2>
+
+{% set pending = [] %}
+{% set reviewed = [] %}
+{% for req in goalReports %}
+  {% if req.status === 'pending' %}
+    {% set pending = (pending.push(req), pending) %}
+  {% else %}
+    {% set reviewed = (reviewed.push(req), reviewed) %}
+  {% endif %}
+{% endfor %}
+
+{% if pending.length === 0 %}
+<div class="alert alert-info">
+  No pending goal reports.
+</div>
+{% else %}
+<h3>Pending</h3>
+<div class="table-responsive">
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>Manager</th>
+        <th>Player</th>
+        <th>Goals</th>
+        <th>Cup goals</th>
+        <th>Gameweek</th>
+        <th>Reason</th>
+        <th>Submitted</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for req in pending %}
+      <tr>
+        <td>{{ req.manager.name }}</td>
+        <td>{{ req.player.firstName }} {{ req.player.lastName }}</td>
+        <td>{{ req.goals }}</td>
+        <td>{{ req.goalsCup }}</td>
+        <td>Week {{ req.gameweekId }}</td>
+        <td>{{ req.reason or '-' }}</td>
+        <td>{{ req.created | date }}</td>
+        <td>
+          <form method="POST" action="/goal-report/accept" style="display: inline;">
+            <input type="hidden" name="crumb" value="{{ crumb }}"/>
+            <input type="hidden" name="goalReportId" value="{{ req.goalReportId }}"/>
+            <button type="submit" class="btn btn-sm btn-success">Accept</button>
+          </form>
+          <form method="POST" action="/goal-report/reject" style="display: inline;">
+            <input type="hidden" name="crumb" value="{{ crumb }}"/>
+            <input type="hidden" name="goalReportId" value="{{ req.goalReportId }}"/>
+            <button type="submit" class="btn btn-sm btn-danger">Reject</button>
+          </form>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endif %}
+
+{% if reviewed.length > 0 %}
+<h3>History</h3>
+<div class="table-responsive">
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>Manager</th>
+        <th>Player</th>
+        <th>Goals</th>
+        <th>Cup goals</th>
+        <th>Gameweek</th>
+        <th>Status</th>
+        <th>Submitted</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for req in reviewed %}
+      <tr>
+        <td>{{ req.manager.name }}</td>
+        <td>{{ req.player.firstName }} {{ req.player.lastName }}</td>
+        <td>{{ req.goals }}</td>
+        <td>{{ req.goalsCup }}</td>
+        <td>Week {{ req.gameweekId }}</td>
+        <td>
+          {% if req.status === 'approved' %}
+            <span class="badge badge-success">Approved</span>
+          {% else %}
+            <span class="badge badge-danger">Rejected</span>
+          {% endif %}
+        </td>
+        <td>{{ req.created | date }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endif %}
+{% endblock %}

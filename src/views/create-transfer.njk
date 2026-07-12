@@ -1,0 +1,65 @@
+{% extends '_layout.njk' %}
+
+{% block content %}
+  <div class="col-md-6">
+    {% if error %}
+      <div class="alert alert-danger">
+        {{ error }}
+      </div>
+    {% endif %}
+    <h2>Add Transfer</h2>
+    <form method="POST" action="/transfer/create">
+      <input type="hidden" name="crumb" value="{{crumb}}"/>
+      <div class="form-group">
+        <label for="managerId">Manager</label>
+        <select class="form-control" id="managerId" name="managerId">
+          <option value="">Select manager</option>
+          {% for manager in managers %}
+            <option value="{{ manager.managerId }}" {% if transfer.managerId == manager.managerId %}selected{% endif %}>{{ manager.name }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="playerInId">Player In</label>
+        <select class="form-control" id="playerInId" name="playerInId">
+          <option value="">Select player</option>
+          {% for player in players %}
+            <option value="{{ player.playerId }}" {% if transfer.playerInId == player.playerId %}selected{% endif %}>{{ player.firstName }} {{ player.lastName }} ({{ player.team.name }})</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="playerOutId">Player Out (optional)</label>
+        <select class="form-control" id="playerOutId" name="playerOutId">
+          <option value="">None</option>
+          {% for player in players %}
+            <option value="{{ player.playerId }}" {% if transfer.playerOutId == player.playerId %}selected{% endif %}>{{ player.firstName }} {{ player.lastName }} ({{ player.team.name }})</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="meetingId">Meeting (optional)</label>
+        <select class="form-control" id="meetingId" name="meetingId">
+          <option value="">None (initial auction)</option>
+          {% for meeting in meetings %}
+            <option value="{{ meeting.meetingId }}" {% if transfer.meetingId == meeting.meetingId %}selected{% endif %}>{{ meeting.date | date }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="type">Type</label>
+        <select class="form-control" id="type" name="type">
+          <option value="sealed-bid" {% if transfer.type == 'sealed-bid' %}selected{% endif %}>Sealed Bid</option>
+          <option value="open-bid" {% if transfer.type == 'open-bid' %}selected{% endif %}>Open Bid</option>
+          <option value="auction" {% if transfer.type == 'auction' %}selected{% endif %}>Auction</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="created">Date</label>
+        <input type="date" class="form-control" id="created" name="created" value="{{ transfer.created }}">
+      </div>
+      <button type="submit" class="btn btn-primary">Submit</button>
+      <a href="/transfers">Cancel</a>
+    </form>
+  </div>
+{% endblock %}
