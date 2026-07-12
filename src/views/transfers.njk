@@ -20,7 +20,7 @@
       </tr>
       {% for transfer in transfers %}
         <tr>
-          <td>{{ transfer.created }}</td>
+          <td>{{ transfer.created | date }}</td>
           <td>{{ transfer.manager.name }}</td>
           <td><a href="/league/player/detail?playerId={{ transfer.playerIn.playerId }}">{{ transfer.playerIn.firstName }} {{ transfer.playerIn.lastName }}</a></td>
           <td>
@@ -33,7 +33,7 @@
           <td>{{ transfer.type }}</td>
           <td>
             {% if transfer.meeting %}
-              {{ transfer.meeting.date }}
+              {{ transfer.meeting.date | date }}
             {% else %}
               -
             {% endif %}

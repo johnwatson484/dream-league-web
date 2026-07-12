@@ -42,7 +42,7 @@
         <select class="form-control" id="meetingId" name="meetingId">
           <option value="">None (initial auction)</option>
           {% for meeting in meetings %}
-            <option value="{{ meeting.meetingId }}" {% if transfer.meetingId == meeting.meetingId %}selected{% endif %}>{{ meeting.date }}</option>
+            <option value="{{ meeting.meetingId }}" {% if transfer.meetingId == meeting.meetingId %}selected{% endif %}>{{ meeting.date | date }}</option>
           {% endfor %}
         </select>
       </div>

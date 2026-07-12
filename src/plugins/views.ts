@@ -59,10 +59,21 @@ export default {
           return (ctx: Record<string, unknown>) => template.render(ctx)
         },
         prepare: (options: { compileOptions: { environment?: unknown }; relativeTo?: string; path: string }, next: () => void) => {
-          options.compileOptions.environment = nunjucks.configure(path.join(options.relativeTo || process.cwd(), options.path), {
+          const env = nunjucks.configure(path.join(options.relativeTo || process.cwd(), options.path), {
             autoescape: true,
             watch: false,
           })
+          env.addFilter('date', (value: string | Date) => {
+            const d = new Date(value)
+            if (Number.isNaN(d.getTime())) { return String(value) }
+            const day = String(d.getDate()).padStart(2, '0')
+            const month = String(d.getMonth() + 1).padStart(2, '0')
+            const year = d.getFullYear()
+            const hours = String(d.getHours()).padStart(2, '0')
+            const minutes = String(d.getMinutes()).padStart(2, '0')
+            return `${day}/${month}/${year} ${hours}:${minutes}`
+          })
+          options.compileOptions.environment = env
           return next()
         },
       },
