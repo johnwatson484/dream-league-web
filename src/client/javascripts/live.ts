@@ -12,7 +12,6 @@ $(function () {
       if (scores) {
         $(this).find('.goals-for').text(scores.goals)
         $(this).find('.goals-against').text(scores.conceded)
-        $(this).find('.margin').text(scores.goals - scores.conceded)
       }
     })
   }
