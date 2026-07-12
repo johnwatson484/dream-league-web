@@ -1,5 +1,4 @@
 const acceptButton = document.querySelector('.js-cookies-button-accept')
-const questionBanner = document.querySelector('.js-question-banner')
 const cookieContainer = document.querySelector('.js-cookies-container')
 
 cookieContainer.style.display = 'block'
