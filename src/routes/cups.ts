@@ -67,8 +67,8 @@ const routes: ServerRoute[] = [{
       payload: {
         cupId: Joi.number().integer().required(),
         name: Joi.string(),
-        hasGroupStage: Joi.boolean().required(),
-        knockoutLegs: Joi.number().integer().required(),
+        hasGroupStage: Joi.boolean().default(false),
+        knockoutLegs: Joi.number().integer().empty('').default(1),
       },
       failAction: async (request, h, _error) => {
         return h.view('edit-cup', { cup: request.payload, error: _error }).code(HTTP_STATUS_BAD_REQUEST).takeover()
