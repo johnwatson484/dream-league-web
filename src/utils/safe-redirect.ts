@@ -7,7 +7,7 @@ export function safePath (url: string | undefined, fallback: string): string {
     return fallback
   }
 
-  if (/^\/\/|[:\\]/.test(url) || /[a-z][a-z\d+\-.]*:/i.test(url)) {
+  if (/^\/\//.test(url) || /[:\\]/.test(url) || /[a-z][\da-z]*:/i.test(url)) {
     return fallback
   }
 
