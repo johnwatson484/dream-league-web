@@ -5,7 +5,7 @@ const cookieContainer = document.querySelector('.js-cookies-container')
 cookieContainer.style.display = 'block'
 
 acceptButton.addEventListener('click', function (event) {
-  questionBanner.setAttribute('hidden', 'hidden')
+  cookieContainer.style.display = 'none'
   event.preventDefault()
   submitPreference(true)
   const gtmScript = document.createElement('script')
