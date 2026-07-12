@@ -23,6 +23,11 @@ import search from '../routes/search.ts'
 import apiWinners from '../routes/api/winners.ts'
 import apiMeetings from '../routes/api/meetings.ts'
 import apiManagers from '../routes/api/managers.ts'
+import goalReports from '../routes/goal-reports.ts'
+import transfers from '../routes/transfers.ts'
+import headToHead from '../routes/head-to-head.ts'
+import live from '../routes/live.ts'
+import seasonSetup from '../routes/season-setup.ts'
 import publicRoutes from '../routes/public.ts'
 
 const routes: ServerRoute[] = [
@@ -47,6 +52,11 @@ const routes: ServerRoute[] = [
   ...groups,
   ...history,
   ...search,
+  ...goalReports,
+  ...transfers,
+  ...headToHead,
+  ...live,
+  ...seasonSetup,
   ...apiWinners,
   ...apiMeetings,
   ...apiManagers,

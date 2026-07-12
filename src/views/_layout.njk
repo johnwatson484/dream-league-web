@@ -47,8 +47,13 @@
       </button>
       <div class="navbar-collapse collapse d-sm-inline-flex">
         <ul class="navbar-nav flex-grow-1">
-          <li class="nav-item">
-            <a class="nav-link text-light" href="https://videprinter.dreamleaguefantasyfootball.co.uk/">Videprinter</a>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle text-light" href="#" role="button"
+              data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Live</a>
+            <div class="dropdown-menu">
+              <a class="dropdown-item" href="/live">Match day</a>
+              <a class="dropdown-item" href="https://videprinter.dreamleaguefantasyfootball.co.uk/">Videprinter</a>
+            </div>
           </li>
           {% if auth.isAdmin %}
             <li class="nav-item dropdown">
@@ -59,6 +64,9 @@
               <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                 <a class="dropdown-item" href="/results">View</a>
                 <a class="dropdown-item" href="/results/edit">Edit</a>
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item" href="/goal-report">Report goal</a>
+                <a class="dropdown-item" href="/goal-reports">Reported goals</a>
               </div>
             </li>
             <li class="nav-item dropdown">
@@ -93,14 +101,21 @@
                 <div class="dropdown-divider"></div>
                 <a class="dropdown-item" href="/goals">Goals</a>
                 <a class="dropdown-item" href="/conceded">Conceded</a>
+                <a class="dropdown-item" href="/transfers">Transfers</a>
                 <div class="dropdown-divider"></div>
                 <a class="dropdown-item" href="/league/refresh">Refresh</a>
+                <a class="dropdown-item" href="/league/season-setup">Season Setup</a>
               </div>
             </li>
           {% else %}
             <li class="nav-item">
               <a class="nav-link text-light" href="/results">Results</a>
             </li>
+            {% if auth.isAuthenticated %}
+            <li class="nav-item">
+              <a class="nav-link text-light" href="/goal-report">Report goal</a>
+            </li>
+            {% endif %}
             <li class="nav-item">
               <a class="nav-link text-light" href="/teamsheet">Teamsheet</a>
             </li>
@@ -116,6 +131,9 @@
               </div>
             </li>
           {% endif %}
+          <li class="nav-item">
+            <a class="nav-link text-light" href="/head-to-head">Head to Head</a>
+          </li>
           <li class="nav-item">
             <a class="nav-link text-light" href="/history">History</a>
           </li>

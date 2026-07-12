@@ -1,0 +1,89 @@
+{% extends '_layout.njk' %}
+
+{% block content %}
+<h2>Head to Head</h2>
+
+<form method="GET" action="/head-to-head" class="form-inline mb-4">
+  <div class="form-group mr-2">
+    <select class="form-control" name="manager1" required>
+      <option value="">Select manager</option>
+      {% for m in managers %}
+        <option value="{{ m.managerId }}" {% if m.managerId == manager1 %}selected{% endif %}>{{ m.name }}</option>
+      {% endfor %}
+    </select>
+  </div>
+  <span class="mr-2 font-weight-bold">vs</span>
+  <div class="form-group mr-2">
+    <select class="form-control" name="manager2" required>
+      <option value="">Select manager</option>
+      {% for m in managers %}
+        <option value="{{ m.managerId }}" {% if m.managerId == manager2 %}selected{% endif %}>{{ m.name }}</option>
+      {% endfor %}
+    </select>
+  </div>
+  <button type="submit" class="btn btn-primary">Compare</button>
+</form>
+
+{% if headToHead %}
+<div class="row mb-4">
+  <div class="col-md-8">
+    <div class="card border-dark">
+      <div class="card-header bg-dark text-light">
+        {{ headToHead.manager1.name }} vs {{ headToHead.manager2.name }}
+      </div>
+      <div class="card-body">
+        <div class="row text-center">
+          <div class="col-4">
+            <h3>{{ headToHead.record.manager1Wins }}</h3>
+            <p>{{ headToHead.manager1.alias }} wins</p>
+          </div>
+          <div class="col-4">
+            <h3>{{ headToHead.record.draws }}</h3>
+            <p>Draws</p>
+          </div>
+          <div class="col-4">
+            <h3>{{ headToHead.record.manager2Wins }}</h3>
+            <p>{{ headToHead.manager2.alias }} wins</p>
+          </div>
+        </div>
+        <p class="text-center text-muted mt-2">Based on {{ headToHead.record.weeks.length }} gameweeks</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% if headToHead.record.weeks.length > 0 %}
+<h3>Week by week</h3>
+<div class="table-responsive">
+  <table class="table table-striped table-sm">
+    <thead>
+      <tr>
+        <th>Week</th>
+        <th>{{ headToHead.manager1.alias }}</th>
+        <th>{{ headToHead.manager2.alias }}</th>
+        <th>Winner</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for week in headToHead.record.weeks | reverse %}
+      <tr>
+        <td>{{ week.gameweekId }}</td>
+        <td>{{ week.manager1.goals }}-{{ week.manager1.conceded }}</td>
+        <td>{{ week.manager2.goals }}-{{ week.manager2.conceded }}</td>
+        <td>
+          {% if week.winner === 'manager1' %}
+            <span class="badge badge-success">{{ headToHead.manager1.alias }}</span>
+          {% elif week.winner === 'manager2' %}
+            <span class="badge badge-success">{{ headToHead.manager2.alias }}</span>
+          {% else %}
+            <span class="badge badge-secondary">Draw</span>
+          {% endif %}
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endif %}
+{% endif %}
+{% endblock %}

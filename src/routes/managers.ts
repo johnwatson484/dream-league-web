@@ -24,8 +24,12 @@ const routes: ServerRoute[] = [{
     },
   },
   handler: async (request, h) => {
-    const manager = await get(`/manager/detail/?managerId=${(request.query as Record<string, unknown>).managerId}`, request)
-    return h.view('manager', manager as Record<string, unknown>)
+    const managerId = (request.query as Record<string, unknown>).managerId
+    const [manager, managerStats] = await Promise.all([
+      get(`/manager/detail/?managerId=${managerId}`, request),
+      get(`/statistics/manager-stats?managerId=${managerId}`, request),
+    ])
+    return h.view('manager', { ...(manager as Record<string, unknown>), managerStats })
   },
 }, {
   method: 'GET',

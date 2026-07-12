@@ -1,0 +1,54 @@
+{% extends '_layout.njk' %}
+
+{% block content %}
+  <h2>Transfers</h2>
+
+  {% if auth.isAdmin %}
+    <a href="/transfer/create" class="btn btn-primary btn-sm mb-3">Add Transfer</a>
+  {% endif %}
+
+  {% if transfers.length %}
+    <table class="table table-hover table-sm small">
+      <tr>
+        <th>Date</th>
+        <th>Manager</th>
+        <th>In</th>
+        <th>Out</th>
+        <th>Type</th>
+        <th>Meeting</th>
+        <th></th>
+      </tr>
+      {% for transfer in transfers %}
+        <tr>
+          <td>{{ transfer.created | date }}</td>
+          <td>{{ transfer.manager.name }}</td>
+          <td><a href="/league/player/detail?playerId={{ transfer.playerIn.playerId }}">{{ transfer.playerIn.firstName }} {{ transfer.playerIn.lastName }}</a></td>
+          <td>
+            {% if transfer.playerOut %}
+              <a href="/league/player/detail?playerId={{ transfer.playerOut.playerId }}">{{ transfer.playerOut.firstName }} {{ transfer.playerOut.lastName }}</a>
+            {% else %}
+              -
+            {% endif %}
+          </td>
+          <td>{{ transfer.type }}</td>
+          <td>
+            {% if transfer.meeting %}
+              {{ transfer.meeting.date | date }}
+            {% else %}
+              -
+            {% endif %}
+          </td>
+          <td>
+            {% if auth.isAdmin %}
+              <a href="/transfer/delete?transferId={{ transfer.transferId }}">Delete</a>
+            {% endif %}
+          </td>
+        </tr>
+      {% endfor %}
+    </table>
+  {% else %}
+    <div class="alert alert-info">
+      No transfers recorded.
+    </div>
+  {% endif %}
+{% endblock %}

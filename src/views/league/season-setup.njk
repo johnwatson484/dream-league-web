@@ -1,0 +1,155 @@
+{% extends '_layout.njk' %}
+
+{% block content %}
+  <h2>Season Setup</h2>
+  <p class="text-muted">Manage end-of-season team promotion and relegation in bulk.</p>
+
+  {% if error %}
+    <div class="alert alert-danger">{{ error }}</div>
+  {% endif %}
+
+  <form method="POST" action="/league/season-setup">
+    <input type="hidden" name="crumb" value="{{crumb}}"/>
+
+    <div class="card mb-4">
+      <div class="card-header bg-success text-white">
+        <strong>New to Championship</strong> (relegated from Premier League)
+      </div>
+      <div class="card-body">
+        <p class="text-muted">Enter the 3 teams relegated from the Premier League that will join the Championship.</p>
+        {% for i in [1, 2, 3] %}
+          <div class="form-row mb-2">
+            <div class="col">
+              <input type="text" class="form-control" name="newTeamName{{ i }}" placeholder="Team name {{ i }}" required>
+            </div>
+            <div class="col">
+              <input type="text" class="form-control" name="newTeamAlias{{ i }}" placeholder="Alias {{ i }}" required>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+
+    <div class="card mb-4">
+      <div class="card-header bg-danger text-white">
+        <strong>Promoted from Championship</strong> (to Premier League - leave the league)
+      </div>
+      <div class="card-body">
+        <p class="text-muted">Select 3 Championship teams promoted to the Premier League. These teams will be removed.</p>
+        {% for i in [1, 2, 3] %}
+          <div class="form-group">
+            <label for="promoteFromChampionship{{ i }}">Team {{ i }}</label>
+            <select class="form-control" id="promoteFromChampionship{{ i }}" name="promoteFromChampionship{{ i }}" required>
+              <option value="">-- Select team --</option>
+              {% for team in championship %}
+                <option value="{{ team.teamId }}">{{ team.name }}</option>
+              {% endfor %}
+            </select>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+
+    <div class="card mb-4">
+      <div class="card-header bg-warning">
+        <strong>Relegated from Championship</strong> (to League 1)
+      </div>
+      <div class="card-body">
+        <p class="text-muted">Select 3 Championship teams to relegate to League 1.</p>
+        {% for i in [1, 2, 3] %}
+          <div class="form-group">
+            <label for="relegateFromChampionship{{ i }}">Team {{ i }}</label>
+            <select class="form-control" id="relegateFromChampionship{{ i }}" name="relegateFromChampionship{{ i }}" required>
+              <option value="">-- Select team --</option>
+              {% for team in championship %}
+                <option value="{{ team.teamId }}">{{ team.name }}</option>
+              {% endfor %}
+            </select>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+
+    <div class="card mb-4">
+      <div class="card-header bg-success text-white">
+        <strong>Promoted from League 1</strong> (to Championship)
+      </div>
+      <div class="card-body">
+        <p class="text-muted">Select 3 League 1 teams to promote to Championship.</p>
+        {% for i in [1, 2, 3] %}
+          <div class="form-group">
+            <label for="promoteFromLeague1_{{ i }}">Team {{ i }}</label>
+            <select class="form-control" id="promoteFromLeague1_{{ i }}" name="promoteFromLeague1_{{ i }}" required>
+              <option value="">-- Select team --</option>
+              {% for team in league1 %}
+                <option value="{{ team.teamId }}">{{ team.name }}</option>
+              {% endfor %}
+            </select>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+
+    <div class="card mb-4">
+      <div class="card-header bg-warning">
+        <strong>Relegated from League 1</strong> (to League 2)
+      </div>
+      <div class="card-body">
+        <p class="text-muted">Select 4 League 1 teams to relegate to League 2.</p>
+        {% for i in [1, 2, 3, 4] %}
+          <div class="form-group">
+            <label for="relegateFromLeague1_{{ i }}">Team {{ i }}</label>
+            <select class="form-control" id="relegateFromLeague1_{{ i }}" name="relegateFromLeague1_{{ i }}" required>
+              <option value="">-- Select team --</option>
+              {% for team in league1 %}
+                <option value="{{ team.teamId }}">{{ team.name }}</option>
+              {% endfor %}
+            </select>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+
+    <div class="card mb-4">
+      <div class="card-header bg-success text-white">
+        <strong>Promoted from League 2</strong> (to League 1)
+      </div>
+      <div class="card-body">
+        <p class="text-muted">Select 4 League 2 teams to promote to League 1.</p>
+        {% for i in [1, 2, 3, 4] %}
+          <div class="form-group">
+            <label for="promoteFromLeague2_{{ i }}">Team {{ i }}</label>
+            <select class="form-control" id="promoteFromLeague2_{{ i }}" name="promoteFromLeague2_{{ i }}" required>
+              <option value="">-- Select team --</option>
+              {% for team in league2 %}
+                <option value="{{ team.teamId }}">{{ team.name }}</option>
+              {% endfor %}
+            </select>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+
+    <div class="card mb-4">
+      <div class="card-header bg-danger text-white">
+        <strong>Relegated from League 2</strong> (to National League - leave the league)
+      </div>
+      <div class="card-body">
+        <p class="text-muted">Select 2 League 2 teams relegated to the National League. These teams will be removed.</p>
+        {% for i in [1, 2] %}
+          <div class="form-group">
+            <label for="relegateFromLeague2_{{ i }}">Team {{ i }}</label>
+            <select class="form-control" id="relegateFromLeague2_{{ i }}" name="relegateFromLeague2_{{ i }}" required>
+              <option value="">-- Select team --</option>
+              {% for team in league2 %}
+                <option value="{{ team.teamId }}">{{ team.name }}</option>
+              {% endfor %}
+            </select>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+
+    <button type="submit" class="btn btn-primary btn-lg mb-4">Apply Season Setup</button>
+  </form>
+{% endblock %}
