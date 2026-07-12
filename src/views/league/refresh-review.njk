@@ -1,0 +1,48 @@
+{% extends '_layout.njk' %}
+
+{% block content %}
+  <h2>Player Refresh - Resolve Unmatched Teams</h2>
+
+  <div class="alert alert-info">
+    <strong>{{ mappedPlayers.length }}</strong> players matched automatically.
+    <strong>{{ unmappedTeams.length }}</strong> team name(s) need manual resolution.
+  </div>
+
+  <div id="review-status" class="alert alert-danger" style="display: none;">
+    <span id="status-message"></span>
+  </div>
+
+  <table class="table table-hover">
+    <thead>
+      <tr>
+        <th>Unmatched Team Name</th>
+        <th>Players</th>
+        <th>Assign To Team</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for item in unmappedTeams %}
+        <tr>
+          <td>{{ item.team }}</td>
+          <td>{{ item.players.length }}</td>
+          <td>
+            <select class="form-control team-select" data-index="{{ loop.index0 }}">
+              <option value="">-- Select team --</option>
+              {% for team in teams %}
+                <option value="{{ team.teamId }}">{{ team.name }}</option>
+              {% endfor %}
+            </select>
+          </td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  <button id="confirm-btn" class="btn btn-primary" disabled>Confirm and Save All Players</button>
+
+  <textarea id="preview-data" style="display:none;">{{ previewJson }}</textarea>
+{% endblock %}
+
+{% block bodyEnd %}
+  <script src="{{ asset('javascripts/player-refresh-review.js') }}"></script>
+{% endblock %}

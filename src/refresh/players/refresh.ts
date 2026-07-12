@@ -16,5 +16,5 @@ export async function refreshPlayers (path: string, token?: Request): Promise<un
   const players = XLSX.utils.sheet_to_json(worksheet) as Parameters<typeof mapPlayer>[0][]
   await unlink(path)
   const mappedPlayers = players.map(mapPlayer)
-  return post('/league/players/refresh', { players: mappedPlayers }, token)
+  return post('/league/players/refresh/preview', { players: mappedPlayers }, token)
 }

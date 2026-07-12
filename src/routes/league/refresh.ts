@@ -1,6 +1,8 @@
 import type { ServerRoute } from '@hapi/hapi'
 import Joi from 'joi'
 import { refreshPlayers } from '../../refresh/players/refresh.ts'
+import { get } from '../../api/get.ts'
+import { post } from '../../api/post.ts'
 
 const routes: ServerRoute[] = [{
   method: 'GET',
@@ -42,19 +44,48 @@ const routes: ServerRoute[] = [{
     },
     handler: async (request, h) => {
       const payload = request.payload as { playerFile: { path: string } }
-      const response = await refreshPlayers(payload.playerFile.path, request) as { success: boolean; unmappedPlayers?: unknown[] }
-      if (response.success) {
+      const response = await refreshPlayers(payload.playerFile.path, request) as { mappedPlayers: any[]; unmappedTeams: any[] }
+
+      if (!response.mappedPlayers && !response.unmappedTeams) {
+        return h.view('league/refresh', { message: 'Invalid players list' })
+      }
+
+      if (!response.unmappedTeams.length) {
+        await post('/league/players/refresh/confirm', { players: response.mappedPlayers }, request)
         return h.redirect('/league/players')
       }
 
-      if (response.unmappedPlayers) {
-        return h.view('league/refresh', {
-          message: 'Some players could not be mapped',
-          unmappedPlayers: response.unmappedPlayers,
-        })
-      }
-
-      return h.view('league/refresh', { message: 'Invalid players list' })
+      const teams = await get('/league/teams', request) as any[]
+      return h.view('league/refresh-review', {
+        mappedPlayers: response.mappedPlayers,
+        unmappedTeams: response.unmappedTeams,
+        teams,
+        previewJson: JSON.stringify(response),
+      })
+    },
+  },
+}, {
+  method: 'POST',
+  path: '/league/refresh/players/confirm',
+  options: {
+    auth: { strategy: 'session', scope: ['admin'] },
+    plugins: { crumb: false },
+    validate: {
+      payload: Joi.object({
+        players: Joi.array().items(Joi.object({
+          firstName: Joi.string().allow('', null),
+          lastName: Joi.string().allow('', null),
+          position: Joi.string().required(),
+          teamId: Joi.number().integer().required(),
+        })),
+      }),
+      failAction: async (_request, h, _error) => {
+        return h.response({ success: false, message: 'Invalid payload' }).code(400).takeover()
+      },
+    },
+    handler: async (request, h) => {
+      const result = await post('/league/players/refresh/confirm', request.payload, request) as object
+      return h.response(result)
     },
   },
 }]
