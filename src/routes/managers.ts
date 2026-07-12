@@ -1,7 +1,10 @@
+import { constants as httpConstants } from 'node:http2'
 import type { ServerRoute } from '@hapi/hapi'
 import Joi from 'joi'
 import { get } from '../api/get.ts'
 import { post } from '../api/post.ts'
+
+const { HTTP_STATUS_BAD_REQUEST, HTTP_STATUS_NOT_FOUND } = httpConstants
 
 const routes: ServerRoute[] = [{
   method: 'GET',
@@ -19,7 +22,7 @@ const routes: ServerRoute[] = [{
         managerId: Joi.number().integer().required(),
       },
       failAction: async (_request, h, _error) => {
-        return h.view('404').code(400).takeover()
+        return h.view('404').code(HTTP_STATUS_BAD_REQUEST).takeover()
       },
     },
   },
@@ -50,7 +53,7 @@ const routes: ServerRoute[] = [{
         emails: Joi.array().items(Joi.string().email().allow('')).single(),
       },
       failAction: async (request, h, error) => {
-        return h.view('create-manager', { error, manager: request.payload }).code(400).takeover()
+        return h.view('create-manager', { error, manager: request.payload }).code(HTTP_STATUS_BAD_REQUEST).takeover()
       },
     },
     handler: async (request, h) => {
@@ -68,7 +71,7 @@ const routes: ServerRoute[] = [{
         managerId: Joi.number().integer().required(),
       },
       failAction: async (_request, h, _error) => {
-        return h.view('404').code(400).takeover()
+        return h.view('404').code(HTTP_STATUS_BAD_REQUEST).takeover()
       },
     },
   },
@@ -89,7 +92,7 @@ const routes: ServerRoute[] = [{
         emails: Joi.array().items(Joi.string().email().allow('')).single(),
       }),
       failAction: async (request, h, error) => {
-        return h.view('league/edit-manager', { manager: request.payload, error }).code(400).takeover()
+        return h.view('league/edit-manager', { manager: request.payload, error }).code(HTTP_STATUS_BAD_REQUEST).takeover()
       },
     },
     handler: async (request, h) => {
@@ -107,7 +110,7 @@ const routes: ServerRoute[] = [{
         managerId: Joi.number().integer().required(),
       },
       failAction: async (_request, h, _error) => {
-        return h.view('404').code(404).takeover()
+        return h.view('404').code(HTTP_STATUS_NOT_FOUND).takeover()
       },
     },
   },
@@ -126,7 +129,7 @@ const routes: ServerRoute[] = [{
       },
       failAction: async (request, h, error) => {
         const manager = await get(`/manager/?managerId=${(request.query as Record<string, unknown>).managerId}`, request)
-        return h.view('delete-manager', { manager, error }).code(400).takeover()
+        return h.view('delete-manager', { manager, error }).code(HTTP_STATUS_BAD_REQUEST).takeover()
       },
     },
     handler: async (request, h) => {

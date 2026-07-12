@@ -1,7 +1,10 @@
+import { constants as httpConstants } from 'node:http2'
 import type { ServerRoute } from '@hapi/hapi'
 import Joi from 'joi'
 import { get } from '../api/get.ts'
 import { post } from '../api/post.ts'
+
+const { HTTP_STATUS_BAD_REQUEST, HTTP_STATUS_NOT_FOUND } = httpConstants
 
 const routes: ServerRoute[] = [{
   method: 'GET',
@@ -38,7 +41,7 @@ const routes: ServerRoute[] = [{
         const managers = await get('/managers', request)
         const players = await get('/league/players', request)
         const meetings = await get('/meetings', request)
-        return h.view('create-transfer', { managers, players, meetings, error, transfer: request.payload }).code(400).takeover()
+        return h.view('create-transfer', { managers, players, meetings, error, transfer: request.payload }).code(HTTP_STATUS_BAD_REQUEST).takeover()
       },
     },
     handler: async (request, h) => {
@@ -62,7 +65,7 @@ const routes: ServerRoute[] = [{
         transferId: Joi.number().integer().required(),
       },
       failAction: async (_request, h, _error) => {
-        return h.view('404').code(404).takeover()
+        return h.view('404').code(HTTP_STATUS_NOT_FOUND).takeover()
       },
     },
   },
@@ -83,7 +86,7 @@ const routes: ServerRoute[] = [{
       failAction: async (request, h, error) => {
         const transfers = await get('/transfers', request) as any[]
         const transfer = transfers.find((t: any) => t.transferId === Number((request.payload as Record<string, unknown>).transferId))
-        return h.view('delete-transfer', { transfer, error }).code(400).takeover()
+        return h.view('delete-transfer', { transfer, error }).code(HTTP_STATUS_BAD_REQUEST).takeover()
       },
     },
     handler: async (request, h) => {

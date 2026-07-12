@@ -1,8 +1,12 @@
+import { constants as httpConstants } from 'node:http2'
 import type { ServerRoute } from '@hapi/hapi'
 import Joi from 'joi'
 import boom from '@hapi/boom'
 import { get } from '../api/get.ts'
 import { post } from '../api/post.ts'
+import { safePath } from '../utils/safe-redirect.ts'
+
+const { HTTP_STATUS_BAD_REQUEST, HTTP_STATUS_NOT_FOUND } = httpConstants
 
 const routes: ServerRoute[] = [{
   method: 'GET',
@@ -38,7 +42,7 @@ const routes: ServerRoute[] = [{
         const gameweeks = await get('/gameweeks', request)
         const cups = await get('/cups', request)
         const managers = await get('/managers', request)
-        return h.view('create-fixture', { error, fixture: request.payload, gameweeks, cups, managers }).code(400).takeover()
+        return h.view('create-fixture', { error, fixture: request.payload, gameweeks, cups, managers }).code(HTTP_STATUS_BAD_REQUEST).takeover()
       },
     },
     handler: async (request, h) => {
@@ -57,7 +61,7 @@ const routes: ServerRoute[] = [{
         returnTo: Joi.string().optional(),
       }),
       failAction: async (_request, h, _error) => {
-        return h.view('404').code(404).takeover()
+        return h.view('404').code(HTTP_STATUS_NOT_FOUND).takeover()
       },
     },
   },
@@ -88,12 +92,12 @@ const routes: ServerRoute[] = [{
         const gameweeks = await get('/gameweeks', request)
         const cups = await get('/cups', request)
         const managers = await get('/managers', request)
-        return h.view('edit-fixture', { fixture: request.payload, error, gameweeks, cups, managers }).code(400).takeover()
+        return h.view('edit-fixture', { fixture: request.payload, error, gameweeks, cups, managers }).code(HTTP_STATUS_BAD_REQUEST).takeover()
       },
     },
     handler: async (request, h) => {
       const payload = request.payload as Record<string, unknown>
-      const returnTo = payload.returnTo as string || '/fixtures'
+      const returnTo = safePath(payload.returnTo as string, '/fixtures')
       const { returnTo: _, ...fixturePayload } = payload
       await post('/fixture/edit', fixturePayload, request)
       return h.redirect(returnTo)
@@ -110,7 +114,7 @@ const routes: ServerRoute[] = [{
         returnTo: Joi.string().optional(),
       }),
       failAction: async (_request, h, _error) => {
-        return h.view('404').code(400).takeover()
+        return h.view('404').code(HTTP_STATUS_BAD_REQUEST).takeover()
       },
     },
   },
@@ -131,12 +135,12 @@ const routes: ServerRoute[] = [{
       }),
       failAction: async (request, h, error) => {
         const fixture = await get(`/fixture/?fixtureId=${(request.query as Record<string, unknown>).fixtureId}`, request)
-        return h.view('delete-fixture', { fixture, error }).code(400).takeover()
+        return h.view('delete-fixture', { fixture, error }).code(HTTP_STATUS_BAD_REQUEST).takeover()
       },
     },
     handler: async (request, h) => {
       const payload = request.payload as Record<string, unknown>
-      const returnTo = payload.returnTo as string || '/fixtures'
+      const returnTo = safePath(payload.returnTo as string, '/fixtures')
       const { returnTo: _, ...fixturePayload } = payload
       await post('/fixture/delete', fixturePayload, request)
       return h.redirect(returnTo)
@@ -170,7 +174,7 @@ const routes: ServerRoute[] = [{
         const groupCups = cups.filter((c: any) => c.hasGroupStage)
         const groups = await get('/groups', request)
         const gameweeks = await get('/gameweeks', request)
-        return h.view('fixtures-generate', { cups: groupCups, groups, gameweeks, error }).code(400).takeover()
+        return h.view('fixtures-generate', { cups: groupCups, groups, gameweeks, error }).code(HTTP_STATUS_BAD_REQUEST).takeover()
       },
     },
     handler: async (request, h) => {

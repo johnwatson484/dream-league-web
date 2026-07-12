@@ -1,6 +1,9 @@
+import { constants as httpConstants } from 'node:http2'
 import type { ServerRoute } from '@hapi/hapi'
 import Joi from 'joi'
 import { post } from '../../api/post.ts'
+
+const { HTTP_STATUS_INTERNAL_SERVER_ERROR } = httpConstants
 
 const routes: ServerRoute[] = [{
   method: 'GET',
@@ -41,7 +44,10 @@ const routes: ServerRoute[] = [{
         const { userId, password, token } = payload
         await post('/reset-password', { userId, password, token })
         return h.redirect('/login')
-      } catch {
+      } catch (err: any) {
+        if (!err?.data?.res?.statusCode || err.data.res.statusCode >= HTTP_STATUS_INTERNAL_SERVER_ERROR) {
+          request.log(['error', 'auth'], { msg: 'Password reset request failed unexpectedly', err: err?.message })
+        }
         const payload = request.payload as { userId: number; token: string }
         return h.view('identity/reset-password', {
           message: 'Link expired',

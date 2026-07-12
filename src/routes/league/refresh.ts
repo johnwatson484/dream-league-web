@@ -1,8 +1,11 @@
+import { constants as httpConstants } from 'node:http2'
 import type { ServerRoute } from '@hapi/hapi'
 import Joi from 'joi'
 import { refreshPlayers } from '../../refresh/players/refresh.ts'
 import { get } from '../../api/get.ts'
 import { post } from '../../api/post.ts'
+
+const { HTTP_STATUS_BAD_REQUEST } = httpConstants
 
 const routes: ServerRoute[] = [{
   method: 'GET',
@@ -39,7 +42,7 @@ const routes: ServerRoute[] = [{
         }).unknown(),
       },
       failAction: async (_request, h, _error) => {
-        return h.view('league/refresh', { message: 'Only .xlsx files are permitted' }).code(400).takeover()
+        return h.view('league/refresh', { message: 'Only .xlsx files are permitted' }).code(HTTP_STATUS_BAD_REQUEST).takeover()
       },
     },
     handler: async (request, h) => {
@@ -80,7 +83,7 @@ const routes: ServerRoute[] = [{
         })),
       }),
       failAction: async (_request, h, _error) => {
-        return h.response({ success: false, message: 'Invalid payload' }).code(400).takeover()
+        return h.response({ success: false, message: 'Invalid payload' }).code(HTTP_STATUS_BAD_REQUEST).takeover()
       },
     },
     handler: async (request, h) => {

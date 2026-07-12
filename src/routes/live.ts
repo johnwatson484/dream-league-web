@@ -25,7 +25,8 @@ const routes: ServerRoute[] = [{
         const summaryUrl = `${videprinterHost}/videprinter/summary?from=${startDate.toISOString()}&to=${endDate.toISOString()}`
         const { payload } = await Wreck.get(summaryUrl, { json: true })
         liveSummary = payload
-      } catch {
+      } catch (err: any) {
+        request.log(['warn', 'videprinter'], { msg: 'Failed to fetch live summary', err: err?.message })
         liveSummary = null
       }
     }
@@ -33,7 +34,8 @@ const routes: ServerRoute[] = [{
     let managers: any[] = []
     try {
       managers = await get('/managers', request) as any[]
-    } catch {
+    } catch (err: any) {
+      request.log(['warn', 'api'], { msg: 'Failed to fetch managers for live view', err: err?.message })
       managers = []
     }
 

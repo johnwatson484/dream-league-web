@@ -30,6 +30,7 @@ const plugin: Plugin<ServerOptions> = {
           session.accessTokenExpiresAt = Date.now() + 15 * 60 * 1000
           await updateSession(sessionCookie.sessionId, session)
         } catch {
+          request.log(['warn', 'session'], 'Token refresh failed, destroying session')
           await destroySession(sessionCookie.sessionId)
           h.unstate(cookieName)
           request.app.session = null

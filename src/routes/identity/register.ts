@@ -1,8 +1,11 @@
+import { constants as httpConstants } from 'node:http2'
 import type { ServerRoute } from '@hapi/hapi'
 import Joi from 'joi'
 import config from '../../config.ts'
 import { post } from '../../api/post.ts'
 import { createSession } from '../../session/session-manager.ts'
+
+const { HTTP_STATUS_INTERNAL_SERVER_ERROR } = httpConstants
 
 const routes: ServerRoute[] = [{
   method: 'GET',
@@ -43,7 +46,10 @@ const routes: ServerRoute[] = [{
         })
         return h.redirect('/')
           .state(config.get('session.cookieName'), { sessionId })
-      } catch {
+      } catch (err: any) {
+        if (!err?.data?.res?.statusCode || err.data.res.statusCode >= HTTP_STATUS_INTERNAL_SERVER_ERROR) {
+          request.log(['error', 'auth'], { msg: 'Registration request failed unexpectedly', err: err?.message })
+        }
         return h.view('identity/register', {
           message: 'Invalid credentials',
         })
