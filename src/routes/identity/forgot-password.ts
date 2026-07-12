@@ -5,8 +5,21 @@ import { post } from '../../api/post.ts'
 const routes: ServerRoute[] = [{
   method: 'GET',
   path: '/forgot-password',
-  handler: (_request, h) => {
-    return h.view('identity/forgot-password')
+  options: {
+    validate: {
+      query: Joi.object({
+        sent: Joi.string().valid('true').optional(),
+      }),
+      failAction: async (_request, h, _error) => {
+        return h.view('identity/forgot-password').takeover()
+      },
+    },
+  },
+  handler: (request, h) => {
+    const sent = (request.query as Record<string, string>).sent === 'true'
+    return h.view('identity/forgot-password', {
+      message: sent ? 'If your email address is registered you will receive an email with reset instructions.' : undefined,
+    })
   },
 },
 {
@@ -24,8 +37,12 @@ const routes: ServerRoute[] = [{
       },
     },
     handler: async (request, h) => {
-      await post('/forgot-password', request.payload)
-      return h.redirect('/')
+      try {
+        await post('/forgot-password', request.payload)
+      } catch {
+        // swallow - don't reveal whether email exists
+      }
+      return h.redirect('/forgot-password?sent=true')
     },
   },
 }]

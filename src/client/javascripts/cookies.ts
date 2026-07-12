@@ -1,11 +1,10 @@
 const acceptButton = document.querySelector('.js-cookies-button-accept')
-const questionBanner = document.querySelector('.js-question-banner')
 const cookieContainer = document.querySelector('.js-cookies-container')
 
 cookieContainer.style.display = 'block'
 
 acceptButton.addEventListener('click', function (event) {
-  questionBanner.setAttribute('hidden', 'hidden')
+  cookieContainer.style.display = 'none'
   event.preventDefault()
   submitPreference(true)
   const gtmScript = document.createElement('script')
