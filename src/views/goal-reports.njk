@@ -42,7 +42,7 @@
         <td>{{ req.goalsCup }}</td>
         <td>Week {{ req.gameweekId }}</td>
         <td>{{ req.reason or '-' }}</td>
-        <td>{{ req.created | date }}</td>
+        <td>{{ req.created }}</td>
         <td>
           <form method="POST" action="/goal-report/accept" style="display: inline;">
             <input type="hidden" name="crumb" value="{{ crumb }}"/>
@@ -92,7 +92,7 @@
             <span class="badge badge-danger">Rejected</span>
           {% endif %}
         </td>
-        <td>{{ req.created | date }}</td>
+        <td>{{ req.created }}</td>
       </tr>
       {% endfor %}
     </tbody>
