@@ -3,9 +3,9 @@ import groupWinnersByGameweek from '../../src/routes/models/weekly-winners.ts'
 describe('weekly winners view model', () => {
   test('groups winners by gameweek', () => {
     const winners = [
-      { gameweek: 1, name: 'Alice', managerId: 1, goals: 7 },
-      { gameweek: 1, name: 'Bob', managerId: 2, goals: 7 },
-      { gameweek: 2, name: 'Charlie', managerId: 3, goals: 5 },
+      { gameweek: 1, name: 'Alice', managerId: 1, goals: 7, conceded: 2, margin: 5, result: 'W', scorers: [] },
+      { gameweek: 1, name: 'Bob', managerId: 2, goals: 7, conceded: 2, margin: 5, result: 'W', scorers: [] },
+      { gameweek: 2, name: 'Charlie', managerId: 3, goals: 5, conceded: 3, margin: 2, result: 'W', scorers: [] },
     ]
 
     const result = groupWinnersByGameweek(winners)
@@ -17,9 +17,9 @@ describe('weekly winners view model', () => {
 
   test('sorts gameweeks in descending order', () => {
     const winners = [
-      { gameweek: 1, name: 'Alice', managerId: 1, goals: 5 },
-      { gameweek: 3, name: 'Bob', managerId: 2, goals: 6 },
-      { gameweek: 2, name: 'Charlie', managerId: 3, goals: 4 },
+      { gameweek: 1, name: 'Alice', managerId: 1, goals: 5, conceded: 2, margin: 3, result: 'W', scorers: [] },
+      { gameweek: 3, name: 'Bob', managerId: 2, goals: 6, conceded: 1, margin: 5, result: 'W', scorers: [] },
+      { gameweek: 2, name: 'Charlie', managerId: 3, goals: 4, conceded: 2, margin: 2, result: 'W', scorers: [] },
     ]
 
     const result = groupWinnersByGameweek(winners)
@@ -31,8 +31,8 @@ describe('weekly winners view model', () => {
 
   test('handles multiple winners in same gameweek', () => {
     const winners = [
-      { gameweek: 5, name: 'Alice', managerId: 1, goals: 11 },
-      { gameweek: 5, name: 'Bob', managerId: 2, goals: 11 },
+      { gameweek: 5, name: 'Alice', managerId: 1, goals: 11, conceded: 3, margin: 8, result: 'W', scorers: [{ playerId: 1, name: 'Smith', goals: 11 }] },
+      { gameweek: 5, name: 'Bob', managerId: 2, goals: 11, conceded: 3, margin: 8, result: 'W', scorers: [{ playerId: 2, name: 'Jones', goals: 11 }] },
     ]
 
     const result = groupWinnersByGameweek(winners)

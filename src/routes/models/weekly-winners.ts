@@ -1,8 +1,18 @@
+interface Scorer {
+  playerId: number
+  name: string
+  goals: number
+}
+
 interface Winner {
   gameweek: number
   name: string
   managerId: number
   goals: number
+  conceded: number
+  margin: number
+  result: string
+  scorers: Scorer[]
 }
 
 interface WeeklyWinners {

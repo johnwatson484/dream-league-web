@@ -4,28 +4,44 @@
   <h2>Weekly Winners</h2>
 
   {% if weeklyWinners.length %}
-    <table class="table table-hover table-sm small">
-      <tr>
-        <th>Gameweek</th>
-        <th>Winner</th>
-        <th class="numeric">Goals</th>
-        <th></th>
-      </tr>
-      {% for week in weeklyWinners %}
-        {% for winner in week.winners %}
-          <tr>
-            <td>{{ week.gameweek }}</td>
-            <td><a href="/manager?managerId={{ winner.managerId }}">{{ winner.name }}</a></td>
-            <td class="numeric">{{ winner.goals }}</td>
-            <td>
-              {% if winner.goals >= 10 %}
-                <span class="badge badge-success">JACKPOT!</span>
-              {% endif %}
-            </td>
-          </tr>
-        {% endfor %}
-      {% endfor %}
-    </table>
+    {% for week in weeklyWinners %}
+      <div class="card border-dark" style="margin-bottom: 20px;">
+        <div class="card-header bg-dark text-light">
+          Week {{ week.gameweek }}
+        </div>
+        <div class="card-body">
+          <table class="table table-hover table-sm small">
+            {% for winner in week.winners %}
+              <tr>
+                <td><a href="/manager?managerId={{ winner.managerId }}">{{ winner.name }}</a></td>
+                <td>
+                  <div class="row">
+                    <div class="col-md-12">
+                      <span class="badge {% if winner.result === 'W' %}badge-success{% elif winner.result === 'L' %}badge-danger{% else %}badge-primary{% endif %}">{{ winner.goals }} - {{ winner.conceded }}</span>
+                      {% if winner.goals >= 10 %}
+                        <span class="badge badge-warning">JACKPOT!</span>
+                      {% endif %}
+                    </div>
+                  </div>
+                  {% for scorer in winner.scorers %}
+                    <div class="row">
+                      <div class="col-md-12">
+                        <em>
+                          <a href="/league/player/detail?playerId={{ scorer.playerId }}">{{ scorer.name }}</a>
+                          {% if scorer.goals > 1 %}
+                            ({{ scorer.goals }})
+                          {% endif %}
+                        </em>
+                      </div>
+                    </div>
+                  {% endfor %}
+                </td>
+              </tr>
+            {% endfor %}
+          </table>
+        </div>
+      </div>
+    {% endfor %}
   {% else %}
     <div class="alert alert-info">
       No weekly winners recorded.
