@@ -14,9 +14,9 @@ interface MappedPlayer {
 
 export function mapPlayer (player: RawPlayer): MappedPlayer {
   return {
-    firstName: player['First Name'] ? player['First Name'].trim() : undefined,
-    lastName: player.Surname ? player.Surname.trim() : undefined,
-    position: player.Position ? player.Position.trim() : undefined,
-    team: player.Club ? player.Club.trim() : undefined,
+    firstName: player['First Name'] ? String(player['First Name']).trim() : undefined,
+    lastName: player.Surname ? String(player.Surname).trim() : undefined,
+    position: player.Position ? String(player.Position).trim() : undefined,
+    team: player.Club ? String(player.Club).trim() : undefined,
   }
 }
