@@ -60,6 +60,10 @@ const routes: ServerRoute[] = [{
         promoteFromLeague2_4: Joi.number().integer().required(),
         relegateFromLeague2_1: Joi.number().integer().required(),
         relegateFromLeague2_2: Joi.number().integer().required(),
+        newLeague2TeamName1: Joi.string().required(),
+        newLeague2TeamAlias1: Joi.string().required(),
+        newLeague2TeamName2: Joi.string().required(),
+        newLeague2TeamAlias2: Joi.string().required(),
       }),
       failAction: async (request, h, _error) => {
         const data = await get('/league/season-setup', request) as { teams: any[]; divisions: any[] }
@@ -94,6 +98,8 @@ const routes: ServerRoute[] = [{
         { name: payload.newTeamName1, alias: payload.newTeamAlias1, divisionId: championshipDivision.divisionId },
         { name: payload.newTeamName2, alias: payload.newTeamAlias2, divisionId: championshipDivision.divisionId },
         { name: payload.newTeamName3, alias: payload.newTeamAlias3, divisionId: championshipDivision.divisionId },
+        { name: payload.newLeague2TeamName1, alias: payload.newLeague2TeamAlias1, divisionId: league2Division.divisionId },
+        { name: payload.newLeague2TeamName2, alias: payload.newLeague2TeamAlias2, divisionId: league2Division.divisionId },
       ]
 
       const moves = [

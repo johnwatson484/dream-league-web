@@ -150,6 +150,25 @@
       </div>
     </div>
 
+    <div class="card mb-4">
+      <div class="card-header bg-success text-white">
+        <strong>New to League 2</strong> (promoted from National League)
+      </div>
+      <div class="card-body">
+        <p class="text-muted">Enter the 2 teams promoted from the National League that will join League 2.</p>
+        {% for i in [1, 2] %}
+          <div class="form-row mb-2">
+            <div class="col">
+              <input type="text" class="form-control" name="newLeague2TeamName{{ i }}" placeholder="Team name {{ i }}" required>
+            </div>
+            <div class="col">
+              <input type="text" class="form-control" name="newLeague2TeamAlias{{ i }}" placeholder="Alias {{ i }}" required>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+
     <button type="submit" class="btn btn-primary btn-lg mb-4">Apply Season Setup</button>
   </form>
 {% endblock %}
