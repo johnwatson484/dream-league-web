@@ -1,0 +1,34 @@
+{% extends '_layout.njk' %}
+
+{% block content %}
+  <h2>Weekly Winners</h2>
+
+  {% if weeklyWinners.length %}
+    <table class="table table-hover table-sm small">
+      <tr>
+        <th>Gameweek</th>
+        <th>Winner</th>
+        <th class="numeric">Goals</th>
+        <th></th>
+      </tr>
+      {% for week in weeklyWinners %}
+        {% for winner in week.winners %}
+          <tr>
+            <td>{{ week.gameweek }}</td>
+            <td><a href="/manager?managerId={{ winner.managerId }}">{{ winner.name }}</a></td>
+            <td class="numeric">{{ winner.goals }}</td>
+            <td>
+              {% if winner.goals >= 10 %}
+                <span class="badge badge-success">JACKPOT!</span>
+              {% endif %}
+            </td>
+          </tr>
+        {% endfor %}
+      {% endfor %}
+    </table>
+  {% else %}
+    <div class="alert alert-info">
+      No weekly winners recorded.
+    </div>
+  {% endif %}
+{% endblock %}
