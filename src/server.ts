@@ -5,7 +5,6 @@ import inert from '@hapi/inert'
 import config from './config.ts'
 import { getCookieOptions } from './cookies/get-cookie-options.ts'
 import { connect as connectRedis } from './session/redis-client.ts'
-import userAgentProtection from './plugins/user-agent-protection.ts'
 import views from './plugins/views.ts'
 import contentSecurityPolicy from './plugins/content-security-policy.ts'
 import auth from './plugins/auth.ts'
@@ -38,7 +37,6 @@ async function createServer (): Promise<Server> {
   server.validator(Joi)
   server.state('cookies_policy', getCookieOptions())
 
-  await server.register(userAgentProtection)
   await server.register(scooter)
   await server.register(inert)
   await server.register(views)
