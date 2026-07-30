@@ -112,74 +112,90 @@
 {% else %}
 
 {% if upcoming.seasonStartDate %}
-<div class="card border-dark mb-4">
-  <div class="card-header bg-dark text-light">
-    <h5 class="mb-0">Season Countdown</h5>
-  </div>
-  <div class="card-body text-center">
-    <p class="lead mb-2">The new season starts <strong>{{ upcoming.seasonStartDate | longDate }}</strong></p>
-    <div id="countdown" class="d-flex justify-content-center"></div>
+<div class="row">
+  <div class="col-md-6" style="padding-bottom: 20px;">
+    <div class="card border-dark">
+      <div class="card-header bg-dark text-light">
+        Season Countdown
+      </div>
+      <div class="card-body text-center">
+        <p class="lead mb-2">The new season starts <strong>{{ upcoming.seasonStartDate | longDate }}</strong></p>
+        <div id="countdown" class="d-flex justify-content-center"></div>
+      </div>
+    </div>
   </div>
 </div>
 {% endif %}
 
 {% if upcoming.managers.length %}
-<div class="card border-dark mb-4">
-  <div class="card-header bg-dark text-light">
-    <h5 class="mb-0">Managers</h5>
-  </div>
-  <div class="card-body">
-    <div class="row">
-      {% for manager in upcoming.managers %}
-      <div class="col-6 col-md-4 col-lg-3 mb-2">
-        <span class="badge badge-secondary p-2 w-100">{{ manager.name }}</span>
+<div class="row">
+  <div class="col-md-6" style="padding-bottom: 20px;">
+    <div class="card border-dark">
+      <div class="card-header bg-dark text-light">
+        Managers
       </div>
-      {% endfor %}
+      <div class="card-body">
+        <div class="row">
+          {% for manager in upcoming.managers %}
+          <div class="col-6 col-md-4 col-lg-3 mb-2">
+            <span class="badge badge-secondary p-2 w-100">{{ manager.name }}</span>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
     </div>
   </div>
 </div>
 {% endif %}
 
 {% if upcoming.lastSeason %}
-<div class="card border-dark mb-4">
-  <div class="card-header bg-dark text-light">
-    <h5 class="mb-0">Last Season's Winners ({{ upcoming.lastSeason.year }})</h5>
-  </div>
-  <div class="card-body">
-    <div class="row text-center">
-      {% if upcoming.lastSeason.league1 %}
-      <div class="col-md-4 mb-3">
-        <i class="fa fa-trophy fa-2x text-warning"></i>
-        <h6 class="mt-2">League</h6>
-        <p class="font-weight-bold">{{ upcoming.lastSeason.league1 }}</p>
+<div class="row">
+  <div class="col-md-6" style="padding-bottom: 20px;">
+    <div class="card border-dark">
+      <div class="card-header bg-dark text-light">
+        Last Season's Winners ({{ upcoming.lastSeason.year }})
       </div>
-      {% endif %}
-      {% if upcoming.lastSeason.cup %}
-      <div class="col-md-4 mb-3">
-        <i class="fa fa-trophy fa-2x text-info"></i>
-        <h6 class="mt-2">Cup</h6>
-        <p class="font-weight-bold">{{ upcoming.lastSeason.cup }}</p>
+      <div class="card-body">
+        <div class="row text-center">
+          {% if upcoming.lastSeason.league1 %}
+          <div class="col-md-4 mb-3">
+            <i class="fa fa-trophy fa-2x text-warning"></i>
+            <h6 class="mt-2">League</h6>
+            <p class="font-weight-bold">{{ upcoming.lastSeason.league1 }}</p>
+          </div>
+          {% endif %}
+          {% if upcoming.lastSeason.cup %}
+          <div class="col-md-4 mb-3">
+            <i class="fa fa-trophy fa-2x text-info"></i>
+            <h6 class="mt-2">Cup</h6>
+            <p class="font-weight-bold">{{ upcoming.lastSeason.cup }}</p>
+          </div>
+          {% endif %}
+          {% if upcoming.lastSeason.leagueCup %}
+          <div class="col-md-4 mb-3">
+            <i class="fa fa-trophy fa-2x text-success"></i>
+            <h6 class="mt-2">League Cup</h6>
+            <p class="font-weight-bold">{{ upcoming.lastSeason.leagueCup }}</p>
+          </div>
+          {% endif %}
+        </div>
       </div>
-      {% endif %}
-      {% if upcoming.lastSeason.leagueCup %}
-      <div class="col-md-4 mb-3">
-        <i class="fa fa-trophy fa-2x text-success"></i>
-        <h6 class="mt-2">League Cup</h6>
-        <p class="font-weight-bold">{{ upcoming.lastSeason.leagueCup }}</p>
-      </div>
-      {% endif %}
     </div>
   </div>
 </div>
 {% endif %}
 
 {% if upcoming.nextMeeting %}
-<div class="card border-dark mb-4">
-  <div class="card-header bg-dark text-light">
-    <h5 class="mb-0">Next Meeting</h5>
-  </div>
-  <div class="card-body">
-    <p>The next transfer meeting is <strong>{{ upcoming.nextMeeting.date | longDate }}</strong>.</p>
+<div class="row">
+  <div class="col-md-6" style="padding-bottom: 20px;">
+    <div class="card border-dark">
+      <div class="card-header bg-dark text-light">
+        Next Meeting
+      </div>
+      <div class="card-body">
+        <p>The next transfer meeting is <strong>{{ upcoming.nextMeeting.date | longDate }}</strong>.</p>
+      </div>
+    </div>
   </div>
 </div>
 {% endif %}
