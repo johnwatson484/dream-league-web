@@ -73,6 +73,11 @@ export default {
             const minutes = String(d.getMinutes()).padStart(2, '0')
             return `${day}/${month}/${year} ${hours}:${minutes}`
           })
+          env.addFilter('longDate', (value: string | Date) => {
+            const d = new Date(value)
+            if (Number.isNaN(d.getTime())) { return String(value) }
+            return d.toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })
+          })
           options.compileOptions.environment = env
           return next()
         },
