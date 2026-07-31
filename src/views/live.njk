@@ -9,66 +9,40 @@
 
 <p class="text-muted">Week {{ gameweek.gameweekId }} ({{ gameweek.shortDate }})</p>
 
-<div class="row mb-4">
-  <div class="col-12">
+{% if not videprinterAvailable %}
+<div class="alert alert-warning">Live scores are unavailable at the moment. Goals will appear here once the feed is back.</div>
+{% endif %}
+
+<div class="row" style="padding-bottom: 20px;">
+  <div class="col-md-6" style="padding-bottom: 20px;">
     <div class="card border-dark">
       <div class="card-header bg-dark text-light">
-        Manager Scores (Live)
+        Scores
       </div>
       <div class="card-body">
-        <div class="table-responsive">
-          <table class="table table-hover table-sm" id="live-scores-table">
-            <thead>
-              <tr>
-                <th>Manager</th>
-                <th>Goals</th>
-                <th>Conceded</th>
-              </tr>
-            </thead>
-            <tbody>
-              {% for manager in managers %}
-              <tr data-manager-id="{{ manager.managerId }}">
-                <td>{{ manager.name }}</td>
-                <td class="goals-for">0</td>
-                <td class="goals-against">0</td>
-              </tr>
-              {% endfor %}
-            </tbody>
-          </table>
-        </div>
+        {% include "./_live-scores.njk" %}
+      </div>
+    </div>
+  </div>
+  <div class="col-md-6">
+    <div class="card border-dark">
+      <div class="card-header bg-dark text-light">
+        Goals
+        <span id="connection-status" class="badge badge-secondary float-right">Connecting</span>
+      </div>
+      <div class="card-body">
+        <table class="table table-hover table-sm small">
+          <tbody id="goal-feed"></tbody>
+        </table>
+        <p id="goal-feed-empty" class="text-muted small">Goals will appear here as they are scored.</p>
       </div>
     </div>
   </div>
 </div>
 
-<div class="row">
-  <div class="col-md-8">
-    <div class="card border-dark">
-      <div class="card-header bg-dark text-light">
-        <span id="connection-status" class="badge badge-secondary mr-2">Connecting...</span>
-        Goal Feed
-      </div>
-      <div class="card-body">
-        <div id="goal-feed">
-          {% if not liveSummary %}
-          <p class="text-muted">No live data available. Goals will appear here during matches.</p>
-          {% endif %}
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
+<p class="text-muted small">Scores update automatically every few minutes.</p>
 
-<script id="live-data" type="application/json">
-  {
-    "videprinterStreamUrl": "{{ videprinterStreamUrl }}",
-    "managers": [
-      {% for manager in managers %}
-        { "managerId": {{ manager.managerId }}, "name": "{{ manager.name }}" }{% if not loop.last %},{% endif %}
-      {% endfor %}
-    ]
-  }
-</script>
+<script id="live-data" type="application/json">{{ liveDataJson | safe }}</script>
 <script src="{{ asset('javascripts/live.js') }}"></script>
 {% endif %}
 {% endblock %}
