@@ -2,6 +2,7 @@ import type { ServerRoute } from '@hapi/hapi'
 import { get } from '../../api/get.ts'
 
 interface TeamsheetTeam {
+  managerId: number
   name: string
   players: { playerId: number; lastNameFirstName: string; position: string; team: string; substitute: boolean }[]
   keepers: { teamId: number; name: string; substitute: boolean }[]
@@ -17,6 +18,7 @@ function formatTeamsheet (teamsheet: TeamsheetTeam[]): { data: { players: unknow
         name: player.lastNameFirstName,
         position: player.position,
         team: player.team,
+        managerId: team.managerId,
         manager: team.name,
         substitute: player.substitute,
       })
@@ -25,6 +27,7 @@ function formatTeamsheet (teamsheet: TeamsheetTeam[]): { data: { players: unknow
       goalkeepers.push({
         teamId: keeper.teamId,
         name: keeper.name,
+        managerId: team.managerId,
         manager: team.name,
         substitute: keeper.substitute,
       })
