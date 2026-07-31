@@ -24,6 +24,10 @@ interface GoalEvent {
 
 const MAX_FEED_ROWS = 50
 
+function isMatched (event: GoalEvent): boolean {
+  return Boolean(event?.potentialGoalFor?.managerId || event?.potentialConcedingFor?.managerId)
+}
+
 $(function () {
   const liveData = JSON.parse($('#live-data').text() || '{}')
   const streamUrl: string = liveData.streamUrl || ''
@@ -112,10 +116,6 @@ $(function () {
 
     $feed.children().slice(MAX_FEED_ROWS).remove()
     $feedEmpty.hide()
-  }
-
-  function isMatched (event: GoalEvent): boolean {
-    return Boolean(event?.potentialGoalFor?.managerId || event?.potentialConcedingFor?.managerId)
   }
 
   function applyGoal (event: GoalEvent): boolean {

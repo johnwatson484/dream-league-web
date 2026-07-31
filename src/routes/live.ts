@@ -8,14 +8,14 @@ const SUMMARY_TIMEOUT_MS = 3000
 
 // Escaped so a '</script>' in any value cannot break out of the JSON island.
 function toJsonIsland (data: unknown): string {
-  return JSON.stringify(data).replace(/</g, '\\u003c')
+  return JSON.stringify(data).replaceAll('<', String.raw`\u003c`)
 }
 
 async function getActiveGameweek (request: any): Promise<any> {
   try {
     const gameweeks = await get('/gameweeks', request) as any[]
     const active = Array.isArray(gameweeks) ? gameweeks.filter((gw: any) => gw.isActive) : []
-    return active.length > 0 ? active[active.length - 1] : null
+    return active.at(-1) ?? null
   } catch (err: any) {
     request.log(['warn', 'api'], { msg: 'Failed to fetch gameweeks for live view', err: err?.message })
     return null
