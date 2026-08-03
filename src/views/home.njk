@@ -138,7 +138,7 @@
         <div class="row">
           {% for manager in upcoming.managers %}
           <div class="col-6 col-md-4 col-lg-3 mb-2">
-            <span class="badge badge-secondary p-2 w-100">{{ manager.name }}</span>
+            <span class="badge badge-secondary p-2 w-100"><a href="/managers?managerId={{ manager.managerId }}">{{ manager.name }}</a></span>
           </div>
           {% endfor %}
         </div>
