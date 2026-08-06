@@ -200,40 +200,5 @@
 </div>
 {% endif %}
 
-{% if upcoming.seasonStartDate %}
-<script>
-(function () {
-  var target = new Date('{{ upcoming.seasonStartDate }}').getTime()
-  var container = document.getElementById('countdown')
-
-  function pad (n) { return n < 10 ? '0' + n : n }
-
-  function render () {
-    var now = Date.now()
-    var diff = target - now
-
-    if (diff <= 0) {
-      container.innerHTML = '<h3 class="text-success">The season has started!</h3>'
-      return
-    }
-
-    var days = Math.floor(diff / 86400000)
-    var hours = Math.floor((diff % 86400000) / 3600000)
-    var minutes = Math.floor((diff % 3600000) / 60000)
-    var seconds = Math.floor((diff % 60000) / 1000)
-
-    container.innerHTML =
-      '<div class="mx-2 text-center"><h2>' + days + '</h2><small>days</small></div>' +
-      '<div class="mx-2 text-center"><h2>' + pad(hours) + '</h2><small>hours</small></div>' +
-      '<div class="mx-2 text-center"><h2>' + pad(minutes) + '</h2><small>mins</small></div>' +
-      '<div class="mx-2 text-center"><h2>' + pad(seconds) + '</h2><small>secs</small></div>'
-  }
-
-  render()
-  setInterval(render, 1000)
-})()
-</script>
-{% endif %}
-
 {% endif %}
 {% endblock %}
