@@ -54,6 +54,13 @@ const config = convict({
     default: 'http://localhost:3002',
     env: 'VIDEPRINTER_HOST',
   },
+  videprinterApiKey: {
+    doc: 'API key sent to the videprinter service for admin actions (e.g. goal rematch).',
+    format: String,
+    default: '',
+    env: 'VIDEPRINTER_API_KEY',
+    sensitive: true,
+  },
   session: {
     cookieName: {
       doc: 'The session cookie name.',

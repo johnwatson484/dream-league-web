@@ -44,6 +44,28 @@ $(function () {
   const $feed = $('#goal-feed')
   const $feedEmpty = $('#goal-feed-empty')
 
+  const $refreshButton = $('#refresh-goals')
+  const $refreshStatus = $('#refresh-status')
+
+  $refreshButton.on('click', function () {
+    $refreshButton.prop('disabled', true)
+    $refreshStatus.text('Refreshing…')
+    $.ajax({
+      type: 'POST',
+      url: '/live/refresh',
+      data: { crumb: $('#refresh-crumb').val() },
+      success: function (summary: { eventsChanged?: number }) {
+        $refreshStatus.text(`Done - ${summary?.eventsChanged ?? 0} goal(s) updated. Reload to see changes.`)
+      },
+      error: function () {
+        $refreshStatus.text('Refresh failed. Please try again.')
+      },
+      complete: function () {
+        $refreshButton.prop('disabled', false)
+      },
+    })
+  })
+
   function setStatus (text: string, badge: string): void {
     $status.text(text).removeClass('badge-secondary badge-success badge-warning badge-danger').addClass(badge)
   }

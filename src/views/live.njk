@@ -13,6 +13,14 @@
 <div class="alert alert-warning">Live scores are unavailable at the moment. Goals will appear here once the feed is back.</div>
 {% endif %}
 
+{% if auth.isAdmin %}
+<div class="mb-3">
+  <input type="hidden" id="refresh-crumb" value="{{crumb}}"/>
+  <button id="refresh-goals" type="button" class="btn btn-sm btn-outline-dark">Refresh goals</button>
+  <span id="refresh-status" class="text-muted small ml-2"></span>
+</div>
+{% endif %}
+
 <div class="row" style="padding-bottom: 20px;">
   <div class="col-md-6" style="padding-bottom: 20px;">
     <div class="card border-dark">
