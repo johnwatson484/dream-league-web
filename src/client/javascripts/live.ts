@@ -28,6 +28,15 @@ function isMatched (event: GoalEvent): boolean {
   return Boolean(event?.potentialGoalFor?.managerId || event?.potentialConcedingFor?.managerId)
 }
 
+function formatEventDate (event: GoalEvent): string {
+  if (!event.utcTimestamp) { return '' }
+  const date = new Date(event.utcTimestamp)
+  if (Number.isNaN(date.getTime())) { return '' }
+  const day = String(date.getDate()).padStart(2, '0')
+  const month = String(date.getMonth() + 1).padStart(2, '0')
+  return `${day}/${month}`
+}
+
 $(function () {
   const liveData = JSON.parse($('#live-data').text() || '{}')
   const streamUrl: string = liveData.streamUrl || ''
@@ -118,15 +127,6 @@ $(function () {
     for (const score of ordered) {
       $body.append(renderScoreRow(score))
     }
-  }
-
-  function formatEventDate (event: GoalEvent): string {
-    if (!event.utcTimestamp) { return '' }
-    const date = new Date(event.utcTimestamp)
-    if (Number.isNaN(date.getTime())) { return '' }
-    const day = String(date.getDate()).padStart(2, '0')
-    const month = String(date.getMonth() + 1).padStart(2, '0')
-    return `${day}/${month}`
   }
 
   function addToFeed (event: GoalEvent, prepend: boolean): void {
