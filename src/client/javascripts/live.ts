@@ -17,9 +17,8 @@ interface GoalEvent {
   id: string
   minute: number | null
   scorer?: { name: string }
-  scoringTeam?: { name: string }
-  potentialGoalFor?: { managerId: number; playerId: number; player: string }
-  potentialConcedingFor?: { managerId: number }
+  potentialGoalFor?: { managerId: number; manager: string; playerId: number; player: string }
+  potentialConcedingFor?: { managerId: number; manager: string }
 }
 
 const MAX_FEED_ROWS = 50
@@ -122,13 +121,13 @@ $(function () {
 
   function addToFeed (event: GoalEvent, prepend: boolean): void {
     const scorer = event.potentialGoalFor?.player || event.scorer?.name || 'Unknown'
-    const team = event.scoringTeam?.name || ''
+    const manager = event.potentialGoalFor?.manager || event.potentialConcedingFor?.manager || ''
     const minute = event.minute ? `${event.minute}'` : ''
 
     const $row = $('<tr>')
       .append($('<td class="numeric">').text(minute))
       .append($('<td>').text(scorer))
-      .append($('<td>').text(team))
+      .append($('<td>').text(manager))
 
     if (prepend) {
       $feed.prepend($row)
