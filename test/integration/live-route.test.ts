@@ -1,18 +1,24 @@
 import { vi } from 'vitest'
 
-const { mockGet, mockWreckGet } = vi.hoisted(() => ({ mockGet: vi.fn(), mockWreckGet: vi.fn() }))
+const { mockGet, mockWreckGet, mockTriggerGoalRematch } = vi.hoisted(() => ({ mockGet: vi.fn(), mockWreckGet: vi.fn(), mockTriggerGoalRematch: vi.fn() }))
 
 vi.mock('../../src/api/get.ts', () => ({ get: mockGet }))
 vi.mock('@hapi/wreck', () => ({ default: { get: mockWreckGet } }))
+vi.mock('../../src/api/videprinter.ts', () => ({ triggerGoalRematch: mockTriggerGoalRematch }))
 
 const routes = (await import('../../src/routes/live.ts')).default
 
 const handler = routes[0]!.handler as any
+const refreshRoute = routes[1]!
+const refreshHandler = refreshRoute.handler as any
 
 const request = { log: vi.fn() }
 
 function view (): any {
-  return { view: (template: string, context: any) => ({ template, context }) }
+  return {
+    view: (template: string, context: any) => ({ template, context }),
+    response: (source: any) => ({ source }),
+  }
 }
 
 const gameweek = { gameweekId: 5, startDate: '2026-08-08T00:00:00.000Z', shortDate: '08/08/2026', isActive: true }
@@ -98,5 +104,33 @@ describe('live route', () => {
 
     expect(context.liveDataJson).not.toContain('</script>')
     expect(context.liveDataJson).toContain('\\u003c/script')
+  })
+})
+
+describe('live refresh route', () => {
+  beforeEach(() => {
+    vi.clearAllMocks()
+  })
+
+  test('is restricted to admins', () => {
+    expect(refreshRoute.method).toBe('POST')
+    expect(refreshRoute.options).toMatchObject({ auth: { strategy: 'session', scope: ['admin'] } })
+  })
+
+  test('returns the rematch summary on success', async () => {
+    mockTriggerGoalRematch.mockResolvedValue({ eventsProcessed: 5, eventsChanged: 2, unmatched: 1, teamsheet: {} })
+
+    const response = await refreshHandler(request, view())
+
+    expect(response.source).toMatchObject({ eventsProcessed: 5, eventsChanged: 2 })
+  })
+
+  test('returns a bad gateway response when the videprinter is unreachable', async () => {
+    mockTriggerGoalRematch.mockRejectedValue(new Error('ECONNREFUSED'))
+
+    const response = await refreshHandler(request, view())
+
+    expect(response.isBoom).toBe(true)
+    expect(response.output.statusCode).toBe(502)
   })
 })

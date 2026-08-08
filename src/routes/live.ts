@@ -1,8 +1,10 @@
 import type { ServerRoute } from '@hapi/hapi'
 import Wreck from '@hapi/wreck'
+import boom from '@hapi/boom'
 import { get } from '../api/get.ts'
 import config from '../config.ts'
 import { buildLiveScores } from './models/live.ts'
+import { triggerGoalRematch } from '../api/videprinter.ts'
 
 const SUMMARY_TIMEOUT_MS = 3000
 
@@ -72,6 +74,21 @@ const routes: ServerRoute[] = [{
         scores,
       }),
     })
+  },
+}, {
+  method: 'POST',
+  path: '/live/refresh',
+  options: {
+    auth: { strategy: 'session', scope: ['admin'] },
+  },
+  handler: async (request, h) => {
+    try {
+      const summary = await triggerGoalRematch()
+      return h.response(summary)
+    } catch (err: any) {
+      request.log(['warn', 'videprinter'], { msg: 'Failed to trigger goal rematch', err: err?.message })
+      return boom.badGateway('Unable to reach videprinter service')
+    }
   },
 }]
 

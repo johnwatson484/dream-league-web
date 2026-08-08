@@ -71,5 +71,14 @@ For running the full stack (API + Web), see the [dream-league-core](https://gith
 | `REDIS_HOST` | Redis host for session storage | `localhost` | No |
 | `REDIS_PORT` | Redis port | `6380` | No |
 | `REDIS_PASSWORD` | Redis password | `''` | No |
+| `VIDEPRINTER_HOST` | Videprinter service base URL | `http://localhost:3002` | No |
+| `VIDEPRINTER_API_KEY` | API key sent to the videprinter service for admin actions (e.g. goal rematch). Must match `API_KEY` in dream-league-videprinter | `''` | No |
 
 Cookie `isSecure` is automatically set to `true` in production and `false` in development/test.
+
+## Admin: refreshing live goals
+
+Admins see a "Refresh goals" button on the `/live` page. It calls `POST /live/refresh`, which asks
+dream-league-videprinter to re-fetch current teamsheets and rematch every stored goal event - useful
+when a goal was scored before a manager's teamsheet was corrected. Requires `VIDEPRINTER_API_KEY` to be
+set and to match the videprinter's `API_KEY`.
