@@ -24,7 +24,20 @@ async function getActiveGameweek (request: any): Promise<any> {
   }
 }
 
-async function getLiveSummary (request: any, videprinterHost: string, gameweek: any): Promise<any> {
+async function getLiveSummary (request: any, videprinterHost: string, window: { startDate: Date; endDate: Date } | null): Promise<any> {
+  if (!window) { return null }
+
+  try {
+    const summaryUrl = `${videprinterHost}/videprinter/summary?from=${window.startDate.toISOString()}&to=${window.endDate.toISOString()}`
+    const { payload } = await Wreck.get(summaryUrl, { json: true, timeout: SUMMARY_TIMEOUT_MS })
+    return payload
+  } catch (err: any) {
+    request.log(['warn', 'videprinter'], { msg: 'Failed to fetch live summary', err: err?.message })
+    return null
+  }
+}
+
+function getGameweekWindow (gameweek: any): { startDate: Date; endDate: Date } | null {
   if (!gameweek) { return null }
 
   const startDate = new Date(gameweek.startDate)
@@ -32,14 +45,7 @@ async function getLiveSummary (request: any, videprinterHost: string, gameweek: 
   endDate.setDate(endDate.getDate() + 6)
   endDate.setHours(23, 59, 59, 999)
 
-  try {
-    const summaryUrl = `${videprinterHost}/videprinter/summary?from=${startDate.toISOString()}&to=${endDate.toISOString()}`
-    const { payload } = await Wreck.get(summaryUrl, { json: true, timeout: SUMMARY_TIMEOUT_MS })
-    return payload
-  } catch (err: any) {
-    request.log(['warn', 'videprinter'], { msg: 'Failed to fetch live summary', err: err?.message })
-    return null
-  }
+  return { startDate, endDate }
 }
 
 async function getManagers (request: any): Promise<any[]> {
@@ -57,12 +63,14 @@ const routes: ServerRoute[] = [{
   handler: async (request, h) => {
     const videprinterHost = config.get('videprinterHost')
     const gameweek = await getActiveGameweek(request)
+    const window = getGameweekWindow(gameweek)
     const [liveSummary, managers] = await Promise.all([
-      getLiveSummary(request, videprinterHost, gameweek),
+      getLiveSummary(request, videprinterHost, window),
       getManagers(request),
     ])
 
     const scores = buildLiveScores(managers, liveSummary)
+    const historyParams = window ? `&from=${window.startDate.toISOString()}&to=${window.endDate.toISOString()}` : ''
 
     return h.view('live', {
       gameweek,
@@ -70,7 +78,7 @@ const routes: ServerRoute[] = [{
       videprinterAvailable: liveSummary !== null,
       liveDataJson: toJsonIsland({
         streamUrl: `${videprinterHost}/videprinter/stream`,
-        historyUrl: `${videprinterHost}/videprinter/history?limit=200`,
+        historyUrl: `${videprinterHost}/videprinter/history?limit=200${historyParams}`,
         scores,
       }),
     })

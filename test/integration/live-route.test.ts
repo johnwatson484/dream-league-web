@@ -64,6 +64,27 @@ describe('live route', () => {
     expect(options.timeout).toBeGreaterThan(0)
   })
 
+  test('scopes the goal feed history to the same gameweek window as the summary', async () => {
+    mockApi()
+    mockWreckGet.mockResolvedValue({ payload: { managers: [] } })
+
+    const { context } = await handler(request, view())
+
+    const liveData = JSON.parse(context.liveDataJson)
+    expect(liveData.historyUrl).toContain('/videprinter/history?limit=200')
+    expect(liveData.historyUrl).toContain('from=2026-08-08T00:00:00.000Z')
+    expect(liveData.historyUrl).toContain('to=2026-08-14T23:59:59.999Z')
+  })
+
+  test('omits the history date range when there is no active gameweek', async () => {
+    mockApi({ gameweeks: [{ ...gameweek, isActive: false }] })
+
+    const { context } = await handler(request, view())
+
+    const liveData = JSON.parse(context.liveDataJson)
+    expect(liveData.historyUrl).toBe('http://localhost:3002/videprinter/history?limit=200')
+  })
+
   test('degrades gracefully when the videprinter is unreachable', async () => {
     mockApi()
     mockWreckGet.mockRejectedValue(new Error('ECONNREFUSED'))
