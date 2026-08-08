@@ -16,6 +16,7 @@ interface LiveScore {
 interface GoalEvent {
   id: string
   minute: number | null
+  utcTimestamp?: string
   scorer?: { name: string }
   potentialGoalFor?: { managerId: number; manager: string; playerId: number; player: string }
   potentialConcedingFor?: { managerId: number; manager: string }
@@ -25,6 +26,15 @@ const MAX_FEED_ROWS = 50
 
 function isMatched (event: GoalEvent): boolean {
   return Boolean(event?.potentialGoalFor?.managerId || event?.potentialConcedingFor?.managerId)
+}
+
+function formatEventDate (event: GoalEvent): string {
+  if (!event.utcTimestamp) { return '' }
+  const date = new Date(event.utcTimestamp)
+  if (Number.isNaN(date.getTime())) { return '' }
+  const day = String(date.getDate()).padStart(2, '0')
+  const month = String(date.getMonth() + 1).padStart(2, '0')
+  return `${day}/${month}`
 }
 
 $(function () {
@@ -123,9 +133,10 @@ $(function () {
     const scorer = event.potentialGoalFor?.player || event.scorer?.name || 'Unknown'
     const manager = event.potentialGoalFor?.manager || event.potentialConcedingFor?.manager || ''
     const minute = event.minute ? `${event.minute}'` : ''
+    const dateMinute = [formatEventDate(event), minute].filter(Boolean).join(' ')
 
     const $row = $('<tr>')
-      .append($('<td class="numeric">').text(minute))
+      .append($('<td class="numeric">').text(dateMinute))
       .append($('<td>').text(scorer))
       .append($('<td>').text(manager))
 
