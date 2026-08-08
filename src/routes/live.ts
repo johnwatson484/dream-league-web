@@ -57,28 +57,36 @@ async function getManagers (request: any): Promise<any[]> {
   }
 }
 
+async function buildLiveViewData (request: any): Promise<{ gameweek: any; window: { startDate: Date; endDate: Date } | null; scores: any[]; videprinterAvailable: boolean }> {
+  const videprinterHost = config.get('videprinterHost')
+  const gameweek = await getActiveGameweek(request)
+  const window = getGameweekWindow(gameweek)
+  const [liveSummary, managers] = await Promise.all([
+    getLiveSummary(request, videprinterHost, window),
+    getManagers(request),
+  ])
+
+  const scores = buildLiveScores(managers, liveSummary)
+
+  return { gameweek, window, scores, videprinterAvailable: liveSummary !== null }
+}
+
 const routes: ServerRoute[] = [{
   method: 'GET',
   path: '/live',
   handler: async (request, h) => {
     const videprinterHost = config.get('videprinterHost')
-    const gameweek = await getActiveGameweek(request)
-    const window = getGameweekWindow(gameweek)
-    const [liveSummary, managers] = await Promise.all([
-      getLiveSummary(request, videprinterHost, window),
-      getManagers(request),
-    ])
-
-    const scores = buildLiveScores(managers, liveSummary)
+    const { gameweek, window, scores, videprinterAvailable } = await buildLiveViewData(request)
     const historyParams = window ? `&from=${window.startDate.toISOString()}&to=${window.endDate.toISOString()}` : ''
 
     return h.view('live', {
       gameweek,
       scores,
-      videprinterAvailable: liveSummary !== null,
+      videprinterAvailable,
       liveDataJson: toJsonIsland({
         streamUrl: `${videprinterHost}/videprinter/stream`,
         historyUrl: `${videprinterHost}/videprinter/history?limit=200${historyParams}`,
+        gameweekId: gameweek?.gameweekId ?? null,
         scores,
       }),
     })
@@ -97,6 +105,13 @@ const routes: ServerRoute[] = [{
       request.log(['warn', 'videprinter'], { msg: 'Failed to trigger goal rematch', err: err?.message })
       return boom.badGateway('Unable to reach videprinter service')
     }
+  },
+}, {
+  method: 'GET',
+  path: '/live/summary',
+  handler: async (request, h) => {
+    const { gameweek, scores, videprinterAvailable } = await buildLiveViewData(request)
+    return h.response({ gameweekId: gameweek?.gameweekId ?? null, scores, videprinterAvailable })
   },
 }]
 

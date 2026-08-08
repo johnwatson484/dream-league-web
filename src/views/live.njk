@@ -16,7 +16,7 @@
 {% if auth.isAdmin %}
 <div class="mb-3">
   <input type="hidden" id="refresh-crumb" value="{{crumb}}"/>
-  <button id="refresh-goals" type="button" class="btn btn-sm btn-outline-dark">Refresh goals</button>
+  <button id="refresh-goals" type="button" class="btn btn-sm btn-danger" data-toggle="modal" data-target="#refresh-confirm">Refresh goals</button>
   <span id="refresh-status" class="text-muted small ml-2"></span>
 </div>
 {% endif %}
@@ -49,6 +49,27 @@
 </div>
 
 <p class="text-muted small">Scores update automatically every few minutes.</p>
+
+{% if auth.isAdmin %}
+<div class="modal fade" id="refresh-confirm" role="dialog" data-backdrop="false">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Refresh goals</h5>
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <p>Re-matches all goals scored so far this gameweek against the current teamsheets.</p>
+        <p>This page will pick up the corrected scores automatically within about a minute - it does not reload for you.</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+        <button type="button" id="refresh-confirm-btn" data-dismiss="modal" class="btn btn-danger">Confirm</button>
+      </div>
+    </div>
+  </div>
+</div>
+{% endif %}
 
 <script id="live-data" type="application/json">{{ liveDataJson | safe }}</script>
 <script src="{{ asset('javascripts/live.js') }}"></script>

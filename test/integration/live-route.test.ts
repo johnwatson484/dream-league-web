@@ -11,6 +11,8 @@ const routes = (await import('../../src/routes/live.ts')).default
 const handler = routes[0]!.handler as any
 const refreshRoute = routes[1]!
 const refreshHandler = refreshRoute.handler as any
+const summaryRoute = routes[2]!
+const summaryHandler = summaryRoute.handler as any
 
 const request = { log: vi.fn() }
 
@@ -74,6 +76,16 @@ describe('live route', () => {
     expect(liveData.historyUrl).toContain('/videprinter/history?limit=200')
     expect(liveData.historyUrl).toContain('from=2026-08-08T00:00:00.000Z')
     expect(liveData.historyUrl).toContain('to=2026-08-14T23:59:59.999Z')
+  })
+
+  test('includes the active gameweek id in the json island for client-side polling', async () => {
+    mockApi()
+    mockWreckGet.mockResolvedValue({ payload: { managers: [] } })
+
+    const { context } = await handler(request, view())
+
+    const liveData = JSON.parse(context.liveDataJson)
+    expect(liveData.gameweekId).toBe(5)
   })
 
   test('omits the history date range when there is no active gameweek', async () => {
@@ -176,5 +188,49 @@ describe('live refresh route', () => {
 
     expect(response.isBoom).toBe(true)
     expect(response.output.statusCode).toBe(502)
+  })
+})
+
+describe('live summary route', () => {
+  beforeEach(() => {
+    vi.clearAllMocks()
+  })
+
+  test('is a public GET route', () => {
+    expect(summaryRoute.method).toBe('GET')
+    expect(summaryRoute.path).toBe('/live/summary')
+    expect(summaryRoute.options).toBeUndefined()
+  })
+
+  test('returns the active gameweek id and current scores', async () => {
+    mockApi()
+    mockWreckGet.mockResolvedValue({
+      payload: {
+        managers: [{ managerId: 2, manager: 'Bob', goals: 2, conceded: 1, scorers: [{ playerId: 9, name: 'Smith, John', goals: 2 }] }],
+      },
+    })
+
+    const response = await summaryHandler(request, view())
+
+    expect(response.source.gameweekId).toBe(5)
+    expect(response.source.videprinterAvailable).toBe(true)
+    expect(response.source.scores[0]).toMatchObject({ manager: 'Bob', goals: 2, conceded: 1 })
+  })
+
+  test('returns a null gameweek id when there is no active gameweek', async () => {
+    mockApi({ gameweeks: [{ ...gameweek, isActive: false }] })
+
+    const response = await summaryHandler(request, view())
+
+    expect(response.source.gameweekId).toBeNull()
+  })
+
+  test('reports videprinterAvailable as false when the videprinter is unreachable', async () => {
+    mockApi()
+    mockWreckGet.mockRejectedValue(new Error('ECONNREFUSED'))
+
+    const response = await summaryHandler(request, view())
+
+    expect(response.source.videprinterAvailable).toBe(false)
   })
 })

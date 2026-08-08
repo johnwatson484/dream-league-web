@@ -19,10 +19,13 @@ interface GoalEvent {
   utcTimestamp?: string
   scorer?: { name: string }
   potentialGoalFor?: { managerId: number; manager: string; playerId: number; player: string }
-  potentialConcedingFor?: { managerId: number; manager: string }
+  potentialConcedingFor?: { managerId: number; manager: string; team: string }
 }
 
 const MAX_FEED_ROWS = 50
+const POLL_INTERVAL_MS = 60000
+const HEARTBEAT_DISPLAY_INTERVAL_MS = 5000
+const MAX_RETRY_DELAY_MS = 15000
 
 function isMatched (event: GoalEvent): boolean {
   return Boolean(event?.potentialGoalFor?.managerId || event?.potentialConcedingFor?.managerId)
@@ -41,6 +44,7 @@ $(function () {
   const liveData = JSON.parse($('#live-data').text() || '{}')
   const streamUrl: string = liveData.streamUrl || ''
   const historyUrl: string = liveData.historyUrl || ''
+  const initialGameweekId: number | null = liveData.gameweekId ?? null
 
   const scores = new Map<number, LiveScore>()
   for (const score of (liveData.scores || []) as LiveScore[]) {
@@ -48,15 +52,21 @@ $(function () {
   }
 
   const countedEventIds = new Set<string>()
+  let lastEventTimestamp: string | null = null
+  let lastHeartbeatTs: number | null = null
+  let statusIsLive = false
+  let retryDelay = 1000
+  let source: EventSource | null = null
 
   const $status = $('#connection-status')
   const $feed = $('#goal-feed')
   const $feedEmpty = $('#goal-feed-empty')
 
   const $refreshButton = $('#refresh-goals')
+  const $refreshConfirmButton = $('#refresh-confirm-btn')
   const $refreshStatus = $('#refresh-status')
 
-  $refreshButton.on('click', function () {
+  $refreshConfirmButton.on('click', function () {
     $refreshButton.prop('disabled', true)
     $refreshStatus.text('Refreshing…')
     $.ajax({
@@ -64,7 +74,7 @@ $(function () {
       url: '/live/refresh',
       data: { crumb: $('#refresh-crumb').val() },
       success: function (summary: { eventsChanged?: number }) {
-        $refreshStatus.text(`Done - ${summary?.eventsChanged ?? 0} goal(s) updated. Reload to see changes.`)
+        $refreshStatus.text(`Done - ${summary?.eventsChanged ?? 0} goal(s) updated.`)
       },
       error: function () {
         $refreshStatus.text('Refresh failed. Please try again.')
@@ -77,6 +87,19 @@ $(function () {
 
   function setStatus (text: string, badge: string): void {
     $status.text(text).removeClass('badge-secondary badge-success badge-warning badge-danger').addClass(badge)
+  }
+
+  function timeAgo (ts: number): string {
+    const elapsed = Date.now() - ts
+    if (elapsed < 2000) { return '1s' }
+    if (elapsed < 60000) { return `${Math.floor(elapsed / 1000)}s` }
+    return `${Math.floor(elapsed / 60000)}m`
+  }
+
+  function setLiveStatus (text: string, badge: string, isLive: boolean): void {
+    statusIsLive = isLive
+    const suffix = lastHeartbeatTs ? ` (last hb ${timeAgo(lastHeartbeatTs)})` : ''
+    setStatus(`${text}${suffix}`, badge)
   }
 
   function resultClass (score: LiveScore): string {
@@ -130,7 +153,11 @@ $(function () {
   }
 
   function addToFeed (event: GoalEvent, prepend: boolean): void {
-    const scorer = event.potentialGoalFor?.player || event.scorer?.name || 'Unknown'
+    const scorer = event.potentialGoalFor
+      ? event.potentialGoalFor.player
+      : event.potentialConcedingFor
+        ? `${event.potentialConcedingFor.team} conceded`
+        : event.scorer?.name || 'Unknown'
     const manager = event.potentialGoalFor?.manager || event.potentialConcedingFor?.manager || ''
     const minute = event.minute ? `${event.minute}'` : ''
     const dateMinute = [formatEventDate(event), minute].filter(Boolean).join(' ')
@@ -179,6 +206,12 @@ $(function () {
     return true
   }
 
+  function recordTimestamp (event: GoalEvent): void {
+    if (event.utcTimestamp && (!lastEventTimestamp || event.utcTimestamp > lastEventTimestamp)) {
+      lastEventTimestamp = event.utcTimestamp
+    }
+  }
+
   function seedFeed (): void {
     if (!historyUrl) { return }
 
@@ -187,44 +220,104 @@ $(function () {
       for (const event of (data?.events || []).filter(isMatched)) {
         if (!event.id || countedEventIds.has(event.id)) { continue }
         countedEventIds.add(event.id)
+        recordTimestamp(event)
         addToFeed(event, false)
       }
     })
   }
+
+  // On reconnect, replay any goals missed while the stream was down or stalled.
+  function fetchMissedEvents (): void {
+    if (!historyUrl || !lastEventTimestamp) { return }
+
+    $.getJSON(historyUrl).done(function (data: { events?: GoalEvent[] }) {
+      const missed = (data?.events || [])
+        .filter(isMatched)
+        .filter(event => event.id && !countedEventIds.has(event.id) && event.utcTimestamp && event.utcTimestamp > lastEventTimestamp!)
+        .reverse()
+
+      let changed = false
+      for (const event of missed) {
+        if (!applyGoal(event)) { continue }
+        addToFeed(event, true)
+        changed = true
+      }
+
+      if (changed) { renderScores() }
+    })
+  }
+
+  function pollSummary (): void {
+    $.getJSON('/live/summary').done(function (data: { gameweekId?: number | null; scores?: LiveScore[] }) {
+      if ((data?.gameweekId ?? null) !== initialGameweekId) {
+        window.location.reload()
+        return
+      }
+
+      scores.clear()
+      for (const score of (data?.scores || [])) {
+        scores.set(score.managerId, score)
+      }
+      renderScores()
+    })
+  }
+
+  function connect (): void {
+    setLiveStatus('Connecting', 'badge-secondary', false)
+
+    if (!source) {
+      seedFeed()
+    } else {
+      fetchMissedEvents()
+    }
+
+    source = new EventSource(streamUrl)
+
+    source.addEventListener('connected', function () {
+      retryDelay = 1000
+      setLiveStatus('Live', 'badge-success', true)
+    })
+
+    source.addEventListener('heartbeat', function () {
+      lastHeartbeatTs = Date.now()
+      setLiveStatus('Live', 'badge-success', true)
+    })
+
+    source.addEventListener('goal', function (e: MessageEvent) {
+      let event: GoalEvent
+      try {
+        event = JSON.parse(e.data)
+      } catch {
+        return
+      }
+
+      recordTimestamp(event)
+      if (!applyGoal(event)) { return }
+
+      renderScores()
+      addToFeed(event, true)
+    })
+
+    // EventSource retries on its own, but we manage reconnection manually so we can
+    // back off and replay missed events once the stream comes back.
+    source.addEventListener('error', function () {
+      setLiveStatus('Reconnecting', 'badge-warning', false)
+      source?.close()
+      setTimeout(connect, retryDelay)
+      retryDelay = Math.min(retryDelay * 2, MAX_RETRY_DELAY_MS)
+    })
+  }
+
+  setInterval(pollSummary, POLL_INTERVAL_MS)
+
+  setInterval(function () {
+    if (statusIsLive) { setLiveStatus('Live', 'badge-success', true) }
+  }, HEARTBEAT_DISPLAY_INTERVAL_MS)
 
   if (!streamUrl) {
     setStatus('Unavailable', 'badge-warning')
     return
   }
 
-  seedFeed()
-
-  const source = new EventSource(streamUrl)
-
-  source.addEventListener('connected', function () {
-    setStatus('Live', 'badge-success')
-  })
-
-  source.addEventListener('goal', function (e: MessageEvent) {
-    let event: GoalEvent
-    try {
-      event = JSON.parse(e.data)
-    } catch {
-      return
-    }
-
-    if (!applyGoal(event)) { return }
-
-    renderScores()
-    addToFeed(event, true)
-  })
-
-  source.onerror = function () {
-    // EventSource retries on its own, so only report a hard failure once it has given up.
-    if (source.readyState === EventSource.CLOSED) {
-      setStatus('Disconnected', 'badge-danger')
-    } else {
-      setStatus('Reconnecting', 'badge-warning')
-    }
-  }
+  connect()
 })
