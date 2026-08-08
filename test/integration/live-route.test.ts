@@ -96,6 +96,29 @@ describe('live route', () => {
     expect(context.scores).toEqual([])
   })
 
+  test('renders with no active gameweek when the gameweeks call fails', async () => {
+    mockGet.mockImplementation(async (path: string) => {
+      if (path === '/gameweeks') { throw new Error('api down') }
+      return managers
+    })
+
+    const { context } = await handler(request, view())
+
+    expect(context.gameweek).toBeNull()
+    expect(mockWreckGet).not.toHaveBeenCalled()
+  })
+
+  test('renders with no active gameweek when the gameweeks response is not an array', async () => {
+    mockGet.mockImplementation(async (path: string) => {
+      if (path === '/gameweeks') { return null }
+      return managers
+    })
+
+    const { context } = await handler(request, view())
+
+    expect(context.gameweek).toBeNull()
+  })
+
   test('escapes markup in the json island so it cannot break out of the script tag', async () => {
     mockApi({ managers: [{ managerId: 1, name: '</script><img src=x onerror=alert(1)>' }] })
     mockWreckGet.mockResolvedValue({ payload: { managers: [] } })
