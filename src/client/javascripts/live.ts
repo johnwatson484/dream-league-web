@@ -20,6 +20,13 @@ interface GoalEvent {
   scorer?: { name: string }
   potentialGoalFor?: { managerId: number; manager: string; playerId: number; player: string }
   potentialConcedingFor?: { managerId: number; manager: string; team: string }
+  // Set when this replaces a previously broadcast goal with the same id (e.g. scorer renamed).
+  correction?: boolean
+}
+
+interface GoalRetraction {
+  id: string
+  fixtureId: string
 }
 
 const MAX_FEED_ROWS = 50
@@ -51,7 +58,9 @@ $(function () {
     scores.set(score.managerId, score)
   }
 
-  const countedEventIds = new Set<string>()
+  // Tracks exactly what was applied per event id (not just that it was seen), so a later
+  // correction or retraction for the same id can be undone precisely before re-applying.
+  const appliedEvents = new Map<string, GoalEvent>()
   let lastEventTimestamp: string | null = null
   let lastHeartbeatTs: number | null = null
   let statusIsLive = false
@@ -152,7 +161,7 @@ $(function () {
     }
   }
 
-  function addToFeed (event: GoalEvent, prepend: boolean): void {
+  function buildFeedRow (event: GoalEvent): JQuery<HTMLElement> {
     const scorer = event.potentialGoalFor
       ? event.potentialGoalFor.player
       : event.potentialConcedingFor
@@ -162,10 +171,15 @@ $(function () {
     const minute = event.minute ? `${event.minute}'` : ''
     const dateMinute = [formatEventDate(event), minute].filter(Boolean).join(' ')
 
-    const $row = $('<tr>')
+    return $('<tr>')
+      .attr('data-event-id', event.id)
       .append($('<td class="numeric">').text(dateMinute))
       .append($('<td>').text(scorer))
       .append($('<td>').text(manager))
+  }
+
+  function addToFeed (event: GoalEvent, prepend: boolean): void {
+    const $row = buildFeedRow(event)
 
     if (prepend) {
       $feed.prepend($row)
@@ -177,10 +191,48 @@ $(function () {
     $feedEmpty.hide()
   }
 
-  function applyGoal (event: GoalEvent): boolean {
-    if (!event?.id || countedEventIds.has(event.id) || !isMatched(event)) { return false }
+  // Replaces the row in place so a correction doesn't show up as a second goal in the feed.
+  function replaceFeedRow (event: GoalEvent): void {
+    const $existing = $feed.find(`tr[data-event-id="${event.id}"]`)
+    if ($existing.length) {
+      $existing.replaceWith(buildFeedRow(event))
+    } else {
+      addToFeed(event, true)
+    }
+  }
 
-    countedEventIds.add(event.id)
+  function removeFeedRow (id: string): void {
+    $feed.find(`tr[data-event-id="${id}"]`).remove()
+    if (!$feed.children().length) { $feedEmpty.show() }
+  }
+
+  function undoGoal (event: GoalEvent): void {
+    const scoredFor = event.potentialGoalFor
+    if (scoredFor?.managerId) {
+      const score = scores.get(scoredFor.managerId)
+      if (score) {
+        score.goals = Math.max(0, score.goals - 1)
+        const existing = score.scorers.find(s => s.playerId === scoredFor.playerId)
+        if (existing) {
+          existing.goals--
+          if (existing.goals <= 0) {
+            score.scorers = score.scorers.filter(s => s !== existing)
+          }
+        }
+      }
+    }
+
+    const concededFor = event.potentialConcedingFor
+    if (concededFor?.managerId) {
+      const score = scores.get(concededFor.managerId)
+      if (score) { score.conceded = Math.max(0, score.conceded - 1) }
+    }
+  }
+
+  function applyGoal (event: GoalEvent): boolean {
+    if (!event?.id || appliedEvents.has(event.id) || !isMatched(event)) { return false }
+
+    appliedEvents.set(event.id, event)
 
     const scoredFor = event.potentialGoalFor
     if (scoredFor?.managerId) {
@@ -206,6 +258,25 @@ $(function () {
     return true
   }
 
+  // Undoes whatever this id previously contributed (if anything), then applies the new content.
+  function applyCorrection (event: GoalEvent): boolean {
+    const prior = appliedEvents.get(event.id)
+    if (prior) {
+      undoGoal(prior)
+      appliedEvents.delete(event.id)
+    }
+    return applyGoal(event)
+  }
+
+  function retractGoal (retraction: GoalRetraction): void {
+    const prior = appliedEvents.get(retraction.id)
+    if (!prior) { return }
+    undoGoal(prior)
+    appliedEvents.delete(retraction.id)
+    renderScores()
+    removeFeedRow(retraction.id)
+  }
+
   function recordTimestamp (event: GoalEvent): void {
     if (event.utcTimestamp && (!lastEventTimestamp || event.utcTimestamp > lastEventTimestamp)) {
       lastEventTimestamp = event.utcTimestamp
@@ -216,10 +287,10 @@ $(function () {
     if (!historyUrl) { return }
 
     $.getJSON(historyUrl).done(function (data: { events?: GoalEvent[] }) {
-      // The server summary already counted these, so only record the ids to stop the stream double counting.
+      // The server summary already counted these, so only record them to stop the stream double counting.
       for (const event of (data?.events || []).filter(isMatched)) {
-        if (!event.id || countedEventIds.has(event.id)) { continue }
-        countedEventIds.add(event.id)
+        if (!event.id || appliedEvents.has(event.id)) { continue }
+        appliedEvents.set(event.id, event)
         recordTimestamp(event)
         addToFeed(event, false)
       }
@@ -233,7 +304,7 @@ $(function () {
     $.getJSON(historyUrl).done(function (data: { events?: GoalEvent[] }) {
       const missed = (data?.events || [])
         .filter(isMatched)
-        .filter(event => event.id && !countedEventIds.has(event.id) && event.utcTimestamp && event.utcTimestamp > lastEventTimestamp!)
+        .filter(event => event.id && !appliedEvents.has(event.id) && event.utcTimestamp && event.utcTimestamp > lastEventTimestamp!)
         .reverse()
 
       let changed = false
@@ -292,10 +363,26 @@ $(function () {
       }
 
       recordTimestamp(event)
-      if (!applyGoal(event)) { return }
+      const applied = event.correction ? applyCorrection(event) : applyGoal(event)
+      if (!applied) { return }
 
       renderScores()
-      addToFeed(event, true)
+      if (event.correction) {
+        replaceFeedRow(event)
+      } else {
+        addToFeed(event, true)
+      }
+    })
+
+    source.addEventListener('goal-retracted', function (e: MessageEvent) {
+      let retraction: GoalRetraction
+      try {
+        retraction = JSON.parse(e.data)
+      } catch {
+        return
+      }
+
+      retractGoal(retraction)
     })
 
     // EventSource retries on its own, but we manage reconnection manually so we can
