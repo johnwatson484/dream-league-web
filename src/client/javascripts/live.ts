@@ -363,11 +363,14 @@ $(function () {
       }
 
       recordTimestamp(event)
-      const applied = event.correction ? applyCorrection(event) : applyGoal(event)
+      // Trust that this id was already applied over the server's own correction flag, in case
+      // the two ever disagree (e.g. the server's in-memory cache was reset by a restart).
+      const isCorrection = event.correction || appliedEvents.has(event.id)
+      const applied = isCorrection ? applyCorrection(event) : applyGoal(event)
       if (!applied) { return }
 
       renderScores()
-      if (event.correction) {
+      if (isCorrection) {
         replaceFeedRow(event)
       } else {
         addToFeed(event, true)
