@@ -13,11 +13,10 @@ function toJsonIsland (data: unknown): string {
   return JSON.stringify(data).replaceAll('<', String.raw`\u003c`)
 }
 
-async function getActiveGameweek (request: any): Promise<any> {
+async function getCurrentGameweek (request: any): Promise<any> {
   try {
     const gameweeks = await get('/gameweeks', request) as any[]
-    const active = Array.isArray(gameweeks) ? gameweeks.filter((gw: any) => gw.isActive) : []
-    return active.at(-1) ?? null
+    return Array.isArray(gameweeks) ? (gameweeks.find((gw: any) => gw.isCurrent) ?? null) : null
   } catch (err: any) {
     request.log(['warn', 'api'], { msg: 'Failed to fetch gameweeks for live view', err: err?.message })
     return null
@@ -59,7 +58,7 @@ async function getManagers (request: any): Promise<any[]> {
 
 async function buildLiveViewData (request: any): Promise<{ gameweek: any; window: { startDate: Date; endDate: Date } | null; scores: any[]; videprinterAvailable: boolean }> {
   const videprinterHost = config.get('videprinterHost')
-  const gameweek = await getActiveGameweek(request)
+  const gameweek = await getCurrentGameweek(request)
   const window = getGameweekWindow(gameweek)
   const [liveSummary, managers] = await Promise.all([
     getLiveSummary(request, videprinterHost, window),
