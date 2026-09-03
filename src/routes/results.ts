@@ -15,7 +15,7 @@ function getDefaultGameweekId (gameweeks: { gameweekId: number; startDate: strin
 
   const started = gameweeks.filter(gw => gw.isActive)
   if (started.length) {
-    return started.reduce((latest, gw) => (new Date(gw.startDate) > new Date(latest.startDate) ? gw : latest)).gameweekId
+    return started.reduce((latest, gw) => (new Date(gw.startDate) > new Date(latest.startDate) ? gw : latest), started[0]!).gameweekId
   }
 
   return gameweeks[0]?.gameweekId ?? null
