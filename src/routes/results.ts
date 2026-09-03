@@ -8,6 +8,19 @@ import { deleteRequest } from '../api/delete.ts'
 import { compare } from '../utils/compare.ts'
 import config from '../config.ts'
 
+// Falls back to the last gameweek that's started (or the first, pre-season) when none is currently in progress.
+function getDefaultGameweekId (gameweeks: { gameweekId: number; startDate: string; isActive: boolean; isCurrent: boolean }[]): number | null {
+  const current = gameweeks.find(gw => gw.isCurrent)
+  if (current) { return current.gameweekId }
+
+  const started = gameweeks.filter(gw => gw.isActive)
+  if (started.length) {
+    return started.reduce((latest, gw) => (new Date(gw.startDate) > new Date(latest.startDate) ? gw : latest)).gameweekId
+  }
+
+  return gameweeks[0]?.gameweekId ?? null
+}
+
 const routes: ServerRoute[] = [{
   method: 'GET',
   path: '/results',
@@ -31,10 +44,11 @@ const routes: ServerRoute[] = [{
   method: 'GET',
   path: '/results/edit',
   handler: async (request, h) => {
-    const resultsInput = await get('/results-edit', request) as { keepers: { division: string; team: string }[]; players: { division: string; team: string; lastName: string; firstName: string }[] }
+    const resultsInput = await get('/results-edit', request) as { keepers: { division: string; team: string }[]; players: { division: string; team: string; lastName: string; firstName: string }[]; gameweeks: { gameweekId: number; startDate: string; isActive: boolean; isCurrent: boolean }[] }
     resultsInput.keepers = resultsInput.keepers.toSorted((a, b) => { return compare(a.division, b.division) || compare(a.team, b.team) })
     resultsInput.players = resultsInput.players.toSorted((a, b) => { return compare(a.division, b.division) || compare(a.team, b.team) || compare(a.lastName, b.lastName) || compare(a.firstName, b.firstName) })
-    return h.view('results-edit', { resultsInput })
+    const selectedGameweekId = getDefaultGameweekId(resultsInput.gameweeks)
+    return h.view('results-edit', { resultsInput, selectedGameweekId })
   },
 }, {
   method: 'POST',
