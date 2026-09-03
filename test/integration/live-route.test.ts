@@ -23,7 +23,7 @@ function view (): any {
   }
 }
 
-const gameweek = { gameweekId: 5, startDate: '2026-08-08T00:00:00.000Z', shortDate: '08/08/2026', isActive: true }
+const gameweek = { gameweekId: 5, startDate: '2026-08-08T00:00:00.000Z', shortDate: '08/08/2026', isCurrent: true }
 const managers = [{ managerId: 1, name: 'Alice' }, { managerId: 2, name: 'Bob' }]
 
 function mockApi (overrides: Record<string, unknown> = {}): void {
@@ -89,7 +89,7 @@ describe('live route', () => {
   })
 
   test('omits the history date range when there is no active gameweek', async () => {
-    mockApi({ gameweeks: [{ ...gameweek, isActive: false }] })
+    mockApi({ gameweeks: [{ ...gameweek, isCurrent: false }] })
 
     const { context } = await handler(request, view())
 
@@ -109,7 +109,7 @@ describe('live route', () => {
   })
 
   test('does not call the videprinter when there is no active gameweek', async () => {
-    mockApi({ gameweeks: [{ ...gameweek, isActive: false }] })
+    mockApi({ gameweeks: [{ ...gameweek, isCurrent: false }] })
 
     const { context } = await handler(request, view())
 
@@ -218,7 +218,7 @@ describe('live summary route', () => {
   })
 
   test('returns a null gameweek id when there is no active gameweek', async () => {
-    mockApi({ gameweeks: [{ ...gameweek, isActive: false }] })
+    mockApi({ gameweeks: [{ ...gameweek, isCurrent: false }] })
 
     const response = await summaryHandler(request, view())
 

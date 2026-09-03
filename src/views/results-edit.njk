@@ -12,7 +12,7 @@
           <div class="form-group">
             <select class="form-control" id="gameweekId" name="gameweekId">
             {% for gameweek in resultsInput.gameweeks %}
-              <option value="{{ gameweek.gameweekId }}" data-start-date="{{ gameweek.startDate }}" {% if gameweek.isActive %}selected{% endif %}>Gameweek {{ gameweek.gameweekId }} - {{ gameweek.shortDate }}</option>
+              <option value="{{ gameweek.gameweekId }}" data-start-date="{{ gameweek.startDate }}" {% if gameweek.isCurrent %}selected{% endif %}>Gameweek {{ gameweek.gameweekId }} - {{ gameweek.shortDate }}</option>
             {% endfor %}
             </select>
           </div>
