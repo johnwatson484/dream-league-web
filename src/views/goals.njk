@@ -7,6 +7,7 @@
     <table class="table table-hover table-sm small">
       <tr>
         <th>Gameweek</th>
+        <th>Competition</th>
         <th>Player</th>
         <th>Team</th>
         <th></th>
@@ -14,6 +15,7 @@
       {% for goal in goals %}
         <tr>
           <td>{{ goal.gameweekId }}</td>
+          <td>{% if goal.cup %}Cup{% else %}League{% endif %}</td>
           <td><a href="/league/player/detail?playerId={{ goal.player.playerId }}">{{ goal.player.fullName }}</a></td>
           <td><a href="/league/team/detail?teamId={{ goal.player.team.teamId }}">{{ goal.player.team.name }}</a></td>
           <td>
