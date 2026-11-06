@@ -7,12 +7,14 @@
     <table class="table table-hover table-sm small">
       <tr>
         <th>Gameweek</th>
+        <th>Competition</th>
         <th>Team</th>
         <th></th>
       </tr>
       {% for concede in conceded %}
         <tr>
           <td>{{ concede.gameweekId }}</td>
+          <td>{% if concede.cup %}Cup{% else %}League{% endif %}</td>
           <td><a href="/league/team/detail?teamId={{ concede.team.teamId }}">{{ concede.team.name }}</a></td>
           <td>
             {% if auth.isAdmin %}
