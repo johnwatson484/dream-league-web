@@ -12,7 +12,7 @@ Dream League website.
 
 ## Prerequisites
 
-- Node.js >= 24 (see `.nvmrc`)
+- Node.js >= 26 (see `.nvmrc`)
 
 ## Local development
 
