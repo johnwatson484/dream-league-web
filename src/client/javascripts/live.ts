@@ -1,5 +1,3 @@
-import { sortScores } from '../../routes/models/live.ts'
-
 interface Scorer {
   playerId: number
   name: string
@@ -151,11 +149,10 @@ $(function () {
   }
 
   function renderScores (): void {
-    const ordered = sortScores([...scores.values()])
-
     const $body = $('#live-scores-table tbody')
     $body.empty()
-    for (const score of ordered) {
+    // Map iteration preserves the order supplied by the server, including after polling.
+    for (const score of scores.values()) {
       $body.append(renderScoreRow(score))
     }
   }
