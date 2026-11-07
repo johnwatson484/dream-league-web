@@ -49,8 +49,8 @@ describe('live view model', () => {
     expect(result.some(s => s.manager === 'Nobody')).toBe(false)
   })
 
-  test('sorts by goals descending, then conceded ascending, then name', () => {
-    const result = buildLiveScores(managers, {
+  test('keeps managers alphabetical regardless of goals or conceded', () => {
+    const result = buildLiveScores([...managers].reverse(), {
       managers: [
         { managerId: 1, manager: 'Alice', goals: 2, conceded: 4, scorers: [] },
         { managerId: 2, manager: 'Bob', goals: 5, conceded: 0, scorers: [] },
@@ -58,10 +58,10 @@ describe('live view model', () => {
       ],
     })
 
-    expect(result.map(s => s.manager)).toEqual(['Bob', 'Charlie', 'Alice'])
+    expect(result.map(s => s.manager)).toEqual(['Alice', 'Bob', 'Charlie'])
   })
 
-  test('falls back to alphabetical order when nobody has scored', () => {
+  test('uses alphabetical order when nobody has scored', () => {
     const result = buildLiveScores([
       { managerId: 3, name: 'Charlie' },
       { managerId: 1, name: 'Alice' },
@@ -97,12 +97,12 @@ describe('live result derivation', () => {
 })
 
 describe('live score sorting', () => {
-  test('is stable for identical scores', () => {
+  test('sorts names without giving uppercase names priority', () => {
     const scores = [
       { managerId: 2, manager: 'Bob', goals: 1, conceded: 1, result: 'D', scorers: [] },
-      { managerId: 1, manager: 'Alice', goals: 1, conceded: 1, result: 'D', scorers: [] },
+      { managerId: 1, manager: 'alice', goals: 1, conceded: 1, result: 'D', scorers: [] },
     ]
 
-    expect(sortScores(scores).map(s => s.manager)).toEqual(['Alice', 'Bob'])
+    expect(sortScores(scores).map(s => s.manager)).toEqual(['alice', 'Bob'])
   })
 })

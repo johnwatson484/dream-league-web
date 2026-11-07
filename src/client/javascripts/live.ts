@@ -149,14 +149,10 @@ $(function () {
   }
 
   function renderScores (): void {
-    const ordered = [...scores.values()].sort((a, b) =>
-      b.goals - a.goals ||
-      a.conceded - b.conceded ||
-      a.manager.localeCompare(b.manager))
-
     const $body = $('#live-scores-table tbody')
     $body.empty()
-    for (const score of ordered) {
+    // Map iteration preserves the order supplied by the server, including after polling.
+    for (const score of scores.values()) {
       $body.append(renderScoreRow(score))
     }
   }
