@@ -1,3 +1,5 @@
+import { sortScores } from '../../routes/models/live.ts'
+
 interface Scorer {
   playerId: number
   name: string
@@ -149,10 +151,7 @@ $(function () {
   }
 
   function renderScores (): void {
-    const ordered = [...scores.values()].sort((a, b) =>
-      b.goals - a.goals ||
-      a.conceded - b.conceded ||
-      a.manager.localeCompare(b.manager))
+    const ordered = sortScores([...scores.values()])
 
     const $body = $('#live-scores-table tbody')
     $body.empty()

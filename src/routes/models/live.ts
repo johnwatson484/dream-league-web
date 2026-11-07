@@ -37,10 +37,7 @@ export function getResult (goals: number, conceded: number): string {
 }
 
 export function sortScores (scores: LiveScore[]): LiveScore[] {
-  return scores.sort((a, b) =>
-    b.goals - a.goals ||
-    a.conceded - b.conceded ||
-    a.manager.localeCompare(b.manager))
+  return scores.sort((a, b) => a.manager.localeCompare(b.manager, 'en', { sensitivity: 'base' }))
 }
 
 export function buildLiveScores (managers: Manager[] = [], liveSummary: LiveSummary | null = null): LiveScore[] {

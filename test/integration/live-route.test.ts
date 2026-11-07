@@ -51,8 +51,9 @@ describe('live route', () => {
 
     expect(template).toBe('live')
     expect(context.videprinterAvailable).toBe(true)
-    expect(context.scores[0]).toMatchObject({ manager: 'Bob', goals: 2, conceded: 1, result: 'W' })
-    expect(context.scores[0].scorers).toHaveLength(1)
+    expect(context.scores.map((score: any) => score.manager)).toEqual(['Alice', 'Bob'])
+    expect(context.scores[1]).toMatchObject({ manager: 'Bob', goals: 2, conceded: 1, result: 'W' })
+    expect(context.scores[1].scorers).toHaveLength(1)
   })
 
   test('requests the summary for the full gameweek', async () => {
@@ -214,7 +215,8 @@ describe('live summary route', () => {
 
     expect(response.source.gameweekId).toBe(5)
     expect(response.source.videprinterAvailable).toBe(true)
-    expect(response.source.scores[0]).toMatchObject({ manager: 'Bob', goals: 2, conceded: 1 })
+    expect(response.source.scores.map((score: any) => score.manager)).toEqual(['Alice', 'Bob'])
+    expect(response.source.scores[1]).toMatchObject({ manager: 'Bob', goals: 2, conceded: 1 })
   })
 
   test('returns a null gameweek id when there is no active gameweek', async () => {
