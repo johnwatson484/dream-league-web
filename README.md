@@ -58,6 +58,7 @@ For running the full stack (API + Web), see the [dream-league-core](https://gith
 | `NODE_ENV` | Application environment (`development`, `test`, `production`) | `development` | No |
 | `PORT` | Server port | `3000` | No |
 | `APP_NAME` | Application display name | `Dream League` | No |
+| `SITE_URL` | Website origin for canonical URLs, site-name metadata and the sitemap; set to the public HTTPS origin when deploying | `http://localhost:3000` | No |
 | `API_HOST` | Backend API base URL | `http://localhost:3001` | No |
 | `COOKIE_NAME` | Session cookie name | `dl_session` | No |
 | `COOKIE_PASSWORD` | Session cookie encryption key (min 32 chars) | — | **Yes** |
@@ -75,6 +76,43 @@ For running the full stack (API + Web), see the [dream-league-core](https://gith
 | `VIDEPRINTER_API_KEY` | API key sent to the videprinter service for admin actions (e.g. goal rematch). Must match `API_KEY` in dream-league-videprinter | `''` | No |
 
 Cookie `isSecure` is automatically set to `true` in production and `false` in development/test.
+
+## Search visibility
+
+The site name and homepage tab title remain **Dream League**. Other public pages use
+descriptive titles such as `Teamsheet | Dream League`; “fantasy football” describes
+the competition in page content and search descriptions.
+
+`SITE_URL` supplies the public origin for canonical URLs, homepage `WebSite`
+structured data, `/robots.txt` and `/sitemap.xml`. It defaults to
+`http://localhost:3000` for local development. Set `SITE_URL` to the public HTTPS
+origin in deployed environments, for example `https://dreamleaguefantasyfootball.co.uk`.
+If using a different local port, set `SITE_URL` to match it. This setting does not
+change the server's listening port. The request Host header is never used to
+generate these URLs.
+
+The sitemap lists the main public destinations. Individual gameweeks, players,
+clubs, managers and cups retain their own canonical URLs and can be discovered
+through page links. Login, editing and reporting forms, filtered player/club
+listings, manager comparison combinations and error pages use `noindex, follow`.
+Robots instructions permit crawling so search engines can read those directives.
+
+After deployment:
+
+1. Verify the domain property in Google Search Console, submit `/sitemap.xml`, and
+   inspect the homepage, results, teamsheet, live scores and rules pages.
+2. Check HTTP/HTTPS, www/non-www and any legacy-domain redirects at the hosting
+   layer. Use permanent redirects to the preferred HTTPS domain, preserving paths
+   and query strings. This application does not force hostname redirects locally.
+3. Check the Google Play app's website link, currently listed as
+   `www.dreamleague.eu`, and update it to the preferred website in Play Console if
+   appropriate. This requires access to the app's listing.
+4. Record Search Console clicks, impressions, click-through rate and average
+   position for league-name searches before rollout; compare over 8–12 weeks.
+5. Run PageSpeed Insights on representative mobile pages. Fingerprinted CSS and
+   JavaScript can now be cached for a year on anonymous requests; HTML remains `no-cache`. The two
+   decorative homepage photos load lazily. Other asset changes should follow
+   measurements.
 
 ## Admin: refreshing live goals
 

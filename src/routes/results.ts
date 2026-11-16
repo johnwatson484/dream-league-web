@@ -35,9 +35,13 @@ const routes: ServerRoute[] = [{
     },
     handler: async (request, h) => {
       const gameweekId = Number((request.query as Record<string, unknown>)?.gameweekId) || 0
-      const results = await get(`/results?gameweekId=${gameweekId}`, request)
-      const gameweeks = await get('/gameweeks?completed=true', request)
-      return h.view('results', { results, gameweeks })
+      const results = await get(`/results?gameweekId=${gameweekId}`, request) as { gameweekId?: number }
+      const gameweeks = await get('/gameweeks?completed=true', request) as { gameweekId: number; shortDate: string }[]
+      const orderedGameweeks = gameweeks.toSorted((a, b) => a.gameweekId - b.gameweekId)
+      const index = orderedGameweeks.findIndex(week => week.gameweekId === results.gameweekId)
+      const previousGameweek = index > 0 ? orderedGameweeks[index - 1] : undefined
+      const nextGameweek = index >= 0 ? orderedGameweeks[index + 1] : undefined
+      return h.view('results', { results, gameweeks, previousGameweek, nextGameweek })
     },
   },
 }, {

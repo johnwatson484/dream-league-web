@@ -42,6 +42,12 @@ const config = convict({
     default: 'Dream League',
     env: 'APP_NAME',
   },
+  siteUrl: {
+    doc: 'The public website origin used for canonical URLs and the sitemap.',
+    format: 'url',
+    default: 'http://localhost:3000',
+    env: 'SITE_URL',
+  },
   apiHost: {
     doc: 'The backend API base URL.',
     format: 'url',

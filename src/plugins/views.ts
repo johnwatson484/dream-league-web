@@ -5,6 +5,7 @@ import vision from '@hapi/vision'
 import type { Request } from '@hapi/hapi'
 import config from '../config.ts'
 import { mapAuth } from '../auth/map-auth.ts'
+import { getSeoMetadata } from '../seo/metadata.ts'
 
 const manifestPath = path.resolve(import.meta.dirname, '../../.public/assets-manifest.json')
 
@@ -37,12 +38,18 @@ function assetCss (logicalPath: string): string[] {
 }
 
 function context (request: Request): Record<string, unknown> {
-  const ctx = (request.response as unknown as { source?: { context?: Record<string, unknown> } }).source?.context || {}
+  const response = request.response as unknown as { statusCode: number; source?: { context?: Record<string, unknown> } }
+  const ctx = response.source?.context || {}
   return {
     ...ctx,
     asset,
     assetCss,
     appName: config.get('appName'),
+    seo: getSeoMetadata(request.path, request.query, ctx, {
+      appName: config.get('appName'),
+      siteUrl: new URL(config.get('siteUrl')).origin,
+      statusCode: response.statusCode,
+    }),
     currentYear: new Date().getUTCFullYear(),
     auth: mapAuth(request),
     cookiesPolicy: request.state?.cookies_policy || { confirmed: false, essential: true, analytics: false },

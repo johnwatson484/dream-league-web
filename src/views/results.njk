@@ -2,12 +2,13 @@
 
 {% block content %}
   {% if results.gameweekId %}
-    <h2>Week {{ results.gameweekId }} Results</h2>
+    <h1 class="h2">Week {{ results.gameweekId }} Results</h1>
 
   <div class="row" style="padding-bottom: 20px;">
     <div class="col-md-6">
       <form action="/results" method="GET" id="frm-gameweek">
         <div class="form-group">
+          <label for="gameweekId">Gameweek</label>
           <select class="form-control" id="gameweekId" name="gameweekId">
             {% for gameweek in gameweeks %}
               <option value="{{ gameweek.gameweekId }}" {% if results.gameweekId===gameweek.gameweekId %}selected{% endif %}>
@@ -15,6 +16,7 @@
             {% endfor %}
           </select>
         </div>
+        <button class="btn btn-secondary" type="submit">View results</button>
       </form>
     </div>
 
@@ -28,6 +30,17 @@
       </div>
     {% endif %}
   </div>
+
+    {% if previousGameweek or nextGameweek %}
+      <nav aria-label="Gameweek results" class="d-flex justify-content-between mb-3">
+        {% if previousGameweek %}
+          <a href="/results?gameweekId={{ previousGameweek.gameweekId }}">Previous: Week {{ previousGameweek.gameweekId }} ({{ previousGameweek.shortDate }})</a>
+        {% endif %}
+        {% if nextGameweek %}
+          <a class="ml-auto" href="/results?gameweekId={{ nextGameweek.gameweekId }}">Next: Week {{ nextGameweek.gameweekId }} ({{ nextGameweek.shortDate }})</a>
+        {% endif %}
+      </nav>
+    {% endif %}
 
     <div class="row" style="padding-bottom: 20px;">
       <div class="col-md-6" style="padding-bottom: 20px;">
@@ -95,6 +108,7 @@
     {% endif %}
 
   {% else %}
+    <h1 class="h2">Results</h1>
     <div class="alert alert-info">
   Results coming soon.
 </div>
