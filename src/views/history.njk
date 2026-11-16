@@ -1,7 +1,9 @@
 {% extends '_layout.njk' %}
 
 {% block content %}
-<h2>History</h2>
+<h1 class="h2">Dream League History</h1>
+<p>Explore past Dream League winners. The tables record the league, cup and league cup winners for each year,
+  alongside the number of teams and results from former competitions.</p>
 
 {% if auth.isAdmin %}
 <a href="/history/create">Create history</a>

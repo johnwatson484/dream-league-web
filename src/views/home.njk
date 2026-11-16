@@ -3,7 +3,14 @@
 {% block content %}
 <div class="jumbotron">
   <h1>Dream League</h1>
-  <p>Private fantasy football league</p>
+  <p>Dream League is a private fantasy football league featuring players from the Championship, League One and League Two.
+    Find the latest results, league table, teamsheets, live scores and competition rules.</p>
+  <nav aria-label="League shortcuts" class="d-flex flex-wrap">
+    <a class="btn btn-primary mr-2 mb-2" href="/results">Latest results and table</a>
+    <a class="btn btn-primary mr-2 mb-2" href="/teamsheet">Teamsheets</a>
+    <a class="btn btn-primary mr-2 mb-2" href="/live">Live scores</a>
+    <a class="btn btn-primary mr-2 mb-2" href="/rules">Rules</a>
+  </nav>
 </div>
 
 {% if results.gameweekId %}
@@ -103,10 +110,10 @@
 
 <div class="row">
   <div class="col-md-6" style="padding-bottom: 20px;">
-    <img class="img-fluid rounded" src="/assets/images/money.jpeg" />
+    <img class="img-fluid rounded" src="/assets/images/money.jpeg" alt="" loading="lazy" />
   </div>
   <div class="col-md-6" style="padding-bottom: 20px;">
-    <img class="img-fluid rounded" src="/assets/images/beer.jpeg" />
+    <img class="img-fluid rounded" src="/assets/images/beer.jpeg" alt="" loading="lazy" />
   </div>
 </div>
 {% else %}

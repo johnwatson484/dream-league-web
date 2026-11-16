@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en-GB">
 
   <head>
     <meta charset="UTF-8">
@@ -9,7 +9,19 @@
       <script async src="https://www.googletagmanager.com/gtag/js?id=G-C35GGT2X1B"></script>
       <script src="{{ asset('javascripts/google-analytics.js') }}"></script>
     {% endif %}
-    <title>{{ appName }}</title>
+    <title>{{ seo.title or appName }}</title>
+    {% if seo.description %}
+      <meta name="description" content="{{ seo.description }}">
+    {% endif %}
+    {% if seo.canonical %}
+      <link rel="canonical" href="{{ seo.canonical }}">
+    {% endif %}
+    {% if seo.robots %}
+      <meta name="robots" content="{{ seo.robots }}">
+    {% endif %}
+    {% if seo.structuredData %}
+      <script type="application/ld+json">{{ seo.structuredData | safe }}</script>
+    {% endif %}
     <link rel="icon" type="image/x-icon" href="/assets/images/favicon.ico"/>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="https://code.jquery.com/ui/1.14.1/themes/blitzer/jquery-ui.css">
@@ -48,7 +60,7 @@
             <a class="nav-link dropdown-toggle text-light" href="#" role="button"
               data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Live</a>
             <div class="dropdown-menu">
-              <a class="dropdown-item" href="/live">Match day</a>
+              <a class="dropdown-item" href="/live">Live scores</a>
               <a class="dropdown-item" href="https://videprinter.dreamleaguefantasyfootball.co.uk/">Videprinter</a>
             </div>
           </li>
@@ -59,7 +71,7 @@
             Results
           </a>
               <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                <a class="dropdown-item" href="/results">View</a>
+                <a class="dropdown-item" href="/results">Latest results</a>
                 <a class="dropdown-item" href="/results/edit">Edit</a>
                 <div class="dropdown-divider"></div>
                 <a class="dropdown-item" href="/goal-report">Report goal</a>
@@ -109,7 +121,7 @@
               <a class="nav-link dropdown-toggle text-light" href="#" role="button"
                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Results</a>
               <div class="dropdown-menu">
-                <a class="dropdown-item" href="/results">View</a>
+                <a class="dropdown-item" href="/results">Latest results</a>
                 <a class="dropdown-item" href="/goal-report">Report goal</a>
                 <a class="dropdown-item" href="/weekly-winners">Weekly Winners</a>
               </div>

@@ -14,7 +14,12 @@ const plugin: Plugin<ServerOptions> = {
         headers['X-Frame-Options'] = 'DENY'
         headers['X-XSS-Protection'] = '1; mode=block'
         // Cache-Control must be lower case to avoid conflicts with Hapi's built-in header handling
-        headers['cache-control'] = 'no-cache'
+        const isHashedAsset = request.path.startsWith('/assets/') && /\.[\w-]{7}\.min\.(css|js)$/.test(request.path)
+        const statusCode = 'isBoom' in response ? response.output.statusCode : response.statusCode
+        // Cookie-bearing requests can refresh sessions; retain their revalidation policy.
+        headers['cache-control'] = isHashedAsset && statusCode === 200 && !request.headers.cookie
+          ? 'public, max-age=31536000, immutable'
+          : 'no-cache'
         headers['Cross-Origin-Opener-Policy'] = 'same-origin'
         headers['Cross-Origin-Resource-Policy'] = 'same-site'
         headers['Referrer-Policy'] = 'no-referrer'
