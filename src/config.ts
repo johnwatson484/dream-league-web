@@ -45,7 +45,7 @@ const config = convict({
   siteUrl: {
     doc: 'The public website origin used for canonical URLs and the sitemap.',
     format: 'url',
-    default: 'https://dreamleaguefantasyfootball.co.uk',
+    default: 'http://localhost:3000',
     env: 'SITE_URL',
   },
   apiHost: {

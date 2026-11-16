@@ -58,7 +58,7 @@ For running the full stack (API + Web), see the [dream-league-core](https://gith
 | `NODE_ENV` | Application environment (`development`, `test`, `production`) | `development` | No |
 | `PORT` | Server port | `3000` | No |
 | `APP_NAME` | Application display name | `Dream League` | No |
-| `SITE_URL` | Public website origin for canonical URLs, site-name metadata and the sitemap | `https://dreamleaguefantasyfootball.co.uk` | No |
+| `SITE_URL` | Website origin for canonical URLs, site-name metadata and the sitemap; set to the public HTTPS origin when deploying | `http://localhost:3000` | No |
 | `API_HOST` | Backend API base URL | `http://localhost:3001` | No |
 | `COOKIE_NAME` | Session cookie name | `dl_session` | No |
 | `COOKIE_PASSWORD` | Session cookie encryption key (min 32 chars) | — | **Yes** |
@@ -84,9 +84,12 @@ descriptive titles such as `Teamsheet | Dream League`; “fantasy football” de
 the competition in page content and search descriptions.
 
 `SITE_URL` supplies the public origin for canonical URLs, homepage `WebSite`
-structured data, `/robots.txt` and `/sitemap.xml`. It defaults to the current
-production domain; set it when hosting on a different public domain. The request
-Host header is never used to generate these URLs.
+structured data, `/robots.txt` and `/sitemap.xml`. It defaults to
+`http://localhost:3000` for local development. Set `SITE_URL` to the public HTTPS
+origin in deployed environments, for example `https://dreamleaguefantasyfootball.co.uk`.
+If using a different local port, set `SITE_URL` to match it. This setting does not
+change the server's listening port. The request Host header is never used to
+generate these URLs.
 
 The sitemap lists the main public destinations. Individual gameweeks, players,
 clubs, managers and cups retain their own canonical URLs and can be discovered

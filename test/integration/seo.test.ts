@@ -3,6 +3,7 @@ import { vi } from 'vitest'
 
 const { mockGet } = vi.hoisted(() => {
   vi.stubEnv('LOG_LEVEL', 'silent')
+  vi.stubEnv('SITE_URL', 'https://dreamleaguefantasyfootball.co.uk')
   return { mockGet: vi.fn() }
 })
 vi.mock('../../src/api/get.ts', () => ({ get: mockGet }))
