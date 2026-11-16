@@ -31,6 +31,25 @@ describe('search metadata', () => {
     expect(getSeoMetadata('/results', { gameweekId: 0 }, {}, options).canonical).toBe(`${options.siteUrl}/results`)
   })
 
+  test.each([true, {}, ['14'], { toString: () => '14' }])('rejects a non-string/non-number gameweek identity: %s', gameweekId => {
+    const seo = getSeoMetadata('/results', { gameweekId }, {}, options)
+    expect(seo.canonical).toBe(`${options.siteUrl}/results`)
+  })
+
+  test.each(['14', 14])('accepts a string or numeric gameweek identity: %s', gameweekId => {
+    const seo = getSeoMetadata('/results', { gameweekId }, {}, options)
+    expect(seo.canonical).toBe(`${options.siteUrl}/results?gameweekId=14`)
+  })
+
+  test('normalizes trailing slashes without changing the root URL', () => {
+    for (const path of ['', '/', '////']) {
+      expect(getSeoMetadata(path, {}, {}, options).canonical).toBe(`${options.siteUrl}/`)
+    }
+    const seo = getSeoMetadata(`/rules${'/'.repeat(4096)}`, {}, {}, options)
+    expect(seo.title).toBe('Rules | Dream League')
+    expect(seo.canonical).toBe(`${options.siteUrl}/rules`)
+  })
+
   test.each([
     ['/league/player/detail', { playerId: 23 }, { player: { firstName: 'Joe', lastName: 'Smith' } }, 'Joe Smith', 'playerId=23'],
     ['/league/team/detail', { teamId: 4 }, { team: { name: 'Example United' } }, 'Example United', 'teamId=4'],

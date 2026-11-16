@@ -39,8 +39,27 @@ interface SeoOptions {
 }
 
 function positiveInteger (value: unknown): string | undefined {
-  const text = String(value ?? '')
+  if (typeof value !== 'string' && typeof value !== 'number') {
+    return undefined
+  }
+  const text = String(value)
   return /^[1-9]\d*$/.test(text) ? text : undefined
+}
+
+function trimTrailingSlashes (path: string): string {
+  let end = path.length
+  while (end > 0 && path[end - 1] === '/') {
+    end--
+  }
+  return path.slice(0, end) || '/'
+}
+
+function isFilteredPage (path: string, query: Record<string, unknown>): boolean {
+  if (path === '/head-to-head') {
+    return Boolean(query.manager1 || query.manager2)
+  }
+  return ['/league/players', '/league/teams'].includes(path) &&
+    ['search', 'position', 'division'].some(key => Boolean(query[key]))
 }
 
 export function getSeoMetadata (
@@ -49,7 +68,7 @@ export function getSeoMetadata (
   context: Record<string, any>,
   { appName, siteUrl, statusCode }: SeoOptions
 ): SeoMetadata {
-  path = path.replace(/\/+$/, '') || '/'
+  path = trimTrailingSlashes(path)
   let page = publicPages[path]
   const canonical = new URL(path, siteUrl)
 
@@ -89,9 +108,10 @@ export function getSeoMetadata (
     },
   }
   const detail = detailPages[path]
-  if (detail && detail.name && positiveInteger(detail.value)) {
+  const detailId = positiveInteger(detail?.value)
+  if (detail?.name && detailId) {
     page = { title: detail.name, description: `View ${detail.name}’s ${appName} ${detail.description}.` }
-    canonical.searchParams.set(detail.id, positiveInteger(detail.value)!)
+    canonical.searchParams.set(detail.id, detailId)
   }
 
   if (/^\/cup\/[1-9]\d*$/.test(path) && context.cup?.name) {
@@ -106,10 +126,7 @@ export function getSeoMetadata (
     title: page.title ? `${page.title} | ${appName}` : appName,
     description: page.description,
   }
-  const filtered = (['/league/players', '/league/teams'].includes(path) && ['search', 'position', 'division'].some(key => query[key])) ||
-    (path === '/head-to-head' && (query.manager1 || query.manager2))
-
-  if (filtered) {
+  if (isFilteredPage(path, query)) {
     metadata.robots = 'noindex, follow'
   } else {
     metadata.canonical = canonical.href
@@ -117,7 +134,7 @@ export function getSeoMetadata (
 
   if (path === '/') {
     // Escape '<' so a configured name cannot terminate the JSON-LD script tag.
-    metadata.structuredData = JSON.stringify({ '@context': 'https://schema.org', '@type': 'WebSite', name: appName, url: canonical.href }).replace(/</g, '\\u003c')
+    metadata.structuredData = JSON.stringify({ '@context': 'https://schema.org', '@type': 'WebSite', name: appName, url: canonical.href }).replaceAll('<', String.raw`\u003c`)
   }
   return metadata
 }
